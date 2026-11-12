@@ -1,0 +1,125 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    cleanup.policy: "delete"
+    segment.bytes: 104857600
+
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    cleanup.policy: "delete"
+    segment.bytes: 104857600
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-processor
+spec:
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  jobManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+  flinkConfiguration:
+    jobmanager.heap.size: 1024m
+    taskmanager.heap.size: 4096m
+    taskmanager.numberOfTaskSlots: 3
+    state.backend: filesystem
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.checkpoints.min-pending-checkpoints-to-retain: 3
+    state.savepoints.dir: s3://flink-state/savepoints
+    taskmanager.network.memory.fraction: 0.8
+    taskmanager.network.memory.min: 512m
+    taskmanager.network.memory.max: 1024m
+    taskmanager.memory.task.heap.size: 2048m
+    taskmanager.memory.task.off-heap.size: 512m
+    state.backend.increment_checkpoint_interval: 60000
+    parallelism.default: 16
+    metrics.reporter.prometheus.type: "prometheus"
+    metrics.reporter.prometheus.interval: "10s"
+    parallelism.runtime-default: 16
+    taskmanager.network.reuse-address: true
+    taskmanager.network.bind-address: 0.0.0.0
+    taskmanager.network.port-range: "50000-50100"
+    taskmanager.network.guava-thread-pool.size: 50
+    taskmanager.network.guava-thread-pool.core-size: 50
+    taskmanager.network.guava-thread-pool.keep-alive: 60s
+```
+
+```sql
+CREATE TABLE clicks (
+  session_id STRING,
+  event_time TIMESTAMP(3),
+  event_data STRING,
+  PRIMARY KEY (session_id) NOT ENFORCED
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'latest-offset',
+  'value.format' = 'json'
+);
+
+CREATE TABLE clicks_enriched (
+  session_id STRING,
+  event_time TIMESTAMP(3),
+  event_data STRING,
+  derived_field STRING,
+  PRIMARY KEY (session_id) NOT ENFORCED
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks-enriched',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format' = 'json',
+  'sink.partitioner' = 'round-robin',
+  'sink.flush.max-records' = '10000',
+  'sink.flush.interval' = '10s'
+);
+```
+
+### Justification of Main Values:
+1. **Kafka Topic Configuration:**
+   - **Partitions (16):** Each topic has 16 partitions to handle the high input rate (20,000 events/s) and ensure parallelism.
+   - **Replicas (3):** Three replicas ensure high availability and fault tolerance.
+   - **Retention (7 days):** Retention is set to 7 days to store historical data while keeping the cluster size manageable.
+   - **Segment Bytes (104.85 MB):** This value is set to ensure that each segment file does not grow too large, which helps in efficient management of log segments.
+
+2. **Flink Configuration:**
+   - **Parallelism (16):** Set to match the number of partitions for parallel processing.
+   - **State Backend (Filesystem):** Utilizes S3 for checkpointing to ensure durability.
+   - **Checkpoint Interval (60 seconds):** Ensures that checkpoints are created frequently enough to meet the latency requirements.
+   - **TaskManager Resources (4 CPU, 8GiB):** Configured based on the assumed maximum processing rate of 20,000 events/s per TaskManager.
+   - **Checkpointing and Savepoints:** Configured to retain multiple checkpoints and savepoints for fault tolerance and recovery.
+
+3. **Flink SQL Tables:**
+   - **Clicks Table:** Configured to read from the `clicks` topic, using JSON format and enforcing a primary key on `session_id`.
+   - **Clicks Enriched Table:** Configured to write to the `clicks-enriched` topic, using JSON format and enforcing a primary key on `session_id`. The `sink.flush` properties ensure that data is flushed periodically to maintain the latency requirement.

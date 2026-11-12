@@ -1,0 +1,116 @@
+### Step 1: Create Kafka topics
+
+```bash
+# Create topic 'clicks' with 4 partitions and 1 replica each
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 4 clicks
+
+# Create topic 'clicks-enriched' with 4 partitions and 1 replica each
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 4 clicks-enriched
+
+# Describe topic 'clicks' to verify the configuration
+kafka-topics.sh --bootstrap-server kafka:9092 --describe clicks
+
+# Describe topic 'clicks-enriched' to verify the configuration
+kafka-topics.sh --bootstrap-server kafka:9092 --describe clicks-enriched
+```
+
+### Step 2: Flink configuration
+
+```yaml
+# config.yaml
+application:
+  name: clickstream-enrichment
+  type: batch
+
+flink:
+  cluster:
+    mode: standalone
+    parallelism: 4
+  taskmanager:
+    num-executors: 3
+    taskmanager-opts:
+      - "memory:8g"
+      - "num-cores:4"
+  checkpointing:
+    enabled: true
+    interval: 10s
+    storage: s3://flink-state/checkpoints
+  checkpointing:
+    mode: EXACTLY_ONCE
+  kafka:
+    bootstrap-servers: kafka:9092
+    properties:
+      bootstrap.servers: kafka:9092
+      key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  logging:
+    level: DEBUG
+```
+
+### Step 3: Flink SQL table definitions
+
+```sql
+-- Create table for Kafka source 'clicks'
+CREATE TABLE clicks (
+  session_id STRING,
+  event JSON
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'kafka.bootstrap.servers' = 'kafka:9092',
+  'topic' = 'clicks',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'scan.startup.mode' = 'latest-offsets',
+  'value.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer'
+);
+
+-- Create table for Kafka sink 'clicks-enriched'
+CREATE TABLE clicks_enriched (
+  session_id STRING,
+  event JSON,
+  derived_field1 STRING,
+  derived_field2 STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'kafka.bootstrap.servers' = 'kafka:9092',
+  'topic' = 'clicks-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'value.serializer' = 'org.apache.kafka.common.serialization.StringSerializer'
+);
+
+-- Create a SQL query to filter out malformed events and enrich each event
+CREATE TABLE filtered_and_enriched (
+  session_id STRING,
+  event JSON,
+  derived_field1 STRING,
+  derived_field2 STRING
+) WITH (
+  'connector.type' = 'sql',
+  'connector.version' = 'universal'
+) AS
+SELECT
+  session_id,
+  event,
+  CASE
+    WHEN event:field1 IS NOT NULL THEN event:field1
+    ELSE 'default_value'
+  END AS derived_field1,
+  CASE
+    WHEN event:field2 IS NOT NULL THEN event:field2
+    ELSE 'default_value'
+  END AS derived_field2
+FROM clicks
+WHERE event IS NOT NULL AND event:session_id IS NOT NULL;
+
+-- Register the filtered_and_enriched table as a sink
+INSERT INTO clicks_enriched SELECT * FROM filtered_and_enriched;
+```
+
+### Justification of main values:
+
+- **Kafka topic configuration**: We create two topics, `clicks` and `clicks-enriched`, each with 4 partitions and 1 replica. This configuration allows for a good balance between throughput and latency. The number of partitions is chosen based on the expected input rate of 5,000 events/s, assuming an average event size of 2048 bytes. This results in a total throughput of 10 MB/s, which is within the capacity of one Kafka partition.
+
+- **Flink configuration**: We use a standalone Flink cluster with 3 TaskManagers, each with 4 CPU cores and 8 GB of memory. This configuration provides sufficient resources for processing the input data. The checkpointing interval is set to 10 seconds, which is a good trade-off between checkpointing frequency and performance. The checkpointing mode is set to EXACTLY_ONCE to ensure exactly-once delivery.
+
+- **Flink SQL table definitions**: We create two tables, `clicks` and `clicks_enriched`, to represent the Kafka source and sink, respectively. The `filtered_and_enriched` table is a SQL query that filters out malformed events and enriches each event with derived fields. This table is registered as a sink to write the enriched events to the `clicks_enriched` topic.

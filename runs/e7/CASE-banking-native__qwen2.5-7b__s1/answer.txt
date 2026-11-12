@@ -1,0 +1,77 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic banking-transactions --partitions 3 --replication-factor 3 --config cleanup.policy=compact --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic banking-transactions-validated --partitions 3 --replication-factor 3 --config cleanup.policy=compact --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+jobmanager.heap.mb: 4096
+taskmanager.heap.mb: 4096
+taskmanager.numberOfTaskSlots: 4
+state.backend: rocksdb
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.backend.rocksdb.checkpoints.dir: s3://flink-state/checkpoints
+state.backend.rocksdb.ttl: 604800
+taskmanager.network.memory.min NetworkPool: 128
+taskmanager.network.memory.min NetworkPool: 128
+taskmanager.network.memory.min NetworkPool: 128
+taskmanager.network.memory.min NetworkPool: 128
+taskmanager.heap.size: 4096m
+jobmanager.heap.size: 4096m
+taskmanager.numberOfTaskSlots: 4
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements
+CREATE TABLE banking_transactions (
+  account_id STRING,
+  transaction_id STRING,
+  amount DECIMAL(10,2),
+  timestamp TIMESTAMP(3),
+  WATERMARK FOR timestamp AS timestamp - INTERVAL '5' SECOND
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'banking-transactions',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'latest-offset',
+  'update-mode' = 'append',
+  'sink.partitioner' = 'round-robin',
+  'sink.partition-commit.policy.type' = 'all-complete'
+);
+
+CREATE TABLE banking_transactions_validated (
+  account_id STRING,
+  transaction_id STRING,
+  amount DECIMAL(10,2),
+  timestamp TIMESTAMP(3),
+  validated BOOLEAN
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'banking-transactions-validated',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'sink.partitioner' = 'round-robin',
+  'sink.partition-commit.policy.type' = 'all-complete'
+);
+```
+
+### Justification of Main Values:
+
+1. **Kafka Topics:**
+   - **Partitions (3):** Given the input rate of 50,000 events/s, 3 partitions are sufficient to handle the load. Each partition can sustain up to 5 MB/s, which is more than enough for 50,000 events/s with an average size of 1024 bytes.
+   - **Replication Factor (3):** Ensures that the data is replicated across all brokers, providing fault tolerance and availability.
+   - **Cleanup Policy (compact):** This is used to compact the log data, which helps in reducing the storage footprint and improving performance for large datasets.
+
+2. **Flink Configuration:**
+   - **Heap Size (4096 MB):** Each TaskManager is configured with 4 GB of heap memory to handle the processing load.
+   - **Task Slots (4):** Each TaskManager is configured with 4 slots, allowing parallel processing of tasks.
+   - **State Backend (rocksdb):** RocksDB is chosen for its durability and efficient storage, and the TTL is set to 604800 seconds (7 days) to match the retention requirement.
+   - **Checkpointing:** Checkpointing is enabled to ensure exactly-once semantics, and the checkpoints are stored in S3 for durability.
+
+3. **Flink SQL Statements:**
+   - **Watermark:** A watermark is set 5 seconds in the past to handle out-of-order events and ensure that the processing is timely.
+   - **Sink Partitioner:** The `round-robin` partitioner ensures that data is distributed evenly across partitions.
+   - **Update Mode (append):** Ensures that the sink appends new data and does not overwrite existing data, maintaining the exactly-once processing semantics.
+   - **Partition Commit Policy (all-complete):** Ensures that the entire batch of data is committed before the sink moves to the next batch, maintaining data integrity.

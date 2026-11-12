@@ -1,0 +1,447 @@
+{
+  "id": "ID-113",
+  "model": "qwen2.5-14b",
+  "seed": 0,
+  "track": "native",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 2048,
+    "latency_slo_ms": 1000,
+    "retention_days": 30,
+    "sink": "clicks-enriched",
+    "src": "clicks",
+    "throughput_eps": 5000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8383",
+  "started": "2026-11-10T19:27:59+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=2592000000",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=2592000000",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks-enriched --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=2592000000",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks-enriched --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=2592000000",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "config.state.checkpoints.dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8383/e7-1390214/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "clicks",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "clicks_enriched",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    }
+  ],
+  "translations": [],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "clicks",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "clicks_enriched",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO clicks_enriched (`session_id`, `event_data`, `enriched_data`, `event_time`, `__sent_ms`, `__seq`)\nSELECT `session_id`,\n       `event_data`,\n       CAST(NULL AS STRING),\n       `event_time`,\n       `__sent_ms`,\n       `__seq`\nFROM clicks;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics.sh --create --topic clicks --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=2592000000",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic clicks --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002 --replication-factor 3 --partitions 10 --config retention.ms=2592000000",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic clicks.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --create --topic clicks-enriched --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=2592000000",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic clicks-enriched --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002 --replication-factor 3 --partitions 10 --config retention.ms=2592000000",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic clicks-enriched.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": true,
+  "job_id": "997b5e40086f784433e6a1ef5c3bb444",
+  "job_state_final": "RUNNING",
+  "root_exception": null,
+  "checkpoints_completed": 0,
+  "checkpoints_failed": 0,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 1000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C1_deploy": "job not RUNNING within 120 s",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794335288.648,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.5,
+      "bootstrap": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "t": 1794335292.182,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "clicks",
+        "clicks-enriched"
+      ],
+      "ok": true
+    },
+    {
+      "t": 1794335298.39,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 6.2,
+      "taskmanagers": 3
+    },
+    {
+      "t": 1794335303.023,
+      "rel": null,
+      "event": "submitted",
+      "job": "997b5e40086f784433e6a1ef5c3bb444",
+      "seconds": 4.6
+    },
+    {
+      "t": 1794335303.04,
+      "rel": null,
+      "event": "job_state",
+      "state": "RUNNING",
+      "vertices": {
+        "CREATED": 2
+      }
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-113",
+    "answer_file": null,
+    "answers": "runs/main/qwen2.5-14b.greedy.jsonl",
+    "model": "qwen2.5-14b",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-113__qwen2.5-14b__s0.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8383",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 11,
+    "findings_L1_L3": [
+      "L2:unknown-key:config.state.backend is not a Flink 1.20 configuration option",
+      "L2:unknown-key:config.state.checkpoints.dir is not a Flink 1.20 configuration option",
+      "L2:unknown-key:config.state.checkpoints.num-retained is not a Flink 1.20 configuration option",
+      "L2:unknown-key:config.execution.checkpointing.mode is not a Flink 1.20 configuration option",
+      "L2:unknown-key:config.execution.checkpointing.interval is not a Flink 1.20 configuration option",
+      "L2:unknown-key:config.execution.checkpointing.timeout is not a Flink 1.20 configuration option",
+      "L2:unknown-key:config.execution.checkpointing.min-pause is not a Flink 1.20 configuration option",
+      "L2:unknown-key:config.parallelism.default is not a Flink 1.20 configuration option",
+      "L2:unknown-key:config.taskmanager.memory.managed.size is not a Flink 1.20 configuration option",
+      "L2:unknown-key:config.taskmanager.numberOfTaskSlots is not a Flink 1.20 configuration option",
+      "L2:unknown-key:config.jobmanager.execution.failover-strategy is not a Flink 1.20 configuration option"
+    ]
+  },
+  "topology": {
+    "port_base": 12000,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [
+        "f3"
+      ],
+      "spanning_sut_nodes": [
+        "f3"
+      ],
+      "sut_domains": [
+        0,
+        1,
+        2,
+        "2,3"
+      ]
+    },
+    "nodes": {
+      "k1": "35,36,147,148",
+      "k2": "37,38,149,150",
+      "k3": "39,40,151,152",
+      "f1": "68,69,70,71,180,181,182,183",
+      "f2": "18,19,20,21,130,131,132,133",
+      "f3": "72,73,74,88,184,185,186,200",
+      "j1": "41,153",
+      "ctl": "89,90,201,202",
+      "m1": "42,154"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12010,2@127.0.0.1:12011,3@127.0.0.1:12012",
+    "listeners=PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8383/e7-1390214/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "clicks-enriched": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    },
+    "clicks": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 12030,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 1,
+    "taskmanager.memory.process.size": "1728m",
+    "parallelism.default": 1,
+    "rest.address": "127.0.0.1",
+    "config.state.backend": "rocksdb",
+    "config.state.checkpoints.dir": "file:///tmp/chamoso-e7/8383/e7-1390214/objstore/flink-state/checkpoints",
+    "config.state.checkpoints.num-retained": 10,
+    "config.execution.checkpointing.mode": "EXACTLY_ONCE",
+    "config.execution.checkpointing.interval": 60000,
+    "config.execution.checkpointing.timeout": 60000,
+    "config.execution.checkpointing.min-pause": 5000,
+    "config.parallelism.default": 10,
+    "config.taskmanager.memory.managed.size": 6000000000,
+    "config.taskmanager.numberOfTaskSlots": 4,
+    "config.jobmanager.execution.failover-strategy": "region",
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 12031,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8383/e7-1390214/flink-io"
+  },
+  "taskmanagers": {
+    "started": 3,
+    "registered": 3,
+    "slots_per_tm": 1
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 4.6,
+    "error": null
+  },
+  "seconds_to_running": null,
+  "vertex_states_final": {
+    "CREATED": 2
+  },
+  "checkpoint_summary": {
+    "end_to_end_duration": {
+      "min": 0,
+      "max": 0,
+      "avg": 0,
+      "p50": "NaN",
+      "p90": "NaN",
+      "p95": "NaN",
+      "p99": "NaN",
+      "p999": "NaN"
+    },
+    "state_size": {
+      "min": 0,
+      "max": 0,
+      "avg": 0,
+      "p50": "NaN",
+      "p90": "NaN",
+      "p95": "NaN",
+      "p99": "NaN",
+      "p999": "NaN"
+    }
+  },
+  "checkpoint_config_effective": {
+    "mode": "at_least_once",
+    "interval": 9223372036854775807,
+    "timeout": 600000,
+    "min_pause": 0,
+    "max_concurrent": 1,
+    "externalization": {
+      "enabled": false,
+      "delete_on_cancellation": true
+    },
+    "state_backend": "HashMapStateBackend",
+    "checkpoint_storage": "JobManagerCheckpointStorage",
+    "unaligned_checkpoints": false,
+    "tolerable_failed_checkpoints": 0,
+    "aligned_checkpoint_timeout": 0,
+    "checkpoints_after_tasks_finish": true,
+    "state_changelog_enabled": false,
+    "changelog_periodic_materialization_interval": 600000,
+    "changelog_storage": "memory"
+  },
+  "num_restarts": 0,
+  "exception_history": [],
+  "topics_after_run": {
+    "clicks-enriched": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    },
+    "clicks": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T19:30:26+0100"
+}

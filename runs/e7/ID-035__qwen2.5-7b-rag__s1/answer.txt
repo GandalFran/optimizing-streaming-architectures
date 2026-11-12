@@ -1,0 +1,83 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic session-events --partitions 3 --replication-factor 3 --config retention.ms=86400000 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic session-events-enriched --partitions 3 --replication-factor 3 --config retention.ms=86400000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+jobmanager.heap.mb: 8192
+taskmanager.heap.mb: 7168
+taskmanager.numberOfTaskSlots: 4
+parallelism.default: 3
+state.backend: rocksdb
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.checkpoints.min-pending-checkpoints-to-retain: 3
+state.checkpoints.num-retained: 3
+metrics.reporter.kafka.bootstrap.servers: kafka:9092
+metrics.reporter.kafka.topic: flink-metrics
+metrics.reporter.class: org.apache.flink.metrics.kafka.KafkaReporter
+metrics.reporter.interval.ms: 60000
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements
+CREATE TABLE session_events (
+    user_id STRING,
+    event_time TIMESTAMP(3),
+    -- other fields
+    -- derived fields
+    -- json schema for the event
+    -- e.g. STRUCT<event_type STRING, action STRING, ...>
+    -- derived fields can be added here as needed
+    -- e.g. derived_field STRING
+    -- with json('payload') AS (event_type, action, ...)
+    -- with watermarks AS event_time - INTERVAL '1' SECOND
+)
+WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events',
+    'properties.bootstrap-server' = 'kafka:9092',
+    'format' = 'json',
+    'scan.start-offset' = 'latest',
+    'value.format.option' = 'skipMalformedRecords=true'
+);
+
+CREATE TABLE session_events_enriched (
+    user_id STRING,
+    event_time TIMESTAMP(3),
+    -- enriched fields
+    -- with json('payload') AS (enriched_field1, enriched_field2, ...)
+    -- with watermarks AS event_time - INTERVAL '1' SECOND
+)
+WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events-enriched',
+    'properties.bootstrap-server' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'fixed',
+    'sink.checkpointing-mode' = 'exactly-once',
+    'sink.checkpointing-interval' = '5000',
+    'sink.buffer-flush.max-rows' = '10000',
+    'sink.buffer-flush.max-bytes' = '5242880', -- 5MB
+    'sink.buffer-flush.interval' = '2000',
+    'sink.parallelism' = '3',
+    'sink.delivery-guarantee' = 'at-least-once'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topics Creation:**
+   - **Partitions and Replication Factor:** Each topic has 3 partitions and a replication factor of 3 to ensure high availability and fault tolerance, while also meeting the durability requirement.
+   - **Retention:** Both topics are set to retain data for 1 day (86,400,000 ms) to ensure data is available for as long as needed.
+
+2. **Flink Configuration:**
+   - **Heap Memory:** Configured with 8 GB for JobManager and 7 GB for each TaskManager to handle the processing load.
+   - **Parallelism:** Set to 3, which matches the number of partitions for the Kafka topics to ensure balanced load distribution.
+   - **Checkpointing:** Enabled with RocksDB as the backend and configured to retain 3 checkpoints, ensuring recovery in case of failures.
+   - **Metrics Reporter:** Configured to send metrics to Kafka for monitoring and logging purposes.
+
+3. **Flink SQL Tables:**
+   - **Input Table (session_events):** Reads from `session-events` topic, configured to skip malformed records and use JSON format.
+   - **Output Table (session_events_enriched):** Writes to `session-events-enriched` topic with at-least-once delivery guarantee, configured with a fixed partitioner to match the input topic's partitioning strategy, and buffer settings optimized for performance and durability.

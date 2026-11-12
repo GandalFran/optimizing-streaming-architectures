@@ -1,0 +1,69 @@
+```bash
+# Create Kafka topics with 3 partitions and 1 replica to ensure durability and meet the retention requirement
+kafka-topics.sh --create --topic session-events --partitions 3 --replication-factor 3 --config retention.ms=86400000 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic session-events-enriched --partitions 3 --replication-factor 3 --config retention.ms=86400000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+jobmanager.rpc.address: jobmanager
+jobmanager.rpc.port: 6123
+taskmanager.numberOfTaskSlots: 4
+taskmanager.memory.process.size: 8g
+state.backend: rocksdb
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.checkpoints.min-pause: 10s
+state.checkpoints.num-retained: 3
+parallelism.default: 3
+```
+
+```sql
+-- Create Kafka source table for session events
+CREATE TABLE session_events (
+  user_id STRING,
+  event_time TIMESTAMP(3),
+  event_data STRING,
+  PRIMARY KEY (user_id) NOT ENFORCED
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events',
+  'bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'latest-offset',
+  'value.format' = 'json',
+  'key.format' = 'json',
+  'update-mode' = 'upsert',
+  'scan.startup.mode' = 'earliest-offset',
+  'sink.partitioner' = 'round-robin'
+);
+
+-- Create Kafka sink table for enriched session events
+CREATE TABLE session_events_enriched (
+  user_id STRING,
+  event_time TIMESTAMP(3),
+  event_data STRING,
+  PRIMARY KEY (user_id) NOT ENFORCED
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events-enriched',
+  'bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'sink.partitioner' = 'round-robin',
+  'sink.delivery.guarantee' = 'at-least-once'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topics Creation:**
+   - **Partitions and Replication Factor:** Set to 3 partitions and 3 replicas to ensure high availability and durability. This configuration also helps in distributing the load and ensuring that the system can handle the input rate of 20,000 events/s.
+   - **Retention:** Set to 1 day (86,400,000 ms) to retain data for the required duration.
+
+2. **Flink Configuration:**
+   - **Parallelism:** Set to 3 to match the number of Kafka partitions, ensuring that the load is evenly distributed.
+   - **State Backend and Checkpoints:** RocksDB is used as the state backend, and checkpoints are stored in S3 to ensure durability. Checkpoints are retained for 3 iterations and the minimum pause between checkpoints is set to 10 seconds to balance between recovery time and checkpoint frequency.
+   - **Scan Startup Mode:** Set to `latest-offset` for the source and `earliest-offset` for the sink to ensure that the job starts from the latest available offset and handles the data correctly.
+
+3. **Flink SQL Tables:**
+   - **Source Table:** Configured to read from `session-events` topic, using JSON format for both key and value, and setting the `update-mode` to `upsert` to handle the enrichment logic.
+   - **Sink Table:** Configured to write to `session-events-enriched` topic, using JSON format, and setting the `sink.partitioner` to `round-robin` to distribute the data evenly across Kafka partitions. The `sink.delivery.guarantee` is set to `at-least-once` to ensure no data loss after failures.

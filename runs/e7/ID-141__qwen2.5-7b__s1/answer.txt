@@ -1,0 +1,85 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic app-logs --partitions 3 --replication-factor 3 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic app-logs-parsed --partitions 3 --replication-factor 3 --bootstrap-server kafka:9092
+kafka-configs.sh --alter --entity-type topics --entity-name app-logs --add-config retention.ms=86400000
+kafka-configs.sh --alter --entity-type topics --entity-name app-logs-parsed --add-config retention.ms=86400000
+```
+
+```yaml
+# config.yaml
+jobmanager.rpc.address: jobmanager
+jobmanager.heap.mb: 4096
+taskmanager.heap.mb: 4096
+taskmanager.numberOfTaskSlots: 4
+state.backend: rocksdb
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.checkpoints.min-pending-checkpoints-to-retain: 3
+state.checkpoints.max-pending-checkpoints-to-retain: 5
+taskmanager.network.memory.fraction: 0.75
+taskmanager.network.memory.min: 256m
+taskmanager.network.memory.max: 1024m
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements
+CREATE TABLE app_logs (
+    service STRING,
+    event JSON
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'app-logs',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'sink.partitioner' = 'round-robin',
+    'sink.checkpoint.min-pending-checkpoints-to-retain' = '3',
+    'sink.checkpoint.max-pending-checkpoints-to-retain' = '5'
+);
+
+CREATE TABLE app_logs_parsed (
+    service STRING,
+    event JSON,
+    derived_field1 STRING,
+    derived_field2 INT
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'app-logs-parsed',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'round-robin',
+    'sink.checkpoint.min-pending-checkpoints-to-retain' = '3',
+    'sink.checkpoint.max-pending-checkpoints-to-retain' = '5'
+);
+
+INSERT INTO app_logs_parsed
+SELECT
+    service,
+    event,
+    -- Add derived fields here
+    JSON_VALUE(event, '$.derivedField1') AS derived_field1,
+    JSON_VALUE(event, '$.derivedField2') AS derived_field2
+FROM app_logs
+WHERE
+    -- Add filtering logic here
+    event IS NOT NULL AND JSON_VALID(event);
+```
+
+### Justification of Main Values:
+
+1. **Kafka Topics Creation**:
+   - **Partitions (3)**: Given the input rate of 20,000 events/s, with each partition handling up to 20,000 events/s, 3 partitions are sufficient to handle the load.
+   - **Replication Factor (3)**: Ensures high availability and fault tolerance.
+   - **Retention (1 day)**: Set to retain data for 1 day as per the requirement.
+
+2. **Flink Configuration**:
+   - **Jobmanager and Taskmanager Resources**: Configured with 4096 MB of heap memory to balance between computation and state storage.
+   - **State Backend**: RocksDB is chosen for its efficiency in handling stateful operations.
+   - **Checkpointing**: Configured to retain at least 3 and at most 5 pending checkpoints to ensure reliability and quick recovery.
+   - **Network Memory**: Configured to ensure that network buffers are allocated appropriately.
+
+3. **Flink SQL Statements**:
+   - **Connector and Format**: Kafka connector is used with JSON format for both source and sink.
+   - **Partitioner**: Round-robin partitioner is used to distribute the load evenly across partitions.
+   - **Filtering and Derived Fields**: The `WHERE` clause filters out malformed events, and derived fields are added to the event.
+   - **Checkpointing**: Checkpointing is enabled with appropriate settings to ensure exactly-once semantics.

@@ -1,0 +1,49 @@
+Nov 10, 2026 7:08:00 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE payments (
+>     account_id BIGINT,
+>     event_time TIMESTAMP(3),
+>     payload STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'payments',
+>     'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>     'properties.group.id' = 'payment-validation-group',
+>     'format' = 'json',
+>     'scan.startup.mode' = 'latest-offset'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE payments_validated (
+>     account_id BIGINT,
+>     event_time TIMESTAMP(3),
+>     payload STRING,
+>     derived_field STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'payments-validated',
+>     'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>     'format' = 'json'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO payments_validated (`account_id`, `event_time`, `payload`, `derived_field`, `__sent_ms`, `__seq`)
+> SELECT `account_id`,
+>        `event_time`,
+>        `payload`,
+>        CAST(NULL AS STRING)[34;1m[INFO] Submitting SQL update statement to the cluster...[0m
+[34;1m[INFO] SQL update statement has been successfully submitted to the cluster:[0m
+Job ID: 4bb7c90738bb87c407557b9988a37860
+
+
+Flink SQL> 
+Shutting down the session...
+done.

@@ -1,0 +1,111 @@
+### Kafka Topic Creation Commands
+
+```bash
+# Create the session-events topic with 8 partitions (to handle the input rate) and 3 replicas (to ensure durability)
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --topic session-events --config retention.ms=86400000
+
+# Create the session-events-enriched topic with 8 partitions (to handle the output rate) and 3 replicas (to ensure durability)
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --topic session-events-enriched --config retention.ms=86400000
+```
+
+### Flink Configuration
+
+```yml
+execution:
+  checkpointing:
+    unaligned-checkpoints: true
+    checkpoint-interval: 10s
+    checkpointing-mode: EXACTLY_ONCE
+    checkpoint-ttl: 1h
+    max-concurrent-checkpoints: 1
+  restart-strategy:
+    failure-rate:
+      max-failures-per-interval: 3
+      failure-rate-interval: 1m
+      delay-between-attempts: 30s
+
+state:
+  backend: filesystem
+  backend.fs.checkpoint-data-uri: s3://flink-state/checkpoints
+
+table:
+  auto-update: true
+  dynamic-table-options:
+    table.exec.state.ttl.ms: 86400000
+
+kafka:
+  kafka-clients:
+    bootstrap.servers: kafka:9092
+    group.id: flink-session-events
+    default.replication.factor: 3
+    default.replication.factor-produce: 3
+  consumer:
+    isolation.level: read_committed
+    group.id: flink-session-events
+  producer:
+    transactional.id.prefix: flink-session-events
+    retries: 10
+    acks: all
+    max.request.size: 5242880
+    buffer.memory: 33554432
+```
+
+### Flink SQL CREATE TABLE Statements
+
+```sql
+CREATE TABLE session_events (
+  `user_id` STRING,
+  `event_data` STRING,
+  `event_timestamp` TIMESTAMP(3) METADATA FROM 'timestamp',
+  WATERMARK FOR `event_timestamp` AS `event_timestamp`
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'session-events',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'format.type' = 'json',
+  'format.json.fail-on-missing-field' = 'true',
+  'format.json.schema' = '{
+    "type": "object",
+    "properties": {
+      "user_id": {"type": "string"},
+      "event_data": {"type": "string"},
+      "event_timestamp": {"type": "string", "format": "date-time"}
+    }
+  }'
+);
+
+CREATE TABLE session_events_enriched (
+  `user_id` STRING,
+  `event_data` STRING,
+  `event_timestamp` TIMESTAMP(3),
+  `derived_field` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'session-events-enriched',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'format.type' = 'json',
+  'format.json.fail-on-missing-field' = 'true',
+  'format.json.schema' = '{
+    "type": "object",
+    "properties": {
+      "user_id": {"type": "string"},
+      "event_data": {"type": "string"},
+      "event_timestamp": {"type": "string", "format": "date-time"},
+      "derived_field": {"type": "string"}
+    }
+  }',
+  'update-mode' = 'append'
+);
+```
+
+**Justification:**
+
+*   We create both topics with 8 partitions to handle the input and output rates, assuming one partition can sustain at most 5 MB/s of produce traffic and one Flink source subtask can process at most 20,000 events/s. This ensures that the pipeline can handle the sustained input rate of 20,000 events/s.
+*   We set the replication factor to 3 for both topics to ensure that the data is durable and can survive the loss of any single Kafka broker without losing acknowledged data.
+*   We set the retention period to 1 day for both topics as per the requirements.
+*   We configure Flink to use the KRaft mode Kafka cluster, with the `kafka-clients.bootstrap.servers` property set to `kafka:9092`.
+*   We set the checkpointing interval to 10 seconds to ensure that the end-to-end latency is below 10 seconds at p99. We also set the checkpointing mode to `EXACTLY_ONCE` to ensure at-least-once delivery guarantee.
+*   We configure the Flink SQL tables to use the Kafka connector, with the `connector.properties.bootstrap.servers` property set to `kafka:9092`. We also set the `format.type` to `json` and specify the JSON schema for each table.
+*   We set the `update-mode` to `append` for the `session_events_enriched` table to ensure that only new events are appended to the table.

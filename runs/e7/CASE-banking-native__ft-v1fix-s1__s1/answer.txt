@@ -1,0 +1,54 @@
+# 1. `kafka-topics.sh` commands to create the Kafka topics
+bash
+# create banking-transactions topic
+kafka-topics.sh --create --topic banking-transactions --partitions 8 --replication-factor 3 --config retention.ms=604800000 --config cleanup.policy=compact --config min.compaction.lag.ms=30000 --bootstrap-server kafka:9092
+
+# create banking-transactions-validated topic
+kafka-topics.sh --create --topic banking-transactions-validated --partitions 8 --replication-factor 3 --config retention.ms=604800000 --config cleanup.policy=compact --config min.compaction.lag.ms=30000 --bootstrap-server kafka:9092
+# 2. Flink configuration (config.yaml) keys
+yaml
+# set the checkpointing interval to 100 ms
+jobmanager.checkpoints.interval: 100 ms
+
+# set the state backend to s3
+state.backend: s3
+
+# set the state backend s3 path
+state.backend.s3.path: s3://flink-state/checkpoints
+
+# set the parallelism to 3 (3 TaskManagers)
+parallelism.default: 3
+
+# set the state backend to use exactly-once end-to-end
+state.backend.exactly-once: true
+# 3. Flink SQL `CREATE TABLE` statements for every Kafka source and sink table
+sql
+CREATE TABLE banking_transactions (
+    account_id STRING,
+    event_time TIMESTAMP(3),
+    amount DECIMAL(10, 2)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'banking_transactions',
+    'format' = 'json',
+    'scan.startup.mode' = 'group-offsets',
+    'scan.startup_offsets_group_name' = 'banking_transactions',
+    'scan.startup_offsets_group_size' = 3
+);
+
+CREATE TABLE banking_transactions_validated (
+    account_id STRING,
+    event_time TIMESTAMP(3),
+    amount DECIMAL(10, 2)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions-validated',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json'
+);
+# Justification:
+# The `kafka-topics.sh` commands create two Kafka topics with 8 partitions and 3 replicas each, for a total of 24 partitions. This ensures high throughput and fault tolerance.
+# The Flink configuration uses the S3 state backend and enables exactly-once semantics, which guarantees no duplicates and no loss of data. The checkpointing interval of 100 ms is set to meet the end-to-end latency requirement.
+# The Flink SQL `CREATE TABLE` statements define the source and sink tables, with the source table configured to use the Kafka connector and the sink table configured to use the JSON format.

@@ -1,0 +1,125 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic banking-transactions --partitions 8 --replication-factor 3 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic banking-transactions-validated --partitions 8 --replication-factor 3 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+flink:
+  checkpointing:
+    mode: exactly-once
+    min-pause-between-checkpoints: 00:00:05
+    max-concurrent-checkpoints: 1
+    min-snapshot-interval: 00:00:01
+    externalized-checkpoints: s3://flink-state/checkpoints
+  parallelism:
+    default: 4
+  taskmanager:
+    memory:
+      heap: 8 GB
+    slots: 4
+  taskmanager.numberOfTaskSlots: 4
+  network:
+    send.buffer.bytes: 131072
+    receive.buffer.bytes: 131072
+  state.backend: rocksdb
+  state.checkpoints.refresh-interval: 00:00:30
+  state.checkpoints.min-pause: 00:00:05
+  state.checkpoints.num-retained: 3
+  state.backend.rocksdb.block-cache-size: 512 MB
+  taskmanager.heap.partitioner: org.apache.flink.runtime.io.network.partition =>$partitioner
+  taskmanager.network.server.port: 6123
+  taskmanager.network.server.bind-host: localhost
+  taskmanager.network.server.bind-port: 6123
+  taskmanager.network.client.port-range: 1024-65535
+  taskmanager.network.client.connect-timeout: 30000
+  taskmanager.network.client.socket-timeout: 30000
+  taskmanager.network.client.idle-timeout: 30000
+  taskmanager.network.server.bind-ports-range: 6123-6126
+  taskmanager.network.server.socket-timeout: 30000
+  taskmanager.network.server.idle-timeout: 30000
+  taskmanager.network.server.max-connections: 10000
+  taskmanager.network.server.request-timeout: 30000
+  taskmanager.network.server.request-timeout-retries: 3
+  taskmanager.network.server.request-timeout-retry-interval: 1000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-retries: 3
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout-retry-backoff-factor: 2
+  taskmanager.network.server.request-timeout-retry-max-interval: 30000
+  taskmanager.network.server.request-timeout

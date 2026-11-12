@@ -1,0 +1,241 @@
+{
+  "id": "ID-114",
+  "model": "phi-3-mini-4k",
+  "seed": 1,
+  "track": "k8s",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 2048,
+    "latency_slo_ms": 1000,
+    "retention_days": 30,
+    "sink": "card-transactions-enriched",
+    "src": "card-transactions",
+    "throughput_eps": 5000
+  },
+  "finish_reason": "length",
+  "host": "cn001",
+  "slurm_job": "8387",
+  "started": "2026-11-10T20:11:59+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "KafkaTopic/card-transactions",
+      "kind": "bootstrap-server",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    }
+  ],
+  "translations": [
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/card-transactions",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic card-transactions --partitions 1 --replication-factor 2 --config retention.bytes=31557600000",
+      "skipped": null
+    },
+    {
+      "artefact": "flink-conf",
+      "from": "FlinkDeployment.spec.flinkConfiguration",
+      "to": "config.yaml keys (verbatim)"
+    },
+    {
+      "artefact": "taskmanagers",
+      "from": "ceil(parallelism 1 / 3 slots) = 1 pods",
+      "to": "1 TaskManager processes (the prompt allows at most 3 pods)"
+    }
+  ],
+  "augmentations": [],
+  "topic_commands": [
+    {
+      "answer_cmd": "KafkaTopic/card-transactions",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic card-transactions --partitions 1 --replication-factor 2 --config retention.bytes=31557600000 --bootstrap-server 127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502",
+      "substitutions": [
+        {
+          "kind": "bootstrap-server",
+          "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic card-transactions.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "FlinkDeployment apiVersion 'flink.kyma.io/v1alpha1' is not served by the Flink Kubernetes Operator 1.13: the API server rejects the resource",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 1000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C1_deploy": "FlinkDeployment apiVersion 'flink.kyma.io/v1alpha1' is not served by the Flink Kubernetes Operator 1.13: the API server rejects the resource",
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794337928.005,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.6,
+      "bootstrap": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "t": 1794337930.527,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "card-transactions"
+      ],
+      "ok": false
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-114",
+    "answer_file": null,
+    "answers": "runs/main/phi-3-mini-4k.sample.jsonl",
+    "model": "phi-3-mini-4k",
+    "seed": 1,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-114__phi-3-mini-4k__s1.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8387",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 9,
+    "findings_L1_L3": [
+      "L1:truncated:generation stopped at the token limit",
+      "L2:unknown-field:KafkaTopic.spec.replicaCount is not a field of this resource",
+      "L3:unsupported-api-version:FlinkDeployment apiVersion 'flink.kyma.io/v1alpha1' not served (served: ['flink.apache.org/v1beta1'])",
+      "L2:unknown-key:taskmanager.ha.retries is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.memory.processing.on-heap.mb is not a Flink 1.20 configuration option",
+      "L1:missing-artefact:no SQL block with CREATE TABLE statements"
+    ]
+  },
+  "topology": {
+    "port_base": 12500,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [
+        "f3"
+      ],
+      "spanning_sut_nodes": [
+        "f3"
+      ],
+      "sut_domains": [
+        0,
+        2,
+        "2,3",
+        3
+      ]
+    },
+    "nodes": {
+      "k1": "18,19,130,131",
+      "k2": "20,21,132,133",
+      "k3": "22,23,134,135",
+      "f1": "68,69,70,71,180,181,182,183",
+      "f2": "88,89,90,91,200,201,202,203",
+      "f3": "72,73,74,92,184,185,186,204",
+      "j1": "24,136",
+      "ctl": "54,55,166,167",
+      "m1": "93,205"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12510,2@127.0.0.1:12511,3@127.0.0.1:12512",
+    "listeners=PLAINTEXT://127.0.0.1:12500,CONTROLLER://127.0.0.1:12510",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12500",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8387/e7-2060493/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "card-transactions": {
+      "partitions": 1,
+      "replication_factor": 2,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.bytes": "31557600000"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": false
+  },
+  "failure_stage": "answer",
+  "topics_after_run": {
+    "card-transactions": {
+      "partitions": 1,
+      "replication_factor": 2,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.bytes": "31557600000"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T20:12:17+0100"
+}

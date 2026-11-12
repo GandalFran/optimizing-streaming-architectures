@@ -1,0 +1,175 @@
+```yaml
+# Topic definitions
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+spec:
+  partitions: 1
+  replicationFactor: 3
+  topicNameFormat: card-transactions
+  retentionMs: 2592000000
+  config:
+    retention.bytes: 524288000
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+spec:
+  partitions: 1
+  replicationFactor: 3
+  topicNameFormat: card-transactions-enriched
+  retentionMs: 2592000000
+  config:
+    retention.bytes: 524288000
+```
+
+```yaml
+# Flink configuration
+
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: flink
+spec:
+  flinkConfiguration:
+    jobmanager:
+      heap.size: 4g
+      taskmanager.numberOfTaskSlots: 4
+      blob.server.port: 6124
+      queryable-state.server.port: 6125
+      metrics.reporters: jmx
+      metrics.sink.jmx.port: 5555
+    taskmanager:
+      heap.size: 4g
+      process.taskmanager.cpu.cores: 1
+      network.netty.client.max-worker-threads: 1024
+      network.netty.client.max-worker-threads-per-processor: 1
+      network.netty.server.max-worker-threads: 1024
+      network.netty.server.max-worker-threads-per-processor: 1
+    high-availability: external
+    high-availability.cluster-id: flink
+    high-availability.storageDir: s3://flink-state/checkpoints
+    jobmanager.rpc.address: flink-jobmanager
+    jobmanager.rpc.port: 6123
+    jobmanager.web.port: 8081
+    jobmanager.web.tmpdir: /tmp
+    taskmanager.rpc.port: 6122
+    taskmanager.web.port: 8082
+    kubernetes:
+      taskmanager.numberOfTaskManager: 3
+      taskmanager.memory.process.size: 8g
+      taskmanager.cpu.cores: 1
+      jobmanager.memory.process.size: 8g
+      jobmanager.cpu.cores: 1
+    sql-connector:
+      json:
+        allow-comments: false
+        allow-empty: true
+        allow-null: true
+        allow-trailing-comma: true
+        allow-unknown-keys: true
+        allow-unknown-fields: true
+        auto-detect: true
+        charset: UTF-8
+        case-insensitive-field-names: false
+        field-cast-mode: fail
+        fail-on-missing-field: true
+        null-string: null
+        prefer-arrays: false
+        suppress-trailing-commas: false
+        trim-whitespace: false
+      csv:
+        allow-comments: false
+        allow-empty: true
+        allow-null: true
+        allow-trailing-commas: false
+        allow-unknown-keys: true
+        allow-unknown-fields: true
+        auto-detect: true
+        charset: UTF-8
+        case-insensitive-field-names: false
+        delimiter: ','
+        field-cast-mode: fail
+        null-string: null
+        quote-character: '"'
+        quote-mode: double
+        quote-null: false
+        quote-escape: '"'
+        skip-empty-lines: true
+        trim-whitespace: false
+      kafka-json:
+        key.fields: card_id
+        key.fields-include: null
+        key.type: POJO
+        key.type-parameters: 'org.apache.flink.api.common.typeinfo.TypeInformation'
+        key.type-parameters.parameters: 'com.example.CardTransaction'
+        value.fields: null
+        value.fields-include: null
+        value.type: POJO
+        value.type-parameters: 'org.apache.flink.api.common.typeinfo.TypeInformation'
+        value.type-parameters.parameters: 'com.example.CardTransaction'
+        value.type-parameters.parameters.parameters: 'card_id=org.apache.flink.api.common.typeinfo.TypeInformation#java.lang.String'
+        value.type-parameters.parameters.parameters.parameters: 'amount=org.apache.flink.api.common.typeinfo.TypeInformation#java.lang.Float'
+        value.type-parameters.parameters.parameters.parameters.parameters: 'currency=org.apache.flink.api.common.typeinfo.TypeInformation#java.lang.String'
+      kafka-csv:
+        key.fields: card_id
+        key.fields-include: null
+        key.type: POJO
+        key.type-parameters: 'org.apache.flink.api.common.typeinfo.TypeInformation'
+        key.type-parameters.parameters: 'com.example.CardTransaction'
+        value.fields: null
+        value.fields-include: null
+        value.type: POJO
+        value.type-parameters: 'org.apache.flink.api.common.typeinfo.TypeInformation'
+        value.type-parameters.parameters: 'com.example.CardTransaction'
+        value.type-parameters.parameters.parameters: 'card_id=org.apache.flink.api.common.typeinfo.TypeInformation#java.lang.String'
+        value.type-parameters.parameters.parameters.parameters: 'amount=org.apache.flink.api.common.typeinfo.TypeInformation#java.lang.Float'
+        value.type-parameters.parameters.parameters.parameters.parameters: 'currency=org.apache.flink.api.common.typeinfo.TypeInformation#java.lang.String'
+    sql-gateway:
+      rest.port: 8088
+      web.tmpdir: /tmp
+    state.backend.rocksdb.memory.write-buffer-ratio: 0.5
+    state.backend.rocksdb.memory.write-buffer-size: 1048576
+    state.backend.rocksdb.memory.write-buffer-flush-threshold: 10485760
+    state.backend.rocksdb.memory.write-buffer-flush-interval: 1000
+    state.backend.rocksdb.memory.write-buffer-sync-interval: 1000
+    state.backend.rocksdb.memory.write-buffer-sync: false
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold: 1048576
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level: 1
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-2: 2
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-3: 3
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-4: 4
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-5: 5
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-6: 6
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-7: 7
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-8: 8
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-9: 9
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-10: 10
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-11: 11
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-12: 12
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-13: 13
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-14: 14
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-15: 15
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-16: 16
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-17: 17
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-18: 18
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-19: 19
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-20: 20
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-21: 21
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-22: 22
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-23: 23
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-24: 24
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-25: 25
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-26: 26
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-27: 27
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-28: 28
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-29: 29
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-30: 30
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-31: 31
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-32: 32
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-33: 33
+    state.backend.rocksdb.memory.write-buffer-sync-level-threshold-level-34: 34
+    state.backend.rocksdb.memory.write-buffer-sync

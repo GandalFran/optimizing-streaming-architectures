@@ -1,0 +1,72 @@
+# 1. Strimzi KafkaTopic resources
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments
+  namespace: default
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    cleanup.policy: compact
+    min.insync.replicas: 2
+    max.message.bytes: 2048
+    max.compaction.lag.ms: 5000
+    segment.bytes: 10485760
+    segment.ms: 60000
+    delete.retention.ms: 604800000
+    flush.messages: 10000
+    flush.ms: 10000
+    flush.interval.messages: 10000
+    flush.max.bytes: 10485760
+    flush.max.messages: 10000
+    flush.max.bytes.per.partition: 10485760
+    flush.max.messages.per.partition: 10000
+    flush.max.bytes.per.second: 10485760
+    flush.max.messages.per.second: 10000
+    flush.max.bytes.per.second.per.partition: 10485760
+    flush.max.messages.per.second.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic: 10485760
+    flush.max.messages.per.second.per.partition.per.topic: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition: 10485760
+    flush.max.messages.per.second.per.partition.per.topic.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition.per.partition

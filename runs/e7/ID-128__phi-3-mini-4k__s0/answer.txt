@@ -1,0 +1,98 @@
+ ```yaml
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+  namespace: default
+  labels:
+    app: clickstream-processor
+    component: kafka-source
+    env: production
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention: 7d
+  cleanupPolicy: "compact"
+
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+  namespace: default
+  labels:
+    app: clickstream-processor
+    component: kafka-sink
+    env: production
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention: 7d
+  cleanupPolicy: "compact"
+```
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-sql-runner
+  namespace: default
+  labels:
+    app: flink-sql-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-sql-runner
+  template:
+    metadata:
+      labels:
+        app: flink-sql-runner
+    spec:
+      containers:
+      - name: flink-sql-runner
+        image: flink:1.20
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: FLINK_PROPERTIES
+          value: "state.backend=filesystem,taskmanager.numberOfTaskSlots=3,taskmanager.heap.size=8192,state.checkpoints.dir=s3://flink-state/checkpoints"
+        ports:
+        - containerPort: 6123
+        volumeMounts:
+        - mountPath: /opt/flink/usrlib
+          name: flink-lib
+      volumes:
+      - name: flink-lib
+        persistentVolumeClaim:
+          claimName: flink-lib-pvc
+```
+
+```sql
+CREATE TABLE clicks (
+  session_id VARCHAR,
+  event_time TIMESTAMP,
+  event_data STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'clickstream-processor',
+  'format' = 'json'
+);
+
+CREATE TABLE clicks_enriched (
+  session_id VARCHAR,
+  event_time TIMESTAMP,
+  event_data STRING,
+  enriched_data STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks-enriched',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format' = 'json'
+);
+```
+
+Justification:
+- The Kafka topics `clicks` and `clicks-enriched` are created with 3 partitions each and a replication factor of 3 to ensure durability and meet the requirement of keeping data for 7 days. The cleanup policy is set to "compact" to manage the retention period efficiently.
+- The Flink deployment is configured with 3 task manager slots, which is the maximum allowed by the Flink Kubernetes Operator. The state backend is set to filesystem, and the checkpoint storage is specified to use S3. The Flink SQL job is packaged as a JAR file and deployed as a single replica to meet the requirement of at-least-once delivery.
+- The Flink SQL `CREATE TABLE` statements define the source and sink tables for the Kafka topics. The `format` property is set to "json" to handle the JSON-formatted clickstream events. The `enriched_data` field in the `clicks_enriched` table is a placeholder for the derived fields that will be added during the transformation process.

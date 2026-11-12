@@ -1,0 +1,86 @@
+```bash
+# Create the Kafka topics
+kafka-topics.sh --create --topic sensor-readings --partitions 10 --replication-factor 3 --config retention.ms=604800000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic sensor-readings-clean --partitions 10 --replication-factor 3 --config retention.ms=604800000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092
+```
+
+```yaml
+# Flink configuration
+flink.jobmanager.memory.process.size: 1024 mb
+flink.taskmanager.memory.process.size: 1024 mb
+flink.jobmanager.rpc.address: jobmanager
+flink.resourcemanager.address: jobmanager
+flink.resourcemanager.web.address: jobmanager
+flink.resourcemanager.scheduler: classic
+flink.resourcemanager.scheduler.classic.adaptive.enabled: true
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism: 3
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-factor: 1.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-minimum: 1
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-maximum: 10
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-factor: 1.25
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-factor: 0.75
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold: 0.1
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold: 0.1
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay: 10 s
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay: 10 s
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor: 1.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-minimum: 0.1
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-minimum: 0.1
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-minimum: 10 s
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-minimum: 10 s
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-maximum: 10 s
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-maximum: 10 s
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-minimum: 1.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-minimum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-minimum: 1.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-minimum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-minimum: 1.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-minimum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-minimum: 1.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-minimum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-minimum: 1.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-minimum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-minimum: 1.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-minimum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-minimum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-threshold-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-threshold-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-increase-delay-factor-maximum: 2.0
+flink.resourcemanager.scheduler.classic.adaptive.target-parallelism-decrease-delay-factor-maximum: 0.5
+flink.resourcemanager.scheduler.classic.adaptive.target-

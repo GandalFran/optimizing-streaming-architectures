@@ -1,0 +1,88 @@
+**Kafka Topics**
+```yml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 86400000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions-clean
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 86400000
+```
+
+**Flink Deployment**
+```yml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: vehicle-positions-cleaner
+spec:
+  image:
+    name: flink:1.20
+  flinkVersion: v1_20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.cpu.cores: 4
+    taskmanager.memory.jvm-metaspace.size: 896m
+    taskmanager.memory.jvm-overhead.max: 2048m
+    taskmanager.memory.process.size: 8192m
+    state.savepoints.dir: s3://flink-state/checkpoints
+    execution.checkpointing.interval: 10000
+    execution.checkpointing.timeout: 10000
+    execution.checkpointing.unaligned: true
+    execution.checkpointing.tolerable-failed-checkpoints: 3
+    execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+    execution.checkpointing.externalized-checkpoint.cleanup: DELETE_ON_CANCELLATION
+    execution.checkpointing.checkpoints.listing.timeout: 60000
+    execution.checkpointing.checkpoints.history.limit: 10
+    execution.checkpointing.checkpoints.max-concurrent: 1
+    execution.checkpointing.checkpoint-timeout-exception: true
+    execution.checkpointing.checkpoint-duration-threshold: 1000
+    execution.checkpointing.checkpoint-duration-threshold-warning-threshold: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-threshold: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-wait: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries: 3
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts: 3
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts: 3
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts: 3
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts: 3
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts: 3
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts: 3
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts: 3
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts: 3
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max: 10000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts: 3
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff: 1000
+    execution.checkpointing.checkpoint-duration-threshold-failure-max-wait-interval-timeout-retries-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max-attempts-backoff-max: 10000
+    execution.checkpointing.checkpoint-duration-threshold

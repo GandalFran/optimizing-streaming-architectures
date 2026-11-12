@@ -1,0 +1,61 @@
+```bash
+# Create the banking-transactions topic with 25 partitions and replication factor 3
+kafka-topics.sh --create --topic banking-transactions --bootstrap-server kafka:9092 --partitions 25 --replication-factor 3 --config retention.ms=604800000 --config segment.ms=604800000
+
+# Create the banking-transactions-validated topic with 25 partitions and replication factor 3
+kafka-topics.sh --create --topic banking-transactions-validated --bootstrap-server kafka:9092 --partitions 25 --replication-factor 3 --config retention.ms=604800000 --config segment.ms=604800000
+```
+
+```yaml
+# Flink configuration for the standalone cluster
+execution.checkpointing.interval: 5s
+execution.checkpointing.mode: EXACTLY_ONCE
+execution.checkpointing.unaligned.enabled: true
+execution.checkpointing.min-pause: 500
+execution.checkpointing.timeout: 60s
+execution.parallelism: 10
+state.backend: rocksdb
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.savepoints.dir: s3://flink-state/savepoints
+```
+
+```sql
+-- Define the source table for the banking-transactions topic
+CREATE TABLE banking_transactions (
+    account_id BIGINT,
+    transaction_data ROW<...>,  -- Define the structure of the transaction_data JSON
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions',
+    'scan.startup.mode' = 'earliest-offset',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json'
+);
+
+-- Define the sink table for the banking-transactions-validated topic
+CREATE TABLE banking_transactions_validated (
+    account_id BIGINT,
+    transaction_data ROW<...>,  -- Define the structure of the transaction_data JSON
+    event_time TIMESTAMP(3)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions-validated',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'org.apache.flink.connector.kafka.sink.KeyPartitioner',
+    'key.format' = 'raw'
+);
+```
+
+**Justification of main values:**
+- **Kafka Topics:**
+  - **25 Partitions:** Given the input rate of 50,000 events/s with an average size of 1024 bytes, each partition would handle 2 MB/s (50,000 * 1024 / 1,000,000) which is within the assumed limit of 5 MB/s per partition. 25 partitions distribute the load well.
+  - **Replication Factor 3:** Ensures durability, as data will be stored across 3 brokers, preventing loss in case any single broker fails.
+  - **Retention 7 days:** Configured for both topics to keep data for the required duration.
+- **Flink Configuration:**
+  - **Checkpointing:** Interval set to 5 seconds to ensure low latency while maintaining durability. Unaligned checkpoints are enabled for better performance.
+  - **Parallelism:** Set to 10 to match the number of source subtasks (50,000 events/s / 5,000 events/s per subtask), ensuring efficient distribution of processing.
+  - **Checkpoint Storage:** Directed to S3 for durability.
+- **SQL Statements:**
+  - **Key Partitioner:** Used in the sink to ensure exactly-once processing semantics by leveraging Kafka's support for idempotent producers.

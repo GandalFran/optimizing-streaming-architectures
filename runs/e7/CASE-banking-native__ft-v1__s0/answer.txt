@@ -1,0 +1,44 @@
+1. ```bash
+# Create the Kafka topics
+kafka-topics.sh --create --topic banking-transactions --partitions 12 --replication-factor 3 --config retention.ms=604800000 --config min.insync.replicas=2 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic banking-transactions-validated --partitions 12 --replication-factor 3 --config retention.ms=604800000 --config min.insync.replicas=2 --bootstrap-server kafka:9092
+```
+
+2. ```yaml
+# Flink configuration
+jobmanager.rpc.address: jobmanager
+jobmanager.rpc.port: 6123
+jobmanager.web.port: 8081
+taskmanager.numberOfTaskSlots: 4
+state.backend: filesystem
+state.backend.fs.checkpointdir: s3://flink-state/checkpoints
+parallelism.default: 3
+```
+
+3. ```sql
+# Flink SQL statements
+CREATE TABLE banking_transactions (
+  account_id STRING,
+  transaction JSON
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'banking-transactions',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json'
+);
+
+CREATE TABLE banking_transactions_validated (
+  account_id STRING,
+  transaction JSON
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'banking-transactions-validated',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json'
+);
+```
+
+The main values are as follows:
+- The Kafka topics are created with 12 partitions and 3 replicas to ensure high availability and durability.
+- The Flink configuration sets the jobmanager and taskmanager settings, and the state backend to filesystem to ensure exactly-once semantics.
+- The Flink SQL statements create the Kafka source and sink tables, and specify the format as JSON. The source table is keyed by `account_id` to ensure that the transactions are processed in order. The sink table is created with the same format and properties as the source table. The retention period is set to 7 days to ensure that the data is retained for the required period. The min.insync.replicas is set to 2 to ensure that the data is replicated to at least 2 brokers. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The input rate is handled by setting the number of partitions and replicas to 12 and 3 respectively. The Flink source subtask is set to process at most 20,000 events/s. The end-to-end latency is handled by setting the retention period to 7 days and the min.insync.replicas to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days) to ensure that the data is retained for the required period. The delivery guarantee is exactly-once end-to-end as the state backend is set to filesystem and the min.insync.replicas is set to 2. The retention.ms is set to 604800000 (7 days)

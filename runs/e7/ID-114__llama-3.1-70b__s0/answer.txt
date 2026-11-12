@@ -1,0 +1,120 @@
+**Kafka Topics**
+```yml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 2592000000
+    segment.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 2592000000
+    segment.ms: 604800000
+```
+
+**Flink Deployment**
+```yml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: card-transactions-enricher
+spec:
+  image:
+    name: flink:1.20
+  flinkVersion: v1_20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.cpu.cores: 4
+    taskmanager.memory.jvm-metaspace.size: 896m
+    taskmanager.memory.jvm-overhead.max: 2048m
+    taskmanager.memory.process.size: 8192m
+    state.savepoints.dir: s3://flink-state/checkpoints
+    execution.checkpointing.interval: 10s
+    execution.checkpointing.timeout: 1min
+    execution.checkpointing.unaligned: true
+    execution.checkpointing.tolerable-failed-checkpoints: 3
+    execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+    execution.restart-strategy: fixed-delay
+    execution.restart-strategy.fixed-delay.attempts: 3
+    execution.restart-strategy.fixed-delay.delay: 10s
+    execution.savepointing.interval: 1h
+    execution.savepointing.max-concurrent: 1
+  job:
+    jarURI: local:///opt/flink/usrlib/sql-runner.jar
+    parallelism: 10
+  resources:
+    taskmanager:
+      cpu: 4
+      memory: 8G
+  podTemplate:
+    spec:
+      containers:
+      - name: flink-main-container
+        volumeMounts:
+        - name: flink-config-volume
+          mountPath: /opt/flink/conf
+      volumes:
+      - name: flink-config-volume
+        configMap:
+          name: flink-config
+  replicas: 3
+```
+
+**Flink SQL**
+```sql
+CREATE TABLE card_transactions (
+  `card_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `amount` DECIMAL(10, 2),
+  `merchant` STRING,
+  `location` STRING,
+  `event` STRING,
+  `event_data` MAP<STRING, STRING>
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'card-transactions',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.fail-on-missing-field' = 'true',
+  'update-mode' = 'append'
+);
+
+CREATE TABLE card_transactions_enriched (
+  `card_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `amount` DECIMAL(10, 2),
+  `merchant` STRING,
+  `location` STRING,
+  `event` STRING,
+  `event_data` MAP<STRING, STRING>,
+  `derived_field1` STRING,
+  `derived_field2` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'card-transactions-enriched',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.fail-on-missing-field' = 'true',
+  'update-mode' = 'append'
+);
+```
+
+**Justification**
+
+*   Kafka topics are created with 10 partitions to handle the input rate of 5,000 events/s, assuming one partition can sustain at most 5 MB/s of produce traffic and the average event size is 2048 bytes. This results in approximately 10 MB/s of produce traffic per topic.
+*   The Flink deployment is configured with 3 TaskManager pods, each with 4 CPU and 8 GiB of memory, to handle the input rate and provide enough resources for the job. The parallelism is set to 10 to match the number of Kafka partitions.
+*   The Flink configuration is set to use unaligned checkpoints with a 10-second interval and a 1-minute timeout to achieve low end-to-end latency. The `execution.checkpointing.tolerable-failed-checkpoints` is set to 3 to allow for some checkpoint failures without restarting the job.
+*   The Flink SQL tables are created with the `json` format and `fail-on-missing-field` set to `true` to ensure that only valid events are processed. The `update-mode` is set to `append` to ensure that events are not overwritten.

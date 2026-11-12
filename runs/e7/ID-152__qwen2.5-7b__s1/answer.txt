@@ -1,0 +1,160 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.bytes: 7864320000 # 7 days retention in bytes, 8 GB
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.bytes: 7864320000 # 7 days retention in bytes, 8 GB
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: payment-processor
+spec:
+  jobManager:
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 1
+      limits:
+        memory: 2Gi
+        cpu: 2
+    serviceAccountName: flink-sa
+  taskManager:
+    replicas: 3
+    resources:
+      requests:
+        memory: 8Gi
+        cpu: 4
+      limits:
+        memory: 16Gi
+        cpu: 8
+    serviceAccountName: flink-sa
+  flinkConfiguration:
+    flink-conf.yaml: |
+      taskmanager.numberOfTaskSlots: 2
+      state.backend: rocksdb
+      state.checkpoints.dir: s3://flink-state/checkpoints
+      state.checkpoints.min-pending-checkpoints-to-retain: 1
+      state.savepoints.dir: s3://flink-state/savepoints
+      checkpointing.mode: exactly-once
+      checkpointing.interval: 60000
+      checkpointing.externalized-checkpoints.dir: s3://flink-state/checkpoints
+      jobmanager.rpc.address: jobmanager-0.payment-processor.flink-system.svc.cluster.local
+      taskmanager.network.netty.worker-threads: 4
+      taskmanager.network.netty.worker-buffer-size: 16384
+      parallelism.default: 6
+      taskmanager.network.memory.min-buffer-pool-size: 128m
+      taskmanager.network.memory.min-buffer-size: 64k
+      taskmanager.network.memory.max-buffer-pool-size: 512m
+      taskmanager.network.memory.max-buffer-size: 64k
+      taskmanager.network.memory.max-buffer-pool-size: 512m
+      taskmanager.network.memory.max-buffer-size: 64k
+      taskmanager.memory.task.off-heap.size: 512m
+      taskmanager.memory.flink-state.size: 1g
+      taskmanager.memory.flink-state.max-size: 1g
+      taskmanager.memory.flink-state.min-size: 1g
+      taskmanager.memory.flink-state.default-size: 1g
+      taskmanager.memory.flink-state.checkpoint-size: 1g
+      taskmanager.memory.flink-state.savepoint-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.savepoint-metric-size: 1g
+      taskmanager.memory.flink-state.max-checkpoint-metric-size: 1g
+      taskmanager.memory.flink-state.min-checkpoint-m

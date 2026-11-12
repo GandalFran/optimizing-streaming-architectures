@@ -1,0 +1,106 @@
+ ```bash
+# Create Kafka topics
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions --partitions 3 --replication-factor 3 --config retention.ms=2592000000
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions-enriched --partitions 3 --replication-factor 3 --config retention.ms=2592000000
+```
+
+```yaml
+# Flink configuration (config.yaml)
+
+# Kafka consumer configuration
+kafka.consumer.properties:
+  bootstrap.servers: kafka:9092
+  group.id: ad-impression-consumer-group
+  auto.offset.reset: latest
+  key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  max.partition.fetch.bytes: 1048576
+  session.timeout.ms: 30000
+  max.poll.interval.ms: 30000
+
+# Flink job configuration
+job.name: ad-impression-enrichment-job
+job.checkpoint.dir: s3://flink-state/checkpoints
+taskmanager.numberOfTaskSlots: 3
+taskmanager.heap.mb: 8
+taskmanager.file.upload.dir: s3://flink-state/uploads
+taskmanager.heap.per.slot.mb: 1
+taskmanager.heap.min.mb: 1
+taskmanager.heap.initial.mb: 1
+taskmanager.heap.offheap.size.gb: 0.1
+taskmanager.heap.offheap.enabled: false
+taskmanager.network.send-buffer-bytes: 10485760
+taskmanager.network.receive-buffer-bytes: 10485760
+taskmanager.network.max-send-buffer-bytes: 10485760
+taskmanager.network.max-receive-buffer-bytes: 10485760
+taskmanager.heap.min.free.bytes: 10485760
+taskmanager.heap.initial.free.bytes: 10485760
+taskmanager.heap.max.free.bytes: 10485760
+taskmanager.heap.offheap.min.free.bytes: 10485760
+taskmanager.heap.offheap.initial.free.bytes: 10485760
+taskmanager.heap.offheap.max.free.bytes: 10485760
+taskmanager.heap.offheap.min.used.percent: 0.9
+taskmanager.heap.offheap.initial.used.percent: 0.9
+taskmanager.heap.offheap.max.used.percent: 0.9
+taskmanager.heap.offheap.min.free.percent: 0.1
+taskmanager.heap.offheap.initial.free.percent: 0.1
+taskmanager.heap.offheap.max.free.percent: 0.1
+taskmanager.heap.offheap.min.used.percent: 0.9
+taskmanager.heap.offheap.initial.used.percent: 0.9
+taskmanager.heap.offheap.max.used.percent: 0.9
+taskmanager.heap.offheap.min.free.percent: 0.1
+taskmanager.heap.offheap.initial.free.percent: 0.1
+taskmanager.heap.offheap.max.free.percent: 0.1
+taskmanager.heap.offheap.min.used.percent: 0.9
+taskmanager.heap.offheap.initial.used.percent: 0.9
+taskmanager.heap.offheap.max.used.percent: 0.9
+taskmanager.heap.offheap.min.free.percent: 0.1
+taskmanager.heap.offheap.initial.free.percent: 0.1
+taskmanager.heap.offheap.max.free.percent: 0.1
+taskmanager.heap.offheap.min.used.percent: 0.9
+taskmanager.heap.offheap.initial.used.percent: 0.9
+taskmanager.heap.offheap.max.used.percent: 0.9
+taskmanager.heap.offheap.min.free.percent: 0.1
+taskmanager.heap.offheap.initial.free.percent: 0.1
+taskmanager.heap.offheap.max.free.percent: 0.1
+taskmanager.heap.offheap.min.used.percent: 0.9
+taskmanager.heap.offheap.initial.used.percent: 0.9
+taskmanager.heap.offheap.max.used.percent: 0.9
+taskmanager.heap.offheap.min.free.percent: 0.1
+taskmanager.heap.offheap.initial.free.percent: 0.1
+taskmanager.heap.offheap.max.free.percent: 0.1
+taskmanager.heap.offheap.min.used.percent: 0.9
+taskmanager.heap.offheap.initial.used.percent: 0.9
+taskmanager.heap.offheap.max.used.percent: 0.9
+taskmanager.heap.offheap.min.free.percent: 0.1
+taskmanager.heap.offheap.initial.free.percent: 0.1
+taskmanager.heap.offheap.max.free.percent: 0.1
+taskmanager.heap.offheap.min.used.percent: 0.9
+taskmanager.heap.offheap.initial.used.percent: 0.9
+taskmanager.heap.offheap.max.used.percent: 0.9
+taskmanager.heap.offheap.min.free.percent: 0.1
+taskmanager.heap.offheap.initial.free.percent: 0.1
+taskmanager.heap.offheap.max.free.percent: 0.1
+taskmanager.heap.offheap.min.used.percent: 0.9
+taskmanager.heap.offheap.initial.used.percent: 0.9
+taskmanager.heap.offheap.max.used.percent: 0.9
+taskmanager.heap.offheap.min.free.percent: 0.1
+taskmanager.heap.offheap.initial.free.percent: 0.1
+taskmanager.heap.offheap.max.free.percent: 0.1
+taskmanager.heap.offheap.min.used.percent: 0.9
+taskmanager.heap.offheap.initial.used.percent: 0.9
+taskmanager.heap.offheap.max.used.percent: 0.9
+taskmanager.heap.offheap.min.free.percent: 0.1
+taskmanager.heap.offheap.initial.free.percent: 0.1
+taskmanager.heap.offheap.max.free.percent: 0.1
+taskmanager.heap.offheap.min.used.percent: 0.9
+taskmanager.heap.offheap.initial.used.percent: 0.9
+taskmanager.heap.offheap.max.used.percent: 0.9
+taskmanager.heap.offheap.min.free.percent: 0.1
+taskmanager.heap.offheap.initial.free.percent: 0.1
+taskmanager.heap.offheap.max.free.percent: 0.1
+taskmanager.heap.offheap.min.used.percent: 0.9
+taskmanager.heap.offheap.initial.used.percent: 0.9
+taskmanager.heap.offheap.max.used.percent: 0.9
+taskmanager.heap.offheap.min.free.percent: 0.1
+taskmanager.heap.offheap.initial.free.percent: 0.

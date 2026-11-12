@@ -1,0 +1,189 @@
+```yaml
+# Topic definitions
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks
+  labels:
+    strimzi.io/name: my-cluster
+spec:
+  partitions: 10
+  replicas: 3
+  retention: "30d"
+  config:
+    retention.ms: 2592000000
+    cleanup.policy: compact
+    segment.ms: 604800000
+    segment.bytes: 1073741824
+    compression.type: lz4
+    min.compaction.lag.ms: 120000
+    max.compaction.lag.ms: 9223372036854775807
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+  labels:
+    strimzi.io/name: my-cluster
+spec:
+  partitions: 10
+  replicas: 3
+  retention: "30d"
+  config:
+    retention.ms: 2592000000
+    cleanup.policy: compact
+    segment.ms: 604800000
+    segment.bytes: 1073741824
+    compression.type: lz4
+    min.compaction.lag.ms: 120000
+    max.compaction.lag.ms: 9223372036854775807
+```
+
+```yaml
+apiVersion: flinkoperator.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: sql
+spec:
+  flinkConfiguration:
+    jobmanager:
+      memoryManager:
+        memory.process.size: 8g
+      blobServer:
+        port: 6124
+    taskmanager:
+      memoryManager:
+        memory.process.size: 8g
+        memory.taskmanager.heap.size: 6g
+        memory.flink.heap.size: 1g
+        memory.jvm Metaspace.size: 256m
+        memory.jvm Overhead.size: 1g
+    kubernetes:
+      serviceAccount: flink
+      resourceLimits:
+        cpu: 4
+        memory: 16G
+      config:
+        serviceAccount: flink
+        taskManager.numberOfTaskSlots: "3"
+        blobServer.port: "6124"
+        highAvailability:
+          type: k8s
+          kubernetes:
+            serviceAccount: flink
+            jobmanager:
+              resourceLimits:
+                cpu: 1
+                memory: 2g
+              restartStrategy:
+                type: ON_FAILURE
+            taskManager:
+              resourceLimits:
+                cpu: 1
+                memory: 2g
+              restartStrategy:
+                type: ON_FAILURE
+        stateBackends:
+          - type: RocksDB
+            allowNonTxMode: true
+            stateBackendOptions:
+              repair: true
+              fixedNumberOfBuckets: 10000000
+              writeBufferSize: 256mb
+              blockCacheSize: 1024mb
+              indexBlockCacheSize: 512mb
+              indexCompression: true
+              blockSize: 4kb
+              writeAheadLog:
+                enabled: true
+                blockSize: 16kb
+                maxLogSize: 64mb
+        stateBackend: RocksDB
+        checkpointing:
+          interval: 1000
+          minPauseBetweenCheckpoints: 1000
+          maxConcurrentCheckpoints: 1
+          recoveryTimeout: 3600000
+          async: true
+        blobServer:
+          port: 6124
+        jobManager:
+          taskManagerNumber: 3
+          restartStrategy: ON_FAILURE
+        taskManager:
+          numberOfTaskSlots: 3
+          resourceLimits:
+            cpu: 4
+            memory: 16g
+          restartStrategy: ON_FAILURE
+        metrics:
+          enabled: true
+    plugins: []
+  service:
+    type: ClusterIP
+    port: 9081
+    protocol: TCP
+  sql:
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    class: org.apache.flink.contrib.streaming.sql.FlinkSQLRunner
+    mode: stream
+    classpath: local:///opt/flink/usrlib/sql-runner.jar
+    arguments: ['--input-topic', 'clicks', '--output-topic', 'clicks-enriched', '--bootstrap-servers', 'my-cluster-kafka-bootstrap:9092']
+    table-config: |
+      format = 'json'
+      serde = 'org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ObjectMapper'
+      json.format = 'STRICT'
+      key.fields = ['session_id']
+      key.fields-as-map = 'false'
+      key.type = 'string'
+      key.fields-as-struct = 'true'
+  resources: {}
+  restart-strategy: ON_FAILURE
+```
+
+```sql
+CREATE TABLE clicks (
+  session_id STRING,
+  event_time TIMESTAMP(3),
+  page_id INT,
+  page_url STRING,
+  page_referrer STRING,
+  page_duration DOUBLE,
+  user_id STRING,
+  user_agent STRING,
+  device_type STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks',
+  'key.fields' = 'session_id',
+  'key.fields-as-struct' = 'false',
+  'key.type' = 'string',
+  'key.fields-as-map' = 'false',
+  'key.format' = 'json',
+  'key.value' = 'session_id',
+  'value.fields' = 'event_time, page_id, page_url, page_referrer, page_duration, user_id, user_agent, device_type',
+  'value.format' = 'json',
+  'scan.startup.mode' = 'earliest-offset',
+  'scan.startup.allow-overtake' = 'true',
+  'scan.startup.max-unavailable-record-batch-time' = 'PT60S',
+  'scan.startup.max-unavailable-record-batch-count' = '1000000',
+  'scan.startup.max-unavailable-record-batch-duration' = 'PT10M',
+  'scan.startup.max-unavailable-record-batch-count-per-partition' = '10000000',
+  'scan.startup.max-unavailable-record-batch-duration-per-partition' = 'PT10M',
+  'scan.startup.max-unavailable-record-batch-count-per-partition-per-consumer' = '10000000',
+  'scan.startup.max-unavailable-record-batch-duration-per-partition-per-consumer' = 'PT10M',
+  'scan.startup.max-unavailable-record-batch-count-per-partition-per-consumer-per-subscriber' = '10000000',
+  'scan.startup.max-unavailable-record-batch-duration-per-partition-per-consumer-per-subscriber' = 'PT10M',
+  'scan.startup.max-unavailable-record-batch-count-per-partition-per-consumer-per-subscriber-per-logical-partition' = '10000000',
+  'scan.startup.max-unavailable-record-batch-duration-per-partition-per-consumer-per-subscriber-per-logical-partition' = 'PT10M',
+  'scan.startup.max-unavailable-record-batch-count-per-partition-per-consumer-per-subscriber-per-logical-partition-per-physical-partition' = '10000000',
+  'scan.startup.max-unavailable-record-batch-duration-per-partition-per-consumer-per-subscriber-per-logical-partition-per-physical-partition' = 'PT10M',
+  'scan.startup.max-unavailable-record-batch-count-per-partition-per-consumer-per-subscriber-per-logical-partition-per-physical-partition-per-partition-key' = '10000000',
+  'scan.startup.max-unavailable-record-batch-duration-per-partition-per-consumer-per-subscriber-per-logical-partition-per-physical-partition-per-partition-key' = 'PT10M',
+  'scan.startup.max-unavailable-record-batch-count-per-partition-per-consumer-per-subscriber-per-logical-partition-per-physical-partition-per-partition-key-per-partition-key-key' = '10000000',
+  'scan.startup.max-unavailable-record-batch-duration-per-partition-per-consumer-per-subscriber-per-logical-partition-per-physical-partition-per-partition-key-per-partition-key-key' = 'PT10M',
+  'scan.startup.max-unavailable-record-batch-count-per-partition-per-consumer-per-subscriber-per-logical-partition-per-physical-partition-per-partition-key-per-partition-key-key-per-partition-key-key' = '10000000',
+  'scan.startup.max-unavailable-record-batch-duration-per-partition-per-consumer-per-subscriber-per-logical-partition-per-physical-partition-per-partition-key-per-partition-key-key-per-partition-key-key' = 'PT10M',
+  'scan.startup.max-unavailable-record-batch-count-per-partition-per-consumer-per-subscriber-per-logical-partition-per-physical-partition-per-partition-key-per-partition-key-key-per-partition-key-key-per-partition-key-key' = '10000000',
+  'scan.startup.max-unavailable-record-b

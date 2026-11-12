@@ -1,0 +1,96 @@
+ 1. Kafka Topic Creation (`bash`):
+
+```bash
+# Create clicks topic with 10 partitions, replication factor 3, and 5 MB segment size
+kafka-topics.sh --create --topic clicks --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config compression.type=lz4 --bootstrap-server kafka:9092
+
+# Create clicks-enriched topic with 10 partitions, replication factor 3, and 5 MB segment size
+kafka-topics.sh --create --topic clicks-enriched --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config compression.type=lz4 --bootstrap-server kafka:9092
+```
+
+The topic configurations are set to meet the retention requirement of 30 days (2592000000 ms) and use LZ4 compression for better performance and storage efficiency. The number of partitions is chosen based on the input rate and Kafka's throughput capacity.
+
+2. Flink Configuration (`config.yaml`):
+
+```yaml
+jobmanager.rpc.address: localhost
+taskmanager.numberOfTaskSlots: 4
+parallelism.default: 4
+rest.port: 8081
+checkpointing.enabled: true
+checkpointing.minPauseBetweenCheckpoints: 5000
+checkpointing.checkpointInterval: 10000
+checkpointing.maxConcurrentCheckpoints: 3
+state.backend: filesystem
+state.backend.fs.type: filesystem
+state.backend.fs.checkpoint.dir: s3://flink-state/checkpoints
+jobmanager.rack-aware: false
+taskmanager.resource-manager-address: localhost
+taskmanager.heartbeat.interval: 3000
+taskmanager.restart-failed-tasks: false
+taskmanager.restart-failed-tasks-max-retries-before-failing-job: 0
+taskmanager.numberOfTaskSlots: 4
+parallelism-rebalance.enabled: true
+parallelism-rebalance.strategy: fair
+parallelism-rebalance.retries: 3
+parallelism-rebalance.backoff-factor: 2.0
+parallelism-rebalance.max-retries-before-failing-job: 10
+parallelism-rebalance.max-retries-before-failing-task: 10
+parallelism-rebalance.max-retries-before-failing-task-group: 10
+parallelism-rebalance.max-retries-before-failing-job-group: 10
+parallelism-rebalance.max-retries-before-failing-task-slot: 10
+parallelism-rebalance.max-retries-before-failing-task-slot-group: 10
+parallelism-rebalance.max-retries-before-failing-job-slot: 10
+parallelism-rebalance.max-retries-before-failing-job-slot-group: 10
+parallelism-rebalance.max-retries-before-failing-task-manager: 10
+parallelism-rebalance.max-retries-before-failing-task-manager-group: 10
+parallelism-rebalance.max-retries-before-failing-job-manager: 10
+parallelism-rebalance.max-retries-before-failing-job-manager-group: 10
+parallelism-rebalance.max-retries-before-failing-cluster: 10
+parallelism-rebalance.max-retries-before-failing-cluster-group: 10
+parallelism-rebalance.max-retries-before-failing-task-slot-replica: 10
+parallelism-rebalance.max-retries-before-failing-task-slot-replica-group: 10
+parallelism-rebalance.max-retries-before-failing-task-manager-replica: 10
+parallelism-rebalance.max-retries-before-failing-task-manager-replica-group: 10
+parallelism-rebalance.max-retries-before-failing-job-manager-replica: 10
+parallelism-rebalance.max-retries-before-failing-job-manager-replica-group: 10
+parallelism-rebalance.max-retries-before-failing-cluster-replica: 10
+parallelism-rebalance.max-retries-before-failing-cluster-replica-group: 10
+parallelism-rebalance.max-retries-before-failing-task: 10
+parallelism-rebalance.max-retries-before-failing-task-group: 10
+parallelism-rebalance.max-retries-before-failing-job: 10
+parallelism-rebalance.max-retries-before-failing-job-group: 10
+parallelism-rebalance.max-retries-before-failing-task-slot: 10
+parallelism-rebalance.max-retries-before-failing-task-slot-group: 10
+parallelism-rebalance.max-retries-before-failing-job-slot: 10
+parallelism-rebalance.max-retries-before-failing-job-slot-group: 10
+parallelism-rebalance.max-retries-before-failing-task-manager: 10
+parallelism-rebalance.max-retries-before-failing-task-manager-group: 10
+parallelism-rebalance.max-retries-before-failing-job-manager: 10
+parallelism-rebalance.max-retries-before-failing-job-manager-group: 10
+parallelism-rebalance.max-retries-before-failing-cluster: 10
+parallelism-rebalance.max-retries-before-failing-cluster-group: 10
+parallelism-rebalance.max-retries-before-failing-task-slot-replica: 10
+parallelism-rebalance.max-retries-before-failing-task-slot-replica-group: 10
+parallelism-rebalance.max-retries-before-failing-task-manager-replica: 10
+parallelism-rebalance.max-retries-before-failing-task-manager-replica-group: 10
+parallelism-rebalance.max-retries-before-failing-job-manager-replica: 10
+parallelism-rebalance.max-retries-before-failing-job-manager-replica-group: 10
+parallelism-rebalance.max-retries-before-failing-cluster-replica: 10
+parallelism-rebalance.max-retries-before-failing-cluster-replica-group: 10
+parallelism-rebalance.max-retries-before-failing-task: 10
+parallelism-rebalance.max-retries-before-failing-task-group: 10
+parallelism-rebalance.max-retries-before-failing-job: 10
+parallelism-rebalance.max-retries-before-failing-job-group: 10
+parallelism-rebalance.max-retries-before-failing-task-slot: 10
+parallelism-rebalance.max-retries-before-failing-task-slot-group: 10
+parallelism-rebalance.max-retries-before-failing-job-slot: 10
+parallelism-rebalance.max-retries-before-failing-job-slot-group: 10
+parallelism-rebalance.max-retries-before-failing-task-manager: 10
+parallelism-rebalance.max-retries-before-failing-task-manager-group: 10
+parallelism-rebalance.max-retries-before-failing-job-manager: 10
+parallelism-rebalance.max-retries-before-failing-job-manager-group: 10
+parallelism-rebalance.max-retries-before-failing-cluster: 10
+parallelism-rebalance.max-retries-before-failing-cluster-group: 10
+parallelism-rebalance.max-retries-before-failing-task-slot-replica: 10
+parallelism-

@@ -1,0 +1,109 @@
+ ```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 10
+  replicas: 3
+  ipc: disabled
+  retention: 1d
+  replicationFactor: 2
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: ad-impressions-job
+  namespace: default
+spec:
+  parallelism: 10
+  taskmanager:
+    resources:
+      requests:
+        cpu: "4"
+        memory: "8Gi"
+      limits:
+        cpu: "8"
+        memory: "16Gi"
+    kubernetes:
+      jobManager:
+        replicas: 3
+  streaming:
+    stateBackends:
+      - type: kafka
+        zookeeperHosts: "my-cluster-kafka-bootstrap:2181"
+        topics: ad-impressions-enriched
+    checkpointing:
+      dir: s3://flink-state/checkpoints
+      interval: 1s
+      retention: 1d
+    externalJobProperties:
+      stream.flink.enable.streaming-execution-mode: true
+      stream.flink.enable.streaming-execution-mode.auto.shutdown: true
+      stream.flink.enable.streaming-execution-mode.auto.restart: true
+      stream.flink.enable.streaming-execution-mode.auto.start.mode: always
+      stream.flink.enable.streaming-execution-mode.auto.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.failure.delay: 1s
+      stream.flink.enable.streaming-execution-mode.max.restarts: 3
+      stream.flink.enable.streaming-execution-mode.max.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.max.start.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.max.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.interval: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.retries: 3
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.start.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.interval: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.max.retries: 3
+      stream.flink.enable.streaming-execution-mode.auto.start.max.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.max.start.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.max.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.enable.streaming-execution-mode: true
+      stream.flink.enable.streaming-execution-mode.auto.start.mode: always
+      stream.flink.enable.streaming-execution-mode.auto.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.failure.delay: 1s
+      stream.flink.enable.streaming-execution-mode.auto.stop.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.interval: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.retries: 3
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.start.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.interval: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.max.retries: 3
+      stream.flink.enable.streaming-execution-mode.auto.start.max.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.max.start.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.max.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.mode: always
+      stream.flink.enable.streaming-execution-mode.auto.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.failure.delay: 1s
+      stream.flink.enable.streaming-execution-mode.auto.stop.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.interval: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.retries: 3
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.start.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.interval: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.max.retries: 3
+      stream.flink.enable.streaming-execution-mode.auto.start.max.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.max.start.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.max.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.mode: always
+      stream.flink.enable.streaming-execution-mode.auto.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.failure.delay: 1s
+      stream.flink.enable.streaming-execution-mode.auto.stop.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.interval: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.retries: 3
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.start.failure.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.stop.max.start.timeout: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.delay: 1m
+      stream.flink.enable.streaming-execution-mode.auto.start.interval: 1m
+      stream.flink.enable.streaming-execution-mode.

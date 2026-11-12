@@ -1,0 +1,106 @@
+**Kafka Topics**
+```yml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    'retention.ms': '604800000'  # 7 days
+    'segment.ms': '604800000'  # 7 days
+
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    'retention.ms': '604800000'  # 7 days
+    'segment.ms': '604800000'  # 7 days
+```
+
+**Flink Deployment**
+```yml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+spec:
+  image:
+    name: flink:1.20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.memory.jvm-metaspace.size: 512m
+    taskmanager.memory.jvm-overhead.max: 2048m
+    taskmanager.memory.process.size: 8192m
+    taskmanager.cpu.cores: 4
+    state.savepoints.dir: s3://flink-state/checkpoints
+    execution.checkpointing.interval: 10s
+    execution.checkpointing.timeout: 1m
+    execution.checkpointing.unaligned: true
+    execution.checkpointing.tolerable-failed-checkpoints: 3
+    execution.checkpointing.max-concurrent-checkpoints: 1
+    execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+    restart-strategy:
+      fixed-delay:
+        attempts: 3
+        delay: 10s
+  job:
+    jarUri: local:///opt/flink/usrlib/sql-runner.jar
+    parallelism: 8
+  resources:
+    taskmanager:
+      cpu:
+        milliCores: 4000
+      memory:
+        quantity: 8Gi
+  podTemplate:
+    spec:
+      containers:
+      - name: flink-main-container
+        resources:
+          requests:
+            cpu: 4000m
+            memory: 8Gi
+```
+
+**Flink SQL Tables**
+```sql
+CREATE TABLE clicks (
+  session_id STRING,
+  ...
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'clicks',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'update-mode' = 'append'
+);
+
+CREATE TABLE clicks_enriched (
+  session_id STRING,
+  ...
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'clicks-enriched',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'update-mode' = 'append'
+);
+```
+
+Justification:
+
+1.  Kafka topics are created with 8 partitions to handle the input rate of 20,000 events/s and an average event size of 512 bytes, which translates to approximately 10 MB/s of produce traffic. Each partition can sustain at most 5 MB/s, so 8 partitions can handle the input rate. The topic retention is set to 7 days.
+
+2.  The Flink deployment is configured with a parallelism of 8 to match the number of Kafka partitions. Each TaskManager has 4 CPU cores and 8 GiB of memory, and at most 3 TaskManager pods can run. The `taskmanager.numberOfTaskSlots` is set to 1 to ensure that each TaskManager slot processes events from only one Kafka partition. The `execution.checkpointing.interval` is set to 10s to achieve an end-to-end latency below 1s at p99. The `execution.checkpointing.tolerable-failed-checkpoints` is set to 3 to allow for at-least-once delivery guarantee.
+
+3.  The Flink SQL tables are defined with the Kafka connector and JSON format. The `update-mode` is set to `'append'` to ensure that events are appended to the Kafka topic without any aggregation or joins.

@@ -1,0 +1,210 @@
+### Kafka Topic Configuration
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.ms: 604800000
+    cleanup.policy: compact
+    flush.ms: 10000
+    min.insync.replicas: 2
+    acks: all
+    replication.factor: 3
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.ms: 604800000
+    cleanup.policy: compact
+    flush.ms: 10000
+    min.insync.replicas: 2
+    acks: all
+    replication.factor: 3
+```
+
+### Flink Deployment Configuration
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-sql-job
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-sql-job
+  template:
+    metadata:
+      labels:
+        app: flink-sql-job
+    spec:
+      containers:
+      - name: flink
+        image: flink:latest
+        ports:
+        - containerPort: 6123
+        volumeMounts:
+        - name: flink-conf
+          mountPath: /etc/flink/conf
+        - name: usrlib
+          mountPath: /opt/flink/usrlib
+        - name: checkpoints
+          mountPath: /opt/flink/checkpoints
+      volumes:
+      - name: flink-conf
+        configMap:
+          name: flink-conf
+      - name: usrlib
+        emptyDir: {}
+      - name: checkpoints
+        persistentVolumeClaim:
+          claimName: flink-checkpoints
+      - name: s3-checkpoints
+        persistentVolumeClaim:
+          claimName: s3-checkpoints
+  volumes:
+  - name: flink-conf
+    configMap:
+      name: flink-conf
+  - name: s3-checkpoints
+    persistentVolumeClaim:
+      claimName: s3-checkpoints
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: s3-checkpoints
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flink-conf
+data:
+  flink-conf.yaml: |
+    jobmanager.rpc.port: 6123
+    taskmanager.numberOfTaskSlots: 4
+    taskmanager.heap.size: 8192
+    parallelism.default: 4
+    state.backend: fs
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.checkpointing.interval: 10s
+    state.checkpointing.max-concurrent-checkpoints: 1
+    state.checkpointing.mode: EXACTLATE
+    state.checkpointing.timeout: 30s
+    state.checkpointing.enabled: true
+    parallelism.min: 1
+    parallelism.max: 3
+    parallelism.preferred: 4
+    parallelism.preferred.min: 1
+    parallelism.preferred.max: 3
+    parallelism.preferred.prefer-same-node: true
+    parallelism.preferred.prefer-same-rack: true
+    parallelism.preferred.prefer-same-zone: true
+    parallelism.preferred.prefer-same-availability-zone: true
+    parallelism.preferred.prefer-same-region: true
+    parallelism.preferred.prefer-same-datacenter: true
+    parallelism.preferred.prefer-same-machine: true
+    parallelism.preferred.prefer-same-host: true
+    parallelism.preferred.prefer-same-container: true
+    parallelism.preferred.prefer-same-pod: true
+    parallelism.preferred.prefer-same-node-group: true
+    parallelism.preferred.prefer-same-zone-group: true
+    parallelism.preferred.prefer-same-availability-zone-group: true
+    parallelism.preferred.prefer-same-region-group: true
+    parallelism.preferred.prefer-same-datacenter-group: true
+    parallelism.preferred.prefer-same-machine-group: true
+    parallelism.preferred.prefer-same-host-group: true
+    parallelism.preferred.prefer-same-container-group: true
+    parallelism.preferred.prefer-same-pod-group: true
+    parallelism.preferred.prefer-same-node-group: true
+    parallelism.preferred.prefer-same-zone-group: true
+    parallelism.preferred.prefer-same-availability-zone-group: true
+    parallelism.preferred.prefer-same-region-group: true
+    parallelism.preferred.prefer-same-datacenter-group: true
+    parallelism.preferred.prefer-same-machine-group: true
+    parallelism.preferred.prefer-same-host-group: true
+    parallelism.preferred.prefer-same-container-group: true
+    parallelism.preferred.prefer-same-pod-group: true
+    parallelism.preferred.prefer-same-node-group: true
+    parallelism.preferred.prefer-same-zone-group: true
+    parallelism.preferred.prefer-same-availability-zone-group: true
+    parallelism.preferred.prefer-same-region-group: true
+    parallelism.preferred.prefer-same-datacenter-group: true
+    parallelism.preferred.prefer-same-machine-group: true
+    parallelism.preferred.prefer-same-host-group: true
+    parallelism.preferred.prefer-same-container-group: true
+    parallelism.preferred.prefer-same-pod-group: true
+    parallelism.preferred.prefer-same-node-group: true
+    parallelism.preferred.prefer-same-zone-group: true
+    parallelism.preferred.prefer-same-availability-zone-group: true
+    parallelism.preferred.prefer-same-region-group: true
+    parallelism.preferred.prefer-same-datacenter-group: true
+    parallelism.preferred.prefer-same-machine-group: true
+    parallelism.preferred.prefer-same-host-group: true
+    parallelism.preferred.prefer-same-container-group: true
+    parallelism.preferred.prefer-same-pod-group: true
+    parallelism.preferred.prefer-same-node-group: true
+    parallelism.preferred.prefer-same-zone-group: true
+    parallelism.preferred.prefer-same-availability-zone-group: true
+    parallelism.preferred.prefer-same-region-group: true
+    parallelism.preferred.prefer-same-datacenter-group: true
+    parallelism.preferred.prefer-same-machine-group: true
+    parallelism.preferred.prefer-same-host-group: true
+    parallelism.preferred.prefer-same-container-group: true
+    parallelism.preferred.prefer-same-pod-group: true
+    parallelism.preferred.prefer-same-node-group: true
+    parallelism.preferred.prefer-same-zone-group: true
+    parallelism.preferred.prefer-same-availability-zone-group: true
+    parallelism.preferred.prefer-same-region-group: true
+    parallelism.preferred.prefer-same-datacenter-group: true
+    parallelism.preferred.prefer-same-machine-group: true
+    parallelism.preferred.prefer-same-host-group: true
+    parallelism.preferred.prefer-same-container-group: true
+    parallelism.preferred.prefer-same-pod-group: true
+    parallelism.preferred.prefer-same-node-group: true
+    parallelism.preferred.prefer-same-zone-group: true
+    parallelism.preferred.prefer-same-availability-zone-group: true
+    parallelism.preferred.prefer-same-region-group: true
+    parallelism.preferred.prefer-same-datacenter-group: true
+    parallelism.preferred.prefer-same-machine-group: true
+    parallelism.preferred.prefer-same-host-group: true
+    parallelism.preferred.prefer-same-container-group: true
+    parallelism.preferred.prefer-same-pod-group: true
+    parallelism.preferred.prefer-same-node-group: true
+    parallelism.preferred.prefer-same-zone-group: true
+    parallelism.preferred.prefer-same-availability-zone-group: true
+    parallelism.preferred.prefer-same-region-group: true
+    parallelism.preferred.prefer-same-datacenter-group: true
+    parallelism.preferred.prefer-same-machine-group: true
+    parallelism.preferred.prefer-same-host-group: true
+    parallelism.preferred.prefer-same-container-group: true
+    parallelism.preferred.prefer-same-pod-group: true
+    parallelism.preferred.prefer-same-node-group: true
+    parallelism.preferred.prefer-same-zone-group: true
+    parallelism.preferred.prefer-same-availability-zone-group: true
+    parallelism.preferred.prefer-same-region-group: true
+    parallelism.preferred.prefer-same-datacenter-group: true
+    parallelism.preferred.prefer-same-machine-group: true
+    parallelism.preferred.prefer-same-host-group: true
+    parallelism.preferred.prefer-same-container-group: true
+    parallelism.preferred.prefer-same-pod-group: true
+    parallelism.preferred.prefer

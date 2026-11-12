@@ -1,0 +1,96 @@
+Nov 10, 2026 10:53:42 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE clicks (
+>     `session_id` STRING,
+>     `event` STRING,
+>     `event_time` TIMESTAMP(3),
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     WATERMARK FOR `event_time` AS `event_time` - INTERVAL '5' SECOND
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'clicks',
+>     'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>     'properties.group.id' = 'clicks-group',
+>     'format' = 'json',
+>     'json.fail-on-missing-field' = 'false'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE clicks_enriched (
+>     `session_id` STRING,
+>     `event` STRING,
+>     `event_time` TIMESTAMP(3),
+>     `derived_field_1` STRING,
+>     `derived_field_2` STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     PRIMARY KEY (`session_id`) NOT ENFORCED
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'clicks-enriched',
+>     'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>     'properties.transactional.id.prefix' = 'clicks-enriched-',
+>     'upsert-kafka' = 'true',
+>     'format' = 'json',
+>     'json.fail-on-missing-field' = 'false'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO clicks_enriched (`session_id`, `event`, `event_time`, `derived_field_1`, `derived_field_2`, `__sent_ms`, `__seq`)
+> SELECT `session_id`,
+>        `event`,
+>        `event_time`,
+>        CAST(NULL AS STRING),
+>        CAST(NULL AS STRING)[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.table.api.ValidationException: Unsupported options found for 'kafka'.
+
+Unsupported options:
+
+upsert-kafka
+
+Supported options:
+
+connector
+format
+json.encode.decimal-as-plain-number
+json.encode.ignore-null-fields
+json.fail-on-missing-field
+json.ignore-parse-errors
+json.map-null-key.literal
+json.map-null-key.mode
+json.timestamp-format.standard
+key.fields
+key.fields-prefix
+key.format
+properties.bootstrap.servers
+properties.group.id
+properties.transactional.id.prefix
+property-version
+scan.bounded.mode
+scan.bounded.specific-offsets
+scan.bounded.timestamp-millis
+scan.startup.mode
+scan.startup.specific-offsets
+scan.startup.timestamp-millis
+scan.topic-partition-discovery.interval
+scan.watermark.alignment.group
+scan.watermark.alignment.max-drift
+scan.watermark.alignment.update-interval
+scan.watermark.emit.strategy
+scan.watermark.idle-timeout
+sink.delivery-guarantee
+sink.parallelism
+sink.partitioner
+sink.semantic
+sink.transactional-id-prefix
+topic
+topic-pattern
+value.fields-include
+value.format[0m
+
+Shutting down the session...
+done.

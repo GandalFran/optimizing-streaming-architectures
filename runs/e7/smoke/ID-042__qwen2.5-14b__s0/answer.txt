@@ -1,0 +1,90 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: trades
+  namespace: my-namespace
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: trades-enriched
+  namespace: my-namespace
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-sql-job
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    state.checkpoints.num-retained: "10"
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.savepoints.dir: s3://flink-state/savepoints
+    execution.checkpointing.mode: EXACTLY_ONCE
+    execution.checkpointing.interval: 5000
+    execution.checkpointing.timeout: 60000
+    execution.checkpointing.min-pause: 500
+    execution.checkpointing.max-concurrent: 1
+    execution.parallelism: 16
+    taskmanager.numberOfTaskSlots: 16
+    taskmanager.memory.process.size: 8g
+  job:
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    entryClass: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
+```
+
+```sql
+CREATE TABLE trades (
+    instrument_id STRING,
+    trade_data STRING,
+    WATERMARK FOR ts AS ts - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'trades',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'properties.group.id' = 'trades-group',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset'
+);
+
+CREATE TABLE trades_enriched (
+    instrument_id STRING,
+    enriched_data STRING
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'trades-enriched',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'org.apache.flink.connector.kafka.sink.KeyPartitioner',
+    'sink.partitioner.key-extractor' = 'org.apache.flink.connector.kafka.sink.KeySelector'
+);
+```
+
+**Justification:**
+
+1. **Kafka Topics Configuration:**
+   - **Partitions:** 16 partitions are chosen to handle the input rate of 20,000 events/s (20,000 * 2048 bytes = 40.96 MB/s, which is within the 5 MB/s per partition limit).
+   - **Retention:** Both topics retain data for 30 days as required.
+
+2. **Flink Deployment Configuration:**
+   - **Parallelism:** The parallelism is set to 16 to match the number of partitions in the Kafka topics, ensuring that each partition is processed independently.
+   - **Checkpointing:** Checkpointing is configured for exactly-once semantics with a 5-second interval to ensure low latency and durability.
+   - **Memory and CPU:** Each TaskManager is configured to use up to 4 CPUs and 8 GiB of memory, with up to 3 TaskManager pods running, which fits within the sizing assumptions.
+
+3. **Flink SQL Table Definitions:**
+   - **Source Table (`trades`):** Configured to read from the `trades` topic with JSON format.
+   - **Sink Table (`trades_enriched`):** Configured to write to the `trades-enriched` topic, using a key partitioner to ensure the enriched data is written back to Kafka with the same key (`instrument_id`), maintaining the exact-once delivery guarantee.

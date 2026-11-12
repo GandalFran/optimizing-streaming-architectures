@@ -1,0 +1,427 @@
+{
+  "id": "ID-113",
+  "model": "llama-3.1-8b",
+  "seed": 0,
+  "track": "native",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 2048,
+    "latency_slo_ms": 1000,
+    "retention_days": 30,
+    "sink": "clicks-enriched",
+    "src": "clicks",
+    "throughput_eps": 5000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8381",
+  "started": "2026-11-10T19:10:30+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 4 clicks",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 4 clicks",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 4 clicks-enriched",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 4 clicks-enriched",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --describe clicks",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --describe clicks",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --describe clicks-enriched",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --describe clicks-enriched",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "clicks",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "clicks_enriched",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    }
+  ],
+  "translations": [],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "clicks",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "clicks_enriched",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO clicks_enriched (`session_id`, `event`, `derived_field1`, `derived_field2`, `__sent_ms`, `__seq`)\nSELECT `session_id`,\n       `event`,\n       CAST(NULL AS STRING),\n       CAST(NULL AS STRING),\n       `__sent_ms`,\n       `__seq`\nFROM clicks;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 4 clicks",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502 --create --replication-factor 1 --partitions 4 clicks",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+        }
+      ],
+      "rc": 1,
+      "stdout_tail": "",
+      "stderr_head": "Missing required argument \"[topic]\"\nOption                                   Description                            \n------                                   -----------                            \n--alter                                  Alter the number of partitions and     \n                                           replica assignment. (To alter topic  \n                                           configurations, the kafka-configs    \n                                           tool can be used.)                   \n--at-min-isr-partitions                  If set when describing topics, only  ",
+      "stderr_tail": "                            escape regular expression symbols; e.\n                                           g. \"test\\.topic\".                    \n--topic-id <String: topic-id>            The topic-id to describe.              \n--topics-with-overrides                  If set when describing topics, only    \n                                           show topics that have overridden     \n                                           configs.                             \n--unavailable-partitions                 If set when describing topics, only    \n                                           show partitions whose leader is not  \n                                           available.                           \n--under-min-isr-partitions               If set when describing topics, only    \n                                           show partitions whose isr count is   \n                                           less than the configured minimum.    \n--under-replicated-partitions            If set when describing topics, only    \n                                           show under-replicated partitions.    \n--version                                Display Kafka version.                 \n"
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 4 clicks-enriched",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502 --create --replication-factor 1 --partitions 4 clicks-enriched",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+        }
+      ],
+      "rc": 1,
+      "stdout_tail": "",
+      "stderr_head": "Missing required argument \"[topic]\"\nOption                                   Description                            \n------                                   -----------                            \n--alter                                  Alter the number of partitions and     \n                                           replica assignment. (To alter topic  \n                                           configurations, the kafka-configs    \n                                           tool can be used.)                   \n--at-min-isr-partitions                  If set when describing topics, only  ",
+      "stderr_tail": "                            escape regular expression symbols; e.\n                                           g. \"test\\.topic\".                    \n--topic-id <String: topic-id>            The topic-id to describe.              \n--topics-with-overrides                  If set when describing topics, only    \n                                           show topics that have overridden     \n                                           configs.                             \n--unavailable-partitions                 If set when describing topics, only    \n                                           show partitions whose leader is not  \n                                           available.                           \n--under-min-isr-partitions               If set when describing topics, only    \n                                           show partitions whose isr count is   \n                                           less than the configured minimum.    \n--under-replicated-partitions            If set when describing topics, only    \n                                           show under-replicated partitions.    \n--version                                Display Kafka version.                 \n"
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --describe clicks",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502 --describe clicks",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --describe clicks-enriched",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502 --describe clicks-enriched",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.calcite.sql.validate.SqlValidatorException: Unknown identifier 'JSON'\nShutting down the session...\ndone.",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 1000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794334238.908,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.3,
+      "bootstrap": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "t": 1794334244.175,
+      "rel": null,
+      "event": "topics",
+      "created": [],
+      "ok": false
+    },
+    {
+      "t": 1794334250.804,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 6.6,
+      "taskmanagers": 3
+    },
+    {
+      "t": 1794334254.084,
+      "rel": null,
+      "event": "submit_failed",
+      "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.calcite.sql.validate.SqlValidatorException: Unknown identifier 'JSON'\nShutting down the session...\ndone."
+    }
+  ],
+  "notes": [
+    "duplicate YAML keys ['checkpointing']: the last value is used (as the validator does)"
+  ],
+  "driver_args": {
+    "id": "ID-113",
+    "answer_file": null,
+    "answers": "runs/main/llama-3.1-8b.greedy.jsonl",
+    "model": "llama-3.1-8b",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-113__llama-3.1-8b__s0.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8381",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": [
+      "AS\nSELECT\n  session_id,\n  event,\n  CASE\n    WHEN event:field1 IS NOT NULL THEN event:field1\n    ELSE 'default_value'\n  END AS derived_field1,\n  CASE\n    WHEN event:field2 IS NOT NULL THEN event:field2\n    ELSE 'default_value'\n  END AS derived_field2\nFROM clicks\nWHERE event IS NOT NULL AND event:session_id IS NOT NULL",
+      "INSERT INTO clicks_enriched SELECT * FROM filtered_and_enriched"
+    ]
+  },
+  "static_validator": {
+    "n_findings": 22,
+    "findings_L1_L3": [
+      "L2:cli-syntax:unexpected token 'clicks'",
+      "L2:missing-required-option:--create without --topic",
+      "L2:cli-syntax:unexpected token 'clicks-enriched'",
+      "L2:missing-required-option:--create without --topic",
+      "L2:cli-syntax:unexpected token 'clicks'",
+      "L2:cli-syntax:unexpected token 'clicks-enriched'",
+      "L2:unknown-key:application.name is not a Flink 1.20 configuration option",
+      "L2:unknown-key:application.type is not a Flink 1.20 configuration option",
+      "L2:unknown-key:flink.cluster.mode is not a Flink 1.20 configuration option",
+      "L2:unknown-key:flink.cluster.parallelism is not a Flink 1.20 configuration option",
+      "L2:unknown-key:flink.taskmanager.num-executors is not a Flink 1.20 configuration option",
+      "L2:unknown-key:flink.taskmanager.taskmanager-opts is not a Flink 1.20 configuration option",
+      "L2:unknown-key:flink.checkpointing.mode is not a Flink 1.20 configuration option",
+      "L2:unknown-key:flink.kafka.bootstrap-servers is not a Flink 1.20 configuration option",
+      "L2:unknown-key:flink.kafka.properties.bootstrap.servers is not a Flink 1.20 configuration option",
+      "L2:unknown-key:flink.kafka.properties.key.deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:flink.kafka.properties.value.deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:flink.logging.level is not a Flink 1.20 configuration option",
+      "L2:missing-required-option:no 'connector' option",
+      "L2:missing-required-option:no 'connector' option"
+    ]
+  },
+  "topology": {
+    "port_base": 12500,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "nodes": {
+      "k1": "38,39,150,151",
+      "k2": "40,41,152,153",
+      "k3": "42,43,154,155",
+      "f1": "68,69,70,71,180,181,182,183",
+      "f2": "88,89,90,91,200,201,202,203",
+      "f3": "18,19,20,21,130,131,132,133",
+      "j1": "72,184",
+      "ctl": "92,93,204,205",
+      "m1": "73,185"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12510,2@127.0.0.1:12511,3@127.0.0.1:12512",
+    "listeners=PLAINTEXT://127.0.0.1:12500,CONTROLLER://127.0.0.1:12510",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12500",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8381/e7-1200811/k1/kafka-data"
+  ],
+  "topics_after_commands": {},
+  "topics_created": {
+    "source": false,
+    "sink": false
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 12530,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 1,
+    "taskmanager.memory.process.size": "1728m",
+    "parallelism.default": 1,
+    "rest.address": "127.0.0.1",
+    "application.name": "clickstream-enrichment",
+    "application.type": "batch",
+    "flink.cluster.mode": "standalone",
+    "flink.cluster.parallelism": 4,
+    "flink.taskmanager.num-executors": 3,
+    "flink.taskmanager.taskmanager-opts": [
+      "memory:8g",
+      "num-cores:4"
+    ],
+    "flink.checkpointing.mode": "EXACTLY_ONCE",
+    "flink.kafka.bootstrap-servers": "kafka:9092",
+    "flink.kafka.properties.bootstrap.servers": "kafka:9092",
+    "flink.kafka.properties.key.deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+    "flink.kafka.properties.value.deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+    "flink.logging.level": "DEBUG",
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 12531,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8381/e7-1200811/flink-io"
+  },
+  "taskmanagers": {
+    "started": 3,
+    "registered": 3,
+    "slots_per_tm": 1
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 3.3,
+    "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.calcite.sql.validate.SqlValidatorException: Unknown identifier 'JSON'\nShutting down the session...\ndone."
+  },
+  "failure_stage": "sql-submit",
+  "topics_after_run": {},
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T19:11:01+0100"
+}

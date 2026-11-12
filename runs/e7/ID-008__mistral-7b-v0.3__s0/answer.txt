@@ -1,0 +1,164 @@
+ 1. Strimzi `KafkaTopic` resources for all topics:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  kafka:
+    replicas: 3
+    listeners:
+    - name: plain
+      port: 9092
+      tls: false
+      authentication: none
+    zookeeper:
+      enabled: false
+    kafkaRaft:
+      enabled: true
+
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+spec:
+  replicas: 3
+  partitions: 10
+  compaction:
+    strategy: compact
+  config:
+    retention.ms: 86400000
+    segment.bytes: 10485760
+    max.message.bytes: 1048576
+    cleanup.policy: delete
+
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+spec:
+  replicas: 3
+  partitions: 10
+  compaction:
+    strategy: compact
+  config:
+    retention.ms: 86400000
+    segment.bytes: 10485760
+    max.message.bytes: 1048576
+    cleanup.policy: delete
+```
+
+Explanation:
+- `my-cluster` is the Kafka cluster with 3 brokers and KRaft enabled for high availability.
+- `ad-impressions` and `ad-impressions-enriched` are Kafka topics with 10 partitions each, configured for retention of 1 day and a maximum message size of 1 MB.
+
+2. FlinkDeployment resource:
+
+```yaml
+apiVersion: kustomize.io/v1beta1
+kind: Deployment
+metadata:
+  name: flink-sql-job
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+      - name: flink
+        image: apache/flink:1.13-1.20
+        env:
+        - name: JARS
+          value: local:///opt/flink/usrlib/sql-runner.jar
+        command: ["sh", "-c", "java -cp $JARS org.apache.flink.client.cli.CliFrontend"]
+        resources:
+          limits:
+            cpu: 4
+            memory: 8Gi
+          requests:
+            cpu: 2
+            memory: 4Gi
+        volumeMounts:
+        - name: checkpoint-storage
+          mountPath: /flink-checkpoints
+      volumes:
+      - name: checkpoint-storage
+        persistentVolumeClaim:
+          claimName: flink-checkpoint-pvc
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  triggers:
+  - type: ConfigChange
+
+---
+
+apiVersion: apps/v1
+kind: ConfigMap
+metadata:
+  name: flink-config
+data:
+  taskmanager.numberOfTaskSlots: 1
+  taskmanager.memory.process-heap-size-mb: 4096
+  taskmanager.memory.off-heap-size-mb: 1024
+  taskmanager.memory.java-heap-fraction: 0.7
+  taskmanager.memory.java-off-heap-fraction: 0.3
+  taskmanager.network.socket-buffer-size: 131072
+  taskmanager.numberOfTaskSlotsPerContainer: 1
+  checkpointing.checkpointing-mode: EXACTLY_ONCE
+  checkpointing.minPauseBetweenCheckpoints: 5000
+  checkpointing.maxConcurrentCheckpoints: 1
+  checkpointing.checkpoint-interval: 5000
+  checkpointing.enabled: true
+  checkpointing.failure-tolerance.max-failure-ratio: 0.1
+  checkpointing.failure-tolerance.max-failure-numbers: 3
+  checkpointing.failure-tolerance.min-number-of-checkpoints-to-keep-in-memory: 2
+  checkpointing.failure-tolerance.snapshot-interval-ms: 60000
+  checkpointing.failure-tolerance.max-snapshot-retention-hours: 72
+  checkpointing.failure-tolerance.mode: FAIL_ON_EXCEPTION
+  checkpointing.enabled-for-native-checkpointing: true
+  checkpointing.native-checkpointing.checkpoint-interval: 5000
+  checkpointing.native-checkpointing.min-pause-between-checkpoints: 5000
+  checkpointing.native-checkpointing.max-concurrent-checkpoints: 1
+  checkpointing.native-checkpointing.checkpoint-interval-for-native-checkpointing-mode: 5000
+  checkpointing.native-checkpointing.min-pause-between-checkpoints-for-native-checkpointing-mode: 5000
+  checkpointing.native-checkpointing.max-concurrent-checkpoints-for-native-checkpointing-mode: 1
+  checkpointing.native-checkpointing.mode: FAIL_ON_EXCEPTION
+  checkpointing.native-checkpointing.enabled: true
+  jobmanager.rpc.address: 0.0.0.0
+  jobmanager.rpc.port: 6123
+  jobmanager.web-ui.port: 8081
+  taskmanager.web-ui-port: 8082
+  taskmanager.heartbeat-interval-ms: 5000
+  taskmanager.heartbeat-timeout-ms: 15000
+  taskmanager.zookeeper-connect: my-cluster-kafka-bootstrap:9092
+  taskmanager.kafka.bootstrap-servers: my-cluster-kafka-bootstrap:9092
+  taskmanager.kafka.consumer.group-id: flink-sql-job
+  taskmanager.kafka.consumer.auto-offset-reset: earliest
+  taskmanager.kafka.consumer.max-poll-records: 10000
+  taskmanager.kafka.consumer.max-poll-interval-ms: 100
+  taskmanager.kafka.consumer.enable-auto-commit: false
+  taskmanager.kafka.consumer.session-timeout-ms: 10000
+  taskmanager.kafka.producer.acks: all
+  taskmanager.kafka.producer.retries: 3
+  taskmanager.kafka.producer.batch.size: 16384
+  taskmanager.kafka.producer.linger-ms: 5
+  taskmanager.kafka.producer.buffer-memory: 33554432
+  taskmanager.kafka.producer.compression.type: snappy
+  taskmanager.kafka.producer.key-serializer: org.apache.kafka.common.serialization.StringSerializer
+  taskmanager.kafka.producer.value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  taskmanager.kafka.producer.interceptor: org.apache.flink.kafka.interceptor.Kafka010RecordInterceptor
+  taskmanager.kafka.producer.interceptor.properties.group-id: flink-sql-job
+  taskmanager.kafka.producer.interceptor.properties.bootstrap-servers: my-cluster-kafka-bootstrap:9092
+  taskmanager.kafka.producer.interceptor.properties.topic: ad-impressions-enriched
+  taskmanager.kafka.producer.interceptor.properties.serializer: org.apache.kafka.common.serialization.StringSerializer
+  taskmanager.kafka.producer.interceptor.properties.compression-type: snappy
+  taskmanager.kafka.producer.interceptor.properties.acks: all
+  taskmanager.kafka.producer.interceptor.properties.retries: 3
+  taskmanager.kafka.producer.interceptor.properties.

@@ -1,0 +1,231 @@
+### 1. Strimzi KafkaTopic resources
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+spec:
+  kafka:
+    bootstrap:
+      service:
+        name: my-cluster-kafka-bootstrap
+        port: 9092
+    replicas: 3
+  partitions: 16
+  replicationFactor: 3
+  topic:
+    numPartitions: 16
+    replicationFactor: 3
+    config:
+      cleanup.policy: compact
+      retention.bytes: 1024*1024*1024*1024
+      retention.ms: 86400000
+      segment.ms: 300000
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+spec:
+  kafka:
+    bootstrap:
+      service:
+        name: my-cluster-kafka-bootstrap
+        port: 9092
+    replicas: 3
+    partitions: 16
+    replicationFactor: 3
+    topic:
+      numPartitions: 16
+      replicationFactor: 3
+      config:
+        cleanup.policy: compact
+        retention.bytes: 1024*1024*1024*1024
+        retention.ms: 86400000
+        segment.ms: 300000
+```
+
+### 2. FlinkDeployment resource
+
+```yaml
+apiVersion: flink.apache.org/v1alpha1
+kind: FlinkDeployment
+metadata:
+  name: ad-impression-enrichment
+spec:
+  type: jobmanager
+  mode: cluster
+  replicas: 1
+  restartStrategy: Always
+  spec:
+    resources:
+      requests:
+        cpu: 1
+        memory: 4Gi
+    executors:
+      taskmanager:
+        cpu: 4
+        memory: 8Gi
+        instances: 3
+        restartStrategy: Always
+    checkpointing:
+      type: EXACTLY_ONCE
+      storage: s3://flink-state/checkpoints
+    flinkConfiguration:
+      state.backend: fs
+      state.checkpoints.dir: s3://flink-state/checkpoints
+      restart-strategy: restart-on-failure
+      restart-strategy.max-retries: 3
+      restart-strategy.delay: 10000
+      parallelism.default: 4
+      parallelism.crossing: 1
+      parallelism.tasks: 4
+      parallelism.query: 4
+      parallelism.tasks.max: 4
+      taskmanager.numberOfTaskSlots: 4
+      taskmanager.memory.fraction: 0.5
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      taskmanager.memory.managed.size: 4Gi
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.memory.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      parallelism.default: 4
+      parallelism.crossing: 1
+      parallelism.tasks: 4
+      parallelism.query: 4
+      parallelism.tasks.max: 4
+      taskmanager.numberOfTaskSlots: 4
+      taskmanager.memory.fraction: 0.5
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      taskmanager.memory.managed.size: 4Gi
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.memory.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      parallelism.default: 4
+      parallelism.crossing: 1
+      parallelization-degree: 4
+      parallelism.tasks: 4
+      parallelism.query: 4
+      parallelism.tasks.max: 4
+      taskmanager.numberOfTaskSlots: 4
+      taskmanager.memory.fraction: 0.5
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      taskmanager.memory.managed.size: 4Gi
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.memory.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      parallelism.default: 4
+      parallelism.crossing: 1
+      parallelism.tasks: 4
+      parallelism.query: 4
+      parallelism.tasks.max: 4
+      taskmanager.numberOfTaskSlots: 4
+      taskmanager.memory.fraction: 0.5
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      taskmanager.memory.managed.size: 4Gi
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.memory.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      parallelism.default: 4
+      parallelism.crossing: 1
+      parallelism.tasks: 4
+      parallelism.query: 4
+      parallelism.tasks.max: 4
+      taskmanager.numberOfTaskSlots: 4
+      taskmanager.memory.fraction: 0.5
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      taskmanager.memory.managed.size: 4Gi
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.memory.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      parallelism.default: 4
+      parallelism.crossing: 1
+      parallelism.tasks: 4
+      parallelism.query: 4
+      parallelism.tasks.max: 4
+      taskmanager.numberOfTaskSlots: 4
+      taskmanager.memory.fraction: 0.5
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      taskmanager.memory.managed.size: 4Gi
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.memory.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      parallelism.default: 4
+      parallelism.crossing: 1
+      parallelism.tasks: 4
+      parallelism.query: 4
+      parallelism.tasks.max: 4
+      taskmanager.numberOfTaskSlots: 4
+      taskmanager.memory.fraction: 0.5
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      taskmanager.memory.managed.size: 4Gi
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.memory.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      parallelism.default: 4
+      parallelism.crossing: 1
+      parallelism.tasks: 4
+      parallelism.query: 4
+      parallelism.tasks.max: 4
+      taskmanager.numberOfTaskSlots: 4
+      taskmanager.memory.fraction: 0.5
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+      taskmanager.memory.managed.size: 4Gi
+      taskmanager.memory.off-heap.size: 4Gi
+      taskmanager.memory.heap.size: 4Gi
+      taskmanager.memory.min: 4Gi
+      taskmanager.memory.managed.size-to-memory-ratio: 0.8
+```
+
+### 3. Flink SQL `CREATE TABLE` statements
+
+```sql
+CREATE TABLE ad_impressions (
+  `campaign_id` VARCHAR(255) NOT NULL,
+  `event` JSON,
+  WATERMARK FOR `event` AS PROCTIME() - INTERVAL '5' SECOND
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'ad-impressions',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'value.deserializer' = 'org.apache.kafka.common.serialization.JsonDeserializer',
+  'value.schema' = 'JSON'
+);
+
+CREATE TABLE ad_impressions_enriched (
+  `campaign_id` VARCHAR(255),
+ 

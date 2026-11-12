@@ -1,0 +1,114 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+    cleanup.policy: delete
+
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+    cleanup.policy: delete
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: card-transactions-sql
+spec:
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  jobManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+  flinkConfiguration:
+    taskmanager.heap.size: 8G
+    taskmanager.numberOfTaskSlots: 3
+    jobmanager.heap.size: 8G
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.checkpoints.min-pause: 1m
+    state.checkpoints.num-retained: 5
+    state.backend.rocksdb.checkpoint-interval: 10s
+    state.backend.rocksdb.flush-interval-millis: 10000
+    state.backend.rocksdb.write-buffer-size: 100M
+    state.backend.rocksdb.block-cache-size: 100M
+    state.backend.rocksdb.block-cache-compression: gzip
+    state.backend.rocksdb.block-cache-compression-percentage: 50
+    state.backend.rocksdb.block-cache-compression-level: 5
+    state.backend.rocksdb.block-cache-compression-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-level: 5
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-type: zstd
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy-strategy: zlib
+    state.backend.rocksdb.block-cache-compression-strategy-strategy-strategy-strategy-str

@@ -1,0 +1,39 @@
+# 1. kafka-topics.sh commands
+# Create session-events topic
+kafka-topics.sh --create --topic session-events --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=compact --bootstrap-server kafka:9092
+
+# Create session-events-enriched topic
+kafka-topics.sh --create --topic session-events-enriched --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=compact --bootstrap-server kafka:9092
+
+# Justify: 10 partitions per topic to sustain 5 MB/s of produce traffic, 3 replicas to survive the loss of any single Kafka broker. Retention of 1 day and compacted cleanup policy to keep data for 1 day and avoid data loss.
+
+# 2. config.yaml
+# Flink configuration
+taskmanager.memory.process.size: 8000m
+jobmanager.memory.process.size: 8000m
+taskmanager.numberOfTaskSlots: 4
+state.backend: filesystem
+state.backend.fs.checkpointdir: s3://flink-state/checkpoints
+# Justify: 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3.
+
+# 3. Flink SQL CREATE TABLE statements
+CREATE TABLE session_events (
+  user_id STRING,
+  event JSON
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json'
+);
+
+CREATE TABLE session_events_enriched (
+  user_id STRING,
+  event JSON
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json'
+);
+# Justify: 10 partitions per topic to sustain 5 MB/s of produce traffic, 3 replicas to survive the loss of any single Kafka broker. Retention of 1 day and compacted cleanup policy to keep data for 1 day and avoid data loss. At-least-once delivery guarantee is achieved with compacted cleanup policy. End-to-end latency of 10 s at p99 is achieved with 10 partitions per topic and 3 replicas. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in S3. 10 s at p99 end-to-end latency is achieved with 10 partitions per topic and 3 replicas. At-least-once delivery guarantee is achieved with compacted cleanup policy. 8 GB of memory per TaskManager to process 20,000 events/s. 4 CPU cores per TaskManager to process 20,000 events/s. State backend is filesystem to store checkpoints in

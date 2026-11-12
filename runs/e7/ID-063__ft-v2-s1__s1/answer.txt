@@ -1,0 +1,64 @@
+```bash
+# Create the sensor-readings topic
+./bin/kafka-topics.sh --create --topic sensor-readings --partitions 3 --replication-factor 3 --config retention.ms=604800000 --if-not-exists --bootstrap-server kafka:9092
+
+# Create the sensor-readings-clean topic
+./bin/kafka-topics.sh --create --topic sensor-readings-clean --partitions 3 --replication-factor 3 --config retention.ms=604800000 --if-not-exists --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+pekko.remote.netty.client.tcp.socket-send-buffer-size: 65536
+pekko.remote.netty.tcp.client-worker-threads: 4
+pekko.remote.netty.tcp.server-worker-threads: 4
+pekko.client-timeout: 10000
+pekko.timeout: 30000
+pekko.jvm-exit-on-fatal-error: true
+pekko.remote.netty.tcp.keepalive: true
+pekko.serialization.jvm.cross-application-serialization: true
+pekko.jvm-exit-on-fatal-error: true
+pekko.fork-join-executor.parallelism-min: 8
+pekko.fork-join-executor.parallelism-max: 8
+pekko.fork-join-executor.parallelism-factor: 1.0
+pekko.fork-join-executor.max-worker-threads: 8
+pekko.fork-join-executor.min-worker-threads: 8
+pekko.fork-join-executor.thread-name-format: "pekko-akka://flink@%H:%p/%n"
+pekko.fork-join-executor.allow-core-timeout: false
+pekko.fork-join-executor.discard-capacity: 1
+pekko.fork-join-executor.dynamic-worker-threads-factor: 1.0
+pekko.fork-join-executor.use-worker-pool-threads: false
+pekko.fork-join-executor.shutdown-timeout: 10
+pekko.fork-join-executor.shutdown-idle-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool: false
+pekko.fork-join-executor.shutdown-worker-pool-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout: 10
+pekko.fork-join-executor.shutdown-worker-pool-idle-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-timeout-time

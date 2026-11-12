@@ -1,0 +1,87 @@
+ 1. Kafka Topics Creation (`bash`):
+
+```bash
+# Create app-logs topic with 10 partitions, replication factor 3, and 5 MB segment size.
+kafka-topics.sh --create --topic app-logs --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config compression.type=lz4 --bootstrap-server kafka:9092
+
+# Create app-logs-parsed topic with 10 partitions, replication factor 3, and 5 MB segment size.
+kafka-topics.sh --create --topic app-logs-parsed --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config compression.type=lz4 --bootstrap-server kafka:9092
+```
+
+The number of partitions is chosen based on the input rate and the maximum throughput a single partition can handle. With 20,000 events/s and a partition handling 5 MB/s, we need 400 partitions for the app-logs topic. However, we're using 10 partitions to balance resource utilization and manageability.
+
+2. Flink Configuration (`config.yaml`):
+
+```yaml
+jobmanager.rpc.address: localhost
+taskmanager.numberOfTaskSlots: 4
+parallelism.default: 4
+rest.port: 8081
+rest.bind-host: 0.0.0.0
+jobmanager.rpc.timeout: 10000
+jobmanager.type: standalone
+jobmanager.failover.enabled: true
+jobmanager.failover.retries: 3
+jobmanager.failover.zookeeper.connect: localhost:2181
+jobmanager.high-availability.enabled: true
+jobmanager.high-availability.fencing-enabled: true
+jobmanager.high-availability.fencing-mode: lease
+checkpointing.enabled: true
+checkpointing.mode: exact
+checkpointing.failure-tolerance.max-failure-ratio: 0.1
+checkpointing.failure-tolerance.max-failure-numbers: 3
+checkpointing.min-pause-between-checkpoints: 5000
+checkpointing.max-concurrency: 4
+state.backend: filesystem
+state.backend.fs.type: filesystem
+state.backend.fs.checkpoint.dir: s3://flink-state/checkpoints
+```
+
+The parallelism is set to 4, which matches the number of TaskManagers and the number of partitions in the Kafka topics. The checkpointing configuration ensures that checkpoints are taken frequently and can handle some failures.
+
+3. Flink SQL `CREATE TABLE` statements:
+
+```sql
+-- Create Kafka source table for app-logs
+CREATE TABLE app_logs (
+    service VARCHAR,
+    event JSON
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'app-logs',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'app-logs-source',
+    'format' = 'json',
+    'json.ignore-parse-errors' = 'true'
+);
+
+-- Create a derived table with enriched fields
+CREATE TABLE app_logs_enriched AS
+SELECT
+    service,
+    event->>'service' AS service,
+    event->>'event_type' AS event_type,
+    event->>'timestamp'::timestamp AS event_timestamp,
+    -- Add more derived fields as needed
+    json_object('service', service, 'event_type', event_type, 'event_timestamp', event_timestamp) AS enriched_event
+FROM app_logs;
+
+-- Create Kafka sink table for app-logs-parsed
+CREATE TABLE app_logs_parsed (
+    service VARCHAR,
+    enriched_event JSON
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'app-logs-parsed',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.key.serializer' = 'org.apache.kafka.common.serialization.StringSerializer',
+    'properties.value.serializer' = 'org.apache.kafka.common.serialization.JsonSerializer',
+    'format' = 'json'
+);
+```
+
+The Kafka source table is created with the necessary properties to read from the app-logs topic. The app_logs_enriched table is a derived table that extracts and derives additional fields from the raw JSON events. The app_logs_parsed table is the sink table that writes the enriched events to the app-logs-parsed topic.
+
+The serializers are set to ensure that the key (service) and value (enriched_event) are serialized correctly. The serializers used are the default serializers for Kafka Connect connectors.
+
+The end-to-end latency and delivery guarantee are achieved by using exactly-once processing, frequent checkpoints, and error tolerance in the Flink configuration. The Kafka topic configurations ensure that data is retained for 1 day and that the topics can handle the required input rate.

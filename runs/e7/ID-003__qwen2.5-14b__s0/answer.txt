@@ -1,0 +1,68 @@
+```bash
+# Create the session-events topic with 10 partitions and 7-day retention
+kafka-topics.sh --create --topic session-events --bootstrap-server kafka:9092 --partitions 10 --replication-factor 3 --config retention.ms=604800000
+
+# Create the session-events-enriched topic with 10 partitions and 7-day retention
+kafka-topics.sh --create --topic session-events-enriched --bootstrap-server kafka:9092 --partitions 10 --replication-factor 3 --config retention.ms=604800000
+```
+
+```yaml
+# Flink configuration
+config:
+  parallelism.default: 5
+  taskmanager.numberOfTaskSlots: 4
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.backend: rocksdb
+  state.checkpointing.interval: 60000
+  state.checkpointing.mode: exactly-once
+  state.backend.rocksdb.checkpoint.compress: true
+  metrics.reporter.kafka.class: org.apache.flink.metrics.kafka.KafkaReporter
+  metrics.reporter.kafka.metrics.topic: flink-metrics
+  metrics.reporter.kafka.bootstrap.servers: kafka:9092
+```
+
+```sql
+-- Define the source table for session events
+CREATE TABLE session_events (
+    user_id STRING,
+    event_data STRING,
+    event_time TIMESTAMP(3) METADATA FROM 'timestamp'
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'json.timestamp-format.standard' = 'ISO-8601'
+);
+
+-- Define the sink table for enriched session events
+CREATE TABLE session_events_enriched (
+    user_id STRING,
+    event_data STRING,
+    enriched_field STRING,
+    event_time TIMESTAMP(3)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'round-robin'
+);
+```
+
+**Justification:**
+
+1. **Kafka Topic Configuration:**
+   - **Partitions:** 10 partitions are chosen to distribute the input rate of 5,000 events/s (50,000 events/s total) across the brokers, ensuring each partition handles up to 5 MB/s (2048 bytes * 5000 events/s / 10 partitions ≈ 102.4 MB/s / partition ≈ 5 MB/s).
+   - **Replication Factor:** 3 to ensure durability and availability in case of broker failure.
+   - **Retention:** 7 days as specified.
+
+2. **Flink Configuration:**
+   - **Parallelism:** Set to 5 to match the number of partitions in the Kafka topic, ensuring each Flink subtask processes one partition.
+   - **Checkpointing:** Enabled with an interval of 60 seconds to ensure fault tolerance and durability.
+   - **Metrics Reporter:** Configured to report metrics to Kafka for monitoring purposes.
+
+3. **Flink SQL Table Definitions:**
+   - **Source Table:** Configured to read from the `session-events` topic with JSON format and ISO-8601 timestamp format.
+   - **Sink Table:** Configured to write to the `session-events-enriched` topic with JSON format and uses a round-robin partitioner to distribute the output across partitions.

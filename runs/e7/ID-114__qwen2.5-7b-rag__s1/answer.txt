@@ -1,0 +1,171 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+    segment.bytes: 1073741824 # 1 GB
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+    segment.bytes: 1073741824 # 1 GB
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: card-transactions-flink
+spec:
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  flinkConfiguration:
+    taskmanager.network.memory.fraction: 0.85
+    state.backend: rocksdb
+    state.backend.rocksdb.path: /tmp/flink-state
+    state.backend.rocksdb.block-cache-size: 512m
+    state.backend.rocksdb.memory-table-batch-max-size: 5000
+    state.backend.rocksdb.write-buffer-size: 100m
+    taskmanager.heap.size: 8g
+    taskmanager.memory.process.fraction: 0.8
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.memory.network.fraction: 0.1
+    taskmanager.numberOfTaskSlots: 3
+    parallelism.default: 3
+    checkpointing.mode: exactly-once
+    checkpointing.interval: 5000
+    checkpointing.internal-state-ttl: 1800000 # 30 minutes
+    checkpointing.min-pause: 5000
+    checkpointing.max-pause: 600000 # 10 minutes
+    jobmanager.heap.size: 8g
+    jobmanager.memory.process.fraction: 0.8
+    jobmanager.memory.heap.size: 8g
+    jobmanager.rpc.address: card-transactions-flink
+    taskmanager.rpc.address: card-transactions-flink
+    taskmanager.numberOfTaskSlots: 3
+    jobmanager.web.port: 8081
+    taskmanager.network.memory.fraction: 0.85
+    jobmanager.web.port: 8081
+    taskmanager.network.listen.address: card-transactions-flink
+    taskmanager.network.rpc.address: card-transactions-flink
+    jobmanager.rpc.address: card-transactions-flink
+    jobmanager.rpc.port: 6123
+    taskmanager.network.listen.address: card-transactions-flink
+    taskmanager.network.rpc.address: card-transactions-flink
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+    taskmanager.network.memory.fraction: 0.85
+   

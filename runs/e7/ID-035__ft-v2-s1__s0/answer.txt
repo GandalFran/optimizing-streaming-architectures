@@ -1,0 +1,80 @@
+```bash
+# Create the Kafka topics
+kafka-topics.sh --create --topic session-events --partitions 10 --replication-factor 3 --if-not-exists --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic session-events-enriched --partitions 10 --replication-factor 3 --if-not-exists --bootstrap-server kafka:9092
+```
+
+```yaml
+# Flink configuration
+flink-conf.yaml:
+  jobmanager.rpc.address: jobmanager
+  taskmanager.numberOfTaskSlots: 4
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.backend: rocksdb
+  state.backend.incremental: true
+  state.backend.rocksdb.write-buffer.count: 2
+  state.backend.rocksdb.block-cache.size: 128 mb
+  state.backend.rocksdb.block-cache.per-level.size-ratio: 0.75
+  state.backend.rocksdb.level0-file-num-compaction-trigger: 4
+  state.backend.rocksdb.level0-slowdown-writes-trigger: 10
+  state.backend.rocksdb.level0-stop-writes-trigger: 32
+  state.backend.rocksdb.max-file-size: 1 gb
+  state.backend.rocksdb.max-write-buffer-number: 4
+  state.backend.rocksdb.min-write-buffer-number-to-merge: 2
+  state.backend.rocksdb.num-sst-files-to-merge: 4
+  state.backend.rocksdb.write-buffer-flush-threshold: 128 mb
+  state.backend.rocksdb.write-buffer-flush-interval: 10 s
+  state.backend.rocksdb.write-buffer-flushes-in-flight: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per-level-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-min-max: 1
+  state.backend.rocksdb.write-buffer-flushes-in-flight-per

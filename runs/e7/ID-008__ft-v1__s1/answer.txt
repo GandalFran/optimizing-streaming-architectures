@@ -1,0 +1,162 @@
+1. ```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    message.max.bytes: 16384000
+    max.request.size: 16384000
+    min.insync.replicas: 2
+    max.in.flight.requests.per.connection: 16
+    acks: all
+    compression.type: none
+  topicNameFormat: "${config.topic.name}-${config.replicas}"
+  partitionCountFormat: "${config.partitions}"
+  replicationFactor: 3
+  cleanupPolicy: "delete"
+  storage:
+    class: "kafkatopic"
+    size: "10Gi"
+  logCompactionEnabled: false
+  userTopicConfig:
+    "max.message.bytes": "65536000"
+    "retention.ms": "86400000"
+    "flush.messages": "1000000"
+    "min.compaction.lag.ms": "0"
+    "unclean.leader.election.enable": "false"
+    "delete.retention.ms": "86400000"
+  partitionLayout:
+    partitionLayoutStrategyName: "replicas-per-partition"
+    replicasPerPartition:
+      - nodeSelector:
+          strimzi.io/cluster: "my-cluster"
+          strimzi.io/kind: "kafka-broker"
+          strimzi.io/role: "broker"
+          strimzi.io/version: "0.48.0"
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: strimzi.io/cluster
+                    operator: In
+                    values:
+                      - my-cluster
+        template:
+          spec:
+            containers:
+            - name: strimzi-kafka-broker
+              image: quay.io/strimzi/kafka:0.48.0-kafka-4.1.0
+              resources:
+                limits:
+                  memory: 8Gi
+                  cpu: 4
+                requests:
+                  memory: 8Gi
+                  cpu: 4
+              env:
+              - name: STRIMZI_NAMESPACE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+              - name: STRIMZI_CLUSTER_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+              - name: STRIMZI_TOPIC_NAME
+                value: ad-impressions
+              - name: STRIMZI_TOPIC_PARTITIONS
+                value: "4"
+              - name: STRIMZI_TOPIC_REPLICAS
+                value: "3"
+              - name: STRIMZI_TOPIC_TYPE
+                value: compacted
+              - name: STRIMZI_USER_TOPIC
+                value: "false"
+              - name: STRIMZI_USER_CONFIG
+                value: |
+                  message.max.bytes: 16384000
+                  max.request.size: 16384000
+                  min.insync.replicas: 2
+                  max.in.flight.requests.per.connection: 16
+                  acks: all
+                  compression.type: none
+                  log.retention.hours: "24"
+                  log.segment.bytes: 10485760
+                  log.cleanup.policy: delete
+                  delete.retention.ms: 86400000
+                  flush.messages: 1000000
+                  min.compaction.lag.ms: 0
+                  unclean.leader.election.enable: false
+                  max.message.bytes: 65536000
+                  log.retention.bytes: 10737418240
+                  log.flush.interval.messages: 1000000
+                  log.flush.interval.ms: 10000
+                  log.flush.offset.checkpoints.enabled: false
+                  log.segment.ms: 1000000
+                  log.index.size.max.bytes: 10485760
+                  log.index.interval.bytes: 4096
+                  log.index.block.size: 4096
+                  log.preallocate: false
+                  log.flush.interval.ms: 9223372036854775807
+                  log.flush.offset.checkpoints.enabled: true
+                  log.flush.offset.checkpoints.interval.ms: 60000
+                  log.flush.offset.checkpoints.size: 262144
+                  log.flush.offset.checkpoints.age_ms: 60000
+                  log.flush.offset.checkpoints.max_age_ms: 600000
+                  log.flush.offset.checkpoints.max_count: 1000000
+                  log.flush.offset.checkpoints.max_bytes: 10737418240
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count: 1000000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_age_ms: 600000
+                  log.flush.offset.checkpoints.max_bytes_count_age_ms: 600000
+                  log.flush

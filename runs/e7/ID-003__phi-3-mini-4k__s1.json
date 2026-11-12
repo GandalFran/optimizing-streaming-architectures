@@ -1,0 +1,404 @@
+{
+  "id": "ID-003",
+  "model": "phi-3-mini-4k",
+  "seed": 1,
+  "track": "native",
+  "family": "grid",
+  "spec": {
+    "delivery": "at-least-once",
+    "durability": "high",
+    "event_bytes": 2048,
+    "latency_slo_ms": 100,
+    "retention_days": 7,
+    "sink": "session-events-enriched",
+    "src": "session-events",
+    "throughput_eps": 5000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8387",
+  "started": "2026-11-10T20:10:47+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics --bootstrap-server kafka:9092 --create --topic session-events --partitions 3 --replication-factor 1",
+      "kind": "binary-path",
+      "from": "kafka-topics",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics --bootstrap-server kafka:9092 --create --topic session-events --partitions 3 --replication-factor 1",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics --bootstrap-server kafka:9092 --create --topic session-events-enriched --partitions 3 --replication-factor 1",
+      "kind": "binary-path",
+      "from": "kafka-topics",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics --bootstrap-server kafka:9092 --create --topic session-events-enriched --partitions 3 --replication-factor 1",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "session_events",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "session_events_enriched",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    }
+  ],
+  "translations": [],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "session_events",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "session_events_enriched",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO session_events_enriched (`user_id`, `event_data`, `enriched_fields`, `__sent_ms`, `__seq`)\nSELECT `user_id`,\n       `event_data`,\n       CAST(NULL AS STRING),\n       `__sent_ms`,\n       `__seq`\nFROM session_events;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics --bootstrap-server kafka:9092 --create --topic session-events --partitions 3 --replication-factor 1",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502 --create --topic session-events --partitions 3 --replication-factor 1",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic session-events.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "kafka-topics --bootstrap-server kafka:9092 --create --topic session-events-enriched --partitions 3 --replication-factor 1",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502 --create --topic session-events-enriched --partitions 3 --replication-factor 1",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic session-events-enriched.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.table.api.ValidationException: Unsupported options found for 'kafka'.\nUnsupported options:\nkey.deserializer\nvalue.deserializer\nSupported options:\nconnector\nformat\njson.encode.decimal-as-plain-number\njson.encode.ignore-null-fields\njson.fail-on-missing-field\njson.ignore-parse-errors",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 100,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794337856.949,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 8.0,
+      "bootstrap": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "t": 1794337860.71,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "session-events",
+        "session-events-enriched"
+      ],
+      "ok": true
+    },
+    {
+      "t": 1794337867.356,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 6.6,
+      "taskmanagers": 3
+    },
+    {
+      "t": 1794337870.988,
+      "rel": null,
+      "event": "submit_failed",
+      "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.table.api.ValidationException: Unsupported options found for 'kafka'.\nUnsupported options:\nkey.deserializer\nvalue.deserializer\nSupported options:\nconnector\nformat\njson.encode.decimal-as-plain-number\njson.encode.ignore-null-fields\njson"
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-003",
+    "answer_file": null,
+    "answers": "runs/main/phi-3-mini-4k.sample.jsonl",
+    "model": "phi-3-mini-4k",
+    "seed": 1,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-003__phi-3-mini-4k__s1.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8387",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 32,
+    "findings_L1_L3": [
+      "L2:unknown-key:kafka-source.topic is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.partitions is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.bootstrap-servers is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.key-deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.value-deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.start-from-beginning is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.fetch-max-wait is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.fetch-max-bytes is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.topic is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.partitions is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.bootstrap-servers is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.key-deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.value-deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.keyed-output is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.key-serializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.value-serializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.max-offsets is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.max-offsets-per-trigger is not a Flink 1.20 configuration option",
+      "L2:unknown-key:state.checkpointing.interval is not a Flink 1.20 configuration option",
+      "L2:unknown-key:state.checkpointing.max-retained-checkpoints is not a Flink 1.20 configuration option"
+    ]
+  },
+  "topology": {
+    "port_base": 12500,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [
+        "f3"
+      ],
+      "spanning_sut_nodes": [
+        "f3"
+      ],
+      "sut_domains": [
+        0,
+        2,
+        "2,3",
+        3
+      ]
+    },
+    "nodes": {
+      "k1": "18,19,130,131",
+      "k2": "20,21,132,133",
+      "k3": "22,23,134,135",
+      "f1": "68,69,70,71,180,181,182,183",
+      "f2": "88,89,90,91,200,201,202,203",
+      "f3": "72,73,74,92,184,185,186,204",
+      "j1": "24,136",
+      "ctl": "54,55,166,167",
+      "m1": "93,205"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12510,2@127.0.0.1:12511,3@127.0.0.1:12512",
+    "listeners=PLAINTEXT://127.0.0.1:12500,CONTROLLER://127.0.0.1:12510",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12500",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8387/e7-2008120/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "session-events": {
+      "partitions": 3,
+      "replication_factor": 1,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    },
+    "session-events-enriched": {
+      "partitions": 3,
+      "replication_factor": 1,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 12530,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 1,
+    "taskmanager.memory.process.size": "1728m",
+    "parallelism.default": 1,
+    "rest.address": "127.0.0.1",
+    "kafka-source.topic": "session-events",
+    "kafka-source.partitions": 3,
+    "kafka-source.bootstrap-servers": "kafka:9092",
+    "kafka-source.key-deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+    "kafka-source.value-deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+    "kafka-source.start-from-beginning": false,
+    "kafka-source.fetch-max-wait": 50,
+    "kafka-source.fetch-max-bytes": 2097152,
+    "kafka-sink.topic": "session-events-enriched",
+    "kafka-sink.partitions": 3,
+    "kafka-sink.bootstrap-servers": "kafka:9092",
+    "kafka-sink.key-deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+    "kafka-sink.value-deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+    "kafka-sink.keyed-output": true,
+    "kafka-sink.key-serializer": "org.apache.kafka.common.serialization.StringSerializer",
+    "kafka-sink.value-serializer": "org.apache.kafka.common.serialization.StringSerializer",
+    "kafka-sink.max-offsets": 1,
+    "kafka-sink.max-offsets-per-trigger": 1,
+    "state.backend": "rockdb",
+    "state.checkpointing.interval": 10,
+    "state.checkpointing.max-retained-checkpoints": 1,
+    "state.savepoints.concurrent": 1,
+    "state.savepoints.storage.replicas": 2,
+    "state.savepoints.storage.replication-factor": 1,
+    "state.savepoints.retention.checkpoints": 7,
+    "state.savepoints.retention.time": 7,
+    "state.savepoints.timeout.ms": 60000,
+    "state.timezone": "UTC",
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 12531,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8387/e7-2008120/flink-io"
+  },
+  "taskmanagers": {
+    "started": 3,
+    "registered": 3,
+    "slots_per_tm": 1
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 3.6,
+    "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.table.api.ValidationException: Unsupported options found for 'kafka'.\nUnsupported options:\nkey.deserializer\nvalue.deserializer\nSupported options:\nconnector\nformat\njson.encode.decimal-as-plain-number\njson.encode.ignore-null-fields\njson.fail-on-missing-field\njson.ignore-parse-errors"
+  },
+  "failure_stage": "sql-submit",
+  "topics_after_run": {
+    "session-events": {
+      "partitions": 3,
+      "replication_factor": 1,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    },
+    "session-events-enriched": {
+      "partitions": 3,
+      "replication_factor": 1,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T20:11:20+0100"
+}

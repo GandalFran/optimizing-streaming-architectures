@@ -1,0 +1,55 @@
+Nov 10, 2026 8:07:33 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE banking_transactions (
+>     account_id VARCHAR,
+>     event_timestamp TIMESTAMP,
+>     amount DECIMAL(10, 2),
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector.type' = 'kafka',
+>   'connector.version' = 'universal',
+>   'topic' = 'banking-transactions',
+>   'properties.bootstrap.servers' = '127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002',
+>   'properties.group.id' = 'banking-transactions-group',
+>   'scan.startup.mode' = 'earliest-offset',
+>   'value.format' = 'json',
+>   'json.timestamp-format.standard' = 'ISO 8601',
+>   'json.fail-on-missing-field' = 'true',
+>   'json.timestamp-format' = 'ISO 8601'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE banking_transactions_validated (
+>     account_id VARCHAR,
+>     event_timestamp TIMESTAMP,
+>     amount DECIMAL(10, 2),
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector.type' = 'kafka',
+>   'connector.version' = 'universal',
+>   'topic' = 'banking-transactions-validated',
+>   'properties.bootstrap.servers' = '127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002',
+>   'properties.group.id' = 'banking-transactions-validated-group',
+>   'producer.default-acks' = 'all',
+>   'producer.acks' = 'all',
+>   'producer.retries' = 3,
+>   'producer.max.in.flight.requests.per.connection' = 1,
+>   'producer.linger.ms' = 100,
+>   'producercompression.type' = 'gzip'
+> )[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.sql.parser.impl.ParseException: Encountered "3" at line 16, column 24.
+Was expecting one of:
+    <BINARY_STRING_LITERAL> ...
+    <QUOTED_STRING> ...
+    <PREFIXED_STRING_LITERAL> ...
+    <UNICODE_STRING_LITERAL> ...
+    <BIG_QUERY_DOUBLE_QUOTED_STRING> ...
+    <BIG_QUERY_QUOTED_STRING> ...[0m
+
+Shutting down the session...
+done.

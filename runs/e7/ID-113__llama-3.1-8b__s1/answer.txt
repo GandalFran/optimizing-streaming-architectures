@@ -1,0 +1,102 @@
+### 1. Kafka Topic Creation
+
+```bash
+# Create topic 'clicks' with 4 partitions and 3 replicas, and topic 'clicks-enriched' with 4 partitions and 3 replicas
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 4 clicks
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 4 clicks-enriched
+
+# Set the retention for both topics to 30 days
+kafka-configs.sh --bootstrap-server kafka:9092 --alter --add-config retention.ms=2592000000 clicks
+kafka-configs.sh --bootstrap-server kafka:9092 --alter --add-config retention.ms=2592000000 clicks-enriched
+```
+
+### 2. Flink Configuration (`config.yaml`)
+
+```yaml
+# Flink configuration
+flink:
+  taskmanager:
+    taskmanager.numberOfTaskSlots: 4
+    taskmanager.memory.flink.plugin-memory-size: 1024
+    taskmanager.memory.managed.size-mb: 4096
+    taskmanager.memory.jvm-metaspace-size-mb: 512
+    taskmanager.memory.jvm-heap-size-mb: 4096
+    taskmanager.numberOfTaskSlots: 4
+  checkpointing:
+    checkpointing.mode: EXACTLY_ONCE
+    checkpointing.interval: 1000
+    checkpointing.max-concurrent-checkpoints: 1
+    checkpointing.timeout: 10000
+    checkpointing.max-retention: 7
+  state.backend: fs
+  state.fs.url: s3://flink-state/checkpoints
+  parallelism.default: 4
+```
+
+### 3. Flink SQL (`create-table.sql`)
+
+```sql
+-- Create a Kafka source table for the 'clicks' topic
+CREATE TABLE clicks (
+  -- Assuming the JSON schema is defined in the 'clicks' topic
+  session_id STRING,
+  event_data JSON
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'clicks',
+  'connector.bootstrap.servers' = 'kafka:9092',
+  'scan.startup.mode' = 'latest-offset',
+  'fetch.max.wait.time' = '3000',
+  'fetch.min.bytes' = '1000',
+  'fetch.max.bytes' = '1000000',
+  'max.poll.records' = '100000',
+  'properties.sasl.jaas.config' = 'org.apache.kafka.common.security.plain.PlainLoginModule required username="myuser" password="mypassword";',
+  'properties.security.protocol.map' = 'kafka:PLAINTEXT',
+  'properties.ssl.truststore.location' = '/path/to/truststore.jks',
+  'properties.ssl.truststore.password' = 'truststore_password',
+  'properties.ssl.keystore.location' = '/path/to/keystore.jks',
+  'properties.ssl.keystore.password' = 'keystore_password',
+  'properties.ssl.key.password' = 'key_password'
+);
+
+-- Create a Kafka sink table for the 'clicks-enriched' topic
+CREATE TABLE clicks_enriched (
+  -- Assuming the JSON schema is defined in the 'clicks-enriched' topic
+  session_id STRING,
+  event_data JSON,
+  derived_field1 STRING,
+  derived_field2 STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'clicks-enriched',
+  'connector.bootstrap.servers' = 'kafka:9092',
+  'producer.acks' = 'all',
+  'producer.retries' = '3',
+  'properties.sasl.jaas.config' = 'org.apache.kafka.common.security.plain.PlainLoginModule required username="myuser" password="mypassword";',
+  'properties.security.protocol.map' = 'kafka:PLAINTEXT',
+  'properties.ssl.truststore.location' = '/path/to/truststore.jks',
+  'properties.ssl.truststore.password' = 'truststore_password',
+  'properties.ssl.keystore.location' = '/path/to/keystore.jks',
+  'properties.ssl.keystore.password' = 'keystore_password',
+  'properties.ssl.key.password' = 'key_password'
+);
+
+-- Create a Flink SQL query to filter out malformed events, enrich each event with derived fields, and write every valid event to the 'clicks-enriched' topic
+INSERT INTO clicks_enriched
+SELECT
+  session_id,
+  event_data,
+  -- Assuming derived fields are 'field1' and 'field2'
+  event_data#field1 AS derived_field1,
+  event_data#field2 AS derived_field2
+FROM clicks
+WHERE event_data IS NOT NULL;
+```
+
+**Justifications:**
+
+- For Kafka topic creation, we create `clicks` and `clicks-enriched` topics with 4 partitions and 3 replicas, and set the retention to 30 days.
+- In the Flink configuration (`config.yaml`), we set the task manager's number of slots to 4, task manager memory to 8 GB, and checkpointing to EXACTLY_ONCE with a 1-second interval. We also set the default parallelism to 4.
+- In the Flink SQL (`create-table.sql`), we create a Kafka source table for the `clicks` topic and a Kafka sink table for the `clicks-enriched` topic. We assume the JSON schema for both topics is defined in the topic configuration. We create a Flink SQL query to filter out malformed events, enrich each event with derived fields, and write every valid event to the `clicks-enriched` topic.

@@ -1,0 +1,81 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic ad-impressions --partitions 8 --replication-factor 3 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic ad-impressions-enriched --partitions 8 --replication-factor 3 --bootstrap-server kafka:9092
+
+# Set log retention policy
+kafka-topics.sh --alter --topic ad-impressions --config retention.ms=2592000000 --bootstrap-server kafka:9092
+kafka-topics.sh --alter --topic ad-impressions-enriched --config retention.ms=2592000000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+flink-conf.yaml:
+  taskmanager.memory.process.size: 8000m
+  taskmanager.numberOfTaskSlots: 4
+  checkpointing.mode: exactly-once
+  checkpointing.interval: 6000
+  checkpointing.externalized-checkpoints.dir: s3://flink-state/checkpoints
+  state.backend: rocksdb
+  state.backend.rocksdb.block-cache.size: 512m
+  parallelism.default: 3
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements
+CREATE TABLE ad_impressions (
+  campaign_id STRING,
+  event_time TIMESTAMP(3),
+  event_value DECIMAL(18,2),
+  -- other fields as needed
+  PRIMARY KEY (campaign_id) NOT ENFORCED
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.topic' = 'ad-impressions',
+  'connector.group-id' = 'flink-sql-group',
+  'connector.bootstrap.servers' = 'kafka:9092',
+  'format.type' = 'json',
+  'scan.startup.mode' = 'latest-offset',
+  'sink.partitioner.class' = 'org.apache.flink.connector.kafka.sink.KafkaRecordPartitioner',
+  'sink.topic' = 'ad-impressions-enriched',
+  'sink.delivery-guarantee' = 'at-least-once',
+  'sink.checkpoint.min-poll-interval' = '5000',
+  'sink.checkpointing.mode' = 'exactly-once',
+  'sink.checkpointing.interval' = '6000'
+);
+
+CREATE TABLE ad_impressions_enriched (
+  campaign_id STRING,
+  enriched_event_time TIMESTAMP(3),
+  enriched_event_value DECIMAL(18,2),
+  -- other fields as needed
+  PRIMARY KEY (campaign_id) NOT ENFORCED
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.topic' = 'ad-impressions-enriched',
+  'connector.group-id' = 'flink-sql-group',
+  'connector.bootstrap.servers' = 'kafka:9092',
+  'format.type' = 'json',
+  'sink.partitioner.class' = 'org.apache.flink.connector.kafka.sink.KafkaRecordPartitioner'
+);
+```
+
+### Justification of Main Values:
+
+1. **Kafka Topics Creation:**
+   - **Partitions (8):** Given the input rate of 50,000 events/s, 8 partitions ensure that the load is evenly distributed across multiple partitions, helping to manage the throughput effectively.
+   - **Replication Factor (3):** Ensures high availability and fault tolerance.
+   - **Retention Policy (30 days):** Configured to retain data for 30 days, aligning with the requirement.
+
+2. **Flink Configuration:**
+   - **Memory and Task Slots:** Configured to use 8 GB per TaskManager and 4 slots, which is sufficient given the event rate.
+   - **Checkpointing Mode (exactly-once):** Ensures that data is processed exactly once, which is crucial for maintaining data integrity.
+   - **Checkpoint Interval (6000 ms):** Balanced between performance and fault tolerance, ensuring frequent checkpoints without overwhelming the system.
+   - **State Backend (rocksdb):** Provides efficient state management and is suitable for this use case.
+   - **Parallelism (3):** Set to match the number of TaskManagers to ensure efficient parallel processing.
+
+3. **Flink SQL Table Statements:**
+   - **Kafka Connector Settings:** Configured to use the `json` format and to handle the `ad-impressions` and `ad-impressions-enriched` topics.
+   - **Delivery Guarantee (at-least-once):** Ensures that no events are lost, but duplicates are acceptable, meeting the requirement.
+   - **Checkpointing Mode and Interval:** Ensures exactly-once processing and frequent checkpoints to maintain consistency and recoverability.
+   - **Primary Key Enforcement:** Ensures that the transformation logic is correctly applied to each unique `campaign_id`.

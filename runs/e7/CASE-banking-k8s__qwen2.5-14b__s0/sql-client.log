@@ -1,0 +1,51 @@
+Nov 10, 2026 7:08:22 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE banking_transactions (
+>     account_id BIGINT,
+>     transaction_id BIGINT,
+>     amount DECIMAL(19,4),
+>     transaction_time TIMESTAMP(3),
+>     transaction_type STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     PRIMARY KEY (account_id) NOT ENFORCED
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'banking-transactions',
+>     'properties.bootstrap.servers' = '127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502',
+>     'format' = 'json',
+>     'scan.startup.mode' = 'latest-offset',
+>     'properties.group.id' = 'banking-transactions-group'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE banking_transactions_validated (
+>     account_id BIGINT,
+>     transaction_id BIGINT,
+>     amount DECIMAL(19,4),
+>     transaction_time TIMESTAMP(3),
+>     transaction_type STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     PRIMARY KEY (account_id) NOT ENFORCED
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'banking-transactions-validated',
+>     'properties.bootstrap.servers' = '127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502',
+>     'format' = 'json',
+>     'sink.partitioner' = 'org.apache.flink.connector.kafka.sink.KeyPartitioner',
+>     'sink.parallelism' = '6',
+>     'sink.max-concurrent-requests' = '1',
+>     'sink.max-retries' = 'Integer.MAX_VALUE',
+>     'sink.producer.config' = 'retries=Integer.MAX_VALUE,acks=all'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO banking_transactions_validated (`account_id`, `transaction_id`, `amount`, `transaction_time`, `transaction_type`, `__sent_ms`, `__seq`)[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.table.api.ValidationException: The Kafka table 'default_catalog.default_database.banking_transactions' with 'json' format doesn't support defining PRIMARY KEY constraint on the table, because it can't guarantee the semantic of primary key.[0m
+
+Shutting down the session...
+done.

@@ -1,0 +1,94 @@
+### 1. Kafka Topic Creation
+
+```bash
+# Create topic 'app-logs' with 12 partitions (20,000 events/s / 5 MB/s / 512 bytes/event * 2 for replication)
+bin/kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 2 --partitions 12 --config cleanup.policy=compact --config segment.bytes=536870912 app-logs
+
+# Create topic 'app-logs-parsed' with 12 partitions (same as 'app-logs')
+bin/kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 2 --partitions 12 --config cleanup.policy=compact --config segment.bytes=536870912 app-logs-parsed
+```
+
+### 2. Flink Configuration
+
+```yaml
+# config.yaml
+# flink configuration
+config:
+  jobmanager:
+    high-availability:
+      mode: zk
+    rest-port: 8081
+    webmonitor-port: 8082
+  taskmanager:
+    taskmanager.numberOfTaskSlots: 4
+    taskmanager.memory.flink.streams.buffer-threshold: 1073741824
+    taskmanager.memory.flink.streams.min-block-size: 67108864
+    taskmanager.memory.flink.streams.max-block-size: 536870912
+    taskmanager.memory.flink.streams.buffer-threshold: 1073741824
+    taskmanager.memory.flink.streams.max-buffer-size: 536870912
+  checkpointing:
+    checkpointing.mode: EXACTLY_ONCE
+    checkpointing.interval: 10s
+    checkpointing.state.backend: s3
+    checkpointing.state.checkpoints.dir: s3://flink-state/checkpoints
+```
+
+### 3. Flink SQL Tables
+
+```sql
+-- Create Kafka source table
+CREATE TABLE app_logs (
+  service VARCHAR,
+  event JSON
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'app-logs',
+  'kafka.bootstrap.servers' = 'kafka:9092',
+  'kafka.group.id' = 'app-logs-source',
+  'scan.startup.mode' = 'latest-offset',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'app-logs-source',
+  'connector.properties.zookeeper.connect' = 'kafka:2181',
+  'connector.properties.zookeeper.znode.parent' = '/app-logs-source',
+  'format' = 'json'
+);
+
+-- Create Kafka sink table
+CREATE TABLE app_logs_parsed (
+  service VARCHAR,
+  event JSON
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'app-logs-parsed',
+  'kafka.bootstrap.servers' = 'kafka:9092',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'app-logs-sink',
+  'format' = 'json'
+);
+
+-- Query to filter and enrich app logs
+SELECT service, event
+FROM app_logs
+WHERE TRY_PARSE_JSON(event) IS NOT NULL
+  AND TRY_GET_JSON_FIELD(event, 'field1') IS NOT NULL
+  AND TRY_GET_JSON_FIELD(event, 'field2') IS NOT NULL;
+```
+
+Justification for main values:
+
+*   **Kafka Topic Configuration:**
+    *   We create two Kafka topics: `app-logs` for raw log events and `app-logs-parsed` for the processed logs.
+    *   Each topic has 12 partitions, which is calculated based on the input rate of 20,000 events per second and the assumption that one partition can sustain at most 5 MB/s of produce traffic with an average event size of 512 bytes.
+    *   We use a compacted cleanup policy to store only the most recent messages in each partition, reducing storage requirements.
+    *   We set the segment bytes to 536870912 (512 MB) to control the size of each log file.
+*   **Flink Configuration:**
+    *   We use a standalone session cluster with three TaskManagers, each with 4 CPU cores and 8 GB of memory.
+    *   We set the checkpointing mode to EXACTLY_ONCE to ensure that all events are processed exactly once and no duplicates are produced.
+    *   We configure the checkpointing interval to 10 seconds to meet the end-to-end latency requirement of below 10 seconds at p99.
+    *   We use S3 as the durable checkpoint storage with a directory `s3://flink-state/checkpoints`.
+*   **Flink SQL Tables:**
+    *   We create two Kafka tables: `app_logs` for the source and `app_logs_parsed` for the sink.
+    *   We use the `TRY_PARSE_JSON` and `TRY_GET_JSON_FIELD` functions to filter out malformed events and enrich each event with derived fields.
+    *   We write the processed events to the `app_logs_parsed` table.

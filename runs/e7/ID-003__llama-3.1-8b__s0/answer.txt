@@ -1,0 +1,99 @@
+### Step 1: Create Kafka topics
+
+```bash
+# Create topic session-events with 4 partitions and 1 replica
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic session-events --partitions 4 --replication-factor 3
+
+# Create topic session-events-enriched with 4 partitions and 1 replica
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic session-events-enriched --partitions 4 --replication-factor 3
+
+# Describe topics to verify
+kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic session-events
+kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic session-events-enriched
+```
+
+### Step 2: Flink configuration
+
+```yaml
+# config.yaml
+application:
+  name: session-events-enrichment
+  type: batch
+
+flink:
+  cluster:
+    mode: standalone
+    parallelism: 4
+  taskmanager:
+    num-executors: 3
+    taskmanager-opts:
+      - "memory:8g"
+      - "num-cores:4"
+  checkpointing:
+    enabled: true
+    interval: 10s
+    storage: s3://flink-state/checkpoints
+  checkpointing:
+    mode: EXACTLY_ONCE
+  kafka:
+    bootstrap-servers: kafka:9092
+    properties:
+      bootstrap.servers: kafka:9092
+      key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  logging:
+    level: DEBUG
+```
+
+### Step 3: Flink SQL table definitions
+
+```sql
+-- Create source table for session-events topic
+CREATE TABLE session_events (
+  `user_id` STRING,
+  `event` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'session-events',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'session-events-group',
+  'scan.startup.mode' = 'latest-offset',
+  'value.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer'
+);
+
+-- Create sink table for session-events-enriched topic
+CREATE TABLE session_events_enriched (
+  `user_id` STRING,
+  `event` STRING,
+  -- derived fields
+  `derived_field1` STRING,
+  `derived_field2` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'session-events-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.key.serializer' = 'org.apache.kafka.common.serialization.StringSerializer',
+  'properties.value.serializer' = 'org.apache.kafka.common.serialization.StringSerializer'
+);
+
+-- Create a SQL function to enrich events
+CREATE FUNCTION enrich_event AS (
+  `derived_field1` = 'enriched_value1',
+  `derived_field2` = 'enriched_value2'
+);
+
+-- Enrich events and write to session-events-enriched topic
+INSERT INTO session_events_enriched
+SELECT `user_id`, `event`, enrich_event(`event`) AS derived_fields
+FROM session_events;
+```
+
+### Justification of main values:
+
+- **Kafka topics**: 4 partitions for each topic to handle the input rate of 5,000 events/s, assuming an average event size of 2048 bytes. This results in a total throughput of 10 MB/s, which is within the capacity of a single Kafka partition. Replication factor 3 ensures durability in case of a single broker failure.
+
+- **Flink configuration**: A standalone cluster with 3 TaskManagers, each with 4 CPU cores and 8 GB of memory, should be sufficient for processing the input rate of 5,000 events/s. The checkpointing interval is set to 10 seconds to balance between latency and durability. EXACTLY_ONCE checkpointing mode ensures that no data is lost after failures. The logging level is set to DEBUG for detailed logging.
+
+- **Flink SQL table definitions**: The source table `session_events` is created with the `kafka` connector, using the `universal` version, and configured to read from the `session-events` topic. The sink table `session_events_enriched` is created with the `kafka` connector, using the `universal` version, and configured to write to the `session-events-enriched` topic. The `enrich_event` function is created to derive the required fields, and the events are enriched and written to the sink table.

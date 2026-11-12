@@ -1,0 +1,158 @@
+ 1. Strimzi `KafkaTopic` resources for all topics:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  kafka:
+    replicas: 3
+    listeners:
+    - name: plain
+      port: 9092
+      tls: false
+    inter broker:
+      tls: false
+    config:
+      schema.registry.url: http://my-schema-registry:8081
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments
+spec:
+  replicas: 3
+  partitions: 15
+  compaction:
+    strategy: compact
+    retentionMs: 604800000 # 7 days
+  kafka:
+    replicaSetName: my-cluster
+    topic: payments
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+spec:
+  replicas: 3
+  partitions: 15
+  compaction:
+    strategy: compact
+    retentionMs: 604800000 # 7 days
+  kafka:
+    replicaSetName: my-cluster
+    topic: payments-validated
+```
+
+2. Flink Deployment resource:
+
+```yaml
+apiVersion: kustomize.io/v1beta1
+kind: Deployment
+metadata:
+  name: flink-sql-job
+  namespace: flink
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+      - name: flink-sql-job
+        image: flink:1.20
+        command: ["java", "-jar", "/opt/flink/usrlib/sql-runner.jar"]
+        env:
+        - name: JARS
+          value: /opt/flink/usrlib/sql-runner.jar
+        - name: FLINK_PARALLELIZE
+          value: "1"
+        - name: FLINK_CHECKPOINT_LOCATION
+          value: s3://flink-state/checkpoints
+        - name: FLINK_TASK_MANAGER_ memory.network.buffer-per-core
+          value: "512M"
+        - name: FLINK_TASK_MANAGER_numberOfTaskSlots
+          value: "4"
+        - name: FLINK_TASK_MANAGER_ parallelism
+          value: "3"
+        resources:
+          limits:
+            cpu: "4"
+            memory: "8Gi"
+          requests:
+            cpu: "4"
+            memory: "8Gi"
+      restartPolicy: OnFailure
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-sql-job-operator
+  namespace: flink
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink
+  template:
+    metadata:
+      labels:
+        app: flink
+    spec:
+      containers:
+      - name: flink-sql-job-operator
+        image: flink-kubernetes-operator:1.13
+        command: ["sh", "-c"]
+        args: ["sleep 3600"]
+      serviceAccountName: flink-sa
+```
+
+3. Flink SQL `CREATE TABLE` statements:
+
+```sql
+CREATE TABLE payments (
+  account_id STRING,
+  event_data STRUCT<
+    timestamp: BIGINT,
+    amount: BIGINT,
+    currency: STRING,
+    ...
+  >
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'payments',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'payments-consumer-group',
+  'format' = 'json',
+  'json.ignore-parse-errors' = 'true'
+);
+
+CREATE TABLE payments-validated (
+  account_id STRING,
+  event_data STRUCT<
+    timestamp: BIGINT,
+    amount: BIGINT,
+    currency: STRING,
+    ...
+    derived_field1: BIGINT,
+    derived_field2: STRING,
+    ...
+  >
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'payments-validated',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'payments-validated-consumer-group'
+);
+```
+
+Justification:
+
+1. Topic configuration: We have created two topics, `payments` and `payments-validated`, with 15 partitions each. The number of partitions allows us to process the input rate of 50,000 events/s with one Flink source subtask processing at most 20,000 events/s. The compaction strategy and retention settings ensure the data is kept for 7 days.
+
+2. Flink deployment configuration: The Flink job is packaged as a jar and run in a Kubernetes Deployment. Each TaskManager pod can use up to 4 CPUs and 8 GiB of memory, and at most 3 TaskManager pods can run. The checkpoint storage location is set to an S3 bucket.
+
+3. Flink SQL table creation: The input table `payments` is created with JSON deserialization and an option to ignore parse errors to handle malformed events. The output table `payments-validated` is created with the appropriate consumer group for writing validated events to the topic. The derived fields are not shown in this example, as they depend on the specific business logic.

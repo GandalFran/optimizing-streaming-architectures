@@ -1,0 +1,63 @@
+```bash
+# Create the session-events topic with 8 partitions, replication factor 3, and 1 day retention
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic session-events --partitions 8 --replication-factor 3 --config retention.ms=86400000
+
+# Create the session-events-enriched topic with 8 partitions, replication factor 3, and 1 day retention
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic session-events-enriched --partitions 8 --replication-factor 3 --config retention.ms=86400000
+```
+
+```yml
+execution:
+  checkpointing:
+    interval: 10s
+    timeout: 1min
+    unaligned: true
+    checkpoint-duration: 10s
+    checkpoint-interval: 10s
+    checkpoint-timeout: 1min
+    checkpointing-mode: EXACTLY_ONCE
+    checkpoint-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoints: 3
+    checkpoint-tolerable-failed-checkpoint-time: 1min
+    checkpoint-tolerable-failed-checkpoint-interval: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout: 1min
+    checkpoint-tolerable-failed-checkpoint-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-idle-timeout-interval-time

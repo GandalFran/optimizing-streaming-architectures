@@ -1,0 +1,175 @@
+ 1. Strimzi `KafkaTopic` resources for all topics:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  kafka:
+    replicas: 3
+    listeners:
+    - name: plain
+      port: 9092
+      tls: false
+    inter broker:
+      tls: false
+    config:
+      schema.registry.url: http://my-schema-registry:8081
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+spec:
+  topic: vehicle-positions
+  partitions: 32
+  replication:
+    replicas: 3
+  config:
+    retention.ms: 86400000
+    min.insync.replicas: 2
+    cleanup.policy: delete
+    compression.type: lzo
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions-clean
+spec:
+  topic: vehicle-positions-clean
+  partitions: 32
+  replication:
+    replicas: 3
+  config:
+    retention.ms: 86400000
+    min.insync.replicas: 2
+    cleanup.policy: delete
+    compression.type: lzo
+```
+
+Explanation:
+- `my-cluster` is the main Kafka cluster.
+- `vehicle-positions` and `vehicle-positions-clean` are the Kafka topics for the input and output, respectively. They have 32 partitions and use the LZO compression to reduce the storage footprint. Retention is set to 1 day (86400000 ms) and cleanup policy is set to delete.
+
+2. `FlinkDeployment` resource with the Flink configuration:
+
+```yaml
+apiVersion: kcustomobjects.io/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: my-flink-sql-job
+spec:
+  replicaCount: 3
+  image: flink:1.13-1.20
+  containerPort: 8081
+  flinkConfiguration: |
+    taskmanager.numberOfTaskSlots: 4
+    taskmanager.memory.process-output-buffer-percentage: 0.8
+    checkpointing.enabled: true
+    checkpointing.minPauseBetweenCheckpoints: 500
+    checkpointing.maxConcurrentCheckpoints: 3
+    checkpointing.checkpointInterval: 5000
+    checkpointing.failure-tolerance.enabled: true
+    checkpointing.failure-tolerance.max-concurrent-checkpoints: 3
+    checkpointing.failure-tolerance.min-pended-checkpoints-to-trigger-recovery: 2
+    checkpointing.failure-tolerance.mode: EXACTLY_ONCE
+    state.backend: filesystem
+    state.backend.fs.checkpoint.dir: s3://flink-state/checkpoints
+    rest.port: 8081
+    rest.web-interface.enabled: true
+    rest.web-interface.hostname: 0.0.0.0
+    rest.web-interface.port: 8081
+  kafka:
+    consumer.group.id: my-flink-sql-job-consumer
+    consumer.bootstrap.servers: my-cluster-kafka-bootstrap:9092
+    consumer.properties:
+      schema.registry.url: http://my-schema-registry:8081
+  jobManager:
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        cpu: 2
+        memory: 8Gi
+      requests:
+        cpu: 2
+        memory: 4Gi
+  taskManager:
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 2
+        memory: 4Gi
+  jobSpec:
+    jobClass: org.apache.flink.client.scala.streaming.StreamingJavaDStreamMain
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    arguments: ["--input", "vehicle-positions", "--output", "vehicle-positions-clean"]
+```
+
+Explanation:
+- The Flink deployment uses the Flink 1.20 version and sets the task manager number of slots to 4. It also sets the checkpointing configuration to ensure exactly-once semantics and durability. The state backend is set to S3 for storing checkpoints.
+- The Kafka configuration includes the consumer group, bootstrap servers, and schema registry URL.
+- The job manager and task manager resources specify the container resources and image pull policy.
+- The jobSpec specifies the main Flink job class, jar, and arguments for the input and output topics.
+
+3. Flink SQL `CREATE TABLE` statements for every Kafka source and sink table:
+
+```sql
+CREATE TABLE vehicle_positions (
+  vehicle_id BIGINT,
+  timestamp AS PROCTIME(),
+  latitude DOUBLE,
+  longitude DOUBLE,
+  speed DOUBLE,
+  heading DOUBLE,
+  event_timestamp AS FROM_JSON(value, '{"latitude": latitude, "longitude": longitude, "speed": speed, "heading": heading}')
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'vehicle-positions',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'my-flink-sql-job-consumer',
+  'format' = 'json',
+  'json.ignore-parse-errors' = 'true'
+);
+
+CREATE TABLE vehicle_positions_clean AS (
+  SELECT
+    vehicle_id,
+    timestamp,
+    latitude,
+    longitude,
+    speed,
+    heading,
+    -- Add derived fields if needed
+    ROUND(69.1 * SQRT(pow(latitude, 2) + pow(longitude, 2))) AS distance_from_origin,
+    ...
+  FROM vehicle_positions
+  WHERE is_valid = true
+);
+
+CREATE TABLE vehicle_positions_clean (
+  vehicle_id BIGINT,
+  timestamp AS PROCTIME(),
+  latitude DOUBLE,
+  longitude DOUBLE,
+  speed DOUBLE,
+  heading DOUBLE,
+  distance_from_origin DOUBLE,
+  ...
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'vehicle-positions-clean',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format' = 'json'
+);
+```
+
+Explanation:
+- The first `CREATE TABLE` statement creates the source table from the input Kafka topic, allowing for filtering out malformed events using the `json.ignore-parse-errors` property.
+- The second `CREATE TABLE` statement performs the filtering and enrichment of the events and creates the output table.
+- The third `CREATE TABLE` statement defines the output table with the derived fields and the Kafka sink.

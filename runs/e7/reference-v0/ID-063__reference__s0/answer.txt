@@ -1,0 +1,56 @@
+```bash
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic sensor-readings --partitions 6 --replication-factor 3 \
+  --config min.insync.replicas=2 \
+  --config retention.ms=604800000
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic sensor-readings-clean --partitions 6 --replication-factor 3 \
+  --config min.insync.replicas=2 \
+  --config retention.ms=604800000
+```
+
+```yaml
+execution:
+  checkpointing:
+    dir: s3://flink-state/checkpoints
+    interval: 100 ms
+    mode: EXACTLY_ONCE
+parallelism:
+  default: 3
+taskmanager:
+  memory:
+    process:
+      size: 8g
+  numberOfTaskSlots: 4
+```
+
+```sql
+CREATE TABLE src (
+  `sensor_id` STRING,
+  `payload` STRING,
+  `event_time` TIMESTAMP(3)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'sensor-readings-clean-job',
+  'scan.startup.mode' = 'group-offsets',
+  'properties.auto.offset.reset' = 'earliest',
+  'format' = 'json'
+);
+
+CREATE TABLE snk (
+  `sensor_id` STRING,
+  `payload` STRING,
+  `event_time` TIMESTAMP(3),
+  `enriched_at` TIMESTAMP(3)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings-clean',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'sink.delivery-guarantee' = 'exactly-once',
+  'sink.transactional-id-prefix' = 'sensor-readings-clean-tx',
+  'properties.transaction.timeout.ms' = '600000'
+);
+```
+
+6 partitions: 50,000 events/s x 512 B = 25.60 MB/s at 5 MB/s per partition (and at least the parallelism); parallelism 3 at 20,000 events/s per source subtask; replication factor 3 with min.insync.replicas=2, so acknowledged writes survive the loss of one broker; retention 7 days. Exactly-once: checkpointing in EXACTLY_ONCE mode with an interval no longer than the latency objective (read_committed consumers see results when the checkpoint commits the Kafka transaction), a transactional sink with a transactional-id prefix and a transaction timeout above the checkpoint interval and below the broker maximum of 15 minutes.

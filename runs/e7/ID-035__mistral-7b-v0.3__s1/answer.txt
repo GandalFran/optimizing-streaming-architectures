@@ -1,0 +1,81 @@
+ 1. Here's the `kafka-topics.sh` commands for creating the Kafka topics:
+
+```bash
+# Session events topic
+kafka-topics.sh --create \
+  --bootstrap-server kafka:9092 \
+  --replication-factor 3 \
+  --partitions 10 \
+  --config retention.ms=86400000 \
+  --config min.insync.replicas=2 \
+  --config cleanup.policy=delete \
+  --topic session-events
+
+# Session events enriched topic
+kafka-topics.sh --create \
+  --bootstrap-server kafka:9092 \
+  --replication-factor 3 \
+  --partitions 10 \
+  --config retention.ms=86400000 \
+  --config min.insync.replicas=2 \
+  --config cleanup.policy=delete \
+  --topic session-events-enriched
+```
+
+Explanation: We create two topics with a replication factor of 3 and 10 partitions each for redundancy and scalability. The retention is set to 1 day (86400000 ms), and the cleanup policy is configured to delete data after the retention period.
+
+2. Here's the Flink configuration (`config.yaml` keys):
+
+```yaml
+job.type: Streaming
+parallelism.degree: 3
+taskmanager.numberOfTaskSlots: 4
+checkpointing.enabled: true
+checkpointing.min-pause: 5000
+checkpointing.mode: exactly-once
+checkpointing.failed-checkpoint-max-interval: 1800000
+checkpointing.timeout: 600000
+state.backend: filesystem
+state.filesystem.type: s3
+state.savepoints.dir: s3://flink-state/savepoints
+```
+
+Explanation: We configure Flink to run as a streaming job with parallelism of 3 (one TaskManager per CPU core) and enable checkpointing for exactly-once processing. The checkpointing timeout is set to 600 seconds, and the minimum pause between checkpoints is set to 5 seconds. Savepoints are stored in S3 for durability.
+
+3. Here's the Flink SQL `CREATE TABLE` statements for the source and sink tables:
+
+```sql
+-- Create session-events table
+CREATE TABLE session_events (
+  user_id STRING,
+  event_data JSON
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'session-events-consumer-group',
+  'format' = 'json',
+  'json.ignore-parse-errors' = 'true'
+);
+
+-- Create session-events-enriched table
+CREATE TABLE session_events_enriched AS (
+  SELECT
+    user_id,
+    event_data,
+    -- Add derived fields here
+    FROM session_events
+    WHERE is_valid = true
+);
+
+-- Create sink for session-events-enriched table
+CREATE TABLE session_events_enriched_sink WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.key.serializer' = 'org.apache.kafka.common.serialization.StringSerializer',
+  'properties.value.serializer' = 'org.apache.kafka.common.serialization.JSONSerializer'
+) AS SELECT user_id, event_data FROM session_events_enriched;
+```
+
+Explanation: We create a source table for `session-events`, filtering out malformed events using the `json.ignore-parse-errors` property. The enriched table is created by filtering valid events, and the sink table is configured to write the validated events to the `session-events-enriched` Kafka topic.

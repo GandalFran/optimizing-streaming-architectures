@@ -1,0 +1,92 @@
+ 1. Kafka Topic Creation (`bash`):
+
+```bash
+# Create sensor-readings topic with 3 replication factors and 10 partitions
+kafka-topics.sh --create --topic sensor-readings --partitions 10 --replication-factor 3 --config retention.ms=604800000 --bootstrap-server kafka:9092
+
+# Create sensor-readings-clean topic with 3 replication factors and 10 partitions
+kafka-topics.sh --create --topic sensor-readings-clean --partitions 10 --replication-factor 3 --config retention.ms=604800000 --bootstrap-server kafka:9092
+```
+
+The replication factor is set to 3 to ensure data durability, and 10 partitions are created to handle the input rate of 50,000 events/s. The retention period is set to 7 days (604800000 ms).
+
+2. Flink Configuration (`config.yaml`):
+
+```yaml
+jobmanager.rpc.address: localhost
+taskmanager.numberOfTaskSlots: 4
+parallelism.default: 4
+rest.port: 8081
+checkpointing.enabled: true
+checkpointing.minPauseBetweenCheckpoints: 5000
+checkpointing.checkpointInterval: 10000
+checkpointing.maxConcurrentCheckpoints: 3
+state.backend: filesystem
+state.filesystem.type: s3
+state.savepoints.dir: s3://flink-state/savepoints
+jobmanager.rpc.timeout: 30000
+taskmanager.heartbeat.interval: 3000
+taskmanager.heartbeat.timeout: 10000
+parallelism.checkpointing.cleaner.max-concurrency: 3
+parallelism.checkpointing.cleaner.min-pct-to-clean: 0.5
+parallelism.checkpointing.cleaner.checkpoint-cleanup-interval: 60000
+parallelism.checkpointing.cleaner.max-retention-seconds: 604800
+parallelism.checkpointing.retention.cleaner.scaling-factor: 1.0
+parallelism.checkpointing.retention.checkpoint-retention-seconds: 604800
+parallelism.checkpointing.retention.min-size-for-checkpoint: 10485760
+parallelism.checkpointing.retention.max-size-for-checkpoint: 1073741824
+parallelism.checkpointing.retention.max-instances: 5
+parallelism.checkpointing.retention.min-instances: 1
+```
+
+The Flink configuration is set up to handle the specified requirements. Checkpointing is enabled to ensure exactly-once processing and to handle failures. The parallelism is set to 4, and the job is configured to use S3 for state storage. The retention period for checkpoints is set to 7 days, and the minimum size for a checkpoint is set to 10 MB to reduce the number of checkpoints and improve performance.
+
+3. Flink SQL `CREATE TABLE` statements:
+
+```sql
+-- Sensor readings source table
+CREATE TABLE sensor_readings (
+    sensor_id BIGINT,
+    reading JSON,
+    PROPERTIES (
+        'connector' = 'kafka',
+        'topic' = 'sensor-readings',
+        'format' = 'json',
+        'json.ignore-parse-errors' = 'false',
+        'json.fail-on-missing-field' = 'false',
+        'json.ignore-case' = 'true',
+        'kafka.bootstrap.servers' = 'kafka:9092'
+    )
+);
+
+-- Enriched sensor readings table
+CREATE TABLE enriched_sensor_readings (
+    sensor_id BIGINT,
+    reading JSON,
+    temperature DOUBLE,
+    humidity DOUBLE,
+    pressure DOUBLE,
+    timestamp TIMESTAMP(3),
+    PROPERTIES (
+        'connector' = 'table'
+    )
+);
+
+-- Sensor readings clean sink table
+CREATE TABLE sensor_readings_clean (
+    sensor_id BIGINT,
+    reading JSON,
+    temperature DOUBLE,
+    humidity DOUBLE,
+    pressure DOUBLE,
+    timestamp TIMESTAMP(3),
+    PROPERTIES (
+        'connector' = 'kafka',
+        'topic' = 'sensor-readings-clean',
+        'format' = 'json',
+        'kafka.bootstrap.servers' = 'kafka:9092'
+    )
+);
+```
+
+The source table reads from the `sensor-readings` Kafka topic, and the sink table writes to the `sensor-readings-clean` Kafka topic. The enriched table is an intermediate table that derives the temperature, humidity, and pressure fields from the raw reading JSON. The `json.ignore-parse-errors` and `json.fail-on-missing-field` properties are set to handle malformed events. The `json.ignore-case` property is set to ensure case-insensitive JSON parsing.

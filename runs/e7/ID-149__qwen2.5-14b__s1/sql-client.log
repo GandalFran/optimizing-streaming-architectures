@@ -1,0 +1,41 @@
+Nov 10, 2026 8:02:35 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE ad_impressions (
+>     campaign_id STRING,
+>     impression_time TIMESTAMP(3),
+>     device STRING,
+>     location STRING,
+>     ad_size STRING,
+>     user_id BIGINT,
+>     event_time AS PROCTIME(),
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     WATERMARK FOR event_time AS event_time - INTERVAL '500' MS
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'ad-impressions',
+>     'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>     'format' = 'json',
+>     'scan.startup.mode' = 'latest-offset',
+>     'properties.group.id' = 'ad-impressions-group'
+> )[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.sql.parser.impl.ParseException: Encountered "MS" at line 11, column 61.
+Was expecting one of:
+    "DAY" ...
+    "DAYS" ...
+    "HOUR" ...
+    "HOURS" ...
+    "MINUTE" ...
+    "MINUTES" ...
+    "MONTH" ...
+    "MONTHS" ...
+    "SECOND" ...
+    "SECONDS" ...
+    "YEAR" ...
+    "YEARS" ...[0m
+
+Shutting down the session...
+done.

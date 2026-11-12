@@ -1,0 +1,143 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    cleanup.policy: compact
+    segment.bytes: 10485760
+    min.cleanable.dirty.ratio: 0.05
+    retention.ms: 86400000
+
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions-clean
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    cleanup.policy: compact
+    segment.bytes: 10485760
+    min.cleanable.dirty.ratio: 0.05
+    retention.ms: 86400000
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+spec:
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  flinkConfiguration:
+    jobmanager.heap.size: 2g
+    taskmanager.heap.size: 2g
+    taskmanager.numberOfTaskSlots: 4
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.checkpoints.min-pause: 1m
+    state.checkpoints.num-retained: 5
+    state.backend.rocksdb.checkpoint-interval: 10s
+    state.backend.rocksdb.flush-interval-millis: 10000
+    state.backend.rocksdb.write-buffer-size: 100m
+    state.backend.rocksdb.block-cache-size: 100m
+    state.backend.rocksdb.block-cache-compression: true
+    state.backend.rocksdb.block-cache-compression-percentage: 50
+    state.backend.rocksdb.block-cache-compression-algorithm: zstd
+    state.backend.rocksdb.block-cache-compression-level: 3
+    state.backend.rocksdb.block-cache-compression-window-size: 100
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m
+    state.backend.rocksdb.block-cache-compression-buffer-size: 100m

@@ -1,0 +1,332 @@
+{
+  "id": "CASE-banking-k8s",
+  "model": "qwen2.5-14b",
+  "seed": 0,
+  "track": "k8s",
+  "family": "case-study",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "high",
+    "event_bytes": 1024,
+    "latency_slo_ms": 100,
+    "retention_days": 7,
+    "sink": "banking-transactions-validated",
+    "src": "banking-transactions",
+    "throughput_eps": 50000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8381",
+  "started": "2026-11-10T19:08:04+0100",
+  "substitutions": [
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.checkpoints.dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8381/e7-1128266/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.savepoints.dir",
+      "from": "s3://flink-state/savepoints",
+      "to": "file:///tmp/chamoso-e7/8381/e7-1128266/objstore/flink-state/savepoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "banking_transactions",
+      "from": "my-cluster-kafka-bootstrap:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "banking_transactions_validated",
+      "from": "my-cluster-kafka-bootstrap:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    }
+  ],
+  "translations": [
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/banking-transactions",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/banking-transactions-validated",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "artefact": "flink-conf",
+      "from": "FlinkDeployment.spec.flinkConfiguration",
+      "to": "config.yaml keys (verbatim)"
+    },
+    {
+      "artefact": "taskmanagers",
+      "from": "ceil(parallelism 1 / 1 slots) = 1 pods",
+      "to": "1 TaskManager processes (the prompt allows at most 3 pods)"
+    }
+  ],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "banking_transactions",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "before first WATERMARK/PRIMARY KEY clause"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "banking_transactions_validated",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "before first WATERMARK/PRIMARY KEY clause"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO banking_transactions_validated (`account_id`, `transaction_id`, `amount`, `transaction_time`, `transaction_type`, `__sent_ms`, `__seq`)\nSELECT `account_id`,\n       `transaction_id`,\n       `amount`,\n       `transaction_time`,\n       `transaction_type`,\n       `__sent_ms`,\n       `__seq`\nFROM banking_transactions;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "KafkaTopic/banking-transactions",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_head": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "answer_cmd": "KafkaTopic/banking-transactions-validated",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_head": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.table.api.ValidationException: The Kafka table 'default_catalog.default_database.banking_transactions' with 'json' format doesn't support defining PRIMARY KEY constraint on the table, because it can't guarantee the semantic of primary key.\nShutting down the session...\ndone.",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 100,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794334092.988,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.3,
+      "bootstrap": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "t": 1794334094.147,
+      "rel": null,
+      "event": "topics",
+      "created": [],
+      "ok": false
+    },
+    {
+      "t": 1794334100.791,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 6.6,
+      "taskmanagers": 1
+    },
+    {
+      "t": 1794334104.47,
+      "rel": null,
+      "event": "submit_failed",
+      "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.table.api.ValidationException: The Kafka table 'default_catalog.default_database.banking_transactions' with 'json' format doesn't support defining PRIMARY KEY constraint on the table, because it can't guarantee the semantic of primary"
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "CASE-banking-k8s",
+    "answer_file": null,
+    "answers": "runs/main/qwen2.5-14b.greedy.jsonl",
+    "model": "qwen2.5-14b",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/CASE-banking-k8s__qwen2.5-14b__s0.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8381",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 18,
+    "findings_L1_L3": [
+      "L2:unknown-field:FlinkDeployment.spec.jobManager.parallelism is not a field of this resource",
+      "L2:unknown-field:FlinkDeployment.spec.jobManager.jvmOptions is not a field of this resource",
+      "L2:unknown-field:FlinkDeployment.spec.taskManager.parallelism is not a field of this resource",
+      "L2:unknown-field:FlinkDeployment.spec.taskManager.jvmOptions is not a field of this resource",
+      "L2:unknown-field:FlinkDeployment.spec.taskManager.count is not a field of this resource",
+      "L2:unknown-field:FlinkDeployment.spec.taskManager.memorySize is not a field of this resource",
+      "L2:unknown-field:FlinkDeployment.spec.taskManager.cpuLimit is not a field of this resource",
+      "L2:unknown-field:FlinkDeployment.spec.job.savepointPath is not a field of this resource",
+      "L2:unknown-field:FlinkDeployment.spec.job.jars is not a field of this resource",
+      "L2:unknown-key:execution.checkpointing.max-concurrent is not a Flink 1.20 configuration option",
+      "L2:unknown-key:execution.parallelism is not a Flink 1.20 configuration option",
+      "L2:unknown-key:'sink.max-concurrent-requests' is not an option of connector kafka",
+      "L2:unknown-key:'sink.max-retries' is not an option of connector kafka",
+      "L2:unknown-key:'sink.producer.config' is not an option of connector kafka"
+    ]
+  },
+  "topology": {
+    "port_base": 12500,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "nodes": {
+      "k1": "38,39,150,151",
+      "k2": "40,41,152,153",
+      "k3": "42,43,154,155",
+      "f1": "68,69,70,71,180,181,182,183",
+      "f2": "88,89,90,91,200,201,202,203",
+      "f3": "18,19,20,21,130,131,132,133",
+      "j1": "72,184",
+      "ctl": "92,93,204,205",
+      "m1": "73,185"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12510,2@127.0.0.1:12511,3@127.0.0.1:12512",
+    "listeners=PLAINTEXT://127.0.0.1:12500,CONTROLLER://127.0.0.1:12510",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12500",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8381/e7-1128266/k1/kafka-data"
+  ],
+  "topics_after_commands": {},
+  "topics_created": {
+    "source": false,
+    "sink": false
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 12530,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 1,
+    "taskmanager.memory.process.size": "1728m",
+    "parallelism.default": 1,
+    "rest.address": "127.0.0.1",
+    "state.checkpoints.num-retained": "10",
+    "state.backend": "rocksdb",
+    "state.checkpoints.dir": "file:///tmp/chamoso-e7/8381/e7-1128266/objstore/flink-state/checkpoints",
+    "state.savepoints.dir": "file:///tmp/chamoso-e7/8381/e7-1128266/objstore/flink-state/savepoints",
+    "execution.checkpointing.mode": "EXACTLY_ONCE",
+    "execution.checkpointing.interval": 5000,
+    "execution.checkpointing.timeout": 60000,
+    "execution.checkpointing.min-pause": 500,
+    "execution.checkpointing.max-concurrent": 1,
+    "execution.parallelism": 6,
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 12531,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8381/e7-1128266/flink-io"
+  },
+  "taskmanagers": {
+    "started": 1,
+    "registered": 1,
+    "slots_per_tm": 1
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 3.7,
+    "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.table.api.ValidationException: The Kafka table 'default_catalog.default_database.banking_transactions' with 'json' format doesn't support defining PRIMARY KEY constraint on the table, because it can't guarantee the semantic of primary key.\nShutting down the session...\ndone."
+  },
+  "failure_stage": "sql-submit",
+  "topics_after_run": {},
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T19:08:31+0100"
+}

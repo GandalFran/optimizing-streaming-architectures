@@ -1,0 +1,214 @@
+{
+  "id": "ID-134",
+  "model": "qwen2.5-7b-rag",
+  "seed": 1,
+  "track": "k8s",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 2048,
+    "latency_slo_ms": 100,
+    "retention_days": 1,
+    "sink": "vehicle-positions-clean",
+    "src": "vehicle-positions",
+    "throughput_eps": 20000
+  },
+  "finish_reason": "length",
+  "host": "cn001",
+  "slurm_job": "8387",
+  "started": "2026-11-10T20:08:46+0100",
+  "substitutions": [],
+  "translations": [
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/vehicle-positions",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/vehicle-positions-clean",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    }
+  ],
+  "augmentations": [],
+  "topic_commands": [
+    {
+      "answer_cmd": "KafkaTopic/vehicle-positions",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_head": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "answer_cmd": "KafkaTopic/vehicle-positions-clean",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_head": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "no FlinkDeployment resource: no Flink cluster would be created",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 100,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C1_deploy": "no FlinkDeployment resource: no Flink cluster would be created",
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794337735.329,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.6,
+      "bootstrap": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "t": 1794337736.534,
+      "rel": null,
+      "event": "topics",
+      "created": [],
+      "ok": false
+    }
+  ],
+  "notes": [
+    "YAML error in a k8s block (documents before the error are used): ScannerError: while scanning a simple key"
+  ],
+  "driver_args": {
+    "id": "ID-134",
+    "answer_file": null,
+    "answers": "runs/main/qwen2.5-7b-rag.sample.jsonl",
+    "model": "qwen2.5-7b-rag",
+    "seed": 1,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-134__qwen2.5-7b-rag__s1.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8387",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 4,
+    "findings_L1_L3": [
+      "L1:truncated:generation stopped at the token limit",
+      "L1:syntax:ScannerError: while scanning a simple key",
+      "L1:missing-artefact:no FlinkDeployment resource found",
+      "L1:missing-artefact:no SQL block with CREATE TABLE statements"
+    ]
+  },
+  "topology": {
+    "port_base": 12500,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [
+        "f3"
+      ],
+      "spanning_sut_nodes": [
+        "f3"
+      ],
+      "sut_domains": [
+        0,
+        2,
+        "2,3",
+        3
+      ]
+    },
+    "nodes": {
+      "k1": "18,19,130,131",
+      "k2": "20,21,132,133",
+      "k3": "22,23,134,135",
+      "f1": "68,69,70,71,180,181,182,183",
+      "f2": "88,89,90,91,200,201,202,203",
+      "f3": "72,73,74,92,184,185,186,204",
+      "j1": "24,136",
+      "ctl": "54,55,166,167",
+      "m1": "93,205"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12510,2@127.0.0.1:12511,3@127.0.0.1:12512",
+    "listeners=PLAINTEXT://127.0.0.1:12500,CONTROLLER://127.0.0.1:12510",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12500",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8387/e7-1915309/k1/kafka-data"
+  ],
+  "topics_after_commands": {},
+  "topics_created": {
+    "source": false,
+    "sink": false
+  },
+  "failure_stage": "answer",
+  "topics_after_run": {},
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T20:09:03+0100"
+}

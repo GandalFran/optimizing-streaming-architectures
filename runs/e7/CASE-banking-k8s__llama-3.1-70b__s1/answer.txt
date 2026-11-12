@@ -1,0 +1,96 @@
+**Kafka Topics**
+```yml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+spec:
+  partitions: 10
+  replicas: 3
+  retention:
+    ms: 604800000 # 7 days
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+spec:
+  partitions: 10
+  replicas: 3
+  retention:
+    ms: 604800000 # 7 days
+```
+
+**Flink Deployment**
+```yml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: banking-transactions-validator
+spec:
+  flinkVersion: v1-20
+  flinkConfiguration:
+    execution.checkpointing.interval: 10000
+    execution.checkpointing.timeout: 10000
+    execution.checkpointing.unaligned: true
+    execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+    execution.restart-strategy.fixed-delay.attempts: 2147483647
+    execution.restart-strategy.fixed-delay.delay: 1000
+    state.backend: hashmap
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.savepoints.dir: s3://flink-state/savepoints
+    state.backend.incremental: true
+  taskManager:
+    resource:
+      cpu: 4
+      memory: 8G
+    replicas: 3
+  job:
+    jarURI: local:///opt/flink/usrlib/sql-runner.jar
+  kafka:
+    bootstrapServers: my-cluster-kafka-bootstrap:9092
+    properties:
+      security.protocol: SSL
+```
+
+**Flink SQL Tables**
+```sql
+CREATE TABLE banking_transactions (
+  `account_id` STRING,
+  `transaction_time` TIMESTAMP,
+  `amount` DECIMAL(10, 2),
+  `payload` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'banking-transactions',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.derive-schema' = 'true',
+  'update-mode' = 'append'
+);
+
+CREATE TABLE banking_transactions_validated (
+  `account_id` STRING,
+  `transaction_time` TIMESTAMP,
+  `amount` DECIMAL(10, 2),
+  `payload` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'banking-transactions-validated',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.derive-schema' = 'true',
+  'update-mode' = 'append',
+  'sink.partitioner' = 'fixed'
+);
+```
+
+**Justification**
+
+*   **Kafka Topic Partitions**: To sustain 50,000 events/s with an average event size of 1024 bytes, the total throughput is approximately 51.2 MB/s. With a maximum of 5 MB/s per partition, we need at least 10 partitions to handle the input rate. This also allows for some headroom in case of spikes.
+*   **Kafka Replication Factor**: A replication factor of 3 ensures that data is safely stored across multiple brokers and can survive the loss of any single broker without losing acknowledged data.
+*   **Flink TaskManager Replicas and Resources**: With 3 TaskManager replicas and 4 CPU cores each, we can process up to 60,000 events/s (20,000 events/s per subtask), which is above the required input rate. Each TaskManager has 8 GiB of memory, providing enough memory for state storage and checkpointing.
+*   **Flink Checkpointing and Restart Strategy**: Unaligned checkpointing is used to reduce the overhead of checkpointing. The checkpointing interval and timeout are set to 10 seconds to balance checkpointing overhead and recovery time. The fixed-delay restart strategy is used to ensure that Flink retries failed tasks indefinitely with a 1-second delay between retries.
+*   **Flink SQL Tables**: The `banking_transactions` table is the source table, and the `banking_transactions_validated` table is the sink table. Both tables use the Kafka connector with the universal version and JSON format. The `sink.partitioner` is set to `'fixed'` to ensure that events are written to the same partition as the source event, maintaining the same `account_id` key.

@@ -1,0 +1,259 @@
+### Kafka Topic Configuration
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 86400000
+    segment.ms: 604800000
+    cleanup.policy: DELETE
+    flush.ms: 10000
+    min.insync.replicas: 1
+    max.message.bytes: 1048576
+    compression.type: none
+    num.partitions: 16
+  brokers: my-cluster-kafka-bootstrap:9092
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions-clean
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 86400000
+    segment.ms: 604800000
+    cleanup.policy: DELETE
+    flush.ms: 10000
+    min.insync.replicas: 1
+    max.message.bytes: 1048576
+    compression.type: none
+    num.partitions: 16
+  brokers: my-cluster-kafka-bootstrap:9092
+```
+
+### Flink Configuration
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-sql-job
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-sql-job
+  template:
+    metadata:
+      labels:
+        app: flink-sql-job
+    spec:
+      containers:
+      - name: flink
+        image: flink:latest
+        ports:
+        - containerPort: 6123
+        volumeMounts:
+        - name: flink-config
+          mountPath: /opt/flink/conf
+        - name: flink-lib
+          mountPath: /opt/flink/usrlib
+        - name: flink-checkpoints
+          mountPath: /opt/flink/checkpoints
+      volumes:
+      - name: flink-config
+        configMap:
+          name: flink-config
+      - name: flink-lib
+        emptyDir: {}
+      - name: flink-checkpoints
+        persistentVolumeClaim:
+          claimName: flink-checkpoints
+  volumes:
+  - name: flink-config
+    configMap:
+      name: flink-config
+  - name: flink-checkpoints
+    persistentVolumeClaim:
+      claimName: flink-checkpoints
+spec:
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "4"
+    taskmanager.memory.flink.streams.buffer-threshold: 1073741824
+    taskmanager.memory.flink.streams.buffer-size: 536870912
+    taskmanager.memory.flink.streams.buffer-compaction: true
+    taskmanager.memory.flink.streams.buffer-compaction-interval: 10000
+    taskmanager.memory.flink.streams.buffer-compaction-threshold: 0.5
+    taskmanager.memory.flink.streams.buffer-size-per-slot: 134217728
+    taskmanager.memory.jvm-metaspace-size: 536870912
+    taskmanager.memory.jvm-heap-size: 536870912
+    taskmanager.memory.jvm-opts: "-XX:MaxMetaspaceSize=536870912 -XX:MaxHeapSize=536870912"
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallelism.tasks: 4
+    parallelism.default: 4
+    parallelism.preferred: 4
+    parallelism.min: 1
+    parallelism.max: 4
+    parallelism.rack: 1
+    parallel

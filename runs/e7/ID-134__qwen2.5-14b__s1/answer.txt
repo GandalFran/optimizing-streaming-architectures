@@ -1,0 +1,113 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 86400000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions-clean
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 86400000
+```
+
+```yaml
+apiVersion: flinkoperator.k8s.io/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: vehicle-positions-flink
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.savepoints.dir: s3://flink-state/savepoints
+    s3.access-key: "<your-s3-access-key>"
+    s3.secret-key: "<your-s3-secret-key>"
+    s3.endpoint: "<your-s3-endpoint>"
+    taskmanager.numberOfTaskSlots: 2
+    parallelism.default: 4
+    flink.metrics.reporter.promgateway.class: org.apache.flink.metrics.prometheus.PrometheusPushGatewayReporter
+    flink.metrics.reporter.promgateway.host: prometheus-pushgateway
+    flink.metrics.reporter.promgateway.jobUri: /metrics/flink/jobs
+    flink.metrics.reporter.promgateway.push.interval: 60 SECONDS
+  serviceAccount: flink
+  podTemplate:
+    spec:
+      containers:
+        - name: taskmanager
+          resources:
+            limits:
+              cpu: "4"
+              memory: 8Gi
+  jobManager:
+    parallelism: 1
+    podTemplate:
+      spec:
+        containers:
+          - name: jobmanager
+            resources:
+              limits:
+                cpu: "1"
+                memory: 4Gi
+  job:
+    savepointPath: ""
+    upgradeStrategy: fromSavepoint
+    entrypoint: "sh -c 'flink run -c org.apache.flink.streaming.api.environment.StreamExecutionEnvironmentExample /opt/flink/usrlib/sql-runner.jar'"
+    args: []
+```
+
+```sql
+CREATE TABLE vehicle_positions (
+    vehicle_id STRING,
+    timestamp TIMESTAMP(3),
+    lat DOUBLE,
+    lon DOUBLE,
+    speed INT,
+    direction INT,
+    -- Add other fields as necessary
+    WATERMARK FOR timestamp AS timestamp - INTERVAL '500' MS
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'vehicle-positions',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'properties.group.id' = 'vehicle_positions_group',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset'
+);
+
+CREATE TABLE vehicle_positions_clean (
+    vehicle_id STRING,
+    timestamp TIMESTAMP(3),
+    lat DOUBLE,
+    lon DOUBLE,
+    speed INT,
+    direction INT,
+    -- Add other derived fields as necessary
+    WATERMARK FOR timestamp AS timestamp - INTERVAL '500' MS
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'vehicle-positions-clean',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'round-robin'
+);
+```
+
+**Justification of main values:**
+
+1. **Kafka Topic Partitions and Replicas:** We set the number of partitions to 4 and replicas to 3, which allows each partition to handle up to 5 MB/s, sufficient to support the 20,000 events/s (2048 bytes/event ≈ 40 MB/s total) with some headroom. The replication factor of 3 ensures high durability.
+   
+2. **Flink Configuration:** The `taskmanager.numberOfTaskSlots` is set to 2 to efficiently utilize the resources of each TaskManager pod. The `parallelism.default` is set to 4, aligning with the Kafka topic partitions to ensure balanced load distribution. The `checkpoint` and `savepoint` directories are configured for external storage to ensure durability.
+   
+3. **SQL Tables:** The `WATERMARK` is set to ensure event time processing and a small lag to account for end-to-end latency. The `sink.partitioner` is set to `round-robin` to distribute the output events evenly across the partitions of the `vehicle-positions-clean` topic.

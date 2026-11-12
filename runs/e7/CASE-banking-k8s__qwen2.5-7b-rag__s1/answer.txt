@@ -1,0 +1,173 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 604800000
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: banking-transactions-processor
+spec:
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 2
+        memory: 4Gi
+    replicas: 3
+  flinkConfiguration:
+    jobmanager:
+      taskmanager.numberOfTaskSlots: 3
+    jobmanager:
+      heapSize: 4096m
+    taskmanager:
+      heapSize: 4096m
+    taskmanager:
+      numberOfTaskSlots: 1
+    taskmanager:
+      parallelism.default: 3
+    state:
+      backend: rocksdb
+      backend.rocksdb.checkpointDir: s3://flink-state/checkpoints
+    state:
+      backend.rocksdb.checkpointInterval: 60000
+    state:
+      backend.rocksdb.flushInterval: 1000
+    state:
+      backend.rocksdb.walDir: s3://flink-state/wal
+    state:
+      backend.rocksdb.flushOnCheckpoint: true
+    state:
+      backend.rocksdb.writeBufferSize: 67108864
+    jobmanager:
+      heartbeat.interval: 5000
+    taskmanager:
+      heartbeat.interval: 5000
+    parallelism.default: 3
+    checkpointing:
+      min-pause-between-checkpoints: 1000
+      max-pause-between-checkpoints: 5000
+      enabled: true
+      interval: 60000
+      mode: exactly-once
+    network:
+      taskmanager:
+        rpc:
+          port: 6123
+          bind-host: 0.0.0.0
+      taskmanager:
+        network:
+          rpc:
+            bind-host: 0.0.0.0
+    metrics:
+      prometheus:
+        endpoint:
+          path: /metrics
+          port: 8088
+    connectors:
+      kafka:
+        properties:
+          'topic': 'banking-transactions-validated'
+          'group.id': 'banking-transactions-processor'
+          'auto.offset.reset': 'earliest'
+          'enable.auto.commit': 'false'
+          'isolation.level': 'read_committed'
+          'bootstrap.servers': 'my-cluster-kafka-bootstrap:9092'
+          'key.serializer': 'org.apache.kafka.common.serialization.StringSerializer'
+          'value.serializer': 'org.apache.kafka.common.serialization.StringSerializer'
+    sources:
+      kafka:
+        properties:
+          'topic': 'banking-transactions'
+          'group.id': 'banking-transactions-processor'
+          'auto.offset.reset': 'earliest'
+          'enable.auto.commit': 'false'
+          'isolation.level': 'read_committed'
+          'bootstrap.servers': 'my-cluster-kafka-bootstrap:9092'
+          'key.serializer': 'org.apache.kafka.common.serialization.StringSerializer'
+          'value.serializer': 'org.apache.kafka.common.serialization.StringSerializer'
+    sinks:
+      kafka:
+        properties:
+          'topic': 'banking-transactions-validated'
+          'group.id': 'banking-transactions-processor'
+          'auto.offset.reset': 'earliest'
+          'enable.auto.commit': 'false'
+          'isolation.level': 'read_committed'
+          'bootstrap.servers': 'my-cluster-kafka-bootstrap:9092'
+          'key.serializer': 'org.apache.kafka.common.serialization.StringSerializer'
+          'value.serializer': 'org.apache.kafka.common.serialization.StringSerializer'
+```
+
+```sql
+CREATE TABLE banking_transactions (
+  account_id STRING,
+  transaction_id STRING,
+  amount DECIMAL(10, 2),
+  timestamp TIMESTAMP(3),
+  PRIMARY KEY (account_id) NOT ENFORCED
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'banking-transactions',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'earliest-offset',
+  'update.mode' = 'upsert',
+  'connector.auto.offset.reset' = 'earliest',
+  'connector.isolation.level' = 'read_committed'
+);
+
+CREATE TABLE banking_transactions_validated (
+  account_id STRING,
+  transaction_id STRING,
+  amount DECIMAL(10, 2),
+  timestamp TIMESTAMP(3),
+  PRIMARY KEY (account_id) NOT ENFORCED
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'banking-transactions-validated',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format' = 'json',
+  'update.mode' = 'upsert',
+  'connector.auto.offset.reset' = 'earliest',
+  'connector.isolation.level' = 'read_committed'
+);
+```
+
+### Justification of Values:
+
+1. **Kafka Topics Configuration:**
+   - `partitions: 4`, `replicas: 3`: Sufficient partitions and replicas to handle the input rate of 50,000 events/s. This ensures high availability and durability.
+   - `retention.ms: 604800000`: Retention set to 7 days to keep data for the required duration.
+
+2. **Flink Configuration:**
+   - `taskManager.resources`: Set CPU and memory limits to ensure the TaskManagers can handle the workload.
+   - `checkpointing.min-pause-between-checkpoints`: Ensures checkpoints are taken frequently enough to recover quickly in case of failures.
+   - `state.backend.rocksdb`: RocksDB is chosen as the state backend for its performance and reliability.
+   - `checkpointing.interval`: Set to 60 seconds to balance between recovery time and checkpoint overhead.
+   - `network.rpc.bind-host: 0.0.0.0`: Allows the Flink JobManager to be accessible from outside the cluster.
+   - `connectors.kafka.properties`: Configures the Kafka connector with exactly-once guarantees, setting the `isolation.level` to `read_committed` to ensure consistency.
+   - `sources.kafka.properties` and `sinks.kafka.properties`: Configure the Kafka sources and sinks with the required properties for the transactional writes and reads.
+
+3. **Flink SQL Table Statements:**
+   - `WITH` clause includes necessary properties for Kafka connector, format, and isolation level to ensure exactly-once semantics and high availability.

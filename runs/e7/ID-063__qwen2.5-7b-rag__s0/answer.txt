@@ -1,0 +1,92 @@
+```bash
+# Create Kafka topics with replication factor 3 and retention of 7 days
+kafka-topics.sh --create --topic sensor-readings --bootstrap-server kafka:9092 --partitions 8 --replication-factor 3 --config retention.ms=604800000
+kafka-topics.sh --create --topic sensor-readings-clean --bootstrap-server kafka:9092 --partitions 8 --replication-factor 3 --config retention.ms=604800000
+```
+
+```yaml
+# config.yaml
+flink:
+  parallelism.default: 3
+  checkpointing:
+    mode: EXACTLY_ONCE
+    min-pause-between-checkpoints: 00:00:05
+    max-concurrent-checkpoints: 1
+    min-pause-between-batch-checkpoints: 00:00:05
+    externalized-checkpoints: s3://flink-state/checkpoints
+  taskmanager:
+    memory: 8 GB
+    slots: 4
+  jobmanager:
+    web-service:
+      rest-backend: org.apache.flink.runtime.rest.RestBackendService
+    taskmanager-parallelism: 3
+  state:
+    backend: rocksdb
+    backend.options:
+      rocksdb.block-cache-size: 1000000000
+      rocksdb.write-buffer-size: 1000000000
+  metrics:
+    backend: prometheus
+    backend.options:
+      prometheus.path: /metrics
+      prometheus.port: 8088
+```
+
+```sql
+-- config.yaml
+CREATE TABLE sensor_readings (
+  sensor_id STRING,
+  event_time TIMESTAMP(3),
+  -- other fields
+  PRIMARY KEY (sensor_id) NOT ENFORCED
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'latest-offset',
+  'value.format' = 'json',
+  'key.format' = 'json',
+  'scan.startup.mode' = 'earliest-offset',
+  'sink.checkpointing-mode' = 'EXACTLY_ONCE',
+  'sink.checkpointing-interval' = '5000',
+  'sink.parallelism' = '3'
+);
+
+CREATE TABLE sensor_readings_clean (
+  sensor_id STRING,
+  event_time TIMESTAMP(3),
+  -- other fields
+  PRIMARY KEY (sensor_id) NOT ENFORCED
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings-clean',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'key.format' = 'json',
+  'value.format' = 'json',
+  'sink.checkpointing-mode' = 'EXACTLY_ONCE',
+  'sink.checkpointing-interval' = '5000',
+  'sink.parallelism' = '3'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topics Creation:**
+   - **Partitions (8):** Given the input rate of 50,000 events/s, 8 partitions are sufficient to handle the load, assuming each partition can sustain up to 5 MB/s of produce traffic.
+   - **Replication Factor (3):** Ensures that the data is replicated across three brokers, providing fault tolerance and ensuring that data is not lost if any single broker fails.
+   - **Retention (7 days):** Ensures that data is retained for a week, which is a reasonable retention period for sensor data.
+
+2. **Flink Configuration:**
+   - **Parallelism (3):** Set to match the number of TaskManagers, ensuring that the workload is evenly distributed.
+   - **Checkpointing Mode (EXACTLY_ONCE):** Ensures that the data is processed exactly once, with no duplicates and no loss, even in the event of failures.
+   - **Checkpointing Interval (5000 ms):** A reasonable interval to balance between latency and checkpointing overhead.
+   - **Externalized Checkpoints (S3):** Provides durable storage for checkpoints, ensuring that the state is preserved even if the cluster is restarted.
+
+3. **Flink SQL Table Definitions:**
+   - **Primary Key (sensor_id):** Ensures that the data is processed in a consistent order and helps in managing state.
+   - **Scan Startup Mode (latest-offset):** Ensures that the job starts from the latest offset, which is crucial for maintaining the exactly-once processing guarantee.
+   - **Sink Checkpointing Mode (EXACTLY_ONCE):** Ensures that the sink writes data exactly once, with no duplicates and no loss.
+   - **Sink Checkpointing Interval (5000 ms):** Matches the checkpointing interval in the Flink configuration to ensure consistency.

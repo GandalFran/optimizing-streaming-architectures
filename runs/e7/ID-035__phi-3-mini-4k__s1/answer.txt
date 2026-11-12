@@ -1,0 +1,93 @@
+ ```bash
+# Creating Kafka topics
+kafka-topics --bootstrap-server kafka:9092 --create --topic session-events --partitions 3 --replication-factor 1
+kafka-topics --bootstrap-server kafka:9092 --create --topic session-events-enriched --partitions 3 --replication-factor 1
+```
+
+```yaml
+# Flink configuration (config.yaml)
+
+# Kafka source
+kafka-source:
+  topic: session-events
+  partitions: 3
+  bootstrap-servers: kafka:9092
+  key: user_id
+  value: string
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+# Kafka sink
+kafka-sink:
+  topic: session-events-enriched
+  partitions: 3
+  bootstrap-servers: kafka:9092
+  key: user_id
+  value: string
+  value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+# Flink settings
+taskmanager:
+  parallelism.default: 4
+  execution.memory: 8192M
+  checkpoint.interval: 5
+  state.backend: s3://flink-state/checkpoints
+
+streaming:
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.backend: memory
+  key.serializer: org.apache.kafka.common.serialization.StringSerializer
+  value.serializer: org.apache.kafka.common.serialization.StringSerializer
+  commit.transactional.id: flink-job
+```
+
+```sql
+-- Flink SQL statements
+
+-- Create source table from Kafka topic
+CREATE TABLE session_events_source (
+  user_id STRING,
+  event_json STRING
+) WITH (
+  'connector' = 'kafka',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'session-events-source',
+  'format' = 'json',
+  'topic' = 'session-events',
+  'key' = 'user_id',
+  'value.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer'
+);
+
+-- Enrich the events and write to Kafka topic
+CREATE TABLE session_events_enriched (
+  user_id STRING,
+  event_json STRING
+) WITH (
+  'connector' = 'kafka',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'session-events-enriched',
+  'topic' = 'session-events-enriched',
+  'key' = 'user_id',
+  'value.serializer' = 'org.apache.kafka.common.serialization.StringSerializer'
+);
+
+-- Flink SQL job to filter, enrich and write events
+SELECT 
+  user_id,
+  event_json
+FROM session_events_source
+WHERE event_json IS NOT NULL
+-- Enrichment logic goes here
+-- Write to Kafka sink
+INSERT INTO session_events_enriched
+SELECT 
+  user_id,
+  enriched_event_json
+FROM session_events_source
+WHERE event_json IS NOT NULL;
+```
+
+Justification:
+- Kafka topics have 3 partitions to distribute the load evenly across the 3 Kafka brokers and to achieve the desired throughput of 20,000 events/s.
+- The Flink configuration ensures that there are enough TaskManagers to process the events (20,000 events/s per TaskManager) and that state is stored durably with S3 checkpointing.
+- Kafka's at-least-once delivery guarantees are maintained, and retention policies ensure that data is kept for 1 day in both topics.
+- The Flink SQL job filters out malformed events and enriches each event before writing to the sink topic, ensuring that the pipeline meets the end-to-end latency requirement.

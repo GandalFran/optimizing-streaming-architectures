@@ -1,0 +1,102 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 86400000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 86400000
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-ad-impressions-enrichment
+spec:
+  image: flink:1.20.0
+  flinkConfiguration:
+    state.checkpoints.numRetained: "10"
+    state.savepoints.dir: "s3://flink-state/savepoints/"
+    state.backend: rocksdb
+    taskmanager.numberOfTaskSlots: "4"
+    parallelism.default: "4"
+    execution.checkpointing.interval: "10000"
+    execution.checkpointing.mode: "EXACTLY_ONCE"
+    execution.checkpointing.minPauseBetweenCheckpoints: "1000"
+    execution.state.checkpoints隔断了你的回答。以下是完整的回答：
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-ad-impressions-enrichment
+spec:
+  image: flink:1.20.0
+  flinkConfiguration:
+    state.checkpoints.numRetained: "10"
+    state.savepoints.dir: "s3://flink-state/savepoints/"
+    state.backend: rocksdb
+    taskmanager.numberOfTaskSlots: "4"
+    parallelism.default: "4"
+    execution.checkpointing.interval: "10000"
+    execution.checkpointing.mode: "EXACTLY_ONCE"
+    execution.checkpointing.minPauseBetweenCheckpoints: "1000"
+    execution.state.checkpoints隔断了你的回答。以下是完整的回答：
+
+```sql
+CREATE TABLE ad_impressions (
+    campaign_id INT,
+    impression_data STRING,
+    event_time TIMESTAMP(3) METADATA FROM 'timestamp'
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'ad-impressions',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'properties.group.id' = 'ad-impressions-consumer-group'
+);
+
+CREATE TABLE ad_impressions_enriched (
+    campaign_id INT,
+    impression_data STRING,
+    enriched_field STRING,
+    event_time TIMESTAMP(3)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'ad-impressions-enriched',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topics Configuration**:
+   - **Partitions and Replicas**: Both topics have 4 partitions and 3 replicas. The number of partitions is chosen to distribute the input rate of 5,000 events/s across the available Kafka brokers. Each partition can handle up to 5 MB/s, and with 4 partitions, we can handle up to 20 MB/s, comfortably supporting the 5,000 events/s (5,000 events * 512 bytes = 2.5 MB/s). The replicas ensure durability and availability, as the data is replicated across multiple brokers.
+   
+2. **Flink Deployment Configuration**:
+   - **Task Slots and Parallelism**: Each TaskManager has 4 slots, and the default parallelism is set to 4, ensuring that the Flink job can process the input rate efficiently. This is based on the assumption that each source subtask can process up to 20,000 events/s, and with 4 subtasks, it can handle up to 80,000 events/s, which is more than sufficient for the 5,000 events/s input rate.
+   - **Checkpointing**: Checkpointing is set to EXACTLY_ONCE mode with an interval of 10 seconds. This ensures fault tolerance and end-to-end consistency. The minimum pause between checkpoints is set to 1 second to minimize overhead.
+   - **State Backend**: RocksDB is chosen as the state backend for its performance and durability.
+
+3. **Flink SQL Table Definitions**:
+   - **ad_impressions Table**: This table is configured to read from the `ad-impressions` topic. The `event_time` field is extracted from the metadata of the Kafka message.
+   - **ad_impressions_enriched Table**: This table writes the enriched events to the `ad-impressions-enriched` topic. The enriched field is a placeholder for the derived fields that will be added during the enrichment process.
+
+These configurations aim to meet the end-to-end latency requirement of less than 1 second at p99, while ensuring that the system is durable and scalable.

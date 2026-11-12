@@ -1,0 +1,24 @@
+Nov 10, 2026 6:37:15 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE trades (
+>     instrument_id STRING,
+>     trade_data STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     WATERMARK FOR ts AS ts - INTERVAL '5' SECOND
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'trades',
+>     'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>     'properties.group.id' = 'trades-group',
+>     'format' = 'json',
+>     'scan.startup.mode' = 'latest-offset'
+> )[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.table.api.ValidationException: The rowtime attribute field 'ts' is not defined in the table schema, at line 6, column 19
+Available fields: ['instrument_id', 'trade_data', '__sent_ms', '__seq'][0m
+
+Shutting down the session...
+done.

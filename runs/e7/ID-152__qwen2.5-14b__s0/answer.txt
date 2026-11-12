@@ -1,0 +1,88 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments
+  namespace: my-namespace
+spec:
+  partitions: 25
+  replicas: 3
+  config:
+    retention.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+  namespace: my-namespace
+spec:
+  partitions: 25
+  replicas: 3
+  config:
+    retention.ms: 604800000
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: payment-validation
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    state.checkpoints.num-retained: "10"
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    taskmanager.numberOfTaskSlots: "2"
+    parallelism.default: "5"
+  job:
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    entryClass: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
+```
+
+```sql
+CREATE TABLE payments (
+    account_id BIGINT,
+    event_time TIMESTAMP(3),
+    payload STRING,
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'payments',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'properties.group.id' = 'payment-validation-group',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset'
+);
+
+CREATE TABLE payments_validated (
+    account_id BIGINT,
+    event_time TIMESTAMP(3),
+    payload STRING,
+    derived_field STRING
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'payments-validated',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json'
+);
+```
+
+**Justification:**
+
+1. **Kafka Topic Sizing:**
+   - **Partitions:** 25 partitions are chosen to distribute the input rate of 50,000 events/s across the partitions, aiming for a maximum of 2,000 events/s per partition. This is well below the assumed maximum of 5 MB/s per partition, considering the average event size of 2048 bytes.
+   - **Replicas:** 3 replicas ensure durability and availability, as required by the problem statement.
+   - **Retention:** Both topics retain data for 7 days as specified.
+
+2. **Flink Deployment Configuration:**
+   - **Task Slots:** Each TaskManager has 2 slots to allow for parallelism and fault tolerance.
+   - **Default Parallelism:** Set to 5 to match the number of partitions in the Kafka topic, ensuring that each partition is processed by a separate subtask.
+   - **Checkpointing:** Checkpoints are retained for 10 iterations to ensure recovery in case of failures.
+   - **State Backend:** RocksDB is used for state backend due to its efficiency and durability.
+
+3. **Flink SQL Table Definitions:**
+   - **Watermark:** A watermark is set to handle out-of-order events, ensuring that the system can handle up to 5 seconds of delay in event time.
+   - **Startup Mode:** The `latest-offset` mode is used to start consuming from the latest offset, ensuring that the job starts processing the most recent data.
+
+This setup ensures that the pipeline meets the specified requirements for throughput, latency, and durability.

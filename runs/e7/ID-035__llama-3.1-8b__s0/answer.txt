@@ -1,0 +1,103 @@
+### Step 1: Create Kafka topics
+
+```bash
+# Create topic session-events with 4 partitions and 1 day retention
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 4 --config retention.ms=86400000 session-events
+
+# Create topic session-events-enriched with 4 partitions and 1 day retention
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 4 --config retention.ms=86400000 session-events-enriched
+```
+
+### Step 2: Flink configuration
+
+```yaml
+# config.yaml
+application:
+  name: session-events-enrichment
+
+kafka:
+  bootstrap.servers: kafka:9092
+  properties:
+    retries: 3
+    retry.backoff.ms: 100
+    max.in.flight.requests.per.connection: 1
+    max.partition.fetch.bytes: 1048576
+    fetch.min.bytes: 1
+    fetch.max.wait.ms: 500
+    enable.idempotence: false
+
+flink:
+  checkpointing:
+    mode: EXACTLY_ONCE
+    interval: 10s
+    storage: s3://flink-state/checkpoints
+  parallelism.default: 4
+  taskmanager.numberOfTaskSlots: 4
+  taskmanager.memory.fraction: 0.6
+  taskmanager.memory.jvm-metaspace.size: 256m
+  taskmanager.memory.jvm-heap.size: 4096m
+  taskmanager.memory.off-heap.size: 0
+  taskmanager.memory.off-heap.size-multiple: 0
+  taskmanager.memory.jvm-opts: -Xmx4096m -XX:MetaspaceSize=256m
+```
+
+### Step 3: Flink SQL table definitions
+
+```sql
+-- Create source table for session-events
+CREATE TABLE session_events (
+  `user_id` STRING,
+  `event` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'session-events',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'session-events-group',
+  'scan.startup.mode' = 'latest-offset',
+  'properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'properties.value.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer'
+);
+
+-- Create sink table for session-events-enriched
+CREATE TABLE session_events_enriched (
+  `user_id` STRING,
+  `event` STRING,
+  `derived_field1` STRING,
+  `derived_field2` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'session-events-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'properties.value.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'properties.producer.acks' = 'all',
+  'properties.retries' = '3',
+  'properties.retry.backoff.ms' = '100'
+);
+
+-- Enrich events
+INSERT INTO session_events_enriched
+SELECT
+  user_id,
+  event,
+  -- derive fields here
+  -- e.g., derived_field1 = event -> 'field1',
+  -- e.g., derived_field2 = event -> 'field2'
+  'derived_field1' AS derived_field1,
+  'derived_field2' AS derived_field2
+FROM session_events
+WHERE
+  -- filter out malformed events here
+  -- e.g., event -> 'field1' IS NOT NULL AND event -> 'field2' IS NOT NULL;
+  TRUE;
+```
+
+### Justification of main values:
+
+- **Kafka topic configuration**: We create two topics with 4 partitions each, which can handle the input rate of 20,000 events/s. The retention period is set to 1 day to meet the retention requirement. The replication factor is set to 3 to ensure durability in case of a single broker failure.
+
+- **Flink configuration**: We set the checkpointing mode to EXACTLY_ONCE to ensure that all events are processed at least once. The checkpoint interval is set to 10 seconds to meet the end-to-end latency requirement. We use a durable checkpoint storage at S3 to ensure that checkpoints are persisted even in case of a TaskManager failure. The parallelism is set to 4 to match the number of TaskManagers, and the task slot size is set to 4 to utilize the available CPU resources.
+
+- **Flink SQL table definitions**: We create two tables, `session_events` and `session_events_enriched`, with the corresponding Kafka connector configurations. The `session_events` table is used as the source, and the `session_events_enriched` table is used as the sink. The SQL query enriches the events by deriving new fields and filtering out malformed events.

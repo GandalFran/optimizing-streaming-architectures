@@ -1,0 +1,92 @@
+### Step 1: Create Kafka topics
+
+```bash
+# Create topic app-logs with 4 partitions and 1 day retention
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 4 --config retention.ms=86400000 app-logs
+
+# Create topic app-logs-parsed with 4 partitions and 1 day retention
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 4 --config retention.ms=86400000 app-logs-parsed
+```
+
+### Step 2: Flink configuration
+
+```yaml
+# config.yaml
+application:
+  name: app-logs-parser
+
+flink:
+  cluster:
+    mode: standalone
+    parallelism: 4
+  checkpointing:
+    enabled: true
+    interval: 10s
+    storage: s3
+    storage.checkpoint.dir: s3://flink-state/checkpoints
+  state.backend: filesystem
+  state.checkpoints: true
+
+kafka:
+  bootstrap.servers: kafka:9092
+  properties:
+    key.deserialization.schema: 'json'
+    value.deserialization.schema: 'json'
+    value.deserialization.fail-on-missing-field: false
+
+log:
+  level: INFO
+```
+
+### Step 3: Flink SQL table definitions
+
+```sql
+-- Create table for app-logs topic
+CREATE TABLE app_logs (
+  `service` STRING,
+  `event` JSON
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'app-logs',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'app-logs-group',
+  'scan.startup.mode' = 'latest-offset'
+);
+
+-- Create table for app-logs-parsed topic
+CREATE TABLE app_logs_parsed (
+  `service` STRING,
+  `event` JSON,
+  `derived_field1` STRING,
+  `derived_field2` STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'app-logs-parsed',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.key.format' = 'json',
+  'properties.value.format' = 'json'
+);
+
+-- Create a temporary view for the parsed events
+CREATE VIEW parsed_events AS
+SELECT
+  `service`,
+  `event`,
+  -- derive fields from event
+  JSON_EXTRACT(`event`, '$.field1') AS derived_field1,
+  JSON_EXTRACT(`event`, '$.field2') AS derived_field2
+FROM app_logs
+WHERE JSON_VALID(`event`);
+
+-- Write parsed events to app-logs-parsed topic
+INSERT INTO app_logs_parsed
+SELECT * FROM parsed_events;
+```
+
+### Justification of main values:
+
+- **Kafka topic configuration**: We create two topics, `app-logs` and `app-logs-parsed`, each with 4 partitions. This allows for a good balance between parallelism and resource utilization. The retention period is set to 1 day, which is sufficient for our use case. The replication factor is set to 3, which provides high availability.
+
+- **Flink configuration**: We set the Flink cluster mode to standalone and parallelism to 4, which matches the number of TaskManagers available. The checkpointing interval is set to 10 seconds, which is a good trade-off between latency and durability. We use the S3 storage for checkpoints, which provides high durability. The state backend is set to filesystem, which is suitable for our use case.
+
+- **Flink SQL table definitions**: We create two tables, `app_logs` and `app_logs_parsed`, which correspond to the two Kafka topics. We also create a temporary view `parsed_events` that derives the required fields from the `event` JSON field. Finally, we insert the parsed events into the `app_logs_parsed` table.

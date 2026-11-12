@@ -1,0 +1,68 @@
+### Kafka Topic Creation Commands
+
+```bash
+# Create input topic with sufficient partitions to handle input rate
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=2592000000 --topic clicks
+
+# Create output topic with sufficient partitions for Flink's exactly-once guarantee
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=2592000000 --topic clicks-enriched
+```
+
+### Flink Configuration
+
+```yml
+execution.checkpointing.interval: 1000
+execution.checkpointing.timeout: 10000
+execution.checkpointing.unaligned-checkpoints.enabled: true
+execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+execution.savepoint.pause-job-after-cancellation: true
+restart-strategy.fixed-delay.restart-Attempts: 2147483647
+restart-strategy.fixed-delay.delay: 30000
+state.backend: filesystem
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.savepoints.dir: s3://flink-state/savepoints
+```
+
+### Flink SQL Table Definitions
+
+```sql
+CREATE TABLE clicks (
+    `session_id` STRING,
+    `event` STRING,
+    `event_time` TIMESTAMP(3),
+    WATERMARK FOR `event_time` AS `event_time` - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'clicks-group',
+    'format' = 'json',
+    'json.fail-on-missing-field' = 'false'
+);
+
+CREATE TABLE clicks_enriched (
+    `session_id` STRING,
+    `event` STRING,
+    `event_time` TIMESTAMP(3),
+    `derived_field_1` STRING,
+    `derived_field_2` STRING,
+    PRIMARY KEY (`session_id`) NOT ENFORCED
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.transactional.id.prefix' = 'clicks-enriched-',
+    'upsert-kafka' = 'true',
+    'format' = 'json',
+    'json.fail-on-missing-field' = 'false'
+);
+```
+
+**Justification:**
+
+* The `clicks` topic is created with 10 partitions, which is sufficient to handle the input rate of 5,000 events/s (assuming 500 events/s per partition) and provides a good balance between throughput and latency.
+* The `clicks-enriched` topic is also created with 10 partitions to ensure that Flink can produce to it with exactly-once guarantee.
+* The retention period for both topics is set to 30 days as per the requirement.
+* The Flink configuration is set to use unaligned checkpoints and externalized checkpoint retention to ensure exactly-once guarantee.
+* The Flink SQL table definitions use the Kafka connector with JSON format and set the `WATERMARK` for the `event_time` column to handle late-arriving events.
+* The `clicks_enriched` table uses upsert Kafka to ensure exactly-once guarantee for the enriched events.

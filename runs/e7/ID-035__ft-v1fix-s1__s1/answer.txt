@@ -1,0 +1,59 @@
+# 1. `kafka-topics.sh` commands to create the Kafka topics
+bash
+# create the session-events topic
+kafka-topics.sh --create --topic session-events --partitions 6 --replication-factor 2 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092
+
+# create the session-events-enriched topic
+kafka-topics.sh --create --topic session-events-enriched --partitions 6 --replication-factor 2 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092
+# 2. Flink configuration (`config.yaml` keys)
+yaml
+# set the checkpointing interval to 10 seconds
+flink.checkpointing.interval: 10000
+
+# set the parallelism of the Flink SQL job to 2
+jobmanager.parallelism: 2
+
+# set the parallelism of the Flink source subtasks to 4
+flink.jobmanager.parallelism: 4
+
+# set the parallelism of the Flink sink subtasks to 4
+flink.jobmanager.parallelism: 4
+# 3. Flink SQL `CREATE TABLE` statements for every Kafka source and sink table
+sql
+# create the session-events source table
+CREATE TABLE session_events (
+  user_id STRING,
+  event JSON
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events',
+  'scan.startup.mode' = 'latest-offset',
+  'format' = 'json',
+  'properties.bootstrap.servers' = 'kafka:9092'
+)
+
+# create the session-events-enriched sink table
+CREATE TABLE session_events_enriched (
+  user_id STRING,
+  event JSON
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events-enriched',
+  'scan.startup.mode' = 'latest-offset',
+  'format' = 'json',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'sink.partitioner' = 'round-robin',
+  'sink.buffer-flush.max-rows' = '10000',
+  'sink.buffer-flush.max-size' = '536870912',
+  'sink.buffer-flush.max-wait' = '30000',
+  'sink.buffer-flush.min-rows' = '1000',
+  'sink.buffer-flush.min-wait' = '10000'
+)
+# The main values are as follows:
+# 1. The session-events topic has 6 partitions and a replication factor of 2, which is enough to sustain 120,000 events/s of produce traffic and keep data for 1 day.
+# 2. The session-events-enriched topic has 6 partitions and a replication factor of 2, which is enough to sustain 120,000 events/s of produce traffic and keep data for 1 day.
+# 3. The Flink job's parallelism is set to 2, which is enough to process 20,000 events/s on each TaskManager.
+# 4. The Flink checkpointing interval is set to 10 seconds, which is enough to meet the end-to-end latency requirement of p99 at 10 seconds.
+# 5. The Flink source subtasks' parallelism is set to 4, which is enough to process 80,000 events/s on each TaskManager.
+# 6. The Flink sink subtasks' parallelism is set to 4, which is enough to process 80,000 events/s on each TaskManager.
+# 7. The Flink sink's buffer-flush.max-size is set to 536870912 (512 MB), which is enough to handle the average event size of 512 bytes.

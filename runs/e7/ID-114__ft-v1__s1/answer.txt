@@ -1,0 +1,93 @@
+1. ```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    message.format.version: 2.8-rc1
+    max.message.bytes: 20480
+    min.insync.replicas: 2
+    cleanup.policy: compact
+    segment.bytes: 50331648
+    segment.ms: 10000
+    retention.ms: 2592000000
+    retention.bytes: 167772160
+    compression.type: lz4
+  topicNameFormat: card-transactions
+  partitionAssignor: roundrobin
+  configureKRaftTopic: true
+  storage:
+    class: "kraft"
+  config:
+    retention.bytes: 167772160
+    retention.ms: 2592000000
+    min.insync.replicas: 2
+    cleanup.policy: compact
+    segment.ms: 10000
+    segment.bytes: 50331648
+    message.format.version: 2.8-rc1
+    max.message.bytes: 20480
+    compression.type: lz4
+    acks: all
+    ack-timeout.ms: 5000
+    acker.replicas: 3
+    acker.partitions: 4
+    acker.buffer.size.bytes: 5242880
+    acker.send.buffer.bytes: 5242880
+    acker.poll.interval.ms: 100
+    acker.timeout.ms: 30000
+    acker.backoff.interval.ms: 100
+    acker.backoff.multiplier: 2
+    acker.max.retries: 10
+    acker.max.retries.per.topic: 10
+    acker.max.retries.per.partition: 10
+    acker.max.retries.per.batch: 10
+    acker.max.retries.per.message: 10
+    acker.max.retries.per.topic.partition: 10
+    acker.max.retries.per.topic.partition.message: 10
+    acker.max.retries.per.topic.partition.message.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition.message.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch.batch: 10
+    acker.max.retries.per.topic.partition

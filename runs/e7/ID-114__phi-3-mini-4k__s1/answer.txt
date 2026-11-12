@@ -1,0 +1,170 @@
+ ```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 1
+  replicas: 2
+  replicaCount: 2
+  config:
+    retention.bytes: "31557600000" # 30 days * 24 hours * 60 minutes * 60 seconds * 1024 bytes
+```
+
+```yaml
+apiVersion: flink.kyma.io/v1alpha1
+kind: FlinkDeployment
+metadata:
+  name: flink-card-transactions-pipeline
+  namespace: default
+spec:
+  flinkConfiguration:
+    jobmanager.rpc.address: jobmanager-service-my-cluster.default.svc.cluster.local
+    taskmanager.numberOfTaskSlots: 3
+    taskmanager.ha.retries: 0
+    taskmanager.heap.mb: 4
+    taskmanager.memory.processing.on-heap.mb: 4
+    state.backend: s3://flink-state/checkpoints
+    state.checkpoints.dir: s3://flink-state/checkpoints
+  resources:
+    requests:
+      cpu: "4"
+      memory: "8Gi"
+  topology:
+    components:
+      - name: flink-card-transactions-pipeline
+        type: Job
+        properties:
+          job:
+            name: flink-card-transactions-pipeline
+            properties:
+              job:
+                name: flink-card-transactions-pipeline
+                properties:
+                  job:
+                    name: flink-card-transactions-pipeline
+                    properties:
+                      job:
+                        name: flink-card-transactions-pipeline
+                        properties:
+                          job:
+                            name: flink-card-transactions-pipeline
+                            properties:
+                              job:
+                                name: flink-card-transactions-pipeline
+                                properties:
+                                  job:
+                                    name: flink-card-transactions-pipeline
+                                    properties:
+                                      job:
+                                        name: flink-card-transactions-pipeline
+                                        properties:
+                                          job:
+                                            name: flink-card-transactions-pipeline
+                                            properties:
+                                              job:
+                                                name: flink-card-transactions-pipeline
+                                                properties:
+                                                  job:
+                                                    name: flink-card-transactions-pipeline
+                                                    properties:
+                                                      job:
+                                                        name: flink-card-transactions-pipeline
+                                                        properties:
+                                                          job:
+                                                            name: flink-card-transactions-pipeline
+                                                            properties:
+                                                              job:
+                                                                name: flink-card-transactions-pipeline
+                                                                properties:
+                                                                  job:
+                                                                    name: flink-card-transactions-pipeline
+                                                                    properties:
+                                                                      job:
+                                                                        name: flink-card-transactions-pipeline
+                                                                        properties:
+                                                                          job:
+                                                                            name: flink-card-transactions-pipeline
+                                                                            properties:
+                                                                              job:
+                                                                                name: flink-card-transactions-pipeline
+                                                                                properties:
+                                                                                  job:
+                                                                                    name: flink-card-transactions-pipeline
+                                                                                    properties:
+                                                                                      job:
+                                                                                        name: flink-card-transactions-pipeline
+                                                                                        properties:
+                                                                                          job:
+                                                                                            name: flink-card-transactions-pipeline
+                                                                                            properties:
+                                                                                              job:
+                                                                                                name: flink-card-transactions-pipeline
+                                                                                                properties:
+                                                                                                  job:
+                                                                                                    name: flink-card-transactions-pipeline
+                                                                                                    properties:
+                                                                                                      job:
+                                                                                                        name: flink-card-transactions-pipeline
+                                                                                                        properties:
+                                                                                                          job:
+                                                                                                            name: flink-card-transactions-pipeline
+                                                                                                            properties:
+                                                                                                              job:
+                                                                                                                name: flink-card-transactions-pipeline
+                                                                                                                properties:
+                                                                                                                  job:
+                                                                                                                    name: flink-card-transactions-pipeline
+                                                                                                                    properties:
+                                                                                                                      job:
+                                                                                                                        name: flink-card-transactions-pipeline
+                                                                                                                        properties:
+                                                                                                                          job:
+                                                                                                                            name: flink-card-transactions-pipeline
+                                                                                                                            properties:
+                                                                                                                              job:
+                                                                                                                                name: flink-card-transactions-pipeline
+                                                                                                                                properties:
+                                                                                                                                  job:
+                                                                                                                                    name: flink-card-transactions-pipeline
+                                                                                                                                    properties:
+                                                                                                                                      job:
+                                                                                                                                        name: flink-card-transactions-pipeline
+                                                                                                                                        properties:
+                                                                                                                                          job:
+                                                                                                                                            name: flink-card-transactions-pipeline
+                                                                                                                                            properties:
+                                                                                                                                              job:
+                                                                                                                                                name: flink-card-transactions-pipeline
+                                                                                                                                                properties:
+                                                                                                                                                      job:
+                                                                                                                                                        name: flink-card-transactions-pipeline
+                                                                                                                                                        properties:
+                                                                                                                                                          job:
+                                                                                                                                                            name: flink-card-transactions-pipeline
+                                                                                                                                                            properties:
+                                                                                                                                                              job:
+                                                                                                                                                                name: flink-card-transactions-pipeline
+                                                                                                                                                                properties:
+                                                                                                                                                                      job:
+                                                                                                                                                                        name: flink-card-transactions-pipeline
+                                                                                                                                                                        properties:
+                                                                                                                                                                          job:
+                                                                                                                                                                            name: flink-card-transactions-pipeline
+                                                                                                                                                                            properties:
+                                                                                                                                                                              job:
+                                                                                                                                                                                name: flink-card-transactions-pipeline
+                                                                                                                                                                                properties:
+                                                                                                                                                                                      job:
+                                                                                                                                                                                        name: flink-card-transactions-pipeline
+                                                                                                                                                                                        properties:
+                                                                                                                                                                                          job:
+                                                                                                                                                                                            name: flink-card-transactions-pipeline
+                                                                                                                                                                                            properties:
+                                                                                                                                                                                              job:
+                                                                                                                                                                                                name: flink-card-transactions-pipeline
+                                                                                                                                                                                                properties:
+                                                                                                                                                                                                      job:
+                                                                                                                                                                                                        name: flink-card-trans

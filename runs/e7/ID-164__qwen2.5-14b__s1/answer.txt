@@ -1,0 +1,126 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks
+  namespace: default
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days retention in milliseconds
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+  namespace: default
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days retention in milliseconds
+```
+
+```yaml
+apiVersion: flinkoperator.kubernetes.flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-clickstream-processing
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    jobmanager.memory.process.size: 2048m
+    taskmanager.memory.process.size: 8192m
+    taskmanager.numberOfTaskSlots: 2
+    state.checkpoints.num-retained: 10
+    execution.checkpointing.mode: EXACTLY_ONCE
+    execution.checkpointing.interval: 60000
+    execution.checkpointing.timeout: 600000
+    execution.checkpointing.max-concurrent: 1
+    state.backend: rocksdb
+    state.checkpoints.storage: s3://flink-state/checkpoints/
+    state.savepoints.storage: s3://flink-state/savepoints/
+  serviceAccount: flink
+  podTemplate:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: taskmanager
+          resources:
+            limits:
+              cpu: "4"
+              memory: 8Gi
+  deploymentStrategy:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: taskmanager
+              resources:
+                limits:
+                  cpu: "4"
+                  memory: 8Gi
+  parallelism: 20
+  upgradeStrategy:
+    upgradeMode: RollingUpdate
+  autoscale:
+    enabled: true
+    minParallelism: 20
+    maxParallelism: 40
+    metricName: taskmanager.memory.network.used
+    targetPercentage: 70
+    stepSize: 1
+    interval: 30s
+  job:
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    entryClass: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
+```
+
+```sql
+CREATE TABLE clicks (
+  session_id STRING,
+  event_time TIMESTAMP(3) METADATA FROM 'timestamp',
+  event_data STRING,
+  WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'clickstream-processing',
+  'format' = 'json',
+  'scan.startup.mode' = 'earliest-offset'
+);
+
+CREATE TABLE clicks_enriched (
+  session_id STRING,
+  event_time TIMESTAMP(3),
+  event_data STRING,
+  derived_field1 STRING,
+  derived_field2 STRING,
+  WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks-enriched',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format' = 'json',
+  'sink.partitioner' = 'round-robin'
+);
+```
+
+**Justification:**
+
+1. **Kafka Topics (`clicks` and `clicks-enriched`):**
+   - **Partitions:** 10 partitions are chosen to distribute the high input rate (50,000 events/s) evenly across brokers. Each partition can handle up to 5 MB/s of produce traffic, which is well within the capacity given the average event size of 512 bytes.
+   - **Replicas:** 3 replicas ensure durability and fault tolerance; any single broker failure will not lead to data loss.
+   - **Retention:** 30 days retention is set as per the requirement.
+
+2. **Flink Configuration:**
+   - **Parallelism:** The Flink job is configured with 20 parallel tasks to handle the input rate of 50,000 events/s, assuming each source subtask can process 20,000 events/s.
+   - **Resources:** Each TaskManager pod is limited to 4 CPU and 8 GiB of memory, and up to 3 TaskManager pods can run, ensuring the job does not overwhelm the system resources.
+   - **Checkpointing:** Checkpointing is set to run every 60 seconds with a timeout of 600 seconds, ensuring fault tolerance and exactly-once semantics.
+   - **Autoscaling:** Enabled to dynamically adjust the parallelism based on the load, ensuring the system can handle varying input rates without manual intervention.
+
+3. **Flink SQL Statements:**
+   - **WATERMARK:** A watermark is set to handle out-of-order events and to provide a mechanism for event time processing.
+   - **Sink Partitioner:** The `round-robin` partitioner is used for the `clicks-enriched` topic to distribute the output evenly across partitions.

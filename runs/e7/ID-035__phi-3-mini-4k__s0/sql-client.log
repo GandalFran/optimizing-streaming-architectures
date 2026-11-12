@@ -1,0 +1,45 @@
+Nov 10, 2026 7:12:29 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE session_events (
+>     user_id STRING,
+>     event_data STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector' = 'kafka',
+>   'topic' = 'session-events',
+>   'properties.bootstrap.servers' = '127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502',
+>   'properties.group.id' = 'flink-session-group',
+>   'format' = 'json'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE session_events_enriched (
+>     user_id STRING,
+>     event_data STRING,
+>     enriched_data STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector' = 'kafka',
+>   'topic' = 'session-events-enriched',
+>   'properties.bootstrap.servers' = '127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502',
+>   'properties.group.id' = 'flink-session-group',
+>   'format' = 'json'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO session_events_enriched (`user_id`, `event_data`, `enriched_data`, `__sent_ms`, `__seq`)
+> SELECT `user_id`,
+>        `event_data`,
+>        CAST(NULL AS STRING)[34;1m[INFO] Submitting SQL update statement to the cluster...[0m
+[34;1m[INFO] SQL update statement has been successfully submitted to the cluster:[0m
+Job ID: 375388303dc1cbc6678a17b5884a2351
+
+
+Flink SQL> 
+Shutting down the session...
+done.

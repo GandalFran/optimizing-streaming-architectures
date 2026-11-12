@@ -1,0 +1,84 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic sensor-readings --partitions 8 --replication-factor 3 --config cleanup.policy=delete --config retention.ms=604800000 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic sensor-readings-clean --partitions 8 --replication-factor 3 --config cleanup.policy=delete --config retention.ms=604800000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+flink-conf.yaml:
+  jobmanager.rpc.address: jobmanager
+  taskmanager.numberOfTaskSlots: 4
+  taskmanager.memory.task.off-heap.size: 8GB
+  state.backend: rocksdb
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.checkpoints.min-pending-checkpoints-to-retain: 2
+  state.checkpoints.num-retained: 3
+  state.backend.rocksdb.block-cache.size: 2GB
+  state.backend.rocksdb.log-level: INFO
+  checkpointing.mode: EXACTLY_ONCE
+  checkpointing.interval: 6000
+  checkpointing.external-persist-dir: s3://flink-state/checkpoints
+  taskmanager.network.memory.fraction: 0.6
+  taskmanager.network.memory.min: 256MB
+  parallelism.default: 6
+  metrics.report.interval.seconds: 10
+  taskmanager.numberOfTaskSlots: 4
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements
+CREATE TABLE sensor_readings (
+  sensor_id STRING,
+  event_time TIMESTAMP(3),
+  event_value DOUBLE,
+  -- other fields as necessary
+  WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'earliest-offset',
+  'value.format' = 'json',
+  'update-mode' = 'append'
+);
+
+CREATE TABLE sensor_readings_clean (
+  sensor_id STRING,
+  event_time TIMESTAMP(3),
+  event_value DOUBLE,
+  -- other fields as necessary
+  WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings-clean',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'earliest-offset',
+  'value.format' = 'json',
+  'update-mode' = 'append'
+);
+```
+
+**Justification of Main Values:**
+
+1. **Kafka Topic Creation:**
+   - `sensor-readings` and `sensor-readings-clean` are created with 8 partitions and 3 replicas to ensure high availability and throughput.
+   - `retention.ms=604800000` (7 days) is set for both topics to retain data for 7 days.
+   - `cleanup.policy=delete` ensures that old data is deleted after retention.
+
+2. **Flink Configuration:**
+   - `jobmanager.rpc.address` is set to the job manager's address.
+   - `taskmanager.numberOfTaskSlots` and `taskmanager.memory.task.off-heap.size` are set to ensure that each TaskManager can handle multiple parallel tasks and sufficient memory.
+   - `state.backend.rocksdb.block-cache.size` and `state.backend.rocksdb.log-level` optimize the state backend for durability and performance.
+   - `checkpointing.mode: EXACTLY_ONCE` ensures exactly-once semantics.
+   - `checkpointing.interval` and `checkpointing.external-persist-dir` ensure regular and external storage for checkpoints.
+   - `parallelism.default` is set to 6 to match the number of partitions.
+   - `metrics.report.interval.seconds` is set to report metrics every 10 seconds.
+
+3. **Flink SQL Statements:**
+   - Tables are created to read from `sensor-readings` and write to `sensor-readings-clean`.
+   - `WATERMARK` is set to handle out-of-order events.
+   - The `scan.startup.mode` is set to `earliest-offset` to start from the beginning of the topic.
+   - `update-mode` is set to `append` to ensure that only new data is written.

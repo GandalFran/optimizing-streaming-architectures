@@ -1,0 +1,6768 @@
+
+<!DOCTYPE html>
+<html lang="en" dir=>
+
+<head>
+  <meta name="generator" content="Hugo 0.110.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Apache Kafka Connector # Flink provides an Apache Kafka connector for reading data from and writing data to Kafka topics with exactly-once guarantees.
+Dependency # Apache Flink ships with a universal Kafka connector which attempts to track the latest version of the Kafka client. The version of the client it uses may change between Flink releases. Modern Kafka clients are backwards compatible with broker versions 0.10.0 or later. For details on Kafka compatibility, please refer to the official Kafka documentation.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="Kafka" />
+<meta property="og:description" content="Apache Kafka Connector # Flink provides an Apache Kafka connector for reading data from and writing data to Kafka topics with exactly-once guarantees.
+Dependency # Apache Flink ships with a universal Kafka connector which attempts to track the latest version of the Kafka client. The version of the client it uses may change between Flink releases. Modern Kafka clients are backwards compatible with broker versions 0.10.0 or later. For details on Kafka compatibility, please refer to the official Kafka documentation." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/kafka/" /><meta property="article:section" content="docs" />
+
+
+<title>Kafka | Apache Flink</title>
+<link rel="manifest" href="/flink/flink-docs-release-1.20/manifest.json">
+<link rel="icon" href="/flink/flink-docs-release-1.20/favicon.png" type="image/x-icon">
+<link rel="alternate" hreflang="zh" href="//nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/connectors/datastream/kafka/" title="Kafka">
+
+<link rel="stylesheet" href="/flink/flink-docs-release-1.20/book.min.5c00beaef6b82f1a3a01d19bc3724120a51475ac74de00cc3d9bade85ac5c0db.css" integrity="sha256-XAC&#43;rva4Lxo6AdGbw3JBIKUUdax03gDMPZut6FrFwNs=">
+<script defer src="/flink/flink-docs-release-1.20/en.search.min.58faf144e7f8c66c419f8c7cae6d68feb5f98156f21d139467d846499792bf3c.js" integrity="sha256-WPrxROf4xmxBn4x8rm1o/rX5gVbyHROUZ9hGSZeSvzw="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+
+<link rel="canonical" href="https://nightlies.apache.org/flink/flink-docs-stable/docs/connectors/datastream/kafka/" />
+
+<link rel="stylesheet" type="text/css" href="//nightlies.apache.org/flink/flink-docs-release-1.20/font-awesome/css/font-awesome.min.css">
+<script src="//nightlies.apache.org/flink/flink-docs-release-1.20/js/anchor.min.js"></script>
+<script src="//nightlies.apache.org/flink/flink-docs-release-1.20/js/flink.js"></script>
+
+
+    
+    <script>
+      var _paq = window._paq = window._paq || [];
+       
+       
+      _paq.push(['disableCookies']);
+       
+      _paq.push(["setDomains", ["*.flink.apache.org","*.nightlies.apache.org/flink"]]);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="//analytics.apache.org/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '1']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    
+</head>
+
+<body dir=>
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      
+  
+
+<nav>
+
+
+<a id="logo" href="//nightlies.apache.org/flink/flink-docs-release-1.20">
+    <img width="70%" src="//nightlies.apache.org/flink/flink-docs-release-1.20/flink-header-logo.svg">
+</a>
+<p style="text-align:right">v1.20.3</p>
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ee00ed8156e685af335ebb5ccd4e75ca" class="toggle"  />
+    <label for="section-ee00ed8156e685af335ebb5ccd4e75ca" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Try Flink</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/local_installation/" class="">First steps</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/datastream/" class="">Fraud Detection with the DataStream API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/table_api/" class="">Real Time Reporting with the Table API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/flink-operations-playground/" class="">Flink Operations Playground</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-a5f62c05e51da2d13fd0cb021dee4187" class="toggle"  />
+    <label for="section-a5f62c05e51da2d13fd0cb021dee4187" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Learn Flink</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/datastream_api/" class="">Intro to the DataStream API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/etl/" class="">Data Pipelines & ETL</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/streaming_analytics/" class="">Streaming Analytics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/event_driven/" class="">Event-driven Applications</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/fault_tolerance/" class="">Fault Tolerance</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-6c07f7e07850a28420f21d62041fba0d" class="toggle"  />
+    <label for="section-6c07f7e07850a28420f21d62041fba0d" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Concepts</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/stateful-stream-processing/" class="">Stateful Stream Processing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/time/" class="">Timely Stream Processing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/flink-architecture/" class="">Flink Architecture</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/glossary/" class="">Glossary</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  	<br/>
+  
+  
+    <input type="checkbox" id="section-4be50b0d8f9a243d0d0b85d5143097d6" class="toggle"  />
+    <label for="section-4be50b0d8f9a243d0d0b85d5143097d6" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-code title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Application Development</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-978b3bcc65df430772604fa311c9f9eb" class="toggle"  />
+    <label for="section-978b3bcc65df430772604fa311c9f9eb" class="flex justify-between">Project Configuration<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/maven/" class="">Using Maven</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/gradle/" class="">Using Gradle</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/connector/" class="">Connectors and Formats</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/testing/" class="">Test Dependencies</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/advanced/" class="">Advanced Configuration</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-cc76d21600ce4269c2fc917d6514fd35" class="toggle"  />
+    <label for="section-cc76d21600ce4269c2fc917d6514fd35" class="flex justify-between">DataStream API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution_mode/" class="">Execution Mode (Batch/Streaming)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d1ca6a3ddf6206fe9e3e2905ecc5b840" class="toggle"  />
+    <label for="section-d1ca6a3ddf6206fe9e3e2905ecc5b840" class="flex justify-between">Event Time<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/event-time/generating_watermarks/" class="">Generating Watermarks</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/event-time/built_in/" class="">Builtin Watermark Generators</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d99ef0e0a25e058e76eafba1cd8eaa48" class="toggle"  />
+    <label for="section-d99ef0e0a25e058e76eafba1cd8eaa48" class="flex justify-between">State & Fault Tolerance<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/state/" class="">Working with State</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/broadcast_state/" class="">The Broadcast State Pattern</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/checkpointing/" class="">Checkpointing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/state_backends/" class="">State Backends</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f5f5986e7da95b9b579d8ae2bd679031" class="toggle"  />
+    <label for="section-f5f5986e7da95b9b579d8ae2bd679031" class="flex justify-between">Data Types & Serialization<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/types_serialization/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/schema_evolution/" class="">State Schema Evolution</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/custom_serialization/" class="">Custom State Serialization</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/third_party_serializers/" class="">3rd Party Serializers</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/user_defined_functions/" class="">User-Defined Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ef1281f923b745dff2ed7c163aa9ec7b" class="toggle"  />
+    <label for="section-ef1281f923b745dff2ed7c163aa9ec7b" class="flex justify-between">Operators<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/windows/" class="">Windows</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/joining/" class="">Joining</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/process_function/" class="">Process Function</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/asyncio/" class="">Async I/O</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/full_window_partition/" class="">Full Window Partition</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/sources/" class="">Data Sources</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/side_output/" class="">Side Outputs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/application_parameters/" class="">Handling Application Parameters</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/testing/" class="">Testing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/experimental/" class="">Experimental Features</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/scala_api_extensions/" class="">Scala API Extensions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/java_lambdas/" class="">Java Lambda Expressions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-937b4e61cb5436a4175e69bac4599ad8" class="toggle"  />
+    <label for="section-937b4e61cb5436a4175e69bac4599ad8" class="flex justify-between">Managing Execution<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution/execution_configuration/" class="">Execution Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution/packaging/" class="">Program Packaging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution/parallel/" class="">Parallel Execution</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/dataset_migration/" class="">How to Migrate from DataSet to DataStream</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-8f7718ee0841350d23d794e6e80ecca8" class="toggle"  />
+    <label for="section-8f7718ee0841350d23d794e6e80ecca8" class="flex justify-between">Table API & SQL<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/common/" class="">Concepts & Common API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/data_stream_api/" class="">DataStream API Integration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-437f7dc45a912e6ba89e4658e9cf16c7" class="toggle"  />
+    <label for="section-437f7dc45a912e6ba89e4658e9cf16c7" class="flex justify-between">Streaming Concepts<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/determinism/" class="">Determinism in Continuous Queries</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/dynamic_tables/" class="">Dynamic Tables</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/time_attributes/" class="">Time Attributes</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/versioned_tables/" class="">Versioned Tables</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/temporal_table_function/" class="">Temporal Table Function</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/types/" class="">Data Types</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/timezone/" class="">Time Zone</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/tableapi/" class="">Table API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-4c1e1791793983012460cd817472d096" class="toggle"  />
+    <label for="section-4c1e1791793983012460cd817472d096" class="flex justify-between">SQL<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/overview/" class="">SQL</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/gettingstarted/" class="">Getting Started</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-5d6c290ca84a704ca1b8b2b8851d96d7" class="toggle"  />
+    <label for="section-5d6c290ca84a704ca1b8b2b8851d96d7" class="flex justify-between">Queries<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/hints/" class="">Hints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/with/" class="">WITH clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/select/" class="">SELECT & WHERE</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/select-distinct/" class="">SELECT DISTINCT</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-tvf/" class="">Windowing TVF</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-agg/" class="">Window Aggregation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/group-agg/" class="">Group Aggregation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/over-agg/" class="">Over Aggregation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/joins/" class="">Joins</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-join/" class="">Window JOIN</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/set-ops/" class="">Set Operations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/orderby/" class="">ORDER BY clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/limit/" class="">LIMIT clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/topn/" class="">Top-N</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-topn/" class="">Window Top-N</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/deduplication/" class="">Deduplication</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-deduplication/" class="">Window Deduplication</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/match_recognize/" class="">Pattern Recognition</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/time-travel/" class="">Time Travel</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/create/" class="">CREATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/drop/" class="">DROP Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/alter/" class="">ALTER Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/insert/" class="">INSERT Statement</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/analyze/" class="">ANALYZE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/describe/" class="">DESCRIBE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/truncate/" class="">TRUNCATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/explain/" class="">EXPLAIN Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/use/" class="">USE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/show/" class="">SHOW Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/load/" class="">LOAD Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/unload/" class="">UNLOAD Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/set/" class="">SET Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/reset/" class="">RESET Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/jar/" class="">JAR Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/job/" class="">JOB Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/update/" class="">UPDATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/delete/" class="">DELETE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/call/" class="">CALL Statements</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-813c733a327563e57075b729114cc8b5" class="toggle"  />
+    <label for="section-813c733a327563e57075b729114cc8b5" class="flex justify-between">Materialized Table<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/materialized-table/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/materialized-table/statements/" class="">Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/materialized-table/quickstart/" class="">Quickstart</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b587c52eb9cc90a648b2c07dee157839" class="toggle"  />
+    <label for="section-b587c52eb9cc90a648b2c07dee157839" class="flex justify-between">Functions<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/functions/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/functions/systemfunctions/" class="">System (Built-in) Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/functions/udfs/" class="">User-defined Functions</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/procedures/" class="">Procedures</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/modules/" class="">Modules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/catalogs/" class="">Catalogs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/jdbcdriver/" class="">Flink JDBC Driver</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/olap_quickstart/" class="">OLAP Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sqlclient/" class="">SQL Client</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-5faa5ed4946fc579132ce4387e7df6d6" class="toggle"  />
+    <label for="section-5faa5ed4946fc579132ce4387e7df6d6" class="flex justify-between">SQL Gateway<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql-gateway/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql-gateway/rest/" class="">REST Endpoint</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql-gateway/hiveserver2/" class="">HiveServer2 Endpoint</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-27d468a2caf7b6b532e75a9890a8be61" class="toggle"  />
+    <label for="section-27d468a2caf7b6b532e75a9890a8be61" class="flex justify-between">Hive Compatibility<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-bd89891f1fcee30f52191d13ca7cb941" class="toggle"  />
+    <label for="section-bd89891f1fcee30f52191d13ca7cb941" class="flex justify-between">Hive Dialect<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d0c530a3ce23c2eaeeb0c3e4c8519d4e" class="toggle"  />
+    <label for="section-d0c530a3ce23c2eaeeb0c3e4c8519d4e" class="flex justify-between">Queries<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/sort-cluster-distribute-by/" class="">Sort/Cluster/Distributed By</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/group-by/" class="">Group By</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/join/" class="">Join</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/set-op/" class="">Set Operations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/lateral-view/" class="">Lateral View Clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/window-functions/" class="">Window Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/sub-queries/" class="">Sub-Queries</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/cte/" class="">CTE</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/transform/" class="">Transform Clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/table-sample/" class="">Table Sample</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/create/" class="">CREATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/drop/" class="">DROP Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/alter/" class="">ALTER Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/insert/" class="">INSERT Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/load-data/" class="">Load Data Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/show/" class="">SHOW Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/add/" class="">ADD Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/set/" class="">SET Statements</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/config/" class="">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/tuning/" class="">Performance Tuning</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sourcessinks/" class="">User-defined Sources & Sinks</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-a25fe3d5e31775b296acf374d7cdac92" class="toggle"  />
+    <label for="section-a25fe3d5e31775b296acf374d7cdac92" class="flex justify-between">Python API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/installation/" class="">Installation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table_api_tutorial/" class="">Table API Tutorial</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream_tutorial/" class="">DataStream API Tutorial</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-424bf2ddca17cc2b040ec160630144f2" class="toggle"  />
+    <label for="section-424bf2ddca17cc2b040ec160630144f2" class="flex justify-between">Table API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/intro_to_table_api/" class="">Intro to the Python Table API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/table_environment/" class="">TableEnvironment</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-91932491e3426637ac0c6917c35f993f" class="toggle"  />
+    <label for="section-91932491e3426637ac0c6917c35f993f" class="flex justify-between">Operations<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/operations/operations/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/operations/row_based_operations/" class="">Row-based Operations</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/python_types/" class="">Data Types</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/system_functions/" class="">System (Built-in) Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-2c6dae1d1333e53da24a0d0b4469849e" class="toggle"  />
+    <label for="section-2c6dae1d1333e53da24a0d0b4469849e" class="flex justify-between">User Defined Functions<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/udfs/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/udfs/python_udfs/" class="">General User-defined Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/udfs/vectorized_python_udfs/" class="">Vectorized User-defined Functions</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/conversion_of_pandas/" class="">Conversions between PyFlink Table and Pandas DataFrame</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/conversion_of_data_stream/" class="">Conversions between Table and DataStream</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/sql/" class="">SQL</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/catalogs/" class="">Catalogs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/metrics/" class="">Metrics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/python_table_api_connectors/" class="">Connectors</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-42116523be06cf749380b5ce462b0bf6" class="toggle"  />
+    <label for="section-42116523be06cf749380b5ce462b0bf6" class="flex justify-between">DataStream API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/intro_to_datastream_api/" class="">Intro to the Python DataStream API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-412609674eacdd1d31a3f4c67bbb191f" class="toggle"  />
+    <label for="section-412609674eacdd1d31a3f4c67bbb191f" class="flex justify-between">Operators<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/operators/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/operators/windows/" class="">Windows</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/operators/process_function/" class="">Process Function</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/data_types/" class="">Data Types</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/state/" class="">State</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/dependency_management/" class="">Dependency Management</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/python_execution_mode/" class="">Execution Mode</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/python_config/" class="">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/debugging/" class="">Debugging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/environment_variables/" class="">Environment Variables</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/faq/" class="">FAQ</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f5bf4e18a429153f481150a5e746bb4f" class="toggle"  />
+    <label for="section-f5bf4e18a429153f481150a5e746bb4f" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-book title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Libraries</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/libs/cep/" class="">Event Processing (CEP)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/libs/state_processor_api/" class="">State Processor API</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ed82234225dbf97cc7245e5b0cb1addb" class="toggle" checked />
+    <label for="section-ed82234225dbf97cc7245e5b0cb1addb" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-random title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Connectors</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-a526b98d366d55d2402b163c9f80b4de" class="toggle" checked />
+    <label for="section-a526b98d366d55d2402b163c9f80b4de" class="flex justify-between">DataStream Connectors<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/guarantees/" class="">Fault Tolerance Guarantees</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-c5d27e93a39d1000fee2c771ab8e4c99" class="toggle"  />
+    <label for="section-c5d27e93a39d1000fee2c771ab8e4c99" class="flex justify-between">Formats<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/avro/" class="">Avro</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/azure_table_storage/" class="">Azure Table storage</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/csv/" class="">CSV</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/hadoop/" class="">Hadoop</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/json/" class="">JSON</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/parquet/" class="">Parquet</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/text_files/" class="">Text files</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/datagen/" class="">DataGen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/dynamic-kafka/" class="">Dynamic Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/kafka/" class=" active">Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/cassandra/" class="">Cassandra</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/dynamodb/" class="">DynamoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/elasticsearch/" class="">Elasticsearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/firehose/" class="">Firehose</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/kinesis/" class="">Kinesis</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/mongodb/" class="">MongoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/opensearch/" class="">Opensearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/prometheus/" class="">Prometheus</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/sqs/" class="">SQS</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/filesystem/" class="">FileSystem</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/kudu/" class="">Kudu</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/rabbitmq/" class="">RabbitMQ</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/pubsub/" class="">Google Cloud PubSub</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/hybridsource/" class="">Hybrid Source</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/pulsar/" class="">Pulsar</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/jdbc/" class="">JDBC</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-cd269c4be446b40053a18f8b84110041" class="toggle"  />
+    <label for="section-cd269c4be446b40053a18f8b84110041" class="flex justify-between">Table API Connectors<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-4078b95b237c79336e676b4e2edb2772" class="toggle"  />
+    <label for="section-4078b95b237c79336e676b4e2edb2772" class="flex justify-between">Formats<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/overview/" class="">Formats</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/csv/" class="">CSV</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/json/" class="">JSON</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/avro/" class="">Avro</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/avro-confluent/" class="">Confluent Avro</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/protobuf/" class="">Protobuf</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/debezium/" class="">Debezium</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/canal/" class="">Canal</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/maxwell/" class="">Maxwell</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/ogg/" class="">Ogg</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/parquet/" class="">Parquet</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/orc/" class="">Orc</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/raw/" class="">Raw</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/kafka/" class="">Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/upsert-kafka/" class="">Upsert Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/dynamodb/" class="">DynamoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/firehose/" class="">Firehose</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/kinesis/" class="">Kinesis</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/mongodb/" class="">MongoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/jdbc/" class="">JDBC</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/kudu/" class="">Kudu</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/elasticsearch/" class="">Elasticsearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/opensearch/" class="">Opensearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/filesystem/" class="">FileSystem</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hbase/" class="">HBase</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/pulsar/" class="">Pulsar</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/datagen/" class="">DataGen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/print/" class="">Print</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/blackhole/" class="">BlackHole</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-61ae5a238c9fe2f26340cb03198dfcd7" class="toggle"  />
+    <label for="section-61ae5a238c9fe2f26340cb03198dfcd7" class="flex justify-between">Hive<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/hive_catalog/" class="">Hive Catalog</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/hive_read_write/" class="">Hive Read & Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/hive_functions/" class="">Hive Functions</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/downloads/" class="">Download</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f8c920cc65db331ce219e9ca783fabb2" class="toggle"  />
+    <label for="section-f8c920cc65db331ce219e9ca783fabb2" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-sliders title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Deployment</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/java_compatibility/" class="">Java Compatibility</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f57030cb5bc69ac1d28bd73a2e0fa4a9" class="toggle"  />
+    <label for="section-f57030cb5bc69ac1d28bd73a2e0fa4a9" class="flex justify-between">Resource Providers<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ea9ad33af563289787cbec15cada5824" class="toggle"  />
+    <label for="section-ea9ad33af563289787cbec15cada5824" class="flex justify-between">Standalone<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/working_directory/" class="">Working Directory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/docker/" class="">Docker</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/kubernetes/" class="">Kubernetes</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/native_kubernetes/" class="">Native Kubernetes</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/yarn/" class="">YARN</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/config/" class="">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b2b21a6932971423f75546845eaa0270" class="toggle"  />
+    <label for="section-b2b21a6932971423f75546845eaa0270" class="flex justify-between">Memory Configuration<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_setup/" class="">Set up Flink's Process Memory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_setup_tm/" class="">Set up TaskManager Memory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_setup_jobmanager/" class="">Set up JobManager Memory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_tuning/" class="">Memory Tuning Guide</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_trouble/" class="">Troubleshooting</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_migration/" class="">Migration Guide</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/network_mem_tuning/" class="">Network Buffer Tuning</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/cli/" class="">Command-Line Interface</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/elastic_scaling/" class="">Elastic Scaling</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/finegrained_resource/" class="">Fine-Grained Resource Management</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/speculative_execution/" class="">Speculative Execution</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-3ad52e3c294903bbe597454f3be784d1" class="toggle"  />
+    <label for="section-3ad52e3c294903bbe597454f3be784d1" class="flex justify-between">File Systems<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/common/" class="">Common Configurations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/s3/" class="">Amazon S3</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/gcs/" class="">Google Cloud Storage</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/oss/" class="">Aliyun OSS</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/azure/" class="">Azure Blob Storage</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/plugins/" class="">Plugins</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-8e839847034c230e3c48f00e4eea472f" class="toggle"  />
+    <label for="section-8e839847034c230e3c48f00e4eea472f" class="flex justify-between">High Availability<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/ha/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/ha/zookeeper_ha/" class="">ZooKeeper HA Services</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/ha/kubernetes_ha/" class="">Kubernetes HA Services</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/metric_reporters/" class="">Metric Reporters</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/trace_reporters/" class="">Trace Reporters</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-fa25a9e1707135a6191375ba5ebf6927" class="toggle"  />
+    <label for="section-fa25a9e1707135a6191375ba5ebf6927" class="flex justify-between">REPLs<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/repls/python_shell/" class="">Python REPL</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-da02acee0967ffc7d941d06ca50959d2" class="toggle"  />
+    <label for="section-da02acee0967ffc7d941d06ca50959d2" class="flex justify-between">Security<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/security/security-ssl/" class="">SSL Setup</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/security/security-kerberos/" class="">Kerberos</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/security/security-delegation-token/" class="">Delegation tokens</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b63e989880aebee7e5211ac1d3ce4e9f" class="toggle"  />
+    <label for="section-b63e989880aebee7e5211ac1d3ce4e9f" class="flex justify-between">Advanced<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/external_resources/" class="">External Resources</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/historyserver/" class="">History Server</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/logging/" class="">Logging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/failure_enrichers/" class="">Failure Enrichers</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-5b57649c0c94af0841dac91e624830af" class="toggle"  />
+    <label for="section-5b57649c0c94af0841dac91e624830af" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-cogs title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Operations</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-42a8c1c4247207b80e64d3d223c23a23" class="toggle"  />
+    <label for="section-42a8c1c4247207b80e64d3d223c23a23" class="flex justify-between">State & Fault Tolerance<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/checkpoints/" class="">Checkpoints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/checkpointing_under_backpressure/" class="">Checkpointing under backpressure</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/savepoints/" class="">Savepoints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/checkpoints_vs_savepoints/" class="">Checkpoints vs. Savepoints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/state_backends/" class="">State Backends</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/large_state_tuning/" class="">Tuning Checkpoints and Large State</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/task_failure_recovery/" class="">Task Failure Recovery</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/metrics/" class="">Metrics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/traces/" class="">Traces</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/rest_api/" class="">REST API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-50f4b9e6604765e74142b0e1cd9fb44d" class="toggle"  />
+    <label for="section-50f4b9e6604765e74142b0e1cd9fb44d" class="flex justify-between">Batch<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/batch/batch_shuffle/" class="">Batch Shuffle</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/batch/recovery_from_job_master_failure/" class="">Recovery job progress from job master failures</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d4f1bef6f783a5c6d1b2d5f55db8965f" class="toggle"  />
+    <label for="section-d4f1bef6f783a5c6d1b2d5f55db8965f" class="flex justify-between">Debugging<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/debugging_event_time/" class="">Debugging Windows & Event Time</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/debugging_classloading/" class="">Debugging Classloading</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/flame_graphs/" class="">Flame Graphs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/profiler/" class="">Profiler</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/application_profiling/" class="">Application Profiling & Debugging</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b424141921a30487c09eab3a187e5859" class="toggle"  />
+    <label for="section-b424141921a30487c09eab3a187e5859" class="flex justify-between">Monitoring<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/monitoring/checkpoint_monitoring/" class="">Monitoring Checkpointing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/monitoring/back_pressure/" class="">Monitoring Back Pressure</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/upgrading/" class="">Upgrading Applications and Flink Versions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/production_ready/" class="">Production Readiness Checklist</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  	<br/>
+  
+  
+    <input type="checkbox" id="section-ded926075d02fa6eb11100b638eddaf4" class="toggle"  />
+    <label for="section-ded926075d02fa6eb11100b638eddaf4" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-cogs title dessert" aria-hidden="true"></i>&nbsp;&nbsp;Flink Development</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/flinkdev/ide_setup/" class="">Importing Flink into an IDE</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/flinkdev/building/" class="">Building Flink from Source</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-98ea7844cf9262a9ba52500fc93377fe" class="toggle"  />
+    <label for="section-98ea7844cf9262a9ba52500fc93377fe" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-book title dessert" aria-hidden="true"></i>&nbsp;&nbsp;Internals</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/internals/job_scheduling/" class="">Jobs and Scheduling</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/internals/task_lifecycle/" class="">Task Lifecycle</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/internals/filesystems/" class="">File Systems</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/>
+<hr class="menu-break">
+
+<a href="//flink.apache.org" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> Project Homepage</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/api/java/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> JavaDocs</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/api/scala/index.html#org.apache.flink.api.scala.package/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> ScalaDocs</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/api/python/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> PyDocs</a>
+<br/>
+
+<hr class="menu-break">
+<li style="list-style-type: none">
+  <br>
+  <input type="checkbox" id="section-version-picker" class="toggle">
+  <label for="section-version-picker" class="flex justify-between">
+     <div style="font-weight:450;margin-bottom:0.5em">Pick Docs Version</div>
+     <span>▾</span>
+  </label>
+  <ul>
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20">
+      1.20 (✓)
+    </a>
+    <hr class="menu-break">
+    
+      <li>
+        <a href="http://nightlies.apache.org/flink/flink-docs-release-1.20">
+          v1.20
+        </a>
+      </li>
+    
+      <li>
+        <a href="http://nightlies.apache.org/flink/flink-docs-release-1.19">
+          v1.19
+        </a>
+      </li>
+    
+    <hr class="menu-break">
+    <li>
+      <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/versions">
+          All Versions
+      </a>
+    </li>
+  </ul>
+</li>
+
+
+
+
+  
+
+  
+
+
+  
+
+
+
+
+
+
+<a  href="//nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/connectors/datastream/kafka/" class="flex align-center">
+  <i class="fa fa-globe" aria-hidden="true"></i>&nbsp;&nbsp;
+  中文版
+</a>
+
+<script src="//nightlies.apache.org/flink/flink-docs-release-1.20/js/track-search-terms.js"></script>
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/flink/flink-docs-release-1.20/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Kafka</strong>
+
+  <label for="toc-control">
+    
+    <img src="/flink/flink-docs-release-1.20/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#apache-kafka-connector">Apache Kafka Connector</a>
+      <ul>
+        <li><a href="#dependency">Dependency</a></li>
+        <li><a href="#kafka-source">Kafka Source</a>
+          <ul>
+            <li><a href="#usage">Usage</a></li>
+            <li><a href="#topic-partition-subscription">Topic-partition Subscription</a></li>
+            <li><a href="#deserializer">Deserializer</a></li>
+            <li><a href="#starting-offset">Starting Offset</a></li>
+            <li><a href="#boundedness">Boundedness</a></li>
+            <li><a href="#additional-properties">Additional Properties</a></li>
+            <li><a href="#dynamic-partition-discovery">Dynamic Partition Discovery</a></li>
+            <li><a href="#event-time-and-watermarks">Event Time and Watermarks</a></li>
+            <li><a href="#idleness">Idleness</a></li>
+            <li><a href="#consumer-offset-committing">Consumer Offset Committing</a></li>
+            <li><a href="#monitoring">Monitoring</a></li>
+            <li><a href="#security">Security</a></li>
+          </ul>
+        </li>
+        <li><a href="#kafka-rack-awareness">Kafka Rack Awareness</a>
+          <ul>
+            <li><a href="#rackid">RackId</a></li>
+            <li><a href="#behind-the-scene">Behind the Scene</a></li>
+          </ul>
+        </li>
+        <li><a href="#kafka-sourcefunction">Kafka SourceFunction</a></li>
+        <li><a href="#kafka-sink">Kafka Sink</a>
+          <ul>
+            <li><a href="#usage-1">Usage</a></li>
+            <li><a href="#serializer">Serializer</a></li>
+            <li><a href="#fault-tolerance">Fault Tolerance</a></li>
+            <li><a href="#monitoring-1">Monitoring</a></li>
+          </ul>
+        </li>
+        <li><a href="#kafka-producer">Kafka Producer</a></li>
+        <li><a href="#kafka-connector-metrics">Kafka Connector Metrics</a></li>
+        <li><a href="#enabling-kerberos-authentication">Enabling Kerberos Authentication</a></li>
+        <li><a href="#upgrading-to-the-latest-connector-version">Upgrading to the Latest Connector Version</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a>
+          <ul>
+            <li><a href="#data-loss">Data loss</a></li>
+            <li><a href="#unknowntopicorpartitionexception">UnknownTopicOrPartitionException</a></li>
+            <li><a href="#producerfencedexception">ProducerFencedException</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+
+
+
+<article class="markdown">
+    <blockquote style="border-color:#f66">
+        This documentation is for an out-of-date version of Apache Flink. We recommend you use the latest <a href="//nightlies.apache.org/flink/flink-docs-stable/docs/connectors/datastream/kafka/">stable version</a>.
+    </blockquote>
+</article>
+
+
+
+
+      
+  <article class="markdown"><!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<h1 id="apache-kafka-connector">
+  Apache Kafka Connector
+  <a class="anchor" href="#apache-kafka-connector">#</a>
+</h1>
+<p>Flink provides an <a href="https://kafka.apache.org">Apache Kafka</a> connector for reading data from and writing data to Kafka topics with exactly-once guarantees.</p>
+<h2 id="dependency">
+  Dependency
+  <a class="anchor" href="#dependency">#</a>
+</h2>
+<p>Apache Flink ships with a universal Kafka connector which attempts to track the latest version of the Kafka client.
+The version of the client it uses may change between Flink releases.
+Modern Kafka clients are backwards compatible with broker versions 0.10.0 or later.
+For details on Kafka compatibility, please refer to the official <a href="https://kafka.apache.org/protocol.html#protocol_compatibility">Kafka documentation</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+<p style="font-weight: bold">There is no connector (yet) available for Flink version 1.20.</p>
+    
+
+
+<p>Flink&rsquo;s streaming connectors are not part of the binary distribution.
+See how to link with them for cluster execution <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/overview/">here</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+<p>
+
+In order to use the  in PyFlink jobs, the following
+dependencies are required:
+
+<table>
+    <thead>
+    <th style="text-align: left">Version</th>
+    <th style="text-align: left">PyFlink JAR</th>
+    </thead>
+    <tbody>
+    
+    </tbody>
+</table>
+
+See <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/dependency_management/#jar-dependencies">Python dependency management</a>
+for more details on how to use JARs in PyFlink.
+
+</p>
+
+<h2 id="kafka-source">
+  Kafka Source
+  <a class="anchor" href="#kafka-source">#</a>
+</h2>
+<blockquote class="book-hint info">
+  This part describes the Kafka source based on the new
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/sources/">data source</a> API.
+</blockquote>
+
+<h3 id="usage">
+  Usage
+  <a class="anchor" href="#usage">#</a>
+</h3>
+<p>Kafka source provides a builder class for constructing instance of KafkaSource. The code snippet
+below shows how to build a KafkaSource to consume messages from the earliest offset of topic
+&ldquo;input-topic&rdquo;, with consumer group &ldquo;my-group&rdquo; and deserialize only the value of message as string.</p>
+
+
+
+
+
+<div class="book-tabs"><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Java"
+    name="tabs-KafkaSource"
+    id="tabs-KafkaSource-0"
+    checked="checked" 
+    onclick="onSwitch('Java')"
+  />
+  <label for="tabs-KafkaSource-0">Java</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">KafkaSource</span><span class="o">.&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="n">builder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setBootstrapServers</span><span class="o">(</span><span class="n">brokers</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setTopics</span><span class="o">(</span><span class="s">&#34;input-topic&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setGroupId</span><span class="o">(</span><span class="s">&#34;my-group&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setStartingOffsets</span><span class="o">(</span><span class="n">OffsetsInitializer</span><span class="o">.</span><span class="na">earliest</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setValueOnlyDeserializer</span><span class="o">(</span><span class="k">new</span> <span class="n">SimpleStringSchema</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">env</span><span class="o">.</span><span class="na">fromSource</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">WatermarkStrategy</span><span class="o">.</span><span class="na">noWatermarks</span><span class="o">(),</span> <span class="s">&#34;Kafka Source&#34;</span><span class="o">);</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Python"
+    name="tabs-KafkaSource"
+    id="tabs-KafkaSource-1"
+     
+    onclick="onSwitch('Python')"
+  />
+  <label for="tabs-KafkaSource-1">Python</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">source</span> <span class="o">=</span> <span class="n">KafkaSource</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_bootstrap_servers</span><span class="p">(</span><span class="n">brokers</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_topics</span><span class="p">(</span><span class="s2">&#34;input-topic&#34;</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_group_id</span><span class="p">(</span><span class="s2">&#34;my-group&#34;</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_starting_offsets</span><span class="p">(</span><span class="n">KafkaOffsetsInitializer</span><span class="o">.</span><span class="n">earliest</span><span class="p">())</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_value_only_deserializer</span><span class="p">(</span><span class="n">SimpleStringSchema</span><span class="p">())</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">env</span><span class="o">.</span><span class="n">from_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">WatermarkStrategy</span><span class="o">.</span><span class="n">no_watermarks</span><span class="p">(),</span> <span class="s2">&#34;Kafka Source&#34;</span><span class="p">)</span>
+</span></span></code></pre></div></div></div>
+
+<p>The following properties are <strong>required</strong> for building a KafkaSource:</p>
+<ul>
+<li>Bootstrap servers, configured by <code>setBootstrapServers(String)</code></li>
+<li>Topics / partitions to subscribe, see the following
+<a href="#topic-partition-subscription">Topic-partition subscription</a> for more details.</li>
+<li>Deserializer to parse Kafka messages, see the following
+<a href="#deserializer">Deserializer</a> for more details.</li>
+</ul>
+<h3 id="topic-partition-subscription">
+  Topic-partition Subscription
+  <a class="anchor" href="#topic-partition-subscription">#</a>
+</h3>
+<p>Kafka source provide 3 ways of topic-partition subscription:</p>
+<ul>
+<li>Topic list, subscribing messages from all partitions in a list of topics. For example:
+
+
+
+
+
+<div class="book-tabs"><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Java"
+    name="tabs-KafkaSource#setTopics"
+    id="tabs-KafkaSource#setTopics-0"
+    checked="checked" 
+    onclick="onSwitch('Java')"
+  />
+  <label for="tabs-KafkaSource#setTopics-0">Java</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="na">builder</span><span class="o">().</span><span class="na">setTopics</span><span class="o">(</span><span class="s">&#34;topic-a&#34;</span><span class="o">,</span> <span class="s">&#34;topic-b&#34;</span><span class="o">);</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Python"
+    name="tabs-KafkaSource#setTopics"
+    id="tabs-KafkaSource#setTopics-1"
+     
+    onclick="onSwitch('Python')"
+  />
+  <label for="tabs-KafkaSource#setTopics-1">Python</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span><span class="o">.</span><span class="n">set_topics</span><span class="p">(</span><span class="s2">&#34;topic-a&#34;</span><span class="p">,</span> <span class="s2">&#34;topic-b&#34;</span><span class="p">)</span>
+</span></span></code></pre></div></div></div>
+</li>
+<li>Topic pattern, subscribing messages from all topics whose name matches the provided regular
+expression. For example:
+
+
+
+
+
+<div class="book-tabs"><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Java"
+    name="tabs-KafkaSource#setTopicPattern"
+    id="tabs-KafkaSource#setTopicPattern-0"
+    checked="checked" 
+    onclick="onSwitch('Java')"
+  />
+  <label for="tabs-KafkaSource#setTopicPattern-0">Java</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="na">builder</span><span class="o">().</span><span class="na">setTopicPattern</span><span class="o">(</span><span class="s">&#34;topic.*&#34;</span><span class="o">);</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Python"
+    name="tabs-KafkaSource#setTopicPattern"
+    id="tabs-KafkaSource#setTopicPattern-1"
+     
+    onclick="onSwitch('Python')"
+  />
+  <label for="tabs-KafkaSource#setTopicPattern-1">Python</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span><span class="o">.</span><span class="n">set_topic_pattern</span><span class="p">(</span><span class="s2">&#34;topic.*&#34;</span><span class="p">)</span>
+</span></span></code></pre></div></div></div>
+</li>
+<li>Partition set, subscribing partitions in the provided partition set. For example:
+
+
+
+
+
+<div class="book-tabs"><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Java"
+    name="tabs-KafkaSource#setPartitions"
+    id="tabs-KafkaSource#setPartitions-0"
+    checked="checked" 
+    onclick="onSwitch('Java')"
+  />
+  <label for="tabs-KafkaSource#setPartitions-0">Java</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">final</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">TopicPartition</span><span class="o">&gt;</span> <span class="n">partitionSet</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span>
+</span></span><span class="line"><span class="cl">        <span class="k">new</span> <span class="n">TopicPartition</span><span class="o">(</span><span class="s">&#34;topic-a&#34;</span><span class="o">,</span> <span class="mi">0</span><span class="o">),</span>    <span class="c1">// Partition 0 of topic &#34;topic-a&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">new</span> <span class="n">TopicPartition</span><span class="o">(</span><span class="s">&#34;topic-b&#34;</span><span class="o">,</span> <span class="mi">5</span><span class="o">)));</span>  <span class="c1">// Partition 5 of topic &#34;topic-b&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">KafkaSource</span><span class="o">.</span><span class="na">builder</span><span class="o">().</span><span class="na">setPartitions</span><span class="o">(</span><span class="n">partitionSet</span><span class="o">);</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Python"
+    name="tabs-KafkaSource#setPartitions"
+    id="tabs-KafkaSource#setPartitions-1"
+     
+    onclick="onSwitch('Python')"
+  />
+  <label for="tabs-KafkaSource#setPartitions-1">Python</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">partition_set</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">KafkaTopicPartition</span><span class="p">(</span><span class="s2">&#34;topic-a&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">KafkaTopicPartition</span><span class="p">(</span><span class="s2">&#34;topic-b&#34;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span><span class="o">.</span><span class="n">set_partitions</span><span class="p">(</span><span class="n">partition_set</span><span class="p">)</span>
+</span></span></code></pre></div></div></div>
+</li>
+</ul>
+<h3 id="deserializer">
+  Deserializer
+  <a class="anchor" href="#deserializer">#</a>
+</h3>
+<p>A deserializer is required for parsing Kafka messages. Deserializer (Deserialization schema) can be
+configured by <code>setDeserializer(KafkaRecordDeserializationSchema)</code>, where
+<code>KafkaRecordDeserializationSchema</code> defines how to deserialize a Kafka <code>ConsumerRecord</code>.</p>
+<p>If only the value of Kafka <code>ConsumerRecord</code> is needed, you can use
+<code>setValueOnlyDeserializer(DeserializationSchema)</code> in the builder, where
+<code>DeserializationSchema</code> defines how to deserialize binaries of Kafka message value.</p>
+<p>You can also use a <a href="https://kafka.apache.org/24/javadoc/org/apache/kafka/common/serialization/Deserializer.html"><code>Kafka Deserializer</code></a>
+for deserializing Kafka message value. For example using <code>StringDeserializer</code> for deserializing
+Kafka message value as string:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">org.apache.kafka.common.serialization.StringDeserializer</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="n">builder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">setDeserializer</span><span class="o">(</span><span class="n">KafkaRecordDeserializationSchema</span><span class="o">.</span><span class="na">valueOnly</span><span class="o">(</span><span class="n">StringDeserializer</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+</span></span></code></pre></div><p>Currently, PyFlink only supports <code>set_value_only_deserializer</code> to customize deserialization of the value of a Kafka record.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span><span class="o">.</span><span class="n">set_value_only_deserializer</span><span class="p">(</span><span class="n">SimpleStringSchema</span><span class="p">())</span>
+</span></span></code></pre></div><h3 id="starting-offset">
+  Starting Offset
+  <a class="anchor" href="#starting-offset">#</a>
+</h3>
+<p>Kafka source is able to consume messages starting from different offsets by specifying
+<code>OffsetsInitializer</code>. Built-in initializers include:</p>
+
+
+
+
+
+<div class="book-tabs"><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Java"
+    name="tabs-KafkaSource#setStartingOffsets"
+    id="tabs-KafkaSource#setStartingOffsets-0"
+    checked="checked" 
+    onclick="onSwitch('Java')"
+  />
+  <label for="tabs-KafkaSource#setStartingOffsets-0">Java</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Start from committed offset of the consuming group, without reset strategy
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">.</span><span class="na">setStartingOffsets</span><span class="o">(</span><span class="n">OffsetsInitializer</span><span class="o">.</span><span class="na">committedOffsets</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Start from committed offset, also use EARLIEST as reset strategy if committed offset doesn&#39;t exist
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">.</span><span class="na">setStartingOffsets</span><span class="o">(</span><span class="n">OffsetsInitializer</span><span class="o">.</span><span class="na">committedOffsets</span><span class="o">(</span><span class="n">OffsetResetStrategy</span><span class="o">.</span><span class="na">EARLIEST</span><span class="o">))</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Start from the first record whose timestamp is greater than or equals a timestamp (milliseconds)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">.</span><span class="na">setStartingOffsets</span><span class="o">(</span><span class="n">OffsetsInitializer</span><span class="o">.</span><span class="na">timestamp</span><span class="o">(</span><span class="mi">1657256176000L</span><span class="o">))</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Start from earliest offset
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">.</span><span class="na">setStartingOffsets</span><span class="o">(</span><span class="n">OffsetsInitializer</span><span class="o">.</span><span class="na">earliest</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Start from latest offset
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">.</span><span class="na">setStartingOffsets</span><span class="o">(</span><span class="n">OffsetsInitializer</span><span class="o">.</span><span class="na">latest</span><span class="o">());</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Python"
+    name="tabs-KafkaSource#setStartingOffsets"
+    id="tabs-KafkaSource#setStartingOffsets-1"
+     
+    onclick="onSwitch('Python')"
+  />
+  <label for="tabs-KafkaSource#setStartingOffsets-1">Python</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span> \
+</span></span><span class="line"><span class="cl">    <span class="c1"># Start from committed offset of the consuming group, without reset strategy</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_starting_offsets</span><span class="p">(</span><span class="n">KafkaOffsetsInitializer</span><span class="o">.</span><span class="n">committed_offsets</span><span class="p">())</span> \
+</span></span><span class="line"><span class="cl">    <span class="c1"># Start from committed offset, also use EARLIEST as reset strategy if committed offset doesn&#39;t exist</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_starting_offsets</span><span class="p">(</span><span class="n">KafkaOffsetsInitializer</span><span class="o">.</span><span class="n">committed_offsets</span><span class="p">(</span><span class="n">KafkaOffsetResetStrategy</span><span class="o">.</span><span class="n">EARLIEST</span><span class="p">))</span> \
+</span></span><span class="line"><span class="cl">    <span class="c1"># Start from the first record whose timestamp is greater than or equals a timestamp (milliseconds)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_starting_offsets</span><span class="p">(</span><span class="n">KafkaOffsetsInitializer</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="mi">1657256176000</span><span class="p">))</span> \
+</span></span><span class="line"><span class="cl">    <span class="c1"># Start from the earliest offset</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_starting_offsets</span><span class="p">(</span><span class="n">KafkaOffsetsInitializer</span><span class="o">.</span><span class="n">earliest</span><span class="p">())</span> \
+</span></span><span class="line"><span class="cl">    <span class="c1"># Start from the latest offset</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_starting_offsets</span><span class="p">(</span><span class="n">KafkaOffsetsInitializer</span><span class="o">.</span><span class="n">latest</span><span class="p">())</span>
+</span></span></code></pre></div></div></div>
+
+<p>You can also implement a custom offsets initializer if built-in initializers above cannot fulfill
+your requirement. (Not supported in PyFlink)</p>
+<p>If offsets initializer is not specified, <strong>OffsetsInitializer.earliest()</strong> will be
+used by default.</p>
+<h3 id="boundedness">
+  Boundedness
+  <a class="anchor" href="#boundedness">#</a>
+</h3>
+<p>Kafka source is designed to support both streaming and batch running mode. By default, the KafkaSource
+is set to run in streaming manner, thus never stops until Flink job fails or is cancelled. You can use
+<code>setBounded(OffsetsInitializer)</code> to specify stopping offsets and set the source running in
+batch mode. When all partitions have reached their stopping offsets, the source will exit.</p>
+<p>You can also set KafkaSource running in streaming mode, but still stop at the stopping offset by
+using <code>setUnbounded(OffsetsInitializer)</code>. The source will exit when all partitions reach their
+specified stopping offset.</p>
+<h3 id="additional-properties">
+  Additional Properties
+  <a class="anchor" href="#additional-properties">#</a>
+</h3>
+<p>In addition to properties described above, you can set arbitrary properties for KafkaSource and
+KafkaConsumer by using <code>setProperties(Properties)</code> and <code>setProperty(String, String)</code>.
+KafkaSource has following options for configuration:</p>
+<ul>
+<li><code>client.id.prefix</code> defines the prefix to use for Kafka consumer&rsquo;s client ID</li>
+<li><code>partition.discovery.interval.ms</code> defines the interval im milliseconds for Kafka source
+to discover new partitions. See <a href="#dynamic-partition-discovery">Dynamic Partition Discovery</a>
+below for more details.</li>
+<li><code>register.consumer.metrics</code> specifies whether to register metrics of KafkaConsumer in Flink
+metric group</li>
+<li><code>commit.offsets.on.checkpoint</code> specifies whether to commit consuming offsets to Kafka brokers on checkpoint</li>
+</ul>
+<p>For configurations of KafkaConsumer, you can refer to
+<a href="http://kafka.apache.org/documentation/#consumerconfigs">Apache Kafka documentation</a>
+for more details.</p>
+<p>Please note that the following keys will be overridden by the builder even if
+it is configured:</p>
+<ul>
+<li><code>auto.offset.reset.strategy</code> is overridden by <code>OffsetsInitializer#getAutoOffsetResetStrategy()</code>
+for the starting offsets</li>
+<li><code>partition.discovery.interval.ms</code> is overridden to -1 when
+<code>setBounded(OffsetsInitializer)</code> has been invoked</li>
+</ul>
+<h3 id="dynamic-partition-discovery">
+  Dynamic Partition Discovery
+  <a class="anchor" href="#dynamic-partition-discovery">#</a>
+</h3>
+<p>In order to handle scenarios like topic scaling-out or topic creation without restarting the Flink
+job, Kafka source can be configured to periodically discover new partitions under provided
+topic-partition subscribing pattern. To enable partition discovery, set a positive value for
+property <code>partition.discovery.interval.ms</code>:</p>
+
+
+
+
+
+<div class="book-tabs"><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Java"
+    name="tabs-KafkaSource#PartitionDiscovery"
+    id="tabs-KafkaSource#PartitionDiscovery-0"
+    checked="checked" 
+    onclick="onSwitch('Java')"
+  />
+  <label for="tabs-KafkaSource#PartitionDiscovery-0">Java</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&#34;partition.discovery.interval.ms&#34;</span><span class="o">,</span> <span class="s">&#34;10000&#34;</span><span class="o">);</span> <span class="c1">// discover new partitions per 10 seconds
+</span></span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Python"
+    name="tabs-KafkaSource#PartitionDiscovery"
+    id="tabs-KafkaSource#PartitionDiscovery-1"
+     
+    onclick="onSwitch('Python')"
+  />
+  <label for="tabs-KafkaSource#PartitionDiscovery-1">Python</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&#34;partition.discovery.interval.ms&#34;</span><span class="p">,</span> <span class="s2">&#34;10000&#34;</span><span class="p">)</span>  <span class="c1"># discover new partitions per 10 seconds</span>
+</span></span></code></pre></div></div></div>
+
+<blockquote class="book-hint warning">
+  The partition discovery interval is 5 minutes by default. To <strong>disable</strong> this feature, you need to explicitly set the partition discovery interval to a non-positive value.
+</blockquote>
+
+<h3 id="event-time-and-watermarks">
+  Event Time and Watermarks
+  <a class="anchor" href="#event-time-and-watermarks">#</a>
+</h3>
+<p>By default, the record will use the timestamp embedded in Kafka <code>ConsumerRecord</code> as the event
+time. You can define your own <code>WatermarkStrategy</code> for extract event time from the record itself,
+and emit watermark downstream:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">env</span><span class="o">.</span><span class="na">fromSource</span><span class="o">(</span><span class="n">kafkaSource</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomWatermarkStrategy</span><span class="o">(),</span> <span class="s">&#34;Kafka Source With Custom Watermark Strategy&#34;</span><span class="o">);</span>
+</span></span></code></pre></div><p><a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/event-time/generating_watermarks/">This documentation</a> describes
+details about how to define a <code>WatermarkStrategy</code>. (Not supported in PyFlink)</p>
+<h3 id="idleness">
+  Idleness
+  <a class="anchor" href="#idleness">#</a>
+</h3>
+<p>The Kafka Source does not go automatically in an idle state if the parallelism is higher than the
+number of partitions. You will either need to lower the parallelism or add an idle timeout to the
+watermark strategy. If no records flow in a partition of a stream for that amount of time, then that
+partition is considered &ldquo;idle&rdquo; and will not hold back the progress of watermarks in downstream operators.</p>
+<p><a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/event-time/generating_watermarks/#dealing-with-idle-sources">This documentation</a>
+describes details about how to define a <code>WatermarkStrategy#withIdleness</code>.</p>
+<h3 id="consumer-offset-committing">
+  Consumer Offset Committing
+  <a class="anchor" href="#consumer-offset-committing">#</a>
+</h3>
+<p>Kafka source commits the current consuming offset when checkpoints are <strong>completed</strong>, for
+ensuring the consistency between Flink&rsquo;s checkpoint state and committed offsets on Kafka brokers.</p>
+<p>If checkpointing is not enabled, Kafka source relies on Kafka consumer&rsquo;s internal automatic periodic
+offset committing logic, configured by <code>enable.auto.commit</code> and <code>auto.commit.interval.ms</code> in
+the properties of Kafka consumer.</p>
+<p>Note that Kafka source does <strong>NOT</strong> rely on committed offsets for fault tolerance. Committing offset
+is only for exposing the progress of consumer and consuming group for monitoring.</p>
+<h3 id="monitoring">
+  Monitoring
+  <a class="anchor" href="#monitoring">#</a>
+</h3>
+<p>Kafka source exposes the following metrics in the respective <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/metrics//#scope">scope</a>.</p>
+<h4 id="scope-of-metric">
+  Scope of Metric
+  <a class="anchor" href="#scope-of-metric">#</a>
+</h4>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 15%">Scope</th>
+      <th class="text-left" style="width: 18%">Metrics</th>
+      <th class="text-left" style="width: 18%">User Variables</th>
+      <th class="text-left" style="width: 39%">Description</th>
+      <th class="text-left" style="width: 10%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <th rowspan="8">Operator</th>
+        <td>currentEmitEventTimeLag</td>
+        <td>n/a</td>
+        <td>The time span from the record event timestamp to the time the record is emitted by the source connector¹: <code>currentEmitEventTimeLag = EmitTime - EventTime.</code></td>
+        <td>Gauge</td>
+    </tr>
+    <tr>
+        <td>watermarkLag</td>
+        <td>n/a</td>
+        <td>The time span that the watermark lags behind the wall clock time: <code>watermarkLag = CurrentTime - Watermark</code></td>
+        <td>Gauge</td>
+    </tr>
+    <tr>
+        <td>sourceIdleTime</td>
+        <td>n/a</td>
+        <td>The time span that the source has not processed any record: <code>sourceIdleTime = CurrentTime - LastRecordProcessTime</code></td>
+        <td>Gauge</td>
+    </tr>
+    <tr>
+        <td>pendingRecords</td>
+        <td>n/a</td>
+        <td>The number of records that have not been fetched by the source. e.g. the available records after the consumer offset in a Kafka partition.</td>
+        <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>KafkaSourceReader.commitsSucceeded</td>
+      <td>n/a</td>
+      <td>The total number of successful offset commits to Kafka, if offset committing is turned on and checkpointing is enabled.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+       <td>KafkaSourceReader.commitsFailed</td>
+       <td>n/a</td>
+       <td>The total number of offset commit failures to Kafka, if offset committing is
+       turned on and checkpointing is enabled. Note that committing offsets back to Kafka
+       is only a means to expose consumer progress, so a commit failure does not affect
+       the integrity of Flink's checkpointed partition offsets.</td>
+       <td>Counter</td>
+    </tr>
+    <tr>
+       <td>KafkaSourceReader.committedOffsets</td>
+       <td>topic, partition</td>
+       <td>The last successfully committed offsets to Kafka, for each partition.
+       A particular partition's metric can be specified by topic name and partition id.</td>
+       <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>KafkaSourceReader.currentOffsets</td>
+      <td>topic, partition</td>
+      <td>The consumer's current read offset, for each partition. A particular
+      partition's metric can be specified by topic name and partition id.</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+<p>¹ This metric is an instantaneous value recorded for the last processed record. This metric is provided because latency histogram could be expensive. The instantaneous latency value is usually a good enough indication of the latency.</p>
+<h4 id="kafka-consumer-metrics">
+  Kafka Consumer Metrics
+  <a class="anchor" href="#kafka-consumer-metrics">#</a>
+</h4>
+<p>All metrics of Kafka consumer are also registered under group <code>KafkaSourceReader.KafkaConsumer</code>.
+For example, Kafka consumer metric &ldquo;records-consumed-total&rdquo; will be reported in metric:
+<code>&lt;some_parent_groups&gt;.operator.KafkaSourceReader.KafkaConsumer.records-consumed-total</code> .</p>
+<p>You can configure whether to register Kafka consumer&rsquo;s metric by configuring option
+<code>register.consumer.metrics</code>. This option will be set as true by default.</p>
+<p>For metrics of Kafka consumer, you can refer to
+<a href="http://kafka.apache.org/documentation/#consumer_monitoring">Apache Kafka Documentation</a>
+for more details.</p>
+<p>In case you experience a warning with a stack trace containing
+<code>javax.management.InstanceAlreadyExistsException: kafka.consumer:[...]</code>, you are probably trying to
+register multiple <code>KafkaConsumers</code> with the same client.id. The warning indicates that not all
+available metrics are correctly forwarded to the metrics system. You must ensure that a different
+<code>client.id.prefix</code> for every <code>KafkaSource</code> is configured and that no other
+<code>KafkaConsumer</code> in your job uses the same <code>client.id</code>.</p>
+<h3 id="security">
+  Security
+  <a class="anchor" href="#security">#</a>
+</h3>
+<p>In order to enable security configurations including encryption and authentication, you just need to setup security
+configurations as additional properties to the Kafka source. The code snippet below shows configuring Kafka source to
+use PLAIN as SASL mechanism and provide JAAS configuration:</p>
+
+
+
+
+
+<div class="book-tabs"><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Java"
+    name="tabs-KafkaSource#SecurityPlain"
+    id="tabs-KafkaSource#SecurityPlain-0"
+    checked="checked" 
+    onclick="onSwitch('Java')"
+  />
+  <label for="tabs-KafkaSource#SecurityPlain-0">Java</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&#34;security.protocol&#34;</span><span class="o">,</span> <span class="s">&#34;SASL_PLAINTEXT&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&#34;sasl.mechanism&#34;</span><span class="o">,</span> <span class="s">&#34;PLAIN&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&#34;sasl.jaas.config&#34;</span><span class="o">,</span> <span class="s">&#34;org.apache.kafka.common.security.plain.PlainLoginModule required username=\&#34;username\&#34; password=\&#34;password\&#34;;&#34;</span><span class="o">);</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Python"
+    name="tabs-KafkaSource#SecurityPlain"
+    id="tabs-KafkaSource#SecurityPlain-1"
+     
+    onclick="onSwitch('Python')"
+  />
+  <label for="tabs-KafkaSource#SecurityPlain-1">Python</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&#34;security.protocol&#34;</span><span class="p">,</span> <span class="s2">&#34;SASL_PLAINTEXT&#34;</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&#34;sasl.mechanism&#34;</span><span class="p">,</span> <span class="s2">&#34;PLAIN&#34;</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&#34;sasl.jaas.config&#34;</span><span class="p">,</span> <span class="s2">&#34;org.apache.kafka.common.security.plain.PlainLoginModule required username=</span><span class="se">\&#34;</span><span class="s2">username</span><span class="se">\&#34;</span><span class="s2"> password=</span><span class="se">\&#34;</span><span class="s2">password</span><span class="se">\&#34;</span><span class="s2">;&#34;</span><span class="p">)</span>
+</span></span></code></pre></div></div></div>
+
+<p>For a more complex example, use SASL_SSL as the security protocol and use SCRAM-SHA-256 as SASL mechanism:</p>
+
+
+
+
+
+<div class="book-tabs"><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Java"
+    name="tabs-KafkaSource#SecuritySASL"
+    id="tabs-KafkaSource#SecuritySASL-0"
+    checked="checked" 
+    onclick="onSwitch('Java')"
+  />
+  <label for="tabs-KafkaSource#SecuritySASL-0">Java</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&#34;security.protocol&#34;</span><span class="o">,</span> <span class="s">&#34;SASL_SSL&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// SSL configurations
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// Configure the path of truststore (CA) provided by the server
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&#34;ssl.truststore.location&#34;</span><span class="o">,</span> <span class="s">&#34;/path/to/kafka.client.truststore.jks&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&#34;ssl.truststore.password&#34;</span><span class="o">,</span> <span class="s">&#34;test1234&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Configure the path of keystore (private key) if client authentication is required
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&#34;ssl.keystore.location&#34;</span><span class="o">,</span> <span class="s">&#34;/path/to/kafka.client.keystore.jks&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&#34;ssl.keystore.password&#34;</span><span class="o">,</span> <span class="s">&#34;test1234&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// SASL configurations
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// Set SASL mechanism as SCRAM-SHA-256
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&#34;sasl.mechanism&#34;</span><span class="o">,</span> <span class="s">&#34;SCRAM-SHA-256&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Set JAAS configurations
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&#34;sasl.jaas.config&#34;</span><span class="o">,</span> <span class="s">&#34;org.apache.kafka.common.security.scram.ScramLoginModule required username=\&#34;username\&#34; password=\&#34;password\&#34;;&#34;</span><span class="o">);</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Python"
+    name="tabs-KafkaSource#SecuritySASL"
+    id="tabs-KafkaSource#SecuritySASL-1"
+     
+    onclick="onSwitch('Python')"
+  />
+  <label for="tabs-KafkaSource#SecuritySASL-1">Python</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">KafkaSource</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&#34;security.protocol&#34;</span><span class="p">,</span> <span class="s2">&#34;SASL_SSL&#34;</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="c1"># SSL configurations</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Configure the path of truststore (CA) provided by the server</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&#34;ssl.truststore.location&#34;</span><span class="p">,</span> <span class="s2">&#34;/path/to/kafka.client.truststore.jks&#34;</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&#34;ssl.truststore.password&#34;</span><span class="p">,</span> <span class="s2">&#34;test1234&#34;</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="c1"># Configure the path of keystore (private key) if client authentication is required</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&#34;ssl.keystore.location&#34;</span><span class="p">,</span> <span class="s2">&#34;/path/to/kafka.client.keystore.jks&#34;</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&#34;ssl.keystore.password&#34;</span><span class="p">,</span> <span class="s2">&#34;test1234&#34;</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="c1"># SASL configurations</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Set SASL mechanism as SCRAM-SHA-256</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&#34;sasl.mechanism&#34;</span><span class="p">,</span> <span class="s2">&#34;SCRAM-SHA-256&#34;</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="c1"># Set JAAS configurations</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&#34;sasl.jaas.config&#34;</span><span class="p">,</span> <span class="s2">&#34;org.apache.kafka.common.security.scram.ScramLoginModule required username=</span><span class="se">\&#34;</span><span class="s2">username</span><span class="se">\&#34;</span><span class="s2"> password=</span><span class="se">\&#34;</span><span class="s2">password</span><span class="se">\&#34;</span><span class="s2">;&#34;</span><span class="p">)</span>
+</span></span></code></pre></div></div></div>
+
+<p>Please note that the class path of the login module in <code>sasl.jaas.config</code> might be different if you relocate Kafka
+client dependencies in the job JAR, so you may need to rewrite it with the actual class path of the module in the JAR.</p>
+<p>For detailed explanations of security configurations, please refer to
+<a href="https://kafka.apache.org/documentation/#security">the &ldquo;Security&rdquo; section in Apache Kafka documentation</a>.</p>
+<h2 id="kafka-rack-awareness">
+  Kafka Rack Awareness
+  <a class="anchor" href="#kafka-rack-awareness">#</a>
+</h2>
+<p>Kafka rack awareness allows Flink to select and control the cloud region and availability zone that Kafka consumers read from, based on the Rack ID. This feature reduces network costs and latency since it allows consumers to connect to the closest Kafka brokers, possibly colocated in the same cloud region and availability zone.
+A client&rsquo;s rack is indicated using the <code>client.rack</code> config, and should correspond to a broker&rsquo;s <code>broker.rack</code> config.</p>
+<p><a href="https://kafka.apache.org/documentation/#consumerconfigs_client.rack">https://kafka.apache.org/documentation/#consumerconfigs_client.rack</a></p>
+<h3 id="rackid">
+  RackId
+  <a class="anchor" href="#rackid">#</a>
+</h3>
+<p>setRackIdSupplier() is the Builder method allows us to determine the consumer&rsquo;s rack. If provided, the Supplier will be run when the consumer is set up on the Task Manager, and the consumer&rsquo;s <code>client.rack</code> configuration will be set to the value.</p>
+<p>One of the ways this can be implemented is by making setRackId equal to an environment variable within your taskManager, for instance:</p>
+<pre tabindex="0"><code>.setRackIdSupplier(() -&gt; System.getenv(&#34;TM_NODE_AZ&#34;))
+</code></pre><p>The &ldquo;TM_NODE_AZ&rdquo; is the name of the environment variable in the TaskManager container that contains the zone we want to use.</p>
+<h3 id="behind-the-scene">
+  Behind the Scene
+  <a class="anchor" href="#behind-the-scene">#</a>
+</h3>
+<blockquote class="book-hint info">
+  If you are interested in how Kafka source works under the design of new data source API, you may
+want to read this part as a reference. For details about the new data source API,
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/sources/">documentation of data source</a> and
+<a href="https://cwiki.apache.org/confluence/display/FLINK/FLIP-27%3A+Refactor+Source+Interface">FLIP-27</a>
+provide more descriptive discussions.
+</blockquote>
+
+<p>Under the abstraction of the new data source API, Kafka source consists of the following components:</p>
+<h4 id="source-split">
+  Source Split
+  <a class="anchor" href="#source-split">#</a>
+</h4>
+<p>A source split in Kafka source represents a partition of Kafka topic. A Kafka source split consists
+of:</p>
+<ul>
+<li><code>TopicPartition</code> the split representing</li>
+<li>Starting offset of the partition</li>
+<li>Stopping offset of the partition, only available when the source is running in bounded mode</li>
+</ul>
+<p>The state of Kafka source split also stores current consuming offset of the partition, and the state
+will be converted to immutable split when Kafka source reader is snapshot, assigning current offset
+to the starting offset of the immutable split.</p>
+<p>You can check class <code>KafkaPartitionSplit</code> and <code>KafkaPartitionSplitState</code> for more details.</p>
+<h4 id="split-enumerator">
+  Split Enumerator
+  <a class="anchor" href="#split-enumerator">#</a>
+</h4>
+<p>The split enumerator of Kafka is responsible for discovering new splits (partitions) under the
+provided topic partition subscription pattern, and assigning splits to readers, uniformly
+distributed across subtasks, in round-robin style. Note that the split enumerator of Kafka source
+pushes splits eagerly to source readers, so it won&rsquo;t need to handle split requests from source reader.</p>
+<h4 id="source-reader">
+  Source Reader
+  <a class="anchor" href="#source-reader">#</a>
+</h4>
+<p>The source reader of Kafka source extends the provided <code>SourceReaderBase</code>, and use
+single-thread-multiplexed thread model, which read multiple assigned splits (partitions) with one
+KafkaConsumer driven by one <code>SplitReader</code>. Messages are deserialized right after they are
+fetched from Kafka in <code>SplitReader</code>. The state of split, or current progress of message
+consuming is updated by <code>KafkaRecordEmitter</code> , which is also responsible for assigning event time
+when the record is emitted downstream.</p>
+<h2 id="kafka-sourcefunction">
+  Kafka SourceFunction
+  <a class="anchor" href="#kafka-sourcefunction">#</a>
+</h2>
+<blockquote class="book-hint warning">
+  <code>FlinkKafkaConsumer</code> is deprecated and will be removed with Flink 1.17, please use <code>KafkaSource</code> instead.
+</blockquote>
+
+<p>For older references you can look at the Flink 1.13 <a href="https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/connectors/datastream/kafka/#kafka-sourcefunction">documentation</a>.</p>
+<h2 id="kafka-sink">
+  Kafka Sink
+  <a class="anchor" href="#kafka-sink">#</a>
+</h2>
+<p><code>KafkaSink</code> allows writing a stream of records to one or more Kafka topics.</p>
+<h3 id="usage-1">
+  Usage
+  <a class="anchor" href="#usage-1">#</a>
+</h3>
+<p>Kafka sink provides a builder class to construct an instance of a KafkaSink. The code snippet below
+shows how to write String records to a Kafka topic with a delivery guarantee of at least once.</p>
+
+
+
+
+
+<div class="book-tabs"><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Java"
+    name="tabs-KafkaSink"
+    id="tabs-KafkaSink-0"
+    checked="checked" 
+    onclick="onSwitch('Java')"
+  />
+  <label for="tabs-KafkaSink-0">Java</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">DataStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">stream</span> <span class="o">=</span> <span class="o">...;</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl"><span class="n">KafkaSink</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">sink</span> <span class="o">=</span> <span class="n">KafkaSink</span><span class="o">.&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="n">builder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">setBootstrapServers</span><span class="o">(</span><span class="n">brokers</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">setRecordSerializer</span><span class="o">(</span><span class="n">KafkaRecordSerializationSchema</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">setTopic</span><span class="o">(</span><span class="s">&#34;topic-name&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">setValueSerializationSchema</span><span class="o">(</span><span class="k">new</span> <span class="n">SimpleStringSchema</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="na">build</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="o">)</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">setDeliveryGuarantee</span><span class="o">(</span><span class="n">DeliveryGuarantee</span><span class="o">.</span><span class="na">AT_LEAST_ONCE</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl"><span class="n">stream</span><span class="o">.</span><span class="na">sinkTo</span><span class="o">(</span><span class="n">sink</span><span class="o">);</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Python"
+    name="tabs-KafkaSink"
+    id="tabs-KafkaSink-1"
+     
+    onclick="onSwitch('Python')"
+  />
+  <label for="tabs-KafkaSink-1">Python</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">sink</span> <span class="o">=</span> <span class="n">KafkaSink</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_bootstrap_servers</span><span class="p">(</span><span class="n">brokers</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_record_serializer</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">KafkaRecordSerializationSchema</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="n">set_topic</span><span class="p">(</span><span class="s2">&#34;topic-name&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="n">set_value_serialization_schema</span><span class="p">(</span><span class="n">SimpleStringSchema</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_delivery_guarantee</span><span class="p">(</span><span class="n">DeliveryGuarantee</span><span class="o">.</span><span class="n">AT_LEAST_ONCE</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">stream</span><span class="o">.</span><span class="n">sink_to</span><span class="p">(</span><span class="n">sink</span><span class="p">)</span>
+</span></span></code></pre></div></div></div>
+
+<p>The following properties are <strong>required</strong> to build a KafkaSink:</p>
+<ul>
+<li>Bootstrap servers, <code>setBootstrapServers(String)</code></li>
+<li>Record serializer, <code>setRecordSerializer(KafkaRecordSerializationSchema)</code></li>
+<li>If you configure the delivery guarantee with <code>DeliveryGuarantee.EXACTLY_ONCE</code> you also have
+use <code>setTransactionalIdPrefix(String)</code></li>
+</ul>
+<h3 id="serializer">
+  Serializer
+  <a class="anchor" href="#serializer">#</a>
+</h3>
+<p>You always need to supply a <code>KafkaRecordSerializationSchema</code> to transform incoming elements from
+the data stream to Kafka producer records.
+Flink offers a schema builder to provide some common building blocks i.e. key/value serialization, topic
+selection, partitioning. You can also implement the interface on your own to exert more control.</p>
+
+
+
+
+
+<div class="book-tabs"><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Java"
+    name="tabs-KafkaSink#Serializer"
+    id="tabs-KafkaSink#Serializer-0"
+    checked="checked" 
+    onclick="onSwitch('Java')"
+  />
+  <label for="tabs-KafkaSink#Serializer-0">Java</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">KafkaRecordSerializationSchema</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setTopicSelector</span><span class="o">((</span><span class="n">element</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{&lt;</span><span class="n">your</span><span class="o">-</span><span class="n">topic</span><span class="o">-</span><span class="n">selection</span><span class="o">-</span><span class="n">logic</span><span class="o">&gt;})</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setValueSerializationSchema</span><span class="o">(</span><span class="k">new</span> <span class="n">SimpleStringSchema</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setKeySerializationSchema</span><span class="o">(</span><span class="k">new</span> <span class="n">SimpleStringSchema</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">setPartitioner</span><span class="o">(</span><span class="k">new</span> <span class="n">FlinkFixedPartitioner</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Python"
+    name="tabs-KafkaSink#Serializer"
+    id="tabs-KafkaSink#Serializer-1"
+     
+    onclick="onSwitch('Python')"
+  />
+  <label for="tabs-KafkaSink#Serializer-1">Python</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">KafkaRecordSerializationSchema</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_topic_selector</span><span class="p">(</span><span class="k">lambda</span> <span class="n">element</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">your</span><span class="o">-</span><span class="n">topic</span><span class="o">-</span><span class="n">selection</span><span class="o">-</span><span class="n">logic</span><span class="o">&gt;</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_value_serialization_schema</span><span class="p">(</span><span class="n">SimpleStringSchema</span><span class="p">())</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">set_key_serialization_schema</span><span class="p">(</span><span class="n">SimpleStringSchema</span><span class="p">())</span> \
+</span></span><span class="line"><span class="cl">    <span class="c1"># set partitioner is not supported in PyFlink</span>
+</span></span><span class="line"><span class="cl">    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</span></span></code></pre></div></div></div>
+
+<p>It is <strong>required</strong> to always set a value serialization method and a topic (selection method).
+Moreover, it is also possible to use Kafka serializers instead of Flink serializer by using
+<code>setKafkaKeySerializer(Serializer)</code> or <code>setKafkaValueSerializer(Serializer)</code>.</p>
+<h3 id="fault-tolerance">
+  Fault Tolerance
+  <a class="anchor" href="#fault-tolerance">#</a>
+</h3>
+<p>Overall the <code>KafkaSink</code> supports three different <code>DeliveryGuarantee</code>s. For
+<code>DeliveryGuarantee.AT_LEAST_ONCE</code> and <code>DeliveryGuarantee.EXACTLY_ONCE</code> Flink&rsquo;s checkpointing
+must be enabled. By default the <code>KafkaSink</code> uses <code>DeliveryGuarantee.NONE</code>. Below you can find
+an explanation of the different guarantees.</p>
+<ul>
+<li><code>DeliveryGuarantee.NONE</code> does not provide any guarantees: messages may be lost in case of
+issues on the Kafka broker and messages may be duplicated in case of a Flink failure.</li>
+<li><code>DeliveryGuarantee.AT_LEAST_ONCE</code>: The sink will wait for all outstanding records in the
+Kafka buffers to be acknowledged by the Kafka producer on a checkpoint. No messages will be
+lost in case of any issue with the Kafka brokers but messages may be duplicated when Flink
+restarts because Flink reprocesses old input records.</li>
+<li><code>DeliveryGuarantee.EXACTLY_ONCE</code>: In this mode, the KafkaSink will write all messages in a
+Kafka transaction that will be committed to Kafka on a checkpoint. Thus, if the consumer
+reads only committed data (see Kafka consumer config isolation.level), no duplicates will be
+seen in case of a Flink restart. However, this delays record visibility effectively until a
+checkpoint is written, so adjust the checkpoint duration accordingly. Please ensure that you
+use unique transactionalIdPrefix across your applications running on the same Kafka
+cluster such that multiple running jobs do not interfere in their transactions! Additionally, it
+is highly recommended to tweak Kafka transaction timeout (see Kafka producer
+transaction.timeout.ms)&raquo; maximum checkpoint duration + maximum restart duration or data loss may
+happen when Kafka expires an uncommitted transaction.</li>
+</ul>
+<h3 id="monitoring-1">
+  Monitoring
+  <a class="anchor" href="#monitoring-1">#</a>
+</h3>
+<p>Kafka sink exposes the following metrics in the respective <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/metrics//#scope">scope</a>.</p>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 15%">Scope</th>
+      <th class="text-left" style="width: 18%">Metrics</th>
+      <th class="text-left" style="width: 18%">User Variables</th>
+      <th class="text-left" style="width: 39%">Description</th>
+      <th class="text-left" style="width: 10%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <th rowspan="1">Operator</th>
+        <td>currentSendTime</td>
+        <td>n/a</td>
+        <td>The time it takes to send the last record. This metric is an instantaneous value recorded for the last processed record.</td>
+        <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+<h2 id="kafka-producer">
+  Kafka Producer
+  <a class="anchor" href="#kafka-producer">#</a>
+</h2>
+<blockquote class="book-hint warning">
+  <code>FlinkKafkaProducer</code> is deprecated and will be removed with Flink 1.15, please use <code>KafkaSink</code> instead.
+</blockquote>
+
+<p>For older references you can look at the Flink 1.13 <a href="https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/connectors/datastream/kafka/#kafka-producer">documentation</a>.</p>
+<h2 id="kafka-connector-metrics">
+  Kafka Connector Metrics
+  <a class="anchor" href="#kafka-connector-metrics">#</a>
+</h2>
+<p>Flink&rsquo;s Kafka connectors provide some metrics through Flink&rsquo;s <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/metrics/">metrics system</a> to analyze
+the behavior of the connector.
+The producers and consumers export Kafka&rsquo;s internal metrics through Flink&rsquo;s metric system for all supported versions.
+The Kafka documentation lists all exported metrics in its <a href="http://kafka.apache.org/documentation/#selector_monitoring">documentation</a>.</p>
+<p>It is also possible to disable the forwarding of the Kafka metrics by either configuring <code>register.consumer.metrics</code>
+outlined by this <a href="#kafka-connector-metrics">section</a> for the KafkaSource or when
+using the KafkaSink you can set the configuration <code>register.producer.metrics</code> to false via the producer
+properties.</p>
+<h2 id="enabling-kerberos-authentication">
+  Enabling Kerberos Authentication
+  <a class="anchor" href="#enabling-kerberos-authentication">#</a>
+</h2>
+<p>Flink provides first-class support through the Kafka connector to authenticate to a Kafka installation
+configured for Kerberos. Simply configure Flink in <code>flink-conf.yaml</code> to enable Kerberos authentication for Kafka like so:</p>
+<ol>
+<li>Configure Kerberos credentials by setting the following -</li>
+</ol>
+<ul>
+<li><code>security.kerberos.login.use-ticket-cache</code>: By default, this is <code>true</code> and Flink will attempt to use Kerberos credentials in ticket caches managed by <code>kinit</code>.
+Note that when using the Kafka connector in Flink jobs deployed on YARN, Kerberos authorization using ticket caches will not work.</li>
+<li><code>security.kerberos.login.keytab</code> and <code>security.kerberos.login.principal</code>: To use Kerberos keytabs instead, set values for both of these properties.</li>
+</ul>
+<ol start="2">
+<li>Append <code>KafkaClient</code> to <code>security.kerberos.login.contexts</code>: This tells Flink to provide the configured Kerberos credentials to the Kafka login context to be used for Kafka authentication.</li>
+</ol>
+<p>Once Kerberos-based Flink security is enabled, you can authenticate to Kafka with either the Flink Kafka Consumer or Producer
+by simply including the following two settings in the provided properties configuration that is passed to the internal Kafka client:</p>
+<ul>
+<li>Set <code>security.protocol</code> to <code>SASL_PLAINTEXT</code> (default <code>NONE</code>): The protocol used to communicate to Kafka brokers.
+When using standalone Flink deployment, you can also use <code>SASL_SSL</code>; please see how to configure the Kafka client for SSL <a href="https://kafka.apache.org/documentation/#security_configclients">here</a>.</li>
+<li>Set <code>sasl.kerberos.service.name</code> to <code>kafka</code> (default <code>kafka</code>): The value for this should match the <code>sasl.kerberos.service.name</code> used for Kafka broker configurations.
+A mismatch in service name between client and server configuration will cause the authentication to fail.</li>
+</ul>
+<p>For more information on Flink configuration for Kerberos security, please see <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/config/">here</a>.
+You can also find <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/security/security-kerberos/">here</a> further details on how Flink internally setups Kerberos-based security.</p>
+<h2 id="upgrading-to-the-latest-connector-version">
+  Upgrading to the Latest Connector Version
+  <a class="anchor" href="#upgrading-to-the-latest-connector-version">#</a>
+</h2>
+<p>The generic upgrade steps are outlined in <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/upgrading/">upgrading jobs and Flink versions
+guide</a>. For Kafka, you additionally need
+to follow these steps:</p>
+<ul>
+<li>Do not upgrade Flink and the Kafka Connector version at the same time.</li>
+<li>Make sure you have a <code>group.id</code> configured for your Consumer.</li>
+<li>Set <code>setCommitOffsetsOnCheckpoints(true)</code> on the consumer so that read
+offsets are committed to Kafka. It&rsquo;s important to do this before stopping and
+taking the savepoint. You might have to do a stop/restart cycle on the old
+connector version to enable this setting.</li>
+<li>Set <code>setStartFromGroupOffsets(true)</code> on the consumer so that we get read
+offsets from Kafka. This will only take effect when there is no read offset
+in Flink state, which is why the next step is very important.</li>
+<li>Change the assigned <code>uid</code> of your source/sink. This makes sure the new
+source/sink doesn&rsquo;t read state from the old source/sink operators.</li>
+<li>Start the new job with <code>--allow-non-restored-state</code> because we still have the
+state of the previous connector version in the savepoint.</li>
+</ul>
+<h2 id="troubleshooting">
+  Troubleshooting
+  <a class="anchor" href="#troubleshooting">#</a>
+</h2>
+<blockquote class="book-hint info">
+  If you have a problem with Kafka when using Flink, keep in mind that Flink only wraps
+<a href="https://kafka.apache.org/documentation/#consumerapi">KafkaConsumer</a> or
+<a href="https://kafka.apache.org/documentation/#producerapi">KafkaProducer</a>
+and your problem might be independent of Flink and sometimes can be solved by upgrading Kafka brokers,
+reconfiguring Kafka brokers or reconfiguring <tt>KafkaConsumer</tt> or <tt>KafkaProducer</tt> in Flink.
+Some examples of common problems are listed below.
+</blockquote>
+
+<h3 id="data-loss">
+  Data loss
+  <a class="anchor" href="#data-loss">#</a>
+</h3>
+<p>Depending on your Kafka configuration, even after Kafka acknowledges
+writes you can still experience data loss. In particular keep in mind about the following properties
+in Kafka config:</p>
+<ul>
+<li><code>acks</code></li>
+<li><code>log.flush.interval.messages</code></li>
+<li><code>log.flush.interval.ms</code></li>
+<li><code>log.flush.*</code></li>
+</ul>
+<p>Default values for the above options can easily lead to data loss.
+Please refer to the Kafka documentation for more explanation.</p>
+<h3 id="unknowntopicorpartitionexception">
+  UnknownTopicOrPartitionException
+  <a class="anchor" href="#unknowntopicorpartitionexception">#</a>
+</h3>
+<p>One possible cause of this error is when a new leader election is taking place,
+for example after or during restarting a Kafka broker.
+This is a retriable exception, so Flink job should be able to restart and resume normal operation.
+It also can be circumvented by changing <code>retries</code> property in the producer settings.
+However this might cause reordering of messages,
+which in turn if undesired can be circumvented by setting <code>max.in.flight.requests.per.connection</code> to 1.</p>
+<h3 id="producerfencedexception">
+  ProducerFencedException
+  <a class="anchor" href="#producerfencedexception">#</a>
+</h3>
+<p>The reason for this exception is most likely a transaction timeout on the broker side. With the implementation of
+<a href="https://issues.apache.org/jira/browse/KAFKA-6119">KAFKA-6119</a>, the <code>(producerId, epoch)</code> will be fenced off
+after a transaction timeout and all of its pending transactions are aborted (each <code>transactional.id</code> is
+mapped to a single <code>producerId</code>; this is described in more detail in the following <a href="https://www.confluent.io/blog/simplified-robust-exactly-one-semantics-in-kafka-2-5/">blog post</a>).</p>
+
+<p><a href="#top" class="top pull-right"><i class="fas fa-triangle"></i> Back to top</a></p>
+
+
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  
+
+
+
+
+
+<a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications">Want to contribute translation?</a>
+<br><br>
+<a href="//github.com/apache/flink/edit/release-1.20/docs/content/docs/connectors/datastream/kafka.md" style="color:black"><i class="fa fa-edit fa-fw"></i>Edit This Page</a>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#apache-kafka-connector">Apache Kafka Connector</a>
+      <ul>
+        <li><a href="#dependency">Dependency</a></li>
+        <li><a href="#kafka-source">Kafka Source</a>
+          <ul>
+            <li><a href="#usage">Usage</a></li>
+            <li><a href="#topic-partition-subscription">Topic-partition Subscription</a></li>
+            <li><a href="#deserializer">Deserializer</a></li>
+            <li><a href="#starting-offset">Starting Offset</a></li>
+            <li><a href="#boundedness">Boundedness</a></li>
+            <li><a href="#additional-properties">Additional Properties</a></li>
+            <li><a href="#dynamic-partition-discovery">Dynamic Partition Discovery</a></li>
+            <li><a href="#event-time-and-watermarks">Event Time and Watermarks</a></li>
+            <li><a href="#idleness">Idleness</a></li>
+            <li><a href="#consumer-offset-committing">Consumer Offset Committing</a></li>
+            <li><a href="#monitoring">Monitoring</a></li>
+            <li><a href="#security">Security</a></li>
+          </ul>
+        </li>
+        <li><a href="#kafka-rack-awareness">Kafka Rack Awareness</a>
+          <ul>
+            <li><a href="#rackid">RackId</a></li>
+            <li><a href="#behind-the-scene">Behind the Scene</a></li>
+          </ul>
+        </li>
+        <li><a href="#kafka-sourcefunction">Kafka SourceFunction</a></li>
+        <li><a href="#kafka-sink">Kafka Sink</a>
+          <ul>
+            <li><a href="#usage-1">Usage</a></li>
+            <li><a href="#serializer">Serializer</a></li>
+            <li><a href="#fault-tolerance">Fault Tolerance</a></li>
+            <li><a href="#monitoring-1">Monitoring</a></li>
+          </ul>
+        </li>
+        <li><a href="#kafka-producer">Kafka Producer</a></li>
+        <li><a href="#kafka-connector-metrics">Kafka Connector Metrics</a></li>
+        <li><a href="#enabling-kerberos-authentication">Enabling Kerberos Authentication</a></li>
+        <li><a href="#upgrading-to-the-latest-connector-version">Upgrading to the Latest Connector Version</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a>
+          <ul>
+            <li><a href="#data-loss">Data loss</a></li>
+            <li><a href="#unknowntopicorpartitionexception">UnknownTopicOrPartitionException</a></li>
+            <li><a href="#producerfencedexception">ProducerFencedException</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+ 
+    </aside>
+    <aside class="expand-toc">
+      <button class="toc" onclick="expandToc()">
+        <i class="fa fa-expand" aria-hidden="true"></i>
+      </button>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,89 @@
+Nov 10, 2026 7:14:29 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE sensor_readings (
+>     sensor_id STRING,
+>     event_time TIMESTAMP(3),
+>     temperature DOUBLE,
+>     humidity DOUBLE,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     PRIMARY KEY (sensor_id) NOT ENFORCED
+> ) WITH (
+>   'connector' = 'kafka',
+>   'topic' = 'sensor-readings',
+>   'properties.bootstrap.servers' = '127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502',
+>   'format' = 'json',
+>   'scan.startup.mode' = 'latest-offset',
+>   'sink.partition-commit.policy.type' = 'all-to-same'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE sensor_readings_clean (
+>     sensor_id STRING,
+>     event_time TIMESTAMP(3),
+>     temperature DOUBLE,
+>     humidity DOUBLE,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     PRIMARY KEY (sensor_id) NOT ENFORCED
+> ) WITH (
+>   'connector' = 'kafka',
+>   'topic' = 'sensor-readings-clean',
+>   'properties.bootstrap.servers' = '127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502',
+>   'format' = 'json',
+>   'sink.partitioner.type' = 'round-robin',
+>   'sink.partition-commit.policy.type' = 'all-to-same'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO sensor_readings_clean (`sensor_id`, `event_time`, `temperature`, `humidity`, `__sent_ms`, `__seq`)[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.table.api.ValidationException: Unsupported options found for 'kafka'.
+
+Unsupported options:
+
+sink.partition-commit.policy.type
+
+Supported options:
+
+connector
+format
+json.encode.decimal-as-plain-number
+json.encode.ignore-null-fields
+json.fail-on-missing-field
+json.ignore-parse-errors
+json.map-null-key.literal
+json.map-null-key.mode
+json.timestamp-format.standard
+key.fields
+key.fields-prefix
+key.format
+properties.bootstrap.servers
+properties.group.id
+property-version
+scan.bounded.mode
+scan.bounded.specific-offsets
+scan.bounded.timestamp-millis
+scan.startup.mode
+scan.startup.specific-offsets
+scan.startup.timestamp-millis
+scan.topic-partition-discovery.interval
+scan.watermark.alignment.group
+scan.watermark.alignment.max-drift
+scan.watermark.alignment.update-interval
+scan.watermark.emit.strategy
+scan.watermark.idle-timeout
+sink.delivery-guarantee
+sink.parallelism
+sink.partitioner
+sink.semantic
+sink.transactional-id-prefix
+topic
+topic-pattern
+value.fields-include
+value.format[0m
+
+Shutting down the session...
+done.

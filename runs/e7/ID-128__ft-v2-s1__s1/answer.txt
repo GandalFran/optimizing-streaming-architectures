@@ -1,0 +1,119 @@
+```yaml
+# Topic definitions
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks
+  labels:
+    strimzi.io/name: my-cluster
+spec:
+  partitions: 10
+  replicas: 3
+  retention: "6d"
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+  labels:
+    strimzi.io/name: my-cluster
+spec:
+  partitions: 10
+  replicas: 3
+  retention: "6d"
+```
+
+
+```yaml
+# Flink deployment
+
+apiVersion: flink.apache.org/v1alpha1
+kind: FlinkDeployment
+metadata:
+  name: clickstream
+spec:
+  flinkConfiguration:
+    jobmanager:
+      memory.process.size: 1024
+    taskmanager:
+      memory.process.size: 2048
+    execution.checkpointing.interval: 60000
+    jobmanager.rpc.address: clickstream-jobmanager
+    jobmanager.web.port: 8081
+    jobmanager.web.tmpdir: /tmp
+    taskmanager.numberOfTaskSlots: 4
+    parallelism.default: 4
+    security.kerberos.login.kinit.cmd: /usr/bin/kinit
+    state.backend: rocksdb
+    state.backend.incremental: true
+    state.backend.rocksdb.log.dir: /opt/flink/log
+    state.backend.rocksdb.log.file.num: 10
+    state.backend.rocksdb.log.level: INFO
+    state.backend.incremental.checkpoint-id.assigner: transactional
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-size: 1000
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-ttl: 1m
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size: 10000
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session: 1000
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout: 10m
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assigner.transactional.checkpoint-id-cache-max-size-per-session-timeout-enabled: true
+    state.backend.incremental.checkpoint-id.assign

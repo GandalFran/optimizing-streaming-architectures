@@ -1,0 +1,68 @@
+```bash
+# Create the sensor-readings topic with 10 partitions and replication factor 3
+kafka-topics.sh --create --topic sensor-readings --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10
+
+# Create the sensor-readings-clean topic with 10 partitions and replication factor 3
+kafka-topics.sh --create --topic sensor-readings-clean --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10
+```
+
+```yaml
+# Flink configuration
+config:
+  state.backend: rocksdb
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.checkpoints.num-retained: 10
+  execution.checkpointing.mode: EXACTLY_ONCE
+  execution.checkpointing.interval: 5s
+  execution.checkpointing.timeout: 60s
+  execution.checkpointing.min-pause: 10s
+  execution.parallelism.default: 5
+  taskmanager.numberOfTaskSlots: 4
+  parallelism.default: 5
+  metrics.reporters: prom
+  metrics.reporter.prom.class: org.apache.flink.metrics.prometheus.PrometheusReporter
+  metrics.reporter.prom.port: 9999
+  metrics.reporter.prom.mode: PROM_PUSH
+```
+
+```sql
+-- Define the source table for sensor readings
+CREATE TABLE sensor_readings (
+    sensor_id STRING,
+    reading_data STRING,
+    event_time TIMESTAMP(3) METADATA FROM 'timestamp'
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'sensor-readings',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'properties.group.id' = 'sensor-readings-group',
+    'scan.subtasks' = '5'
+);
+
+-- Define the sink table for clean sensor readings
+CREATE TABLE sensor_readings_clean (
+    sensor_id STRING,
+    reading_data STRING,
+    derived_field1 STRING,
+    derived_field2 STRING,
+    event_time TIMESTAMP(3),
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'sensor-readings-clean',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'round-robin',
+    'sink.parallelism' = '5'
+);
+```
+
+**Justification of main values:**
+
+- **Kafka Topic Partitions:** Each topic has 10 partitions to distribute the input rate of 50,000 events/s across multiple partitions, ensuring that each partition handles up to 5,000 events/s, which is within the assumed capacity of 5 MB/s per partition.
+- **Flink Parallelism:** The default parallelism is set to 5 to match the number of partitions in the Kafka topics, ensuring that each Flink subtask processes events from a single Kafka partition, which helps in maintaining low latency and high throughput.
+- **Checkpointing:** Checkpointing is configured for exactly-once semantics with a 5-second interval to ensure durability and fault tolerance. The checkpoint timeout is set to 60 seconds to handle potential delays in checkpoint completion.
+- **Metrics Reporting:** Prometheus metrics are enabled to monitor the Flink job's performance and health.
+- **Derived Fields:** The `sensor_readings_clean` table includes derived fields, which are assumed to be computed based on the `reading_data` and `event_time` fields. The watermark is set to account for potential late events, ensuring that the system can handle slight delays in event delivery.

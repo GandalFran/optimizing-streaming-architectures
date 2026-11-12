@@ -1,0 +1,231 @@
+ 1. Strimzi `KafkaTopic` resources for all topics:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  kafka:
+    replicas: 3
+    listeners:
+    - name: plain
+      port: 9092
+      tls: false
+      advertising: true
+      openCluster: true
+    entityOperator:
+      replicas: 3
+    zookeeper:
+      replicas: 3
+      storageClass: standard
+    kafkaStorage:
+      volumeClaimTemplate:
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 10Gi
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+spec:
+  replicas: 3
+  partitions: 12
+  config:
+    retention.ms: 604800000
+    cleanup.policy: delete
+    segment.bytes: 1073741824
+    compression.type: lzo
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+spec:
+  replicas: 3
+  partitions: 12
+  config:
+    retention.ms: 604800000
+    cleanup.policy: delete
+    segment.bytes: 1073741824
+    compression.type: lzo
+```
+
+In this configuration, we create a Kafka cluster with 3 brokers, and two topics, `banking-transactions` and `banking-transactions-validated`, with 12 partitions each. The partition size is set to 1 GB, allowing for a sustained input rate of 5 MB/s per partition. The retention period is set to 7 days (604800000 ms). Compression is enabled to reduce storage costs and improve throughput.
+
+2. FlinkDeployment resource:
+
+```yaml
+apiVersion: kustomize.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+- service.yaml
+
+namespace: flink
+
+patchesStrategicMerge:
+- patch.yaml
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-sql-job
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flink-sql-job
+  template:
+    metadata:
+      labels:
+        app: flink-sql-job
+    spec:
+      containers:
+      - name: flink
+        image: apache/flink:1.13.3
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: JAR
+          value: local:///opt/flink/usrlib/sql-runner.jar
+        command: ["java", "-jar", "/opt/flink/bin/flink-sql-runner.sh"]
+        resources:
+          limits:
+            cpu: 4
+            memory: 8Gi
+          requests:
+            cpu: 1
+            memory: 2Gi
+        volumeMounts:
+        - name: checkpoint-volume
+          mountPath: /flink-checkpoints
+      volumes:
+      - name: checkpoint-volume
+        persistentVolumeClaim:
+          claimName: checkpoint-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flink-sql-job
+spec:
+  selector:
+    app: flink-sql-job
+  ports:
+    - name: flink-job-manager-port
+      port: 8081
+      targetPort: 8081
+      protocol: TCP
+      nodePort: 31081
+  type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+kind: ConfigMap
+metadata:
+  name: flink-conf
+data:
+  taskmanager.numberOfTaskSlots: 1
+  rest-web-service.enabled: "false"
+  jobmanager.rpc.address: 0.0.0.0
+  jobmanager.rpc.port: 6123
+  taskmanager.rpc.address: 0.0.0.0
+  taskmanager.rpc.port: 6124
+  jobmanager.remote.connectors.jmx-connector.enabled: "false"
+  taskmanager.remote.connectors.jmx-connector.port: 6125
+  taskmanager.log-level: INFO
+  taskmanager.execution.failover.enabled: "true"
+  taskmanager.execution.failover.retries: "10"
+  taskmanager.execution.failover.timeout: "30s"
+  jobmanager.execution.failover.retries: "3"
+  jobmanager.execution.failover.timeout: "120s"
+  taskmanager.network.client-id: flink-taskmanager
+  taskmanager.web-ui.port: 8081
+  checkpointing.type: exact
+  checkpointing.timeout: 60s
+  checkpointing.enabled: "true"
+  checkpointing.failure-ignoring-mode: "allow-pause"
+  checkpointing.minPauseBetweenCheckpoints: "5s"
+  checkpointing.maxConcurrentCheckpoints: "3"
+  checkpointing.mode: "exactly-once"
+  checkpointing.on-checkpoint: "NONE"
+  checkpointing.minPauseBetweenCheckpoints: "5s"
+  state.backend.type: "filesystem"
+  state.backend.filesystem.type: "hdfs"
+  state.backend.filesystem.hdfs.uri: "hdfs://namenode:8020"
+  state.backend.zoo.connect-string: "zookeeper:2181"
+spec:
+  selector:
+    matchLabels:
+      app: flink-sql-job
+
+---
+
+apiVersion: apps/v1
+kind: ClusterRole
+metadata:
+  name: flink-clusterrole
+rules:
+- apiGroups: [""]
+  resources: ["persistentvolumes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["get", "list", "watch"]
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClaimRoleBinding
+metadata:
+  name: flink-claimrolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flink-clusterrole
+subjects:
+- kind: ServiceAccount
+  name: flink
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flink-clusterrolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flink-clusterrole
+subjects:
+- kind: ServiceAccount
+  name: flink
+```
+
+In this configuration, we create a Flink deployment with 3 replicas, each TaskManager pod can use at most 4 CPU and 8 GiB of memory, and at most 3 TaskManager pods may run. The Flink job is packaged as `local:///opt/flink/usrlib/sql-runner.jar`. Durable checkpoint storage is available at `s3://flink-state/checkpoints`.
+
+3. Flink SQL `CREATE TABLE` statements:
+
+```sql
+-- Create source table
+CREATE TABLE banking_transactions (
+  account_id INT,
+  transaction_type STRING,
+  transaction_amount DOUBLE,
+  transaction_time TIMESTAMP(3)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'banking-transactions',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'banking-transactions-group',
+  'format' = 'json',
+  'json.ignore-parse-errors' = 'true',
+  'json.fail-on-missing-field' = 'false',
+  'json.timestamp-format' = 'yyyy-MM-dd H

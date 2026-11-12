@@ -1,0 +1,92 @@
+### 1. Kafka Topic Creation
+
+```bash
+# Create topic 'sensor-readings' with 12 partitions (3 brokers * 4 partitions/broker)
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 12 sensor-readings
+
+# Create topic 'sensor-readings-clean' with 12 partitions
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 12 sensor-readings-clean
+
+# Describe the topics to verify the configuration
+kafka-topics.sh --bootstrap-server kafka:9092 --describe sensor-readings
+kafka-topics.sh --bootstrap-server kafka:9092 --describe sensor-readings-clean
+```
+
+### 2. Flink Configuration (`config.yaml`)
+
+```yaml
+# Flink configuration
+config:
+  # Enable exactly-once guarantee
+  checkpointing:
+    enabled: true
+    interval: 1000
+    type: EXACTLY_ONCE
+  # Use S3 for checkpoint storage
+  state.backend: fs.state
+  state.checkpoint.dir: s3://flink-state/checkpoints
+  # Use 1 hour for checkpoint recovery timeout
+  checkpointing.checkpoint-recovery-timeout: 3600000
+
+# Kafka configuration
+kafka:
+  bootstrap.servers: kafka:9092
+  # Set the number of parallelism for Kafka consumer to 4
+  parallelism.default: 4
+  # Set the number of max simultaneous requests to 100
+  num.max.inflight.requests: 100
+
+# Set the number of slots per taskmanager to 4
+taskmanager.numberOfTaskSlots: 4
+```
+
+### 3. Flink SQL `CREATE TABLE` Statements
+
+```sql
+CREATE TABLE SensorReadings (
+  sensor_id VARCHAR,
+  value DECIMAL(10, 2),
+  temperature DECIMAL(5, 2),
+  humidity DECIMAL(5, 2)
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'sensor-readings',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'connector.properties.group.id' = 'sensor-readings-group',
+  'connector.startup.mode' = 'latest-offset',
+  'format' = 'json',
+  'json.timestamp.format' = 'epoch-millis',
+  'json.fail-on-missing-field' = 'false',
+  'json.ignore-parse-errors' = 'true',
+  'scan.startup.mode' = 'latest-offset'
+);
+
+CREATE TABLE SensorReadingsClean (
+  sensor_id VARCHAR,
+  value DECIMAL(10, 2),
+  temperature DECIMAL(5, 2),
+  humidity DECIMAL(5, 2)
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'sensor-readings-clean',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'connector.properties.producer.properties.acks' = 'all',
+  'connector.properties.producer.properties.retries' = '3',
+  'connector.properties.producer.properties.batch.size' = '16384',
+  'connector.properties.producer.properties.linger.ms' = '100',
+  'format' = 'json',
+  'json.timestamp.format' = 'epoch-millis'
+);
+```
+
+### Justification:
+
+- The `sensor-readings` topic has 12 partitions, allowing for even distribution of the 50,000 events/s input rate across the 3 Kafka brokers, assuming an average event size of 512 bytes. This should keep each partition below the 5 MB/s limit per partition.
+
+- The Flink configuration enables exactly-once guarantee using checkpoints to the S3 bucket. Checkpoints will be written every 1 second, and Flink will attempt to recover from the latest checkpoint within 1 hour.
+
+- The Kafka consumer is set to use 4 parallelism to process the data in parallel with the 4 CPU cores per TaskManager. The number of max simultaneous requests to Kafka is set to 100 to avoid overloading the Kafka brokers.
+
+- The `SensorReadings` table is defined to read from the `sensor-readings` topic, using a JSON format with fail-on-missing-field and ignore-parse-errors enabled to handle malformed events. The `SensorReadingsClean` table is defined to write to the `sensor-readings-clean` topic with exactly-once delivery guarantee.

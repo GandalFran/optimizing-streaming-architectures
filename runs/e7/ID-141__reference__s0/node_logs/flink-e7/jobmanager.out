@@ -1,0 +1,758 @@
+
+=== spawn 1794392698: numactl --physcpubind=46,158 --membind=1 -- /home/chamoso/tuning-revision/opt/flink/bin/jobmanager.sh start-foreground
+Starting standalonesession as a console application on host cn001.
+2026-11-11 11:25:00,089 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - --------------------------------------------------------------------------------
+2026-11-11 11:25:00,091 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  Preconfiguration: 
+2026-11-11 11:25:00,091 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - 
+
+
+RESOURCE_PARAMS extraction logs:
+jvm_params: -Xmx1073741824 -Xms1073741824 -XX:MaxMetaspaceSize=268435456
+dynamic_configs: -D jobmanager.memory.off-heap.size=134217728b -D jobmanager.memory.jvm-overhead.min=201326592b -D jobmanager.memory.jvm-metaspace.size=268435456b -D jobmanager.memory.heap.size=1073741824b -D jobmanager.memory.jvm-overhead.max=201326592b
+logs: INFO  [] - Using standard YAML parser to load flink configuration file from /tmp/chamoso-e7/8529/e7-2757371/conf/flink-e7/config.yaml.
+INFO  [] - Loading configuration property: execution.checkpointing.mode, EXACTLY_ONCE
+INFO  [] - Loading configuration property: taskmanager.memory.process.size, 8g
+INFO  [] - Loading configuration property: taskmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: jobmanager.execution.failover-strategy, region
+INFO  [] - Loading configuration property: jobmanager.rpc.address, 127.0.0.1
+INFO  [] - Loading configuration property: jobmanager.memory.process.size, 1600m
+INFO  [] - Loading configuration property: jobmanager.rpc.port, 12030
+INFO  [] - Loading configuration property: rest.bind-address, 127.0.0.1
+INFO  [] - Loading configuration property: execution.checkpointing.interval, 5 s
+INFO  [] - Loading configuration property: rest.port, 12031
+INFO  [] - Loading configuration property: jobmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: io.tmp.dirs, /tmp/chamoso-e7/8529/e7-2757371/flink-io
+INFO  [] - Loading configuration property: taskmanager.host, 127.0.0.1
+INFO  [] - Loading configuration property: parallelism.default, 1
+INFO  [] - Loading configuration property: taskmanager.numberOfTaskSlots, 4
+INFO  [] - Loading configuration property: rest.address, 127.0.0.1
+INFO  [] - Loading configuration property: execution.checkpointing.dir, file:///tmp/chamoso-e7/8529/e7-2757371/objstore/flink-state/checkpoints
+INFO  [] - Loading configuration property: env.java.opts.all, --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+INFO  [] - The derived from fraction jvm overhead memory (160.000mb (167772162 bytes)) is less than its min value 192.000mb (201326592 bytes), min value will be used instead
+INFO  [] - Final Master Memory configuration:
+INFO  [] -   Total Process Memory: 1.563gb (1677721600 bytes)
+INFO  [] -     Total Flink Memory: 1.125gb (1207959552 bytes)
+INFO  [] -       JVM Heap:         1024.000mb (1073741824 bytes)
+INFO  [] -       Off-heap:         128.000mb (134217728 bytes)
+INFO  [] -     JVM Metaspace:      256.000mb (268435456 bytes)
+INFO  [] -     JVM Overhead:       192.000mb (201326592 bytes)
+
+2026-11-11 11:25:00,092 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - --------------------------------------------------------------------------------
+2026-11-11 11:25:00,092 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  Starting StandaloneSessionClusterEntrypoint (Version: 1.20.5, Scala: 2.12, Rev:0980485, Date:2026-06-08T09:21:06+02:00)
+2026-11-11 11:25:00,092 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  OS current user: chamoso
+2026-11-11 11:25:00,092 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  Current Hadoop/Kerberos user: <no hadoop dependency found>
+2026-11-11 11:25:00,092 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  JVM: OpenJDK 64-Bit Server VM - Eclipse Adoptium - 17/17.0.20.1+1
+2026-11-11 11:25:00,092 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  Arch: amd64
+2026-11-11 11:25:00,092 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  Maximum heap size: 1024 MiBytes
+2026-11-11 11:25:00,092 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  JAVA_HOME: /home/chamoso/tuning-revision/opt/jdk17
+2026-11-11 11:25:00,092 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  No Hadoop Dependency available
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  JVM Options:
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -Xmx1073741824
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -Xms1073741824
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -XX:MaxMetaspaceSize=268435456
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -XX:+IgnoreUnrecognizedVMOptions
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-exports=java.base/sun.net.util=ALL-UNNAMED
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+2026-11-11 11:25:00,093 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/java.lang=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/java.net=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/java.io=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/java.nio=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/java.text=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/java.time=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/java.util=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+2026-11-11 11:25:00,094 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED
+2026-11-11 11:25:00,095 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+2026-11-11 11:25:00,095 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -Dlog.file=/tmp/chamoso-e7/8529/e7-2757371/logs/flink-e7/flink-chamoso-standalonesession-0-cn001.log
+2026-11-11 11:25:00,095 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -Dlog4j.configuration=file:/tmp/chamoso-e7/8529/e7-2757371/conf/flink-e7/log4j-console.properties
+2026-11-11 11:25:00,095 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -Dlog4j.configurationFile=file:/tmp/chamoso-e7/8529/e7-2757371/conf/flink-e7/log4j-console.properties
+2026-11-11 11:25:00,095 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -Dlogback.configurationFile=file:/tmp/chamoso-e7/8529/e7-2757371/conf/flink-e7/logback-console.xml
+2026-11-11 11:25:00,095 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  Program Arguments:
+2026-11-11 11:25:00,096 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -D
+2026-11-11 11:25:00,096 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     jobmanager.memory.off-heap.size=134217728b
+2026-11-11 11:25:00,096 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -D
+2026-11-11 11:25:00,096 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     jobmanager.memory.jvm-overhead.min=201326592b
+2026-11-11 11:25:00,096 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -D
+2026-11-11 11:25:00,097 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     jobmanager.memory.jvm-metaspace.size=268435456b
+2026-11-11 11:25:00,097 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -D
+2026-11-11 11:25:00,097 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     jobmanager.memory.heap.size=1073741824b
+2026-11-11 11:25:00,097 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     -D
+2026-11-11 11:25:00,097 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     jobmanager.memory.jvm-overhead.max=201326592b
+2026-11-11 11:25:00,097 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --configDir
+2026-11-11 11:25:00,097 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     /tmp/chamoso-e7/8529/e7-2757371/conf/flink-e7
+2026-11-11 11:25:00,097 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     --executionMode
+2026-11-11 11:25:00,097 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -     cluster
+2026-11-11 11:25:00,097 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] -  Classpath: /lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-cep-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-connector-files-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-csv-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-json-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-scala_2.12-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-sql-connector-kafka.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-api-java-uber-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-planner-loader-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-runtime-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-1.2-api-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-api-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-core-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-slf4j-impl-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/lz4-java.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/snappy-java.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/zstd-jni.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-dist-1.20.5.jar::::
+2026-11-11 11:25:00,097 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - --------------------------------------------------------------------------------
+2026-11-11 11:25:00,098 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - Registered UNIX signal handlers for [TERM, HUP, INT]
+2026-11-11 11:25:00,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Using standard YAML parser to load flink configuration file from /tmp/chamoso-e7/8529/e7-2757371/conf/flink-e7/config.yaml.
+2026-11-11 11:25:00,149 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.mode, EXACTLY_ONCE
+2026-11-11 11:25:00,150 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.memory.process.size, 8g
+2026-11-11 11:25:00,150 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.bind-host, 127.0.0.1
+2026-11-11 11:25:00,150 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.execution.failover-strategy, region
+2026-11-11 11:25:00,151 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.rpc.address, 127.0.0.1
+2026-11-11 11:25:00,151 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.memory.process.size, 1600m
+2026-11-11 11:25:00,151 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.rpc.port, 12030
+2026-11-11 11:25:00,152 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.bind-address, 127.0.0.1
+2026-11-11 11:25:00,152 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.interval, 5 s
+2026-11-11 11:25:00,152 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.port, 12031
+2026-11-11 11:25:00,152 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.bind-host, 127.0.0.1
+2026-11-11 11:25:00,152 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: io.tmp.dirs, /tmp/chamoso-e7/8529/e7-2757371/flink-io
+2026-11-11 11:25:00,152 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.host, 127.0.0.1
+2026-11-11 11:25:00,153 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: parallelism.default, 1
+2026-11-11 11:25:00,153 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.numberOfTaskSlots, 4
+2026-11-11 11:25:00,153 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.address, 127.0.0.1
+2026-11-11 11:25:00,153 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.dir, file:///tmp/chamoso-e7/8529/e7-2757371/objstore/flink-state/checkpoints
+2026-11-11 11:25:00,153 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: env.java.opts.all, --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+2026-11-11 11:25:00,154 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: jobmanager.memory.off-heap.size, 134217728b
+2026-11-11 11:25:00,154 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: jobmanager.memory.jvm-overhead.min, 201326592b
+2026-11-11 11:25:00,154 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: jobmanager.memory.jvm-metaspace.size, 268435456b
+2026-11-11 11:25:00,154 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: jobmanager.memory.heap.size, 1073741824b
+2026-11-11 11:25:00,154 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: jobmanager.memory.jvm-overhead.max, 201326592b
+2026-11-11 11:25:00,183 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - Starting StandaloneSessionClusterEntrypoint.
+2026-11-11 11:25:00,214 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - Install default filesystem.
+2026-11-11 11:25:00,216 INFO  org.apache.flink.core.fs.FileSystem                          [] - Hadoop is not in the classpath/dependencies. The extended set of supported File Systems via Hadoop is not available.
+2026-11-11 11:25:00,233 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-datadog
+2026-11-11 11:25:00,238 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-graphite
+2026-11-11 11:25:00,238 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-jmx
+2026-11-11 11:25:00,239 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-slf4j
+2026-11-11 11:25:00,239 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-statsd
+2026-11-11 11:25:00,239 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-prometheus
+2026-11-11 11:25:00,239 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: external-resource-gpu
+2026-11-11 11:25:00,240 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-influx
+2026-11-11 11:25:00,251 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - Install security context.
+2026-11-11 11:25:00,260 INFO  org.apache.flink.runtime.security.modules.HadoopModuleFactory [] - Cannot create Hadoop Security Module because Hadoop cannot be found in the Classpath.
+2026-11-11 11:25:00,264 INFO  org.apache.flink.runtime.security.modules.JaasModule         [] - Jaas file will be created as /tmp/chamoso-e7/8529/e7-2757371/flink-io/jaas-3285680346731016164.conf.
+2026-11-11 11:25:00,268 INFO  org.apache.flink.runtime.security.contexts.HadoopSecurityContextFactory [] - Cannot install HadoopSecurityContext because Hadoop cannot be found in the Classpath.
+2026-11-11 11:25:00,269 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - Initializing cluster services.
+2026-11-11 11:25:00,274 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - Using working directory: WorkingDirectory(/tmp/chamoso-e7/8529/e7-2757371/flink-io/jm_9b9f0f793727a7a31bc628ca4fe165c4).
+2026-11-11 11:25:00,448 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Trying to start actor system, external address 127.0.0.1:12030, bind address 127.0.0.1:12030.
+2026-11-11 11:25:00,796 INFO  org.apache.pekko.event.slf4j.Slf4jLogger                     [] - Slf4jLogger started
+2026-11-11 11:25:00,837 INFO  org.apache.pekko.remote.RemoteActorRefProvider               [] - Pekko Cluster not in use - enabling unsafe features anyway because `pekko.remote.use-unsafe-remote-features-outside-cluster` has been enabled.
+2026-11-11 11:25:00,839 INFO  org.apache.pekko.remote.Remoting                             [] - Starting remoting
+2026-11-11 11:25:00,960 INFO  org.apache.pekko.remote.Remoting                             [] - Remoting started; listening on addresses :[pekko.tcp://flink@127.0.0.1:12030]
+2026-11-11 11:25:01,028 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Actor system started at pekko.tcp://flink@127.0.0.1:12030
+2026-11-11 11:25:01,038 INFO  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - Loading delegation token providers
+2026-11-11 11:25:01,041 INFO  org.apache.flink.runtime.security.token.hadoop.HadoopFSDelegationTokenProvider [] - Hadoop FS is not available (not packaged with this application): NoClassDefFoundError : "org/apache/hadoop/conf/Configuration".
+2026-11-11 11:25:01,042 INFO  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - Delegation token provider hadoopfs loaded and initialized
+2026-11-11 11:25:01,043 INFO  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - Delegation token provider hbase loaded and initialized
+2026-11-11 11:25:01,043 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-datadog
+2026-11-11 11:25:01,043 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-graphite
+2026-11-11 11:25:01,043 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-jmx
+2026-11-11 11:25:01,044 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-slf4j
+2026-11-11 11:25:01,044 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-statsd
+2026-11-11 11:25:01,044 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-prometheus
+2026-11-11 11:25:01,044 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: external-resource-gpu
+2026-11-11 11:25:01,044 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-influx
+2026-11-11 11:25:01,044 INFO  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - Delegation token providers loaded successfully
+2026-11-11 11:25:01,046 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Loading delegation token receivers
+2026-11-11 11:25:01,047 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receiver hadoopfs loaded and initialized
+2026-11-11 11:25:01,048 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receiver hbase loaded and initialized
+2026-11-11 11:25:01,048 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-datadog
+2026-11-11 11:25:01,048 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-graphite
+2026-11-11 11:25:01,048 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-jmx
+2026-11-11 11:25:01,049 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-slf4j
+2026-11-11 11:25:01,049 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-statsd
+2026-11-11 11:25:01,051 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-prometheus
+2026-11-11 11:25:01,058 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: external-resource-gpu
+2026-11-11 11:25:01,058 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-influx
+2026-11-11 11:25:01,059 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receivers loaded successfully
+2026-11-11 11:25:01,059 INFO  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - Checking provider and receiver instances consistency
+2026-11-11 11:25:01,059 INFO  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - Provider and receiver instances are consistent
+2026-11-11 11:25:01,059 INFO  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - Obtaining delegation tokens
+2026-11-11 11:25:01,061 INFO  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - Delegation tokens obtained successfully
+2026-11-11 11:25:01,061 WARN  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - No tokens obtained so skipping notifications
+2026-11-11 11:25:01,073 INFO  org.apache.flink.runtime.blob.BlobServer                     [] - Created BLOB server storage directory /tmp/chamoso-e7/8529/e7-2757371/flink-io/jm_9b9f0f793727a7a31bc628ca4fe165c4/blobStorage
+2026-11-11 11:25:01,079 INFO  org.apache.flink.runtime.blob.BlobServer                     [] - Started BLOB server at 127.0.0.1:36407 - max concurrent requests: 50 - max backlog: 1000
+2026-11-11 11:25:01,093 INFO  org.apache.flink.runtime.metrics.MetricRegistryImpl          [] - No metrics reporter configured, no metrics will be exposed/reported.
+2026-11-11 11:25:01,093 INFO  org.apache.flink.runtime.metrics.MetricRegistryImpl          [] - No trace reporter configured, no metrics will be exposed/reported.
+2026-11-11 11:25:01,096 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Trying to start actor system, external address 127.0.0.1:0, bind address 127.0.0.1:0.
+2026-11-11 11:25:01,125 INFO  org.apache.pekko.event.slf4j.Slf4jLogger                     [] - Slf4jLogger started
+2026-11-11 11:25:01,128 INFO  org.apache.pekko.remote.RemoteActorRefProvider               [] - Pekko Cluster not in use - enabling unsafe features anyway because `pekko.remote.use-unsafe-remote-features-outside-cluster` has been enabled.
+2026-11-11 11:25:01,129 INFO  org.apache.pekko.remote.Remoting                             [] - Starting remoting
+2026-11-11 11:25:01,147 INFO  org.apache.pekko.remote.Remoting                             [] - Remoting started; listening on addresses :[pekko.tcp://flink-metrics@127.0.0.1:41045]
+2026-11-11 11:25:01,151 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Actor system started at pekko.tcp://flink-metrics@127.0.0.1:41045
+2026-11-11 11:25:01,166 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcService           [] - Starting RPC endpoint for org.apache.flink.runtime.metrics.dump.MetricQueryService at pekko://flink-metrics/user/rpc/MetricQueryService .
+2026-11-11 11:25:01,255 INFO  org.apache.flink.runtime.dispatcher.FileExecutionGraphInfoStore [] - Initializing FileExecutionGraphInfoStore: Storage directory /tmp/chamoso-e7/8529/e7-2757371/flink-io/executionGraphStore-42dfb61d-71bf-4a00-bfb6-e14c5e0cea89, expiration time 3600000, maximum cache size 52428800 bytes.
+2026-11-11 11:25:01,282 INFO  org.apache.flink.configuration.Configuration                 [] - Config uses fallback configuration key 'rest.port' instead of key 'rest.bind-port'
+2026-11-11 11:25:01,287 INFO  org.apache.flink.runtime.dispatcher.DispatcherRestEndpoint   [] - Upload directory /tmp/flink-web-265254be-44f6-409c-b4e2-821e0667d87e/flink-web-upload does not exist. 
+2026-11-11 11:25:01,288 INFO  org.apache.flink.runtime.dispatcher.DispatcherRestEndpoint   [] - Created directory /tmp/flink-web-265254be-44f6-409c-b4e2-821e0667d87e/flink-web-upload for file uploads.
+2026-11-11 11:25:01,289 INFO  org.apache.flink.runtime.dispatcher.DispatcherRestEndpoint   [] - Starting rest endpoint.
+2026-11-11 11:25:01,431 INFO  org.apache.flink.runtime.webmonitor.WebMonitorUtils          [] - Determined location of main cluster component log file: /tmp/chamoso-e7/8529/e7-2757371/logs/flink-e7/flink-chamoso-standalonesession-0-cn001.log
+2026-11-11 11:25:01,431 INFO  org.apache.flink.runtime.webmonitor.WebMonitorUtils          [] - Determined location of main cluster component stdout file: /tmp/chamoso-e7/8529/e7-2757371/logs/flink-e7/flink-chamoso-standalonesession-0-cn001.out
+2026-11-11 11:25:01,443 INFO  org.apache.flink.runtime.dispatcher.DispatcherRestEndpoint   [] - Rest endpoint listening at 127.0.0.1:12031
+2026-11-11 11:25:01,444 INFO  org.apache.flink.runtime.dispatcher.DispatcherRestEndpoint   [] - http://127.0.0.1:12031 was granted leadership with leaderSessionID=00000000-0000-0000-0000-000000000000
+2026-11-11 11:25:01,445 INFO  org.apache.flink.runtime.dispatcher.DispatcherRestEndpoint   [] - Web frontend listening at http://127.0.0.1:12031.
+2026-11-11 11:25:01,460 INFO  org.apache.flink.runtime.dispatcher.runner.DefaultDispatcherRunner [] - DefaultDispatcherRunner was granted leadership with leader id 00000000-0000-0000-0000-000000000000. Creating new DispatcherLeaderProcess.
+2026-11-11 11:25:01,463 INFO  org.apache.flink.runtime.dispatcher.runner.SessionDispatcherLeaderProcess [] - Start SessionDispatcherLeaderProcess.
+2026-11-11 11:25:01,464 INFO  org.apache.flink.runtime.resourcemanager.ResourceManagerServiceImpl [] - Starting resource manager service.
+2026-11-11 11:25:01,467 INFO  org.apache.flink.runtime.resourcemanager.ResourceManagerServiceImpl [] - Resource manager service is granted leadership with session id 00000000-0000-0000-0000-000000000000.
+2026-11-11 11:25:01,472 INFO  org.apache.flink.runtime.dispatcher.runner.SessionDispatcherLeaderProcess [] - Recover all persisted job graphs that are not finished, yet.
+2026-11-11 11:25:01,473 INFO  org.apache.flink.runtime.dispatcher.runner.SessionDispatcherLeaderProcess [] - Successfully recovered 0 persisted job graphs.
+2026-11-11 11:25:01,485 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcService           [] - Starting RPC endpoint for org.apache.flink.runtime.resourcemanager.StandaloneResourceManager at pekko://flink/user/rpc/resourcemanager_0 .
+2026-11-11 11:25:01,486 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcService           [] - Starting RPC endpoint for org.apache.flink.runtime.dispatcher.StandaloneDispatcher at pekko://flink/user/rpc/dispatcher_1 .
+2026-11-11 11:25:01,520 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Starting the resource manager.
+2026-11-11 11:25:01,534 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Starting the slot manager.
+2026-11-11 11:25:01,535 INFO  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - Starting tokens update task
+2026-11-11 11:25:01,536 WARN  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - No tokens obtained so skipping notifications
+2026-11-11 11:25:01,536 WARN  org.apache.flink.runtime.security.token.DefaultDelegationTokenManager [] - Tokens update task not started because either no tokens obtained or none of the tokens specified its renewal date
+2026-11-11 11:25:04,475 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Registering TaskManager with ResourceID tm2 (pekko.tcp://flink@127.0.0.1:37531/user/rpc/taskmanager_0) at ResourceManager
+2026-11-11 11:25:04,483 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Registering TaskManager with ResourceID tm0 (pekko.tcp://flink@127.0.0.1:45623/user/rpc/taskmanager_0) at ResourceManager
+2026-11-11 11:25:04,491 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Registering task executor tm2 under 50b5133935c1ac707bc916c4ad4dee81 at the slot manager.
+2026-11-11 11:25:04,495 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Registering TaskManager with ResourceID tm1 (pekko.tcp://flink@127.0.0.1:34075/user/rpc/taskmanager_0) at ResourceManager
+2026-11-11 11:25:04,497 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Registering task executor tm0 under 56fb6e8bcd17cbbf9452a4f571f20e1e at the slot manager.
+2026-11-11 11:25:04,504 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Registering task executor tm1 under f98744b2462cf0407ee653d22f0c4cf0 at the slot manager.
+2026-11-11 11:25:08,671 INFO  org.apache.flink.runtime.dispatcher.StandaloneDispatcher     [] - Received JobGraph submission 'insert-into_default_catalog.default_database.snk' (cc4164cca44ef6621f2a6932c062e8c5).
+2026-11-11 11:25:08,673 INFO  org.apache.flink.runtime.dispatcher.StandaloneDispatcher     [] - Submitting job 'insert-into_default_catalog.default_database.snk' (cc4164cca44ef6621f2a6932c062e8c5).
+2026-11-11 11:25:08,683 INFO  org.apache.flink.runtime.jobmaster.JobMasterServiceLeadershipRunner [] - JobMasterServiceLeadershipRunner for job cc4164cca44ef6621f2a6932c062e8c5 was granted leadership with leader id 00000000-0000-0000-0000-000000000000. Creating new JobMasterServiceProcess.
+2026-11-11 11:25:08,701 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcService           [] - Starting RPC endpoint for org.apache.flink.runtime.jobmaster.JobMaster at pekko://flink/user/rpc/jobmanager_2 .
+2026-11-11 11:25:08,716 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Initializing job 'insert-into_default_catalog.default_database.snk' (cc4164cca44ef6621f2a6932c062e8c5).
+2026-11-11 11:25:08,742 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Using restart back off time strategy ExponentialDelayRestartBackoffTimeStrategy(initialBackoffMS=1000, maxBackoffMS=60000, backoffMultiplier=1.5, resetBackoffThresholdMS=3600000, jitterFactor=0.1, attemptsBeforeResetBackoff=2147483647, currentRestartAttempt=0, nextRestartTimestamp=-2147483648) for insert-into_default_catalog.default_database.snk (cc4164cca44ef6621f2a6932c062e8c5).
+2026-11-11 11:25:08,778 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Created execution graph 1040cab6bd558874687654c3b6d6174c for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:08,791 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Running initialization on master for job insert-into_default_catalog.default_database.snk (cc4164cca44ef6621f2a6932c062e8c5).
+2026-11-11 11:25:08,792 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Successfully ran initialization on master in 0 ms.
+2026-11-11 11:25:08,868 INFO  org.apache.flink.runtime.scheduler.adapter.DefaultExecutionTopology [] - Built 1 new pipelined regions in 1 ms, total 1 pipelined regions currently.
+2026-11-11 11:25:08,875 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@2cf463c8
+2026-11-11 11:25:08,876 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend loader loads the state backend as HashMapStateBackend
+2026-11-11 11:25:08,881 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Using job/cluster config to configure application-defined checkpoint storage: org.apache.flink.runtime.state.storage.FileSystemCheckpointStorage@e9e04e05
+2026-11-11 11:25:08,895 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - No checkpoint found during restore.
+2026-11-11 11:25:08,901 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Using failover strategy org.apache.flink.runtime.executiongraph.failover.RestartPipelinedRegionFailoverStrategy@5916aa1c for insert-into_default_catalog.default_database.snk (cc4164cca44ef6621f2a6932c062e8c5).
+2026-11-11 11:25:08,910 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Starting execution of job 'insert-into_default_catalog.default_database.snk' (cc4164cca44ef6621f2a6932c062e8c5) under job master id 00000000000000000000000000000000.
+2026-11-11 11:25:08,912 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Starting split enumerator for source Source: src[1].
+2026-11-11 11:25:08,917 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Starting scheduling with scheduling strategy [org.apache.flink.runtime.scheduler.strategy.PipelinedRegionSchedulingStrategy]
+2026-11-11 11:25:08,918 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Job insert-into_default_catalog.default_database.snk (cc4164cca44ef6621f2a6932c062e8c5) switched from state CREATED to RUNNING.
+2026-11-11 11:25:08,929 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_0) switched from CREATED to SCHEDULED.
+2026-11-11 11:25:08,940 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Connecting to ResourceManager pekko.tcp://flink@127.0.0.1:12030/user/rpc/resourcemanager_*(00000000000000000000000000000000)
+2026-11-11 11:25:08,946 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.admin.AdminClientConfig [] - AdminClientConfig values: 
+	auto.include.jmx.reporter = true
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	client.dns.lookup = use_all_dns_ips
+	client.id = app-logs-parsed-job-enumerator-admin-client
+	connections.max.idle.ms = 300000
+	default.api.timeout.ms = 60000
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+
+2026-11-11 11:25:08,958 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Resolved ResourceManager address, beginning registration
+2026-11-11 11:25:08,960 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Registering job manager 00000000000000000000000000000000@pekko.tcp://flink@127.0.0.1:12030/user/rpc/jobmanager_2 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:08,969 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Registered job manager 00000000000000000000000000000000@pekko.tcp://flink@127.0.0.1:12030/user/rpc/jobmanager_2 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:08,986 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - JobManager successfully registered at ResourceManager, leader id: 00000000000000000000000000000000.
+2026-11-11 11:25:08,988 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Received resource requirements from job cc4164cca44ef6621f2a6932c062e8c5: [ResourceRequirement{resourceProfile=ResourceProfile{UNKNOWN}, numberOfRequiredSlots=1}]
+2026-11-11 11:25:09,001 WARN  org.apache.flink.kafka.shaded.org.apache.kafka.clients.admin.AdminClientConfig [] - These configurations '[key.deserializer, value.deserializer, enable.auto.commit, client.id.prefix, group.id, partition.discovery.interval.ms, auto.offset.reset]' were supplied but are not used yet.
+2026-11-11 11:25:09,002 WARN  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Error while loading kafka-version.properties: inStream parameter is null
+2026-11-11 11:25:09,002 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 11:25:09,002 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 11:25:09,002 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794392709001
+2026-11-11 11:25:09,004 INFO  org.apache.flink.connector.kafka.source.enumerator.KafkaSourceEnumerator [] - Starting the KafkaSourceEnumerator for consumer group app-logs-parsed-job with partition discovery interval of 300000 ms.
+2026-11-11 11:25:09,059 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Matching resource requirements against available resources.
+Missing resources:
+	 Job cc4164cca44ef6621f2a6932c062e8c5
+		ResourceRequirement{resourceProfile=ResourceProfile{UNKNOWN}, numberOfRequiredSlots=1}
+Current resources:
+	TaskManager tm1
+		Available: ResourceProfile{cpuCores=4, taskHeapMemory=3.225gb (3462817321 bytes), taskOffHeapMemory=0 bytes, managedMemory=2.780gb (2985002310 bytes), networkMemory=711.680mb (746250577 bytes)}
+		Total:     ResourceProfile{cpuCores=4, taskHeapMemory=3.225gb (3462817321 bytes), taskOffHeapMemory=0 bytes, managedMemory=2.780gb (2985002310 bytes), networkMemory=711.680mb (746250577 bytes)}
+	TaskManager tm0
+		Available: ResourceProfile{cpuCores=4, taskHeapMemory=3.225gb (3462817321 bytes), taskOffHeapMemory=0 bytes, managedMemory=2.780gb (2985002310 bytes), networkMemory=711.680mb (746250577 bytes)}
+		Total:     ResourceProfile{cpuCores=4, taskHeapMemory=3.225gb (3462817321 bytes), taskOffHeapMemory=0 bytes, managedMemory=2.780gb (2985002310 bytes), networkMemory=711.680mb (746250577 bytes)}
+	TaskManager tm2
+		Available: ResourceProfile{cpuCores=4, taskHeapMemory=3.225gb (3462817321 bytes), taskOffHeapMemory=0 bytes, managedMemory=2.780gb (2985002310 bytes), networkMemory=711.680mb (746250577 bytes)}
+		Total:     ResourceProfile{cpuCores=4, taskHeapMemory=3.225gb (3462817321 bytes), taskOffHeapMemory=0 bytes, managedMemory=2.780gb (2985002310 bytes), networkMemory=711.680mb (746250577 bytes)}
+2026-11-11 11:25:09,064 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.DefaultSlotStatusSyncer [] - Starting allocation of slot dc72cab755526fa48ab45f3cfab1f90f from tm1 for job cc4164cca44ef6621f2a6932c062e8c5 with resource profile ResourceProfile{cpuCores=1, taskHeapMemory=825.600mb (865704330 bytes), taskOffHeapMemory=0 bytes, managedMemory=711.680mb (746250577 bytes), networkMemory=177.920mb (186562644 bytes)}.
+2026-11-11 11:25:09,111 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_0) switched from SCHEDULED to DEPLOYING.
+2026-11-11 11:25:09,112 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Deploying Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (attempt #0) with attempt id 1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_0 and vertex id cbc357ccb763df2852fee8c4fc7d55f2_0 to tm1 @ localhost (dataPort=45805) with allocation id dc72cab755526fa48ab45f3cfab1f90f
+2026-11-11 11:25:09,188 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_0) switched from DEPLOYING to INITIALIZING.
+2026-11-11 11:25:09,226 INFO  org.apache.flink.connector.kafka.source.enumerator.KafkaSourceEnumerator [] - Discovered new partitions: [app-logs-0, app-logs-1, app-logs-2]
+2026-11-11 11:25:09,926 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Source Source: src[1] registering reader for parallel task 0 (#0) @ 127.0.0.1
+2026-11-11 11:25:09,927 INFO  org.apache.flink.connector.kafka.source.enumerator.KafkaSourceEnumerator [] - Assigning splits to readers {0=[[Partition: app-logs-0, StartingOffset: -3, StoppingOffset: -9223372036854775808], [Partition: app-logs-1, StartingOffset: -3, StoppingOffset: -9223372036854775808], [Partition: app-logs-2, StartingOffset: -3, StoppingOffset: -9223372036854775808]]}
+2026-11-11 11:25:09,930 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_0) switched from INITIALIZING to RUNNING.
+2026-11-11 11:25:11,236 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 1 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392711229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:11,511 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 1 for job cc4164cca44ef6621f2a6932c062e8c5 (1020 bytes, checkpointDuration=280 ms, finalizationTime=2 ms).
+2026-11-11 11:25:11,514 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 1 as completed for source Source: src[1].
+2026-11-11 11:25:16,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 2 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392716229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:16,349 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 2 for job cc4164cca44ef6621f2a6932c062e8c5 (1020 bytes, checkpointDuration=118 ms, finalizationTime=2 ms).
+2026-11-11 11:25:16,351 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 2 as completed for source Source: src[1].
+2026-11-11 11:25:21,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 3 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392721229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:21,365 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 3 for job cc4164cca44ef6621f2a6932c062e8c5 (1074 bytes, checkpointDuration=135 ms, finalizationTime=1 ms).
+2026-11-11 11:25:21,365 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 3 as completed for source Source: src[1].
+2026-11-11 11:25:26,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 4 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392726230 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:26,343 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 4 for job cc4164cca44ef6621f2a6932c062e8c5 (1074 bytes, checkpointDuration=113 ms, finalizationTime=0 ms).
+2026-11-11 11:25:26,344 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 4 as completed for source Source: src[1].
+2026-11-11 11:25:31,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 5 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392731230 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:31,242 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 5 for job cc4164cca44ef6621f2a6932c062e8c5 (1074 bytes, checkpointDuration=12 ms, finalizationTime=0 ms).
+2026-11-11 11:25:31,243 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 5 as completed for source Source: src[1].
+2026-11-11 11:25:36,229 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 6 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392736229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:36,342 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 6 for job cc4164cca44ef6621f2a6932c062e8c5 (1074 bytes, checkpointDuration=113 ms, finalizationTime=0 ms).
+2026-11-11 11:25:36,343 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 6 as completed for source Source: src[1].
+2026-11-11 11:25:41,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 7 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392741229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:41,342 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 7 for job cc4164cca44ef6621f2a6932c062e8c5 (1074 bytes, checkpointDuration=112 ms, finalizationTime=1 ms).
+2026-11-11 11:25:41,343 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 7 as completed for source Source: src[1].
+2026-11-11 11:25:46,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 8 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392746230 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:46,242 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 8 for job cc4164cca44ef6621f2a6932c062e8c5 (1074 bytes, checkpointDuration=12 ms, finalizationTime=0 ms).
+2026-11-11 11:25:46,243 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 8 as completed for source Source: src[1].
+2026-11-11 11:25:51,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 9 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392751230 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:51,343 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 9 for job cc4164cca44ef6621f2a6932c062e8c5 (1074 bytes, checkpointDuration=113 ms, finalizationTime=0 ms).
+2026-11-11 11:25:51,344 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 9 as completed for source Source: src[1].
+2026-11-11 11:25:56,229 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 10 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392756229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:25:56,341 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 10 for job cc4164cca44ef6621f2a6932c062e8c5 (1075 bytes, checkpointDuration=112 ms, finalizationTime=0 ms).
+2026-11-11 11:25:56,342 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 10 as completed for source Source: src[1].
+2026-11-11 11:26:01,229 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 11 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392761229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:01,240 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 11 for job cc4164cca44ef6621f2a6932c062e8c5 (1075 bytes, checkpointDuration=10 ms, finalizationTime=1 ms).
+2026-11-11 11:26:01,240 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 11 as completed for source Source: src[1].
+2026-11-11 11:26:06,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 12 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392766229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:06,341 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 12 for job cc4164cca44ef6621f2a6932c062e8c5 (1075 bytes, checkpointDuration=112 ms, finalizationTime=0 ms).
+2026-11-11 11:26:06,342 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 12 as completed for source Source: src[1].
+2026-11-11 11:26:11,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 13 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392771229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:11,342 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 13 for job cc4164cca44ef6621f2a6932c062e8c5 (1075 bytes, checkpointDuration=112 ms, finalizationTime=1 ms).
+2026-11-11 11:26:11,342 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 13 as completed for source Source: src[1].
+2026-11-11 11:26:16,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 14 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392776230 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:16,240 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 14 for job cc4164cca44ef6621f2a6932c062e8c5 (1075 bytes, checkpointDuration=9 ms, finalizationTime=1 ms).
+2026-11-11 11:26:16,240 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 14 as completed for source Source: src[1].
+2026-11-11 11:26:21,229 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 15 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392781229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:21,341 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 15 for job cc4164cca44ef6621f2a6932c062e8c5 (1075 bytes, checkpointDuration=112 ms, finalizationTime=0 ms).
+2026-11-11 11:26:21,342 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 15 as completed for source Source: src[1].
+2026-11-11 11:26:26,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 16 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392786229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:26,342 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 16 for job cc4164cca44ef6621f2a6932c062e8c5 (1075 bytes, checkpointDuration=112 ms, finalizationTime=1 ms).
+2026-11-11 11:26:26,342 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 16 as completed for source Source: src[1].
+2026-11-11 11:26:31,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 17 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392791229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:31,240 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 17 for job cc4164cca44ef6621f2a6932c062e8c5 (1075 bytes, checkpointDuration=11 ms, finalizationTime=0 ms).
+2026-11-11 11:26:31,240 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 17 as completed for source Source: src[1].
+2026-11-11 11:26:36,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 18 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392796230 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:36,239 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 18 for job cc4164cca44ef6621f2a6932c062e8c5 (1075 bytes, checkpointDuration=9 ms, finalizationTime=0 ms).
+2026-11-11 11:26:36,240 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 18 as completed for source Source: src[1].
+2026-11-11 11:26:41,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 19 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392801230 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:41,342 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 19 for job cc4164cca44ef6621f2a6932c062e8c5 (1075 bytes, checkpointDuration=112 ms, finalizationTime=0 ms).
+2026-11-11 11:26:41,342 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 19 as completed for source Source: src[1].
+2026-11-11 11:26:46,229 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 20 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392806229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:46,239 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 20 for job cc4164cca44ef6621f2a6932c062e8c5 (1075 bytes, checkpointDuration=10 ms, finalizationTime=0 ms).
+2026-11-11 11:26:46,239 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 20 as completed for source Source: src[1].
+2026-11-11 11:26:49,311 WARN  org.apache.pekko.remote.ReliableDeliverySupervisor           [] - Association with remote system [pekko.tcp://flink-metrics@127.0.0.1:34935] has failed, address is now gated for [50] ms. Reason: [Disassociated] 
+2026-11-11 11:26:49,315 WARN  org.apache.pekko.remote.ReliableDeliverySupervisor           [] - Association with remote system [pekko.tcp://flink@127.0.0.1:34075] has failed, address is now gated for [50] ms. Reason: [Disassociated] 
+2026-11-11 11:26:51,229 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 21 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392811229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:51,237 WARN  org.apache.pekko.remote.ReliableDeliverySupervisor           [] - Association with remote system [pekko.tcp://flink@127.0.0.1:34075] has failed, address is now gated for [50] ms. Reason: [Association failed with [pekko.tcp://flink@127.0.0.1:34075]] Caused by: [org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /127.0.0.1:34075, caused by: java.net.ConnectException: Connection refused]
+2026-11-11 11:26:51,237 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering Checkpoint 21 for job cc4164cca44ef6621f2a6932c062e8c5 failed due to org.apache.flink.runtime.rpc.exceptions.RecipientUnreachableException: Could not send message [RemoteRpcInvocation(TaskExecutorGateway.triggerCheckpoint(ExecutionAttemptID, long, long, CheckpointOptions))] from sender [Actor[pekko://flink/temp/taskmanager_0$Ve]] to recipient [Actor[pekko.tcp://flink@127.0.0.1:34075/user/rpc/taskmanager_0#-1639646655]], because the recipient is unreachable. This can either mean that the recipient has been terminated or that the remote RpcService is currently not reachable.
+2026-11-11 11:26:51,240 WARN  org.apache.flink.runtime.checkpoint.CheckpointFailureManager [] - Failed to trigger or complete checkpoint 21 for job cc4164cca44ef6621f2a6932c062e8c5. (0 consecutive failed attempts so far)
+org.apache.flink.runtime.checkpoint.CheckpointException: Trigger checkpoint failure.
+	at org.apache.flink.runtime.checkpoint.CheckpointCoordinator.lambda$triggerCheckpointRequest$10(CheckpointCoordinator.java:810) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.CompletableFuture.uniExceptionally(CompletableFuture.java:990) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniExceptionally.tryFire(CompletableFuture.java:974) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.util.concurrent.FutureUtils$WaitingConjunctFuture.handleCompletedFuture(FutureUtils.java:808) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.runtime.rpc.pekko.PekkoInvocationHandler.lambda$invokeRpc$1(PekkoInvocationHandler.java:261) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.util.concurrent.FutureUtils.doForward(FutureUtils.java:1313) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.ClassLoadingUtils.lambda$null$1(ClassLoadingUtils.java:93) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.ClassLoadingUtils.runWithContextClassLoader(ClassLoadingUtils.java:68) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.ClassLoadingUtils.lambda$guardCompletionWithContextClassLoader$2(ClassLoadingUtils.java:92) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.runtime.concurrent.pekko.ScalaFutureUtils$1.onComplete(ScalaFutureUtils.java:45) ~[?:?]
+	at org.apache.pekko.dispatch.OnComplete.internal(Future.scala:309) ~[?:?]
+	at org.apache.pekko.dispatch.OnComplete.internal(Future.scala:307) ~[?:?]
+	at org.apache.pekko.dispatch.japi$CallbackBridge.apply(Future.scala:234) ~[?:?]
+	at org.apache.pekko.dispatch.japi$CallbackBridge.apply(Future.scala:231) ~[?:?]
+	at scala.concurrent.impl.CallbackRunnable.run(Promise.scala:64) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.pekko.ScalaFutureUtils$DirectExecutionContext.execute(ScalaFutureUtils.java:65) ~[?:?]
+	at scala.concurrent.impl.CallbackRunnable.executeWithValue(Promise.scala:72) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1(Promise.scala:288) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1$adapted(Promise.scala:288) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.concurrent.impl.Promise$DefaultPromise.tryComplete(Promise.scala:288) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.pekko.pattern.PromiseActorRef.$bang(AskSupport.scala:624) ~[?:?]
+	at org.apache.pekko.actor.ActorRef.tell(ActorRef.scala:141) ~[?:?]
+	at org.apache.flink.runtime.rpc.pekko.DeadLettersActor.handleDeadLetter(DeadLettersActor.java:56) ~[?:?]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:33) ~[?:?]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:29) ~[?:?]
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:127) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:126) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:29) ~[?:?]
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:175) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.pekko.actor.Actor.aroundReceive(Actor.scala:547) ~[?:?]
+	at org.apache.pekko.actor.Actor.aroundReceive$(Actor.scala:545) ~[?:?]
+	at org.apache.pekko.actor.AbstractActor.aroundReceive(AbstractActor.scala:229) ~[?:?]
+	at org.apache.pekko.actor.ActorCell.receiveMessage(ActorCell.scala:590) ~[?:?]
+	at org.apache.pekko.actor.ActorCell.invoke(ActorCell.scala:557) ~[?:?]
+	at org.apache.pekko.dispatch.Mailbox.processMailbox(Mailbox.scala:272) ~[?:?]
+	at org.apache.pekko.dispatch.Mailbox.run(Mailbox.scala:233) ~[?:?]
+	at org.apache.pekko.dispatch.Mailbox.exec(Mailbox.scala:245) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+Caused by: org.apache.flink.runtime.rpc.exceptions.RecipientUnreachableException: Could not send message [RemoteRpcInvocation(TaskExecutorGateway.triggerCheckpoint(ExecutionAttemptID, long, long, CheckpointOptions))] from sender [Actor[pekko://flink/temp/taskmanager_0$Ve]] to recipient [Actor[pekko.tcp://flink@127.0.0.1:34075/user/rpc/taskmanager_0#-1639646655]], because the recipient is unreachable. This can either mean that the recipient has been terminated or that the remote RpcService is currently not reachable.
+	at org.apache.flink.runtime.rpc.pekko.DeadLettersActor.handleDeadLetter(DeadLettersActor.java:61) ~[?:?]
+	... 19 more
+2026-11-11 11:26:51,257 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 21 as aborted for source Source: src[1].
+2026-11-11 11:26:51,547 WARN  org.apache.pekko.remote.ReliableDeliverySupervisor           [] - Association with remote system [pekko.tcp://flink@127.0.0.1:34075] has failed, address is now gated for [50] ms. Reason: [Association failed with [pekko.tcp://flink@127.0.0.1:34075]] Caused by: [org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /127.0.0.1:34075, caused by: java.net.ConnectException: Connection refused]
+2026-11-11 11:26:51,630 WARN  org.apache.pekko.remote.ReliableDeliverySupervisor           [] - Association with remote system [pekko.tcp://flink@127.0.0.1:34075] has failed, address is now gated for [50] ms. Reason: [Association failed with [pekko.tcp://flink@127.0.0.1:34075]] Caused by: [org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /127.0.0.1:34075, caused by: java.net.ConnectException: Connection refused]
+2026-11-11 11:26:56,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 22 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392816229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:26:56,233 WARN  org.apache.pekko.remote.ReliableDeliverySupervisor           [] - Association with remote system [pekko.tcp://flink@127.0.0.1:34075] has failed, address is now gated for [50] ms. Reason: [Association failed with [pekko.tcp://flink@127.0.0.1:34075]] Caused by: [org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /127.0.0.1:34075, caused by: java.net.ConnectException: Connection refused]
+2026-11-11 11:26:56,233 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering Checkpoint 22 for job cc4164cca44ef6621f2a6932c062e8c5 failed due to org.apache.flink.runtime.rpc.exceptions.RecipientUnreachableException: Could not send message [RemoteRpcInvocation(TaskExecutorGateway.triggerCheckpoint(ExecutionAttemptID, long, long, CheckpointOptions))] from sender [Actor[pekko://flink/temp/taskmanager_0$ef]] to recipient [Actor[pekko.tcp://flink@127.0.0.1:34075/user/rpc/taskmanager_0#-1639646655]], because the recipient is unreachable. This can either mean that the recipient has been terminated or that the remote RpcService is currently not reachable.
+2026-11-11 11:26:56,233 WARN  org.apache.flink.runtime.checkpoint.CheckpointFailureManager [] - Failed to trigger or complete checkpoint 22 for job cc4164cca44ef6621f2a6932c062e8c5. (0 consecutive failed attempts so far)
+org.apache.flink.runtime.checkpoint.CheckpointException: Trigger checkpoint failure.
+	at org.apache.flink.runtime.checkpoint.CheckpointCoordinator.lambda$triggerCheckpointRequest$10(CheckpointCoordinator.java:810) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.CompletableFuture.uniExceptionally(CompletableFuture.java:990) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniExceptionally.tryFire(CompletableFuture.java:974) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.util.concurrent.FutureUtils$WaitingConjunctFuture.handleCompletedFuture(FutureUtils.java:808) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.runtime.rpc.pekko.PekkoInvocationHandler.lambda$invokeRpc$1(PekkoInvocationHandler.java:261) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.util.concurrent.FutureUtils.doForward(FutureUtils.java:1313) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.ClassLoadingUtils.lambda$null$1(ClassLoadingUtils.java:93) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.ClassLoadingUtils.runWithContextClassLoader(ClassLoadingUtils.java:68) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.ClassLoadingUtils.lambda$guardCompletionWithContextClassLoader$2(ClassLoadingUtils.java:92) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.runtime.concurrent.pekko.ScalaFutureUtils$1.onComplete(ScalaFutureUtils.java:45) ~[?:?]
+	at org.apache.pekko.dispatch.OnComplete.internal(Future.scala:309) ~[?:?]
+	at org.apache.pekko.dispatch.OnComplete.internal(Future.scala:307) ~[?:?]
+	at org.apache.pekko.dispatch.japi$CallbackBridge.apply(Future.scala:234) ~[?:?]
+	at org.apache.pekko.dispatch.japi$CallbackBridge.apply(Future.scala:231) ~[?:?]
+	at scala.concurrent.impl.CallbackRunnable.run(Promise.scala:64) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.pekko.ScalaFutureUtils$DirectExecutionContext.execute(ScalaFutureUtils.java:65) ~[?:?]
+	at scala.concurrent.impl.CallbackRunnable.executeWithValue(Promise.scala:72) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1(Promise.scala:288) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1$adapted(Promise.scala:288) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.concurrent.impl.Promise$DefaultPromise.tryComplete(Promise.scala:288) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.pekko.pattern.PromiseActorRef.$bang(AskSupport.scala:624) ~[?:?]
+	at org.apache.pekko.actor.ActorRef.tell(ActorRef.scala:141) ~[?:?]
+	at org.apache.flink.runtime.rpc.pekko.DeadLettersActor.handleDeadLetter(DeadLettersActor.java:56) ~[?:?]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:33) ~[?:?]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:29) ~[?:?]
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:127) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:126) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:29) ~[?:?]
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:175) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.pekko.actor.Actor.aroundReceive(Actor.scala:547) ~[?:?]
+	at org.apache.pekko.actor.Actor.aroundReceive$(Actor.scala:545) ~[?:?]
+	at org.apache.pekko.actor.AbstractActor.aroundReceive(AbstractActor.scala:229) ~[?:?]
+	at org.apache.pekko.actor.ActorCell.receiveMessage(ActorCell.scala:590) ~[?:?]
+	at org.apache.pekko.actor.ActorCell.invoke(ActorCell.scala:557) ~[?:?]
+	at org.apache.pekko.dispatch.Mailbox.processMailbox(Mailbox.scala:272) ~[?:?]
+	at org.apache.pekko.dispatch.Mailbox.run(Mailbox.scala:233) ~[?:?]
+	at org.apache.pekko.dispatch.Mailbox.exec(Mailbox.scala:245) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+Caused by: org.apache.flink.runtime.rpc.exceptions.RecipientUnreachableException: Could not send message [RemoteRpcInvocation(TaskExecutorGateway.triggerCheckpoint(ExecutionAttemptID, long, long, CheckpointOptions))] from sender [Actor[pekko://flink/temp/taskmanager_0$ef]] to recipient [Actor[pekko.tcp://flink@127.0.0.1:34075/user/rpc/taskmanager_0#-1639646655]], because the recipient is unreachable. This can either mean that the recipient has been terminated or that the remote RpcService is currently not reachable.
+	at org.apache.flink.runtime.rpc.pekko.DeadLettersActor.handleDeadLetter(DeadLettersActor.java:61) ~[?:?]
+	... 19 more
+2026-11-11 11:26:56,235 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 22 as aborted for source Source: src[1].
+2026-11-11 11:26:58,946 WARN  org.apache.pekko.remote.ReliableDeliverySupervisor           [] - Association with remote system [pekko.tcp://flink@127.0.0.1:34075] has failed, address is now gated for [50] ms. Reason: [Association failed with [pekko.tcp://flink@127.0.0.1:34075]] Caused by: [org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /127.0.0.1:34075, caused by: java.net.ConnectException: Connection refused]
+2026-11-11 11:27:01,230 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 23 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392821229 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:01,232 WARN  org.apache.pekko.remote.ReliableDeliverySupervisor           [] - Association with remote system [pekko.tcp://flink@127.0.0.1:34075] has failed, address is now gated for [50] ms. Reason: [Association failed with [pekko.tcp://flink@127.0.0.1:34075]] Caused by: [org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /127.0.0.1:34075, caused by: java.net.ConnectException: Connection refused]
+2026-11-11 11:27:01,233 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering Checkpoint 23 for job cc4164cca44ef6621f2a6932c062e8c5 failed due to org.apache.flink.runtime.rpc.exceptions.RecipientUnreachableException: Could not send message [RemoteRpcInvocation(TaskExecutorGateway.triggerCheckpoint(ExecutionAttemptID, long, long, CheckpointOptions))] from sender [Actor[pekko://flink/temp/taskmanager_0$lf]] to recipient [Actor[pekko.tcp://flink@127.0.0.1:34075/user/rpc/taskmanager_0#-1639646655]], because the recipient is unreachable. This can either mean that the recipient has been terminated or that the remote RpcService is currently not reachable.
+2026-11-11 11:27:01,233 WARN  org.apache.flink.runtime.checkpoint.CheckpointFailureManager [] - Failed to trigger or complete checkpoint 23 for job cc4164cca44ef6621f2a6932c062e8c5. (0 consecutive failed attempts so far)
+org.apache.flink.runtime.checkpoint.CheckpointException: Trigger checkpoint failure.
+	at org.apache.flink.runtime.checkpoint.CheckpointCoordinator.lambda$triggerCheckpointRequest$10(CheckpointCoordinator.java:810) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.CompletableFuture.uniExceptionally(CompletableFuture.java:990) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniExceptionally.tryFire(CompletableFuture.java:974) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.util.concurrent.FutureUtils$WaitingConjunctFuture.handleCompletedFuture(FutureUtils.java:808) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.runtime.rpc.pekko.PekkoInvocationHandler.lambda$invokeRpc$1(PekkoInvocationHandler.java:261) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.util.concurrent.FutureUtils.doForward(FutureUtils.java:1313) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.ClassLoadingUtils.lambda$null$1(ClassLoadingUtils.java:93) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.ClassLoadingUtils.runWithContextClassLoader(ClassLoadingUtils.java:68) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.ClassLoadingUtils.lambda$guardCompletionWithContextClassLoader$2(ClassLoadingUtils.java:92) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162) ~[?:?]
+	at org.apache.flink.runtime.concurrent.pekko.ScalaFutureUtils$1.onComplete(ScalaFutureUtils.java:45) ~[?:?]
+	at org.apache.pekko.dispatch.OnComplete.internal(Future.scala:309) ~[?:?]
+	at org.apache.pekko.dispatch.OnComplete.internal(Future.scala:307) ~[?:?]
+	at org.apache.pekko.dispatch.japi$CallbackBridge.apply(Future.scala:234) ~[?:?]
+	at org.apache.pekko.dispatch.japi$CallbackBridge.apply(Future.scala:231) ~[?:?]
+	at scala.concurrent.impl.CallbackRunnable.run(Promise.scala:64) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.pekko.ScalaFutureUtils$DirectExecutionContext.execute(ScalaFutureUtils.java:65) ~[?:?]
+	at scala.concurrent.impl.CallbackRunnable.executeWithValue(Promise.scala:72) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1(Promise.scala:288) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1$adapted(Promise.scala:288) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.concurrent.impl.Promise$DefaultPromise.tryComplete(Promise.scala:288) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.pekko.pattern.PromiseActorRef.$bang(AskSupport.scala:624) ~[?:?]
+	at org.apache.pekko.actor.ActorRef.tell(ActorRef.scala:141) ~[?:?]
+	at org.apache.flink.runtime.rpc.pekko.DeadLettersActor.handleDeadLetter(DeadLettersActor.java:56) ~[?:?]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:33) ~[?:?]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:29) ~[?:?]
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:127) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:126) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:29) ~[?:?]
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:175) ~[flink-scala_2.12-1.20.5.jar:1.20.5]
+	at org.apache.pekko.actor.Actor.aroundReceive(Actor.scala:547) ~[?:?]
+	at org.apache.pekko.actor.Actor.aroundReceive$(Actor.scala:545) ~[?:?]
+	at org.apache.pekko.actor.AbstractActor.aroundReceive(AbstractActor.scala:229) ~[?:?]
+	at org.apache.pekko.actor.ActorCell.receiveMessage(ActorCell.scala:590) ~[?:?]
+	at org.apache.pekko.actor.ActorCell.invoke(ActorCell.scala:557) ~[?:?]
+	at org.apache.pekko.dispatch.Mailbox.processMailbox(Mailbox.scala:272) ~[?:?]
+	at org.apache.pekko.dispatch.Mailbox.run(Mailbox.scala:233) ~[?:?]
+	at org.apache.pekko.dispatch.Mailbox.exec(Mailbox.scala:245) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+Caused by: org.apache.flink.runtime.rpc.exceptions.RecipientUnreachableException: Could not send message [RemoteRpcInvocation(TaskExecutorGateway.triggerCheckpoint(ExecutionAttemptID, long, long, CheckpointOptions))] from sender [Actor[pekko://flink/temp/taskmanager_0$lf]] to recipient [Actor[pekko.tcp://flink@127.0.0.1:34075/user/rpc/taskmanager_0#-1639646655]], because the recipient is unreachable. This can either mean that the recipient has been terminated or that the remote RpcService is currently not reachable.
+	at org.apache.flink.runtime.rpc.pekko.DeadLettersActor.handleDeadLetter(DeadLettersActor.java:61) ~[?:?]
+	... 19 more
+2026-11-11 11:27:01,235 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 23 as aborted for source Source: src[1].
+2026-11-11 11:27:01,545 WARN  org.apache.pekko.remote.ReliableDeliverySupervisor           [] - Association with remote system [pekko.tcp://flink@127.0.0.1:34075] has failed, address is now gated for [50] ms. Reason: [Association failed with [pekko.tcp://flink@127.0.0.1:34075]] Caused by: [org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /127.0.0.1:34075, caused by: java.net.ConnectException: Connection refused]
+2026-11-11 11:27:01,546 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - TaskManager with id tm1 is no longer reachable.
+2026-11-11 11:27:01,546 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Closing TaskExecutor connection tm1 because: TaskManager with id tm1 is no longer reachable.
+2026-11-11 11:27:01,546 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Unregistering task executor f98744b2462cf0407ee653d22f0c4cf0 from the slot manager.
+2026-11-11 11:27:01,546 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.DefaultSlotStatusSyncer [] - Freeing slot dc72cab755526fa48ab45f3cfab1f90f.
+2026-11-11 11:27:01,551 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_0) switched from RUNNING to FAILED on tm1 @ localhost (dataPort=45805).
+org.apache.flink.runtime.resourcemanager.exceptions.ResourceManagerException: TaskManager with id tm1 is no longer reachable.
+	at org.apache.flink.runtime.resourcemanager.ResourceManager$TaskManagerHeartbeatListener.notifyTargetUnreachable(ResourceManager.java:1484) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.heartbeat.DefaultHeartbeatMonitor.reportHeartbeatRpcFailure(DefaultHeartbeatMonitor.java:126) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.heartbeat.HeartbeatManagerImpl.runIfHeartbeatMonitorExists(HeartbeatManagerImpl.java:275) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.heartbeat.HeartbeatManagerImpl.reportHeartbeatTargetUnreachable(HeartbeatManagerImpl.java:267) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.heartbeat.HeartbeatManagerImpl.handleHeartbeatRpcFailure(HeartbeatManagerImpl.java:262) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.heartbeat.HeartbeatManagerImpl.lambda$handleHeartbeatRpc$0(HeartbeatManagerImpl.java:248) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
+	at org.apache.flink.runtime.rpc.pekko.PekkoRpcActor.lambda$handleRunAsync$4(PekkoRpcActor.java:460) ~[flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.flink.runtime.concurrent.ClassLoadingUtils.runWithContextClassLoader(ClassLoadingUtils.java:68) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.rpc.pekko.PekkoRpcActor.handleRunAsync(PekkoRpcActor.java:460) ~[flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.flink.runtime.rpc.pekko.PekkoRpcActor.handleRpcMessage(PekkoRpcActor.java:225) ~[flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.flink.runtime.rpc.pekko.FencedPekkoRpcActor.handleRpcMessage(FencedPekkoRpcActor.java:88) ~[flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.flink.runtime.rpc.pekko.PekkoRpcActor.handleMessage(PekkoRpcActor.java:174) ~[flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:33) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:29) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:127) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:126) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.pekko.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:29) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:175) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:176) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:176) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.pekko.actor.Actor.aroundReceive(Actor.scala:547) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.pekko.actor.Actor.aroundReceive$(Actor.scala:545) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.pekko.actor.AbstractActor.aroundReceive(AbstractActor.scala:229) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.pekko.actor.ActorCell.receiveMessage(ActorCell.scala:590) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.pekko.actor.ActorCell.invoke(ActorCell.scala:557) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.pekko.dispatch.Mailbox.processMailbox(Mailbox.scala:272) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.pekko.dispatch.Mailbox.run(Mailbox.scala:233) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at org.apache.pekko.dispatch.Mailbox.exec(Mailbox.scala:245) [flink-rpc-akka47bdc208-4b42-4d6a-aa39-0068ca61d74c.jar:1.20.5]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) [?:?]
+2026-11-11 11:27:01,552 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Discarding the results produced by task execution 1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_0.
+2026-11-11 11:27:01,556 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Removing registered reader after failure for subtask 0 (#0) of source Source: src[1].
+2026-11-11 11:27:01,557 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - 1 tasks will be restarted to recover the failed task 1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_0.
+2026-11-11 11:27:01,557 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Job insert-into_default_catalog.default_database.snk (cc4164cca44ef6621f2a6932c062e8c5) switched from state RUNNING to RESTARTING.
+2026-11-11 11:27:01,562 INFO  org.apache.flink.runtime.jobmaster.slotpool.DefaultDeclarativeSlotPool [] - Releasing slot [dc72cab755526fa48ab45f3cfab1f90f].
+2026-11-11 11:27:01,562 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Clearing resource requirements of job cc4164cca44ef6621f2a6932c062e8c5
+2026-11-11 11:27:01,562 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Disconnect TaskExecutor tm1 because: TaskManager with id tm1 is no longer reachable.
+2026-11-11 11:27:02,562 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Job insert-into_default_catalog.default_database.snk (cc4164cca44ef6621f2a6932c062e8c5) switched from state RESTARTING to RUNNING.
+2026-11-11 11:27:02,562 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Restoring job cc4164cca44ef6621f2a6932c062e8c5 from Checkpoint 20 @ 1794392806229 for cc4164cca44ef6621f2a6932c062e8c5 located at file:/tmp/chamoso-e7/8529/e7-2757371/objstore/flink-state/checkpoints/cc4164cca44ef6621f2a6932c062e8c5/chk-20.
+2026-11-11 11:27:02,583 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - No master state to restore
+2026-11-11 11:27:02,585 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Recovering subtask 0 to checkpoint 20 for source Source: src[1] to checkpoint.
+2026-11-11 11:27:02,585 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from CREATED to SCHEDULED.
+2026-11-11 11:27:02,586 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Received resource requirements from job cc4164cca44ef6621f2a6932c062e8c5: [ResourceRequirement{resourceProfile=ResourceProfile{UNKNOWN}, numberOfRequiredSlots=1}]
+2026-11-11 11:27:02,647 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Matching resource requirements against available resources.
+Missing resources:
+	 Job cc4164cca44ef6621f2a6932c062e8c5
+		ResourceRequirement{resourceProfile=ResourceProfile{UNKNOWN}, numberOfRequiredSlots=1}
+Current resources:
+	TaskManager tm0
+		Available: ResourceProfile{cpuCores=4, taskHeapMemory=3.225gb (3462817321 bytes), taskOffHeapMemory=0 bytes, managedMemory=2.780gb (2985002310 bytes), networkMemory=711.680mb (746250577 bytes)}
+		Total:     ResourceProfile{cpuCores=4, taskHeapMemory=3.225gb (3462817321 bytes), taskOffHeapMemory=0 bytes, managedMemory=2.780gb (2985002310 bytes), networkMemory=711.680mb (746250577 bytes)}
+	TaskManager tm2
+		Available: ResourceProfile{cpuCores=4, taskHeapMemory=3.225gb (3462817321 bytes), taskOffHeapMemory=0 bytes, managedMemory=2.780gb (2985002310 bytes), networkMemory=711.680mb (746250577 bytes)}
+		Total:     ResourceProfile{cpuCores=4, taskHeapMemory=3.225gb (3462817321 bytes), taskOffHeapMemory=0 bytes, managedMemory=2.780gb (2985002310 bytes), networkMemory=711.680mb (746250577 bytes)}
+2026-11-11 11:27:02,647 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.DefaultSlotStatusSyncer [] - Starting allocation of slot c1d5f15107485bee78a7fccc14c44a82 from tm0 for job cc4164cca44ef6621f2a6932c062e8c5 with resource profile ResourceProfile{cpuCores=1, taskHeapMemory=825.600mb (865704330 bytes), taskOffHeapMemory=0 bytes, managedMemory=711.680mb (746250577 bytes), networkMemory=177.920mb (186562644 bytes)}.
+2026-11-11 11:27:02,675 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from SCHEDULED to DEPLOYING.
+2026-11-11 11:27:02,676 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Deploying Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (attempt #1) with attempt id 1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_1 and vertex id cbc357ccb763df2852fee8c4fc7d55f2_0 to tm0 @ localhost (dataPort=35179) with allocation id c1d5f15107485bee78a7fccc14c44a82
+2026-11-11 11:27:02,748 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from DEPLOYING to INITIALIZING.
+2026-11-11 11:27:03,643 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Source Source: src[1] registering reader for parallel task 0 (#1) @ 127.0.0.1
+2026-11-11 11:27:03,648 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from INITIALIZING to RUNNING.
+2026-11-11 11:27:06,192 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 24 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392826192 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:06,647 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 24 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=455 ms, finalizationTime=0 ms).
+2026-11-11 11:27:06,648 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 24 as completed for source Source: src[1].
+2026-11-11 11:27:06,721 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Registering TaskManager with ResourceID tm1-r (pekko.tcp://flink@127.0.0.1:37677/user/rpc/taskmanager_0) at ResourceManager
+2026-11-11 11:27:06,728 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Registering task executor tm1-r under b83ff4892cf3babf9bdc0c6457710a96 at the slot manager.
+2026-11-11 11:27:11,192 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 25 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392831192 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:11,304 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 25 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=112 ms, finalizationTime=0 ms).
+2026-11-11 11:27:11,305 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 25 as completed for source Source: src[1].
+2026-11-11 11:27:16,193 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 26 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392836192 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:16,304 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 26 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=111 ms, finalizationTime=1 ms).
+2026-11-11 11:27:16,304 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 26 as completed for source Source: src[1].
+2026-11-11 11:27:21,193 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 27 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392841192 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:21,305 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 27 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=113 ms, finalizationTime=0 ms).
+2026-11-11 11:27:21,306 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 27 as completed for source Source: src[1].
+2026-11-11 11:27:26,193 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 28 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392846193 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:26,305 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 28 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=111 ms, finalizationTime=1 ms).
+2026-11-11 11:27:26,305 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 28 as completed for source Source: src[1].
+2026-11-11 11:27:31,193 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 29 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392851193 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:31,204 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 29 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=11 ms, finalizationTime=0 ms).
+2026-11-11 11:27:31,205 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 29 as completed for source Source: src[1].
+2026-11-11 11:27:36,192 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 30 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392856192 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:36,202 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 30 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=10 ms, finalizationTime=0 ms).
+2026-11-11 11:27:36,203 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 30 as completed for source Source: src[1].
+2026-11-11 11:27:41,193 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 31 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392861192 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:41,203 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 31 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=11 ms, finalizationTime=0 ms).
+2026-11-11 11:27:41,204 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 31 as completed for source Source: src[1].
+2026-11-11 11:27:46,193 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 32 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392866192 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:46,303 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 32 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=111 ms, finalizationTime=0 ms).
+2026-11-11 11:27:46,304 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 32 as completed for source Source: src[1].
+2026-11-11 11:27:51,193 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 33 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392871193 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:51,304 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 33 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=111 ms, finalizationTime=0 ms).
+2026-11-11 11:27:51,305 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 33 as completed for source Source: src[1].
+2026-11-11 11:27:56,193 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 34 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392876193 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:27:56,305 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 34 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=111 ms, finalizationTime=1 ms).
+2026-11-11 11:27:56,305 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 34 as completed for source Source: src[1].
+2026-11-11 11:28:01,192 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 35 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392881192 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:28:01,202 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 35 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=10 ms, finalizationTime=0 ms).
+2026-11-11 11:28:01,202 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 35 as completed for source Source: src[1].
+2026-11-11 11:28:06,193 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 36 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392886192 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:28:06,304 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 36 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=112 ms, finalizationTime=0 ms).
+2026-11-11 11:28:06,305 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 36 as completed for source Source: src[1].
+2026-11-11 11:28:11,193 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 37 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392891193 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:28:11,202 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 37 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=9 ms, finalizationTime=0 ms).
+2026-11-11 11:28:11,203 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 37 as completed for source Source: src[1].
+2026-11-11 11:28:16,193 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 38 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392896193 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:28:16,304 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 38 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=111 ms, finalizationTime=0 ms).
+2026-11-11 11:28:16,304 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 38 as completed for source Source: src[1].
+2026-11-11 11:28:21,192 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 39 (type=CheckpointType{name='Checkpoint', sharingFilesStrategy=FORWARD_BACKWARD}) @ 1794392901192 for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:28:21,304 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 39 for job cc4164cca44ef6621f2a6932c062e8c5 (1313 bytes, checkpointDuration=112 ms, finalizationTime=0 ms).
+2026-11-11 11:28:21,305 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Marking checkpoint 39 as completed for source Source: src[1].
+2026-11-11 11:28:23,625 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Job insert-into_default_catalog.default_database.snk (cc4164cca44ef6621f2a6932c062e8c5) switched from state RUNNING to CANCELLING.
+2026-11-11 11:28:23,625 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from RUNNING to CANCELING.
+2026-11-11 11:28:23,633 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Closing TaskExecutor connection tm0 because: The TaskExecutor is shutting down.
+2026-11-11 11:28:23,633 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Unregistering task executor 56fb6e8bcd17cbbf9452a4f571f20e1e from the slot manager.
+2026-11-11 11:28:23,633 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.DefaultSlotStatusSyncer [] - Freeing slot c1d5f15107485bee78a7fccc14c44a82.
+2026-11-11 11:28:23,633 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1) (1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from CANCELING to CANCELED.
+2026-11-11 11:28:23,633 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Discarding the results produced by task execution 1040cab6bd558874687654c3b6d6174c_cbc357ccb763df2852fee8c4fc7d55f2_0_1.
+2026-11-11 11:28:23,633 INFO  org.apache.flink.runtime.executiongraph.ExecutionGraph       [] - Job insert-into_default_catalog.default_database.snk (cc4164cca44ef6621f2a6932c062e8c5) switched from state CANCELLING to CANCELED.
+2026-11-11 11:28:23,633 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Stopping checkpoint coordinator for job cc4164cca44ef6621f2a6932c062e8c5.
+2026-11-11 11:28:23,634 INFO  org.apache.flink.runtime.jobmaster.slotpool.DefaultDeclarativeSlotPool [] - Releasing slot [c1d5f15107485bee78a7fccc14c44a82].
+2026-11-11 11:28:23,634 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Disconnect TaskExecutor tm0 because: The TaskExecutor is shutting down.
+2026-11-11 11:28:23,635 INFO  org.apache.flink.runtime.dispatcher.StandaloneDispatcher     [] - Job cc4164cca44ef6621f2a6932c062e8c5 reached terminal state CANCELED.
+2026-11-11 11:28:23,636 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Clearing resource requirements of job cc4164cca44ef6621f2a6932c062e8c5
+2026-11-11 11:28:23,655 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Stopping the JobMaster for job 'insert-into_default_catalog.default_database.snk' (cc4164cca44ef6621f2a6932c062e8c5).
+2026-11-11 11:28:23,661 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Closing SourceCoordinator for source Source: src[1].
+2026-11-11 11:28:23,661 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.admin.client for app-logs-parsed-job-enumerator-admin-client unregistered
+2026-11-11 11:28:23,664 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 11:28:23,664 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 11:28:23,664 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 11:28:23,666 INFO  org.apache.flink.runtime.checkpoint.StandaloneCompletedCheckpointStore [] - Shutting down
+2026-11-11 11:28:23,668 INFO  org.apache.flink.runtime.jobmaster.JobMaster                 [] - Close ResourceManager connection 9b9f0f793727a7a31bc628ca4fe165c4: Stopping JobMaster for job 'insert-into_default_catalog.default_database.snk' (cc4164cca44ef6621f2a6932c062e8c5).
+2026-11-11 11:28:23,668 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Disconnect job manager 00000000000000000000000000000000@pekko.tcp://flink@127.0.0.1:12030/user/rpc/jobmanager_2 for job cc4164cca44ef6621f2a6932c062e8c5 from the resource manager.
+2026-11-11 11:28:23,669 INFO  org.apache.flink.runtime.source.coordinator.SourceCoordinator [] - Source coordinator for source Source: src[1] closed.
+2026-11-11 11:28:23,798 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Closing TaskExecutor connection tm1-r because: The TaskExecutor is shutting down.
+2026-11-11 11:28:23,798 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Unregistering task executor b83ff4892cf3babf9bdc0c6457710a96 from the slot manager.
+2026-11-11 11:28:23,912 INFO  org.apache.flink.runtime.resourcemanager.StandaloneResourceManager [] - Closing TaskExecutor connection tm2 because: The TaskExecutor is shutting down.
+2026-11-11 11:28:23,912 INFO  org.apache.flink.runtime.resourcemanager.slotmanager.FineGrainedSlotManager [] - Unregistering task executor 50b5133935c1ac707bc916c4ad4dee81 from the slot manager.
+2026-11-11 11:28:24,069 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - RECEIVED SIGNAL 15: SIGTERM. Shutting down as requested.
+2026-11-11 11:28:24,070 INFO  org.apache.flink.runtime.blob.BlobServer                     [] - Stopped BLOB server at 127.0.0.1:36407
+2026-11-11 11:28:24,070 INFO  org.apache.flink.runtime.entrypoint.ClusterEntrypoint        [] - Shutting StandaloneSessionClusterEntrypoint down with application status UNKNOWN. Diagnostics Cluster entrypoint has been closed externally..
+2026-11-11 11:28:24,072 INFO  org.apache.flink.runtime.dispatcher.DispatcherRestEndpoint   [] - Shutting down rest endpoint.
+2026-11-11 11:28:24,120 INFO  org.apache.pekko.actor.CoordinatedShutdown                   [] - Running CoordinatedShutdown with reason [ActorSystemTerminateReason]
+2026-11-11 11:28:24,128 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Shutting down remote daemon.
+2026-11-11 11:28:24,129 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remote daemon shut down; proceeding with flushing remote transports.
+2026-11-11 11:28:24,129 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Shutting down remote daemon.
+2026-11-11 11:28:24,129 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remote daemon shut down; proceeding with flushing remote transports.
+2026-11-11 11:28:24,139 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remoting shut down.
+2026-11-11 11:28:24,139 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remoting shut down.

@@ -1,0 +1,122 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+  namespace: my-namespace
+spec:
+  partitions: 25
+  replicas: 3
+  config:
+    retention.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+  namespace: my-namespace
+spec:
+  partitions: 25
+  replicas: 3
+  config:
+    retention.ms: 604800000
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: banking-transactions-flink
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    state.checkpoints.num-retained: "10"
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.savepoints.dir: s3://flink-state/savepoints
+    execution.checkpointing.mode: EXACTLY_ONCE
+    execution.checkpointing.interval: 5000
+    execution.checkpointing.timeout: 60000
+    execution.checkpointing.min-pause: 500
+    execution.checkpointing.max-concurrent: 1
+    execution.parallelism: 6
+  jobManager:
+    parallelism: 1
+    jvmOptions: "-Xms1024m -Xmx1024m"
+  taskManager:
+    parallelism: 6
+    jvmOptions: "-Xms2048m -Xmx2048m"
+    count: 3
+    memorySize: 8192
+    cpuLimit: 4
+  serviceAccount: flink-service-account
+  podTemplate:
+    spec:
+      containers:
+        - name: flink-main
+          resources:
+            limits:
+              cpu: "4"
+              memory: 8Gi
+            requests:
+              cpu: "2"
+              memory: 4Gi
+  job:
+    savepointPath: ""
+    entryClass: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
+    jars:
+      - local:///opt/flink/usrlib/sql-runner.jar
+```
+
+```sql
+CREATE TABLE banking_transactions (
+    account_id BIGINT,
+    transaction_id BIGINT,
+    amount DECIMAL(19,4),
+    transaction_time TIMESTAMP(3),
+    transaction_type STRING,
+    PRIMARY KEY (account_id) NOT ENFORCED
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'properties.group.id' = 'banking-transactions-group'
+);
+
+CREATE TABLE banking_transactions_validated (
+    account_id BIGINT,
+    transaction_id BIGINT,
+    amount DECIMAL(19,4),
+    transaction_time TIMESTAMP(3),
+    transaction_type STRING,
+    PRIMARY KEY (account_id) NOT ENFORCED
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions-validated',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'org.apache.flink.connector.kafka.sink.KeyPartitioner',
+    'sink.parallelism' = '6',
+    'sink.max-concurrent-requests' = '1',
+    'sink.max-retries' = 'Integer.MAX_VALUE',
+    'sink.producer.config' = 'retries=Integer.MAX_VALUE,acks=all'
+);
+```
+
+**Justification:**
+
+1. **Kafka Topics Configuration:**
+   - **Partitions:** 25 partitions are chosen to handle the input rate of 50,000 events/s (each partition can handle up to 5 MB/s, and with 25 partitions, we can handle up to 125 MB/s, which is more than sufficient for 50,000 events/s at 1024 bytes each).
+   - **Replicas:** 3 replicas ensure durability and availability, as required.
+   - **Retention:** 7 days retention is set as per the requirement.
+
+2. **Flink Deployment Configuration:**
+   - **Parallelism:** The job parallelism is set to 6 to match the number of partitions in Kafka, ensuring that each partition is processed by a separate subtask.
+   - **Checkpointing:** Checkpointing is configured for exactly-once semantics with a 5-second interval to ensure low latency and durability.
+   - **Resources:** Each TaskManager is configured to use up to 4 CPUs and 8 GiB of memory, with 3 TaskManagers running, to meet the resource constraints.
+
+3. **Flink SQL Table Definitions:**
+   - **Source Table:** Configured to read from the `banking-transactions` topic with JSON format and the latest offset startup mode.
+   - **Sink Table:** Configured to write to the `banking-transactions-validated` topic with JSON format, using a key partitioner to ensure exactly-once delivery, and setting the producer configuration to ensure retries and acknowledgments.

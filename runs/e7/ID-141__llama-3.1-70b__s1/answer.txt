@@ -1,0 +1,94 @@
+### Kafka Topic Creation Commands
+
+```bash
+# Create input topic with sufficient partitions to handle input rate
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --topic app-logs
+
+# Create output topic with the same number of partitions for even distribution
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --topic app-logs-parsed
+
+# Set retention period for both topics
+kafka-configs.sh --bootstrap-server kafka:9092 --alter --entity-type topics --entity-name app-logs --add-config retention.ms=86400000
+kafka-configs.sh --bootstrap-server kafka:9092 --alter --entity-type topics --entity-name app-logs-parsed --add-config retention.ms=86400000
+```
+
+### Flink Configuration
+
+```yaml
+execution:
+  checkpointing:
+    unaligned: true
+    checkpoint-interval: 1min
+    checkpoint-timeout: 1min
+    checkpoint-max-concurrent: 1
+    min-pause-between-checkpoints: 1min
+  restart-strategy:
+    fixed-delay:
+      attempts: 2147483647
+      delay: 10s
+  retry-failed-tasks-configuration:
+    disabled: true
+
+state:
+  backend: filesystem
+  backend.fs.checkpoint-path: s3://flink-state/checkpoints
+
+jobmanager:
+  heap.size: 1024m
+
+taskmanager:
+  heap.size: 8g
+  heap.mb: 8192
+  slots: 4
+
+rest:
+  port: 8081
+```
+
+### Flink SQL
+
+```sql
+CREATE TABLE app_logs (
+    service STRING,
+    log_event STRING,
+    -- Add additional fields as necessary
+    WATERMARK FOR log_event AS log_event
+) WITH (
+    'connector.type' = 'kafka',
+    'connector.version' = 'universal',
+    'connector.topic' = 'app-logs',
+    'connector.properties.bootstrap.servers' = 'kafka:9092',
+    'update-mode' = 'append',
+    'format.type' = 'json',
+    'format.json.fail-on-missing-field' = 'true',
+    'format.json.ignore-parse-errors' = 'true'
+);
+
+CREATE TABLE app_logs_parsed (
+    service STRING,
+    log_event STRING,
+    -- Add additional enriched fields as necessary
+    PRIMARY KEY (service) NOT ENFORCED
+) WITH (
+    'connector.type' = 'kafka',
+    'connector.version' = 'universal',
+    'connector.topic' = 'app-logs-parsed',
+    'connector.properties.bootstrap.servers' = 'kafka:9092',
+    'update-mode' = 'upsert',
+    'format.type' = 'json',
+    'format.json.fail-on-missing-field' = 'false',
+    'format.json.ignore-parse-errors' = 'true'
+);
+```
+
+**Justification:**
+
+- **Kafka Partitions:** 10 partitions are chosen for both topics to handle the input rate of 20,000 events/s, assuming one partition can sustain at most 5 MB/s or approximately 10,000 events/s (conservative estimate given the average event size of 512 bytes).
+
+- **Flink Checkpointing:** Unaligned checkpointing is enabled to improve throughput and reduce latency. The checkpoint interval is set to 1 minute to balance between state size and recovery time, considering the end-to-end latency requirement of below 10 seconds at p99.
+
+- **Flink Restart Strategy:** A fixed-delay restart strategy with a large number of attempts and a 10-second delay is chosen for robustness, allowing the job to recover from failures while preventing a tight loop of restarts.
+
+- **Flink State Backend:** The filesystem state backend is used with an S3 bucket for durable checkpoint storage to ensure exactly-once guarantees and to leverage the durability of S3.
+
+- **Flink SQL Tables:** Watermarking is not strictly necessary for this pipeline but is added to the input table for completeness. The primary key is not enforced on the output table as it's a simple pass-through transformation without aggregation or joins. The `fail-on-missing-field` and `ignore-parse-errors` settings are adjusted to filter out malformed events and prevent the job from failing on parse errors.

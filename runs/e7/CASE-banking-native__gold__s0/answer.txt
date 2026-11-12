@@ -1,0 +1,30 @@
+
+```bash
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions --partitions 12 \
+  --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions-validated --partitions 12 \
+  --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000
+```
+```yaml
+execution:
+  checkpointing:
+    interval: 100 ms
+    mode: EXACTLY_ONCE
+    dir: s3://flink-state/checkpoints
+taskmanager:
+  numberOfTaskSlots: 4
+  memory:
+    process.size: 8g
+parallelism:
+  default: 3
+```
+```sql
+CREATE TABLE src (account_id STRING, amount DOUBLE) WITH (
+  'connector' = 'kafka', 'topic' = 'banking-transactions', 'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'validator', 'scan.startup.mode' = 'group-offsets',
+  'properties.auto.offset.reset' = 'earliest', 'format' = 'json');
+CREATE TABLE snk (account_id STRING, amount DOUBLE) WITH (
+  'connector' = 'kafka', 'topic' = 'banking-transactions-validated', 'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json', 'sink.delivery-guarantee' = 'exactly-once', 'sink.transactional-id-prefix' = 'bank-val',
+  'properties.transaction.timeout.ms' = '600000');
+```

@@ -1,0 +1,89 @@
+```bash
+# Create the input topic with 10 partitions to handle the input rate
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions --partitions 10 --replication-factor 3 --config retention.ms=604800000
+
+# Create the output topic with 10 partitions to handle the output rate
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions-validated --partitions 10 --replication-factor 3 --config retention.ms=604800000
+```
+
+```yml
+execution:
+  checkpointing:
+    interval: 1000
+    timeout: 10000
+    unaligned: true
+    checkpoint-duration: 10000
+    checkpoint-interval: 1000
+    checkpoint-ttl: 3600000
+    checkpoint-idle-timeout: 3600000
+    checkpoint-timing: EXACTLY_ONCE
+    checkpoint-retries: 3
+    checkpoint-retry-delay: 1000
+    checkpoint-write-parallelism: 4
+    checkpoint-externalized: true
+    checkpoint-externalized-path: s3://flink-state/checkpoints
+
+state:
+  backend: filesystem
+  backend.fs.checkpoint: s3://flink-state/checkpoints
+
+restart-strategy:
+  fixed-delay:
+    attempts: 3
+    delay: 1000
+
+taskmanager:
+  num-task-slots: 4
+  memory.jvm-metaspace.size: 512m
+  memory.jvm-overhead.max: 2048m
+  memory.jvm-overhead.min: 512m
+  memory.process.size: 8192m
+  network.memory.fraction: 0.1
+  network.memory.min: 64m
+  network.memory.max: 2048m
+```
+
+```sql
+CREATE TABLE banking_transactions (
+    `account_id` STRING,
+    `transaction_id` STRING,
+    `amount` DECIMAL(10, 2),
+    `timestamp` TIMESTAMP(3),
+    WATERMARK FOR `timestamp` AS `timestamp`
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'banking-transactions-group',
+    'format' = 'json',
+    'json.fail-on-missing-field' = 'false',
+    'json.ignore-parse-errors' = 'true'
+);
+
+CREATE TABLE banking_transactions_validated (
+    `account_id` STRING,
+    `transaction_id` STRING,
+    `amount` DECIMAL(10, 2),
+    `timestamp` TIMESTAMP(3)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions-validated',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'banking-transactions-validated-group',
+    'format' = 'json',
+    'json.fail-on-missing-field' = 'false',
+    'json.ignore-parse-errors' = 'true',
+    'sink.partitioner' = 'org.apache.flink.streaming.connectors.kafka.FlinkKafkaPartitioner',
+    'sink.semantic' = 'exactly-once'
+);
+```
+
+Justification:
+
+*   We create the input and output topics with 10 partitions each to handle the input rate of 50,000 events/s. This is because one Kafka partition can sustain at most 5 MB/s of produce traffic, and with an average event size of 1024 bytes, we can estimate the required number of partitions.
+*   We set the replication factor to 3 to ensure that both topics can survive the loss of any single Kafka broker without losing acknowledged data.
+*   We set the retention period to 7 days for both topics.
+*   In the Flink configuration, we enable checkpointing with an interval of 1 second and a timeout of 10 seconds to ensure exactly-once processing. We also set the checkpoint duration and idle timeout to 10 seconds to ensure that checkpoints are written in a timely manner.
+*   We set the restart strategy to fixed delay with 3 attempts and a delay of 1 second to handle failures.
+*   We configure the task manager with 4 task slots, 8 GB of memory, and 4 CPU cores to match the environment.
+*   In the Flink SQL configuration, we create two tables: one for the input topic and one for the output topic. We use the Kafka connector with JSON format and set the watermark to the `timestamp` field. We also set the sink semantic to exactly-once to ensure that the output is written exactly once to the output topic.

@@ -1,0 +1,73 @@
+```bash
+# Create the ad-impressions topic with 25 partitions for the input rate of 50,000 events/s
+kafka-topics.sh --create --topic ad-impressions --bootstrap-server kafka:9092 --replication-factor 3 --partitions 25 --config retention.ms=2592000000
+
+# Create the ad-impressions-enriched topic with 25 partitions for the output
+kafka-topics.sh --create --topic ad-impressions-enriched --bootstrap-server kafka:9092 --replication-factor 3 --partitions 25 --config retention.ms=2592000000
+```
+
+```yaml
+# Flink configuration
+execution.checkpointing.interval: 10s
+execution.checkpointing.mode: EXACTLY_ONCE
+execution.checkpointing.min-pause: 1s
+execution.state.backend: rocksdb
+execution.state.checkpoints.dir: s3://flink-state/checkpoints
+parallelism.default: 25
+```
+
+```sql
+-- Create the source table for ad-impressions
+CREATE TABLE ad_impressions (
+    campaign_id STRING,
+    impression_time TIMESTAMP(3),
+    device STRING,
+    location STRING,
+    ad_size STRING,
+    user_id BIGINT,
+    event_time AS PROCTIME(),
+    WATERMARK FOR event_time AS event_time - INTERVAL '500' MS
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'ad-impressions',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'properties.group.id' = 'ad-impressions-group'
+);
+
+-- Create the sink table for ad-impressions-enriched
+CREATE TABLE ad_impressions_enriched (
+    campaign_id STRING,
+    impression_time TIMESTAMP(3),
+    device STRING,
+    location STRING,
+    ad_size STRING,
+    user_id BIGINT,
+    enriched_field STRING,
+    event_time TIMESTAMP(3)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'ad-impressions-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'round-robin'
+);
+```
+
+### Justification of Main Values:
+
+- **Kafka Topics:**
+  - **Partitions:** Each Kafka topic has 25 partitions to handle the input rate of 50,000 events/s, assuming each partition handles up to 2,000 events/s (50,000 / 25).
+  - **Retention:** Data retention set to 30 days (2,592,000,000 ms).
+
+- **Flink Configuration:**
+  - **Checkpointing:** Interval set to 10 seconds to ensure data is resilient and recovery is fast. Checkpointing is set to `EXACTLY_ONCE` for higher durability, though the delivery guarantee is `at-least-once`.
+  - **State Backend:** Using RocksDB for state backend due to its efficient handling of large state and durability.
+  - **Parallelism:** Default parallelism set to 25 to match the number of Kafka partitions for optimal throughput and load balancing.
+
+- **Flink SQL:**
+  - **Watermark and Event Time:** Watermark is set to lag behind the event time by 500 ms to account for late events, ensuring proper event time processing.
+  - **Sink Partitioner:** Round-robin partitioning to distribute the output events evenly across Kafka partitions.
+
+These configurations ensure that the pipeline can handle the high throughput of events, maintain low latency, and provide the required durability and fault tolerance.

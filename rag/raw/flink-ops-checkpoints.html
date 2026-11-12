@@ -1,0 +1,5843 @@
+
+<!DOCTYPE html>
+<html lang="en" dir=>
+
+<head>
+  <meta name="generator" content="Hugo 0.110.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Checkpoints # Overview # Checkpoints make state in Flink fault tolerant by allowing state and the corresponding stream positions to be recovered, thereby giving the application the same semantics as a failure-free execution.
+See Checkpointing for how to enable and configure checkpoints for your program.
+To understand the differences between checkpoints and savepoints see checkpoints vs. savepoints.
+Checkpoint Storage # When checkpointing is enabled, managed state is persisted to ensure consistent recovery in case of failures.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="Checkpoints" />
+<meta property="og:description" content="Checkpoints # Overview # Checkpoints make state in Flink fault tolerant by allowing state and the corresponding stream positions to be recovered, thereby giving the application the same semantics as a failure-free execution.
+See Checkpointing for how to enable and configure checkpoints for your program.
+To understand the differences between checkpoints and savepoints see checkpoints vs. savepoints.
+Checkpoint Storage # When checkpointing is enabled, managed state is persisted to ensure consistent recovery in case of failures." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/checkpoints/" /><meta property="article:section" content="docs" />
+
+
+<title>Checkpoints | Apache Flink</title>
+<link rel="manifest" href="/flink/flink-docs-release-1.20/manifest.json">
+<link rel="icon" href="/flink/flink-docs-release-1.20/favicon.png" type="image/x-icon">
+<link rel="alternate" hreflang="zh" href="//nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/ops/state/checkpoints/" title="Checkpoints">
+
+<link rel="stylesheet" href="/flink/flink-docs-release-1.20/book.min.5c00beaef6b82f1a3a01d19bc3724120a51475ac74de00cc3d9bade85ac5c0db.css" integrity="sha256-XAC&#43;rva4Lxo6AdGbw3JBIKUUdax03gDMPZut6FrFwNs=">
+<script defer src="/flink/flink-docs-release-1.20/en.search.min.58faf144e7f8c66c419f8c7cae6d68feb5f98156f21d139467d846499792bf3c.js" integrity="sha256-WPrxROf4xmxBn4x8rm1o/rX5gVbyHROUZ9hGSZeSvzw="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+
+<link rel="canonical" href="https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/checkpoints/" />
+
+<link rel="stylesheet" type="text/css" href="//nightlies.apache.org/flink/flink-docs-release-1.20/font-awesome/css/font-awesome.min.css">
+<script src="//nightlies.apache.org/flink/flink-docs-release-1.20/js/anchor.min.js"></script>
+<script src="//nightlies.apache.org/flink/flink-docs-release-1.20/js/flink.js"></script>
+
+
+    
+    <script>
+      var _paq = window._paq = window._paq || [];
+       
+       
+      _paq.push(['disableCookies']);
+       
+      _paq.push(["setDomains", ["*.flink.apache.org","*.nightlies.apache.org/flink"]]);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="//analytics.apache.org/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '1']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    
+</head>
+
+<body dir=>
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      
+  
+
+<nav>
+
+
+<a id="logo" href="//nightlies.apache.org/flink/flink-docs-release-1.20">
+    <img width="70%" src="//nightlies.apache.org/flink/flink-docs-release-1.20/flink-header-logo.svg">
+</a>
+<p style="text-align:right">v1.20.3</p>
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ee00ed8156e685af335ebb5ccd4e75ca" class="toggle"  />
+    <label for="section-ee00ed8156e685af335ebb5ccd4e75ca" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Try Flink</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/local_installation/" class="">First steps</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/datastream/" class="">Fraud Detection with the DataStream API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/table_api/" class="">Real Time Reporting with the Table API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/flink-operations-playground/" class="">Flink Operations Playground</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-a5f62c05e51da2d13fd0cb021dee4187" class="toggle"  />
+    <label for="section-a5f62c05e51da2d13fd0cb021dee4187" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Learn Flink</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/datastream_api/" class="">Intro to the DataStream API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/etl/" class="">Data Pipelines & ETL</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/streaming_analytics/" class="">Streaming Analytics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/event_driven/" class="">Event-driven Applications</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/fault_tolerance/" class="">Fault Tolerance</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-6c07f7e07850a28420f21d62041fba0d" class="toggle"  />
+    <label for="section-6c07f7e07850a28420f21d62041fba0d" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Concepts</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/stateful-stream-processing/" class="">Stateful Stream Processing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/time/" class="">Timely Stream Processing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/flink-architecture/" class="">Flink Architecture</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/glossary/" class="">Glossary</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  	<br/>
+  
+  
+    <input type="checkbox" id="section-4be50b0d8f9a243d0d0b85d5143097d6" class="toggle"  />
+    <label for="section-4be50b0d8f9a243d0d0b85d5143097d6" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-code title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Application Development</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-978b3bcc65df430772604fa311c9f9eb" class="toggle"  />
+    <label for="section-978b3bcc65df430772604fa311c9f9eb" class="flex justify-between">Project Configuration<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/maven/" class="">Using Maven</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/gradle/" class="">Using Gradle</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/connector/" class="">Connectors and Formats</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/testing/" class="">Test Dependencies</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/advanced/" class="">Advanced Configuration</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-cc76d21600ce4269c2fc917d6514fd35" class="toggle"  />
+    <label for="section-cc76d21600ce4269c2fc917d6514fd35" class="flex justify-between">DataStream API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution_mode/" class="">Execution Mode (Batch/Streaming)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d1ca6a3ddf6206fe9e3e2905ecc5b840" class="toggle"  />
+    <label for="section-d1ca6a3ddf6206fe9e3e2905ecc5b840" class="flex justify-between">Event Time<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/event-time/generating_watermarks/" class="">Generating Watermarks</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/event-time/built_in/" class="">Builtin Watermark Generators</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d99ef0e0a25e058e76eafba1cd8eaa48" class="toggle"  />
+    <label for="section-d99ef0e0a25e058e76eafba1cd8eaa48" class="flex justify-between">State & Fault Tolerance<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/state/" class="">Working with State</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/broadcast_state/" class="">The Broadcast State Pattern</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/checkpointing/" class="">Checkpointing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/state_backends/" class="">State Backends</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f5f5986e7da95b9b579d8ae2bd679031" class="toggle"  />
+    <label for="section-f5f5986e7da95b9b579d8ae2bd679031" class="flex justify-between">Data Types & Serialization<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/types_serialization/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/schema_evolution/" class="">State Schema Evolution</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/custom_serialization/" class="">Custom State Serialization</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/third_party_serializers/" class="">3rd Party Serializers</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/user_defined_functions/" class="">User-Defined Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ef1281f923b745dff2ed7c163aa9ec7b" class="toggle"  />
+    <label for="section-ef1281f923b745dff2ed7c163aa9ec7b" class="flex justify-between">Operators<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/windows/" class="">Windows</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/joining/" class="">Joining</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/process_function/" class="">Process Function</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/asyncio/" class="">Async I/O</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/full_window_partition/" class="">Full Window Partition</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/sources/" class="">Data Sources</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/side_output/" class="">Side Outputs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/application_parameters/" class="">Handling Application Parameters</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/testing/" class="">Testing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/experimental/" class="">Experimental Features</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/scala_api_extensions/" class="">Scala API Extensions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/java_lambdas/" class="">Java Lambda Expressions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-937b4e61cb5436a4175e69bac4599ad8" class="toggle"  />
+    <label for="section-937b4e61cb5436a4175e69bac4599ad8" class="flex justify-between">Managing Execution<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution/execution_configuration/" class="">Execution Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution/packaging/" class="">Program Packaging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution/parallel/" class="">Parallel Execution</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/dataset_migration/" class="">How to Migrate from DataSet to DataStream</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-8f7718ee0841350d23d794e6e80ecca8" class="toggle"  />
+    <label for="section-8f7718ee0841350d23d794e6e80ecca8" class="flex justify-between">Table API & SQL<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/common/" class="">Concepts & Common API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/data_stream_api/" class="">DataStream API Integration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-437f7dc45a912e6ba89e4658e9cf16c7" class="toggle"  />
+    <label for="section-437f7dc45a912e6ba89e4658e9cf16c7" class="flex justify-between">Streaming Concepts<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/determinism/" class="">Determinism in Continuous Queries</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/dynamic_tables/" class="">Dynamic Tables</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/time_attributes/" class="">Time Attributes</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/versioned_tables/" class="">Versioned Tables</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/temporal_table_function/" class="">Temporal Table Function</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/types/" class="">Data Types</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/timezone/" class="">Time Zone</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/tableapi/" class="">Table API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-4c1e1791793983012460cd817472d096" class="toggle"  />
+    <label for="section-4c1e1791793983012460cd817472d096" class="flex justify-between">SQL<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/overview/" class="">SQL</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/gettingstarted/" class="">Getting Started</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-5d6c290ca84a704ca1b8b2b8851d96d7" class="toggle"  />
+    <label for="section-5d6c290ca84a704ca1b8b2b8851d96d7" class="flex justify-between">Queries<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/hints/" class="">Hints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/with/" class="">WITH clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/select/" class="">SELECT & WHERE</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/select-distinct/" class="">SELECT DISTINCT</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-tvf/" class="">Windowing TVF</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-agg/" class="">Window Aggregation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/group-agg/" class="">Group Aggregation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/over-agg/" class="">Over Aggregation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/joins/" class="">Joins</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-join/" class="">Window JOIN</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/set-ops/" class="">Set Operations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/orderby/" class="">ORDER BY clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/limit/" class="">LIMIT clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/topn/" class="">Top-N</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-topn/" class="">Window Top-N</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/deduplication/" class="">Deduplication</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-deduplication/" class="">Window Deduplication</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/match_recognize/" class="">Pattern Recognition</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/time-travel/" class="">Time Travel</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/create/" class="">CREATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/drop/" class="">DROP Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/alter/" class="">ALTER Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/insert/" class="">INSERT Statement</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/analyze/" class="">ANALYZE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/describe/" class="">DESCRIBE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/truncate/" class="">TRUNCATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/explain/" class="">EXPLAIN Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/use/" class="">USE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/show/" class="">SHOW Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/load/" class="">LOAD Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/unload/" class="">UNLOAD Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/set/" class="">SET Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/reset/" class="">RESET Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/jar/" class="">JAR Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/job/" class="">JOB Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/update/" class="">UPDATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/delete/" class="">DELETE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/call/" class="">CALL Statements</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-813c733a327563e57075b729114cc8b5" class="toggle"  />
+    <label for="section-813c733a327563e57075b729114cc8b5" class="flex justify-between">Materialized Table<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/materialized-table/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/materialized-table/statements/" class="">Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/materialized-table/quickstart/" class="">Quickstart</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b587c52eb9cc90a648b2c07dee157839" class="toggle"  />
+    <label for="section-b587c52eb9cc90a648b2c07dee157839" class="flex justify-between">Functions<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/functions/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/functions/systemfunctions/" class="">System (Built-in) Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/functions/udfs/" class="">User-defined Functions</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/procedures/" class="">Procedures</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/modules/" class="">Modules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/catalogs/" class="">Catalogs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/jdbcdriver/" class="">Flink JDBC Driver</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/olap_quickstart/" class="">OLAP Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sqlclient/" class="">SQL Client</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-5faa5ed4946fc579132ce4387e7df6d6" class="toggle"  />
+    <label for="section-5faa5ed4946fc579132ce4387e7df6d6" class="flex justify-between">SQL Gateway<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql-gateway/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql-gateway/rest/" class="">REST Endpoint</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql-gateway/hiveserver2/" class="">HiveServer2 Endpoint</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-27d468a2caf7b6b532e75a9890a8be61" class="toggle"  />
+    <label for="section-27d468a2caf7b6b532e75a9890a8be61" class="flex justify-between">Hive Compatibility<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-bd89891f1fcee30f52191d13ca7cb941" class="toggle"  />
+    <label for="section-bd89891f1fcee30f52191d13ca7cb941" class="flex justify-between">Hive Dialect<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d0c530a3ce23c2eaeeb0c3e4c8519d4e" class="toggle"  />
+    <label for="section-d0c530a3ce23c2eaeeb0c3e4c8519d4e" class="flex justify-between">Queries<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/sort-cluster-distribute-by/" class="">Sort/Cluster/Distributed By</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/group-by/" class="">Group By</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/join/" class="">Join</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/set-op/" class="">Set Operations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/lateral-view/" class="">Lateral View Clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/window-functions/" class="">Window Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/sub-queries/" class="">Sub-Queries</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/cte/" class="">CTE</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/transform/" class="">Transform Clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/table-sample/" class="">Table Sample</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/create/" class="">CREATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/drop/" class="">DROP Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/alter/" class="">ALTER Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/insert/" class="">INSERT Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/load-data/" class="">Load Data Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/show/" class="">SHOW Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/add/" class="">ADD Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/set/" class="">SET Statements</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/config/" class="">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/tuning/" class="">Performance Tuning</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sourcessinks/" class="">User-defined Sources & Sinks</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-a25fe3d5e31775b296acf374d7cdac92" class="toggle"  />
+    <label for="section-a25fe3d5e31775b296acf374d7cdac92" class="flex justify-between">Python API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/installation/" class="">Installation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table_api_tutorial/" class="">Table API Tutorial</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream_tutorial/" class="">DataStream API Tutorial</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-424bf2ddca17cc2b040ec160630144f2" class="toggle"  />
+    <label for="section-424bf2ddca17cc2b040ec160630144f2" class="flex justify-between">Table API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/intro_to_table_api/" class="">Intro to the Python Table API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/table_environment/" class="">TableEnvironment</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-91932491e3426637ac0c6917c35f993f" class="toggle"  />
+    <label for="section-91932491e3426637ac0c6917c35f993f" class="flex justify-between">Operations<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/operations/operations/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/operations/row_based_operations/" class="">Row-based Operations</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/python_types/" class="">Data Types</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/system_functions/" class="">System (Built-in) Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-2c6dae1d1333e53da24a0d0b4469849e" class="toggle"  />
+    <label for="section-2c6dae1d1333e53da24a0d0b4469849e" class="flex justify-between">User Defined Functions<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/udfs/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/udfs/python_udfs/" class="">General User-defined Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/udfs/vectorized_python_udfs/" class="">Vectorized User-defined Functions</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/conversion_of_pandas/" class="">Conversions between PyFlink Table and Pandas DataFrame</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/conversion_of_data_stream/" class="">Conversions between Table and DataStream</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/sql/" class="">SQL</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/catalogs/" class="">Catalogs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/metrics/" class="">Metrics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/python_table_api_connectors/" class="">Connectors</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-42116523be06cf749380b5ce462b0bf6" class="toggle"  />
+    <label for="section-42116523be06cf749380b5ce462b0bf6" class="flex justify-between">DataStream API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/intro_to_datastream_api/" class="">Intro to the Python DataStream API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-412609674eacdd1d31a3f4c67bbb191f" class="toggle"  />
+    <label for="section-412609674eacdd1d31a3f4c67bbb191f" class="flex justify-between">Operators<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/operators/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/operators/windows/" class="">Windows</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/operators/process_function/" class="">Process Function</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/data_types/" class="">Data Types</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/state/" class="">State</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/dependency_management/" class="">Dependency Management</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/python_execution_mode/" class="">Execution Mode</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/python_config/" class="">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/debugging/" class="">Debugging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/environment_variables/" class="">Environment Variables</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/faq/" class="">FAQ</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f5bf4e18a429153f481150a5e746bb4f" class="toggle"  />
+    <label for="section-f5bf4e18a429153f481150a5e746bb4f" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-book title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Libraries</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/libs/cep/" class="">Event Processing (CEP)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/libs/state_processor_api/" class="">State Processor API</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ed82234225dbf97cc7245e5b0cb1addb" class="toggle"  />
+    <label for="section-ed82234225dbf97cc7245e5b0cb1addb" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-random title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Connectors</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-a526b98d366d55d2402b163c9f80b4de" class="toggle"  />
+    <label for="section-a526b98d366d55d2402b163c9f80b4de" class="flex justify-between">DataStream Connectors<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/guarantees/" class="">Fault Tolerance Guarantees</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-c5d27e93a39d1000fee2c771ab8e4c99" class="toggle"  />
+    <label for="section-c5d27e93a39d1000fee2c771ab8e4c99" class="flex justify-between">Formats<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/avro/" class="">Avro</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/azure_table_storage/" class="">Azure Table storage</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/csv/" class="">CSV</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/hadoop/" class="">Hadoop</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/json/" class="">JSON</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/parquet/" class="">Parquet</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/text_files/" class="">Text files</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/datagen/" class="">DataGen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/dynamic-kafka/" class="">Dynamic Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/kafka/" class="">Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/cassandra/" class="">Cassandra</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/dynamodb/" class="">DynamoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/elasticsearch/" class="">Elasticsearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/firehose/" class="">Firehose</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/kinesis/" class="">Kinesis</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/mongodb/" class="">MongoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/opensearch/" class="">Opensearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/prometheus/" class="">Prometheus</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/sqs/" class="">SQS</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/filesystem/" class="">FileSystem</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/kudu/" class="">Kudu</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/rabbitmq/" class="">RabbitMQ</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/pubsub/" class="">Google Cloud PubSub</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/hybridsource/" class="">Hybrid Source</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/pulsar/" class="">Pulsar</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/jdbc/" class="">JDBC</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-cd269c4be446b40053a18f8b84110041" class="toggle"  />
+    <label for="section-cd269c4be446b40053a18f8b84110041" class="flex justify-between">Table API Connectors<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-4078b95b237c79336e676b4e2edb2772" class="toggle"  />
+    <label for="section-4078b95b237c79336e676b4e2edb2772" class="flex justify-between">Formats<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/overview/" class="">Formats</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/csv/" class="">CSV</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/json/" class="">JSON</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/avro/" class="">Avro</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/avro-confluent/" class="">Confluent Avro</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/protobuf/" class="">Protobuf</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/debezium/" class="">Debezium</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/canal/" class="">Canal</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/maxwell/" class="">Maxwell</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/ogg/" class="">Ogg</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/parquet/" class="">Parquet</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/orc/" class="">Orc</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/raw/" class="">Raw</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/kafka/" class="">Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/upsert-kafka/" class="">Upsert Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/dynamodb/" class="">DynamoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/firehose/" class="">Firehose</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/kinesis/" class="">Kinesis</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/mongodb/" class="">MongoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/jdbc/" class="">JDBC</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/kudu/" class="">Kudu</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/elasticsearch/" class="">Elasticsearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/opensearch/" class="">Opensearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/filesystem/" class="">FileSystem</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hbase/" class="">HBase</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/pulsar/" class="">Pulsar</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/datagen/" class="">DataGen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/print/" class="">Print</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/blackhole/" class="">BlackHole</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-61ae5a238c9fe2f26340cb03198dfcd7" class="toggle"  />
+    <label for="section-61ae5a238c9fe2f26340cb03198dfcd7" class="flex justify-between">Hive<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/hive_catalog/" class="">Hive Catalog</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/hive_read_write/" class="">Hive Read & Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/hive_functions/" class="">Hive Functions</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/downloads/" class="">Download</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f8c920cc65db331ce219e9ca783fabb2" class="toggle"  />
+    <label for="section-f8c920cc65db331ce219e9ca783fabb2" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-sliders title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Deployment</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/java_compatibility/" class="">Java Compatibility</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f57030cb5bc69ac1d28bd73a2e0fa4a9" class="toggle"  />
+    <label for="section-f57030cb5bc69ac1d28bd73a2e0fa4a9" class="flex justify-between">Resource Providers<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ea9ad33af563289787cbec15cada5824" class="toggle"  />
+    <label for="section-ea9ad33af563289787cbec15cada5824" class="flex justify-between">Standalone<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/working_directory/" class="">Working Directory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/docker/" class="">Docker</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/kubernetes/" class="">Kubernetes</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/native_kubernetes/" class="">Native Kubernetes</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/yarn/" class="">YARN</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/config/" class="">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b2b21a6932971423f75546845eaa0270" class="toggle"  />
+    <label for="section-b2b21a6932971423f75546845eaa0270" class="flex justify-between">Memory Configuration<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_setup/" class="">Set up Flink's Process Memory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_setup_tm/" class="">Set up TaskManager Memory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_setup_jobmanager/" class="">Set up JobManager Memory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_tuning/" class="">Memory Tuning Guide</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_trouble/" class="">Troubleshooting</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_migration/" class="">Migration Guide</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/network_mem_tuning/" class="">Network Buffer Tuning</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/cli/" class="">Command-Line Interface</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/elastic_scaling/" class="">Elastic Scaling</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/finegrained_resource/" class="">Fine-Grained Resource Management</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/speculative_execution/" class="">Speculative Execution</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-3ad52e3c294903bbe597454f3be784d1" class="toggle"  />
+    <label for="section-3ad52e3c294903bbe597454f3be784d1" class="flex justify-between">File Systems<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/common/" class="">Common Configurations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/s3/" class="">Amazon S3</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/gcs/" class="">Google Cloud Storage</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/oss/" class="">Aliyun OSS</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/azure/" class="">Azure Blob Storage</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/plugins/" class="">Plugins</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-8e839847034c230e3c48f00e4eea472f" class="toggle"  />
+    <label for="section-8e839847034c230e3c48f00e4eea472f" class="flex justify-between">High Availability<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/ha/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/ha/zookeeper_ha/" class="">ZooKeeper HA Services</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/ha/kubernetes_ha/" class="">Kubernetes HA Services</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/metric_reporters/" class="">Metric Reporters</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/trace_reporters/" class="">Trace Reporters</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-fa25a9e1707135a6191375ba5ebf6927" class="toggle"  />
+    <label for="section-fa25a9e1707135a6191375ba5ebf6927" class="flex justify-between">REPLs<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/repls/python_shell/" class="">Python REPL</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-da02acee0967ffc7d941d06ca50959d2" class="toggle"  />
+    <label for="section-da02acee0967ffc7d941d06ca50959d2" class="flex justify-between">Security<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/security/security-ssl/" class="">SSL Setup</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/security/security-kerberos/" class="">Kerberos</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/security/security-delegation-token/" class="">Delegation tokens</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b63e989880aebee7e5211ac1d3ce4e9f" class="toggle"  />
+    <label for="section-b63e989880aebee7e5211ac1d3ce4e9f" class="flex justify-between">Advanced<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/external_resources/" class="">External Resources</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/historyserver/" class="">History Server</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/logging/" class="">Logging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/failure_enrichers/" class="">Failure Enrichers</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-5b57649c0c94af0841dac91e624830af" class="toggle" checked />
+    <label for="section-5b57649c0c94af0841dac91e624830af" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-cogs title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Operations</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-42a8c1c4247207b80e64d3d223c23a23" class="toggle" checked />
+    <label for="section-42a8c1c4247207b80e64d3d223c23a23" class="flex justify-between">State & Fault Tolerance<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/checkpoints/" class=" active">Checkpoints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/checkpointing_under_backpressure/" class="">Checkpointing under backpressure</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/savepoints/" class="">Savepoints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/checkpoints_vs_savepoints/" class="">Checkpoints vs. Savepoints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/state_backends/" class="">State Backends</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/large_state_tuning/" class="">Tuning Checkpoints and Large State</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/task_failure_recovery/" class="">Task Failure Recovery</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/metrics/" class="">Metrics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/traces/" class="">Traces</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/rest_api/" class="">REST API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-50f4b9e6604765e74142b0e1cd9fb44d" class="toggle"  />
+    <label for="section-50f4b9e6604765e74142b0e1cd9fb44d" class="flex justify-between">Batch<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/batch/batch_shuffle/" class="">Batch Shuffle</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/batch/recovery_from_job_master_failure/" class="">Recovery job progress from job master failures</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d4f1bef6f783a5c6d1b2d5f55db8965f" class="toggle"  />
+    <label for="section-d4f1bef6f783a5c6d1b2d5f55db8965f" class="flex justify-between">Debugging<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/debugging_event_time/" class="">Debugging Windows & Event Time</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/debugging_classloading/" class="">Debugging Classloading</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/flame_graphs/" class="">Flame Graphs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/profiler/" class="">Profiler</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/application_profiling/" class="">Application Profiling & Debugging</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b424141921a30487c09eab3a187e5859" class="toggle"  />
+    <label for="section-b424141921a30487c09eab3a187e5859" class="flex justify-between">Monitoring<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/monitoring/checkpoint_monitoring/" class="">Monitoring Checkpointing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/monitoring/back_pressure/" class="">Monitoring Back Pressure</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/upgrading/" class="">Upgrading Applications and Flink Versions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/production_ready/" class="">Production Readiness Checklist</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  	<br/>
+  
+  
+    <input type="checkbox" id="section-ded926075d02fa6eb11100b638eddaf4" class="toggle"  />
+    <label for="section-ded926075d02fa6eb11100b638eddaf4" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-cogs title dessert" aria-hidden="true"></i>&nbsp;&nbsp;Flink Development</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/flinkdev/ide_setup/" class="">Importing Flink into an IDE</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/flinkdev/building/" class="">Building Flink from Source</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-98ea7844cf9262a9ba52500fc93377fe" class="toggle"  />
+    <label for="section-98ea7844cf9262a9ba52500fc93377fe" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-book title dessert" aria-hidden="true"></i>&nbsp;&nbsp;Internals</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/internals/job_scheduling/" class="">Jobs and Scheduling</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/internals/task_lifecycle/" class="">Task Lifecycle</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/internals/filesystems/" class="">File Systems</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/>
+<hr class="menu-break">
+
+<a href="//flink.apache.org" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> Project Homepage</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/api/java/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> JavaDocs</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/api/scala/index.html#org.apache.flink.api.scala.package/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> ScalaDocs</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/api/python/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> PyDocs</a>
+<br/>
+
+<hr class="menu-break">
+<li style="list-style-type: none">
+  <br>
+  <input type="checkbox" id="section-version-picker" class="toggle">
+  <label for="section-version-picker" class="flex justify-between">
+     <div style="font-weight:450;margin-bottom:0.5em">Pick Docs Version</div>
+     <span>▾</span>
+  </label>
+  <ul>
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20">
+      1.20 (✓)
+    </a>
+    <hr class="menu-break">
+    
+      <li>
+        <a href="http://nightlies.apache.org/flink/flink-docs-release-1.20">
+          v1.20
+        </a>
+      </li>
+    
+      <li>
+        <a href="http://nightlies.apache.org/flink/flink-docs-release-1.19">
+          v1.19
+        </a>
+      </li>
+    
+    <hr class="menu-break">
+    <li>
+      <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/versions">
+          All Versions
+      </a>
+    </li>
+  </ul>
+</li>
+
+
+
+
+  
+
+  
+
+
+  
+
+
+
+
+
+
+<a  href="//nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/ops/state/checkpoints/" class="flex align-center">
+  <i class="fa fa-globe" aria-hidden="true"></i>&nbsp;&nbsp;
+  中文版
+</a>
+
+<script src="//nightlies.apache.org/flink/flink-docs-release-1.20/js/track-search-terms.js"></script>
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/flink/flink-docs-release-1.20/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Checkpoints</strong>
+
+  <label for="toc-control">
+    
+    <img src="/flink/flink-docs-release-1.20/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#checkpoints">Checkpoints</a>
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#checkpoint-storage">Checkpoint Storage</a></li>
+        <li><a href="#available-checkpoint-storage-options">Available Checkpoint Storage Options</a>
+          <ul>
+            <li><a href="#the-jobmanagercheckpointstorage">The JobManagerCheckpointStorage</a></li>
+            <li><a href="#the-filesystemcheckpointstorage">The FileSystemCheckpointStorage</a></li>
+          </ul>
+        </li>
+        <li><a href="#retained-checkpoints">Retained Checkpoints</a>
+          <ul>
+            <li><a href="#directory-structure">Directory Structure</a></li>
+            <li><a href="#resuming-from-a-retained-checkpoint">Resuming from a retained checkpoint</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+
+
+
+<article class="markdown">
+    <blockquote style="border-color:#f66">
+        This documentation is for an out-of-date version of Apache Flink. We recommend you use the latest <a href="//nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/checkpoints/">stable version</a>.
+    </blockquote>
+</article>
+
+
+
+
+      
+  <article class="markdown"><!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<h1 id="checkpoints">
+  Checkpoints
+  <a class="anchor" href="#checkpoints">#</a>
+</h1>
+<h2 id="overview">
+  Overview
+  <a class="anchor" href="#overview">#</a>
+</h2>
+<p>Checkpoints make state in Flink fault tolerant by allowing state and the
+corresponding stream positions to be recovered, thereby giving the application
+the same semantics as a failure-free execution.</p>
+<p>See <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/checkpointing/">Checkpointing</a> for how to enable and
+configure checkpoints for your program.</p>
+<p>To understand the differences between checkpoints and <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/savepoints/">savepoints</a> see <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/checkpoints_vs_savepoints/">checkpoints vs. savepoints</a>.</p>
+<h2 id="checkpoint-storage">
+  Checkpoint Storage
+  <a class="anchor" href="#checkpoint-storage">#</a>
+</h2>
+<p>When checkpointing is enabled, managed state is persisted to ensure consistent recovery in case of failures.
+Where the state is persisted during checkpointing depends on the chosen <strong>Checkpoint Storage</strong>.</p>
+<h2 id="available-checkpoint-storage-options">
+  Available Checkpoint Storage Options
+  <a class="anchor" href="#available-checkpoint-storage-options">#</a>
+</h2>
+<p>Out of the box, Flink bundles these checkpoint storage types:</p>
+<ul>
+<li><em>JobManagerCheckpointStorage</em></li>
+<li><em>FileSystemCheckpointStorage</em></li>
+</ul>
+<blockquote class="book-hint info">
+  If a checkpoint directory is configured <code>FileSystemCheckpointStorage</code> will be used, otherwise the system will use the <code>JobManagerCheckpointStorage</code>.
+</blockquote>
+
+<h3 id="the-jobmanagercheckpointstorage">
+  The JobManagerCheckpointStorage
+  <a class="anchor" href="#the-jobmanagercheckpointstorage">#</a>
+</h3>
+<p>The <em>JobManagerCheckpointStorage</em> stores checkpoint snapshots in the JobManager&rsquo;s heap.</p>
+<p>It can be configured to fail the checkpoint if it goes over a certain size to avoid <code>OutOfMemoryError</code>&rsquo;s on the JobManager. To set this feature, users can instantiate a <code>JobManagerCheckpointStorage</code> with the corresponding max size:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="k">new</span> <span class="n">JobManagerCheckpointStorage</span><span class="o">(</span><span class="n">MAX_MEM_STATE_SIZE</span><span class="o">);</span>
+</span></span></code></pre></div><p>Limitations of the <code>JobManagerCheckpointStorage</code>:</p>
+<ul>
+<li>The size of each individual state is by default limited to 5 MB. This value can be increased in the constructor of the <code>JobManagerCheckpointStorage</code>.</li>
+<li>Irrespective of the configured maximal state size, the state cannot be larger than the Pekko frame size (see <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/config/">Configuration</a>).</li>
+<li>The aggregate state must fit into the JobManager memory.</li>
+</ul>
+<p>The JobManagerCheckpointStorage is encouraged for:</p>
+<ul>
+<li>Local development and debugging</li>
+<li>Jobs that use very little state, such as jobs that consist only of record-at-a-time functions (Map, FlatMap, Filter, &hellip;). The Kafka Consumer requires very little state.</li>
+</ul>
+<h3 id="the-filesystemcheckpointstorage">
+  The FileSystemCheckpointStorage
+  <a class="anchor" href="#the-filesystemcheckpointstorage">#</a>
+</h3>
+<p>The <em>FileSystemCheckpointStorage</em> is configured with a file system URL (type, address, path), such as &ldquo;hdfs://namenode:40010/flink/checkpoints&rdquo; or &ldquo;file:///data/flink/checkpoints&rdquo;.</p>
+<p>Upon checkpointing, it writes state snapshots into files in the configured file system and directory. Minimal metadata is stored in the JobManager&rsquo;s memory (or, in high-availability mode, in the metadata checkpoint).</p>
+<p>If a checkpoint directory is specified, <code>FileSystemCheckpointStorage</code> will be used to persist checkpoint snapshots.</p>
+<p>The <code>FileSystemCheckpointStorage</code> is encouraged for:</p>
+<ul>
+<li>All high-availability setups.</li>
+</ul>
+<h2 id="retained-checkpoints">
+  Retained Checkpoints
+  <a class="anchor" href="#retained-checkpoints">#</a>
+</h2>
+<p>Checkpoints are by default not retained and are only used to resume a
+job from failures. They are deleted when a program is cancelled.
+You can, however, configure periodic checkpoints to be retained.
+Depending on the configuration these <em>retained</em> checkpoints are <em>not</em>
+automatically cleaned up when the job fails or is canceled.
+This way, you will have a checkpoint around to resume from if your job fails.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">CheckpointConfig</span> <span class="n">config</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="na">getCheckpointConfig</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">config</span><span class="o">.</span><span class="na">setExternalizedCheckpointRetention</span><span class="o">(</span><span class="n">ExternalizedCheckpointRetention</span><span class="o">.</span><span class="na">RETAIN_ON_CANCELLATION</span><span class="o">);</span>
+</span></span></code></pre></div><p>The <code>ExternalizedCheckpointRetention</code> mode configures what happens with checkpoints when you cancel the job:</p>
+<ul>
+<li>
+<p><strong><code>ExternalizedCheckpointRetention.RETAIN_ON_CANCELLATION</code></strong>: Retain the checkpoint when the job is cancelled. Note that you have to manually clean up the checkpoint state after cancellation in this case.</p>
+</li>
+<li>
+<p><strong><code>ExternalizedCheckpointRetention.DELETE_ON_CANCELLATION</code></strong>: Delete the checkpoint when the job is cancelled. The checkpoint state will only be available if the job fails.</p>
+</li>
+</ul>
+<h3 id="directory-structure">
+  Directory Structure
+  <a class="anchor" href="#directory-structure">#</a>
+</h3>
+<p>Similarly to <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/savepoints/">savepoints</a>, a checkpoint consists
+of a meta data file and, depending on the state backend, some additional data
+files. The meta data file and data files are stored in the directory that is
+configured via <code>execution.checkpointing.dir</code> in the configuration files,
+and also can be specified for per job in the code.</p>
+<p>The current checkpoint directory layout (<a href="https://issues.apache.org/jira/browse/FLINK-8531">introduced by FLINK-8531</a>) is as follows:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">/user-defined-checkpoint-dir</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">/{job-id}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">        + --shared/
+</span></span></span><span class="line"><span class="cl"><span class="sd">        + --taskowned/
+</span></span></span><span class="line"><span class="cl"><span class="sd">        + --chk-1/
+</span></span></span><span class="line"><span class="cl"><span class="sd">        + --chk-2/
+</span></span></span><span class="line"><span class="cl"><span class="sd">        + --chk-3/
+</span></span></span><span class="line"><span class="cl"><span class="sd">        ...</span><span class="w">        
+</span></span></span></code></pre></div><p>The <strong>SHARED</strong> directory is for state that is possibly part of multiple checkpoints, <strong>TASKOWNED</strong> is for state that must never be dropped by the JobManager, and <strong>EXCLUSIVE</strong> is for state that belongs to one checkpoint only.</p>
+<blockquote class="book-hint warning">
+  The checkpoint directory is not part of a public API and can be changed in the future release.
+</blockquote>
+
+<h4 id="configure-globally-via-configuration-files">
+  Configure globally via configuration files
+  <a class="anchor" href="#configure-globally-via-configuration-files">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">execution.checkpointing.dir</span><span class="p">:</span><span class="w"> </span><span class="l">hdfs:///checkpoints/</span><span class="w">
+</span></span></span></code></pre></div><h4 id="configure-for-per-job-on-the-checkpoint-configuration">
+  Configure for per job on the checkpoint configuration
+  <a class="anchor" href="#configure-for-per-job-on-the-checkpoint-configuration">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">Configuration</span> <span class="n">config</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">config</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">CheckpointingOptions</span><span class="o">.</span><span class="na">CHECKPOINT_STORAGE</span><span class="o">,</span> <span class="s">&#34;filesystem&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">config</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">CheckpointingOptions</span><span class="o">.</span><span class="na">CHECKPOINTS_DIRECTORY</span><span class="o">,</span> <span class="s">&#34;hdfs:///checkpoints-data/&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">env</span><span class="o">.</span><span class="na">configure</span><span class="o">(</span><span class="n">config</span><span class="o">);</span>
+</span></span></code></pre></div><h4 id="configure-with-checkpoint-storage-instance">
+  Configure with checkpoint storage instance
+  <a class="anchor" href="#configure-with-checkpoint-storage-instance">#</a>
+</h4>
+<p>Alternatively, checkpoint storage can be set by specifying the desired checkpoint storage instance which allows for setting low level configurations such as write buffer sizes.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">Configuration</span> <span class="n">config</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">config</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">CheckpointingOptions</span><span class="o">.</span><span class="na">CHECKPOINT_STORAGE</span><span class="o">,</span> <span class="s">&#34;filesystem&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">config</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">CheckpointingOptions</span><span class="o">.</span><span class="na">CHECKPOINTS_DIRECTORY</span><span class="o">,</span> <span class="s">&#34;hdfs:///checkpoints-data/&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">config</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">CheckpointingOptions</span><span class="o">.</span><span class="na">FS_WRITE_BUFFER_SIZE</span><span class="o">,</span> <span class="n">FILE_SIZE_THESHOLD</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">env</span><span class="o">.</span><span class="na">configure</span><span class="o">(</span><span class="n">config</span><span class="o">);</span>
+</span></span></code></pre></div><h3 id="resuming-from-a-retained-checkpoint">
+  Resuming from a retained checkpoint
+  <a class="anchor" href="#resuming-from-a-retained-checkpoint">#</a>
+</h3>
+<p>A job may be resumed from a checkpoint just as from a savepoint
+by using the checkpoint&rsquo;s meta data file instead (see the
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/savepoints/#resuming-from-savepoints">savepoint restore guide</a>). Note that if the
+meta data file is not self-contained, the jobmanager needs to have access to
+the data files it refers to (see <a href="#directory-structure">Directory Structure</a>
+above).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ bin/flink run -s :checkpointMetaDataPath <span class="o">[</span>:runArgs<span class="o">]</span>
+</span></span></code></pre></div>
+<p><a href="#top" class="top pull-right"><i class="fas fa-triangle"></i> Back to top</a></p>
+
+
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  
+
+
+
+
+
+<a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications">Want to contribute translation?</a>
+<br><br>
+<a href="//github.com/apache/flink/edit/release-1.20/docs/content/docs/ops/state/checkpoints.md" style="color:black"><i class="fa fa-edit fa-fw"></i>Edit This Page</a>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#checkpoints">Checkpoints</a>
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#checkpoint-storage">Checkpoint Storage</a></li>
+        <li><a href="#available-checkpoint-storage-options">Available Checkpoint Storage Options</a>
+          <ul>
+            <li><a href="#the-jobmanagercheckpointstorage">The JobManagerCheckpointStorage</a></li>
+            <li><a href="#the-filesystemcheckpointstorage">The FileSystemCheckpointStorage</a></li>
+          </ul>
+        </li>
+        <li><a href="#retained-checkpoints">Retained Checkpoints</a>
+          <ul>
+            <li><a href="#directory-structure">Directory Structure</a></li>
+            <li><a href="#resuming-from-a-retained-checkpoint">Resuming from a retained checkpoint</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+ 
+    </aside>
+    <aside class="expand-toc">
+      <button class="toc" onclick="expandToc()">
+        <i class="fa fa-expand" aria-hidden="true"></i>
+      </button>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

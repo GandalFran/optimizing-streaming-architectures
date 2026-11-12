@@ -1,0 +1,83 @@
+ ```bash
+# Creating Kafka topics
+kafka-topics --bootstrap-server kafka:9092 --create --topic session-events --partitions 3 --replication-factor 1
+kafka-topics --bootstrap-server kafka:9092 --create --topic session-events-enriched --partitions 3 --replication-factor 1
+```
+
+```yaml
+# Flink configuration (config.yaml)
+
+# Kafka source
+kafka-source:
+  topic: session-events
+  partitions: 3
+  bootstrap-servers: kafka:9092
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  start-from-beginning: false
+  fetch-max-wait: 50
+  fetch-max-bytes: 2097152
+
+# Kafka sink
+kafka-sink:
+  topic: session-events-enriched
+  partitions: 3
+  bootstrap-servers: kafka:9092
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  keyed-output: true
+  key-serializer: org.apache.kafka.common.serialization.StringSerializer
+  value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  max-offsets: 1
+  max-offsets-per-trigger: 1
+
+# Flink settings
+state.backend: rockdb
+state.checkpointing.interval: 10
+state.checkpointing.max-retained-checkpoints: 1
+state.savepoints.concurrent: 1
+state.savepoints.storage.replicas: 2
+state.savepoints.storage.replication-factor: 1
+state.savepoints.retention.checkpoints: 7
+state.savepoints.retention.time: 7
+state.savepoints.timeout.ms: 60000
+state.timezone: UTC
+```
+
+```sql
+-- Flink SQL create table statements
+CREATE TABLE session_events (
+    user_id STRING,
+    event_data STRING
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+    'value.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+    'format' = 'json'
+);
+
+CREATE TABLE session_events_enriched (
+    user_id STRING,
+    event_data STRING,
+    enriched_fields STRING
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+    'value.deserializer' = 'org.apache.kafka.common.serialization.StringSerializer',
+    'format' = 'json'
+);
+```
+
+Justification of Main Values:
+
+1. **Kafka Topics**: The Kafka topics are configured with a single partition for each topic, which is suitable for the expected input rate and meets the replication factor requirement for durability. The partition number aligns with the requirement of having at least 1 broker per partition for durability, and the replication factor of 1 is for a basic setup, which can be increased for higher availability.
+
+2. **Flink Configuration**: The Flink configuration is set up to ensure that the state backend supports Kafka state savepoints (rockdb in this case), which are needed for checkpointing. The checkpointing interval of 10 seconds and a maximum of 1 concurrent checkpoint are set to ensure the end-to-end latency requirement is met. The state savepoints are configured to be retained for 7 days, aligning with the retention requirement.
+
+3. **Flink SQL Statements**: The Flink SQL statements create two tables for Kafka topics: one for the source (input) and one for the sink (output). The configuration includes the necessary deserializers for JSON data. The source table uses the `json` format to deserialize the incoming JSON data, while the sink table uses `json` format for serialization.
+
+This configuration and setup should ensure that the streaming pipeline meets the specified requirements for throughput, latency, delivery guarantee, and durability.

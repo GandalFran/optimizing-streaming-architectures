@@ -1,0 +1,314 @@
+{
+  "id": "ID-042",
+  "model": "qwen2.5-14b",
+  "seed": 0,
+  "track": "k8s",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 2048,
+    "latency_slo_ms": 1000,
+    "retention_days": 30,
+    "sink": "trades-enriched",
+    "src": "trades",
+    "throughput_eps": 20000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8323",
+  "started": "2026-11-10T18:36:55+0100",
+  "substitutions": [
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.checkpoints.dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8323/e7-996347/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.savepoints.dir",
+      "from": "s3://flink-state/savepoints",
+      "to": "file:///tmp/chamoso-e7/8323/e7-996347/objstore/flink-state/savepoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "trades",
+      "from": "my-cluster-kafka-bootstrap:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "trades_enriched",
+      "from": "my-cluster-kafka-bootstrap:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    }
+  ],
+  "translations": [
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/trades",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/trades-enriched",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "artefact": "flink-conf",
+      "from": "FlinkDeployment.spec.flinkConfiguration",
+      "to": "config.yaml keys (verbatim)"
+    },
+    {
+      "artefact": "taskmanagers",
+      "from": "ceil(parallelism 1 / 16 slots) = 1 pods",
+      "to": "1 TaskManager processes (the prompt allows at most 3 pods)"
+    }
+  ],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "trades",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "before first WATERMARK/PRIMARY KEY clause"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "trades_enriched",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO trades_enriched (`instrument_id`, `enriched_data`, `__sent_ms`, `__seq`)\nSELECT `instrument_id`,\n       CAST(NULL AS STRING),\n       `__sent_ms`,\n       `__seq`\nFROM trades;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "KafkaTopic/trades",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "answer_cmd": "KafkaTopic/trades-enriched",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.table.api.ValidationException: The rowtime attribute field 'ts' is not defined in the table schema, at line 6, column 19\nAvailable fields: ['instrument_id', 'trade_data', '__sent_ms', '__seq']\u001b[0m\nShutting down the session...\ndone.",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 1000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794332225.375,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 8.7,
+      "bootstrap": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "t": 1794332226.595,
+      "rel": null,
+      "event": "topics",
+      "created": [],
+      "ok": false
+    },
+    {
+      "t": 1794332233.283,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 6.7,
+      "taskmanagers": 1
+    },
+    {
+      "t": 1794332237.014,
+      "rel": null,
+      "event": "submit_failed",
+      "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.table.api.ValidationException: The rowtime attribute field 'ts' is not defined in the table schema, at line 6, column 19\nAvailable fields: ['instrument_id', 'trade_data', '__sent_ms', '__seq']\u001b[0m\nShutting down the session...\ndone."
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-042",
+    "answer_file": null,
+    "answers": "runs/main/qwen2.5-14b.greedy.jsonl",
+    "model": "qwen2.5-14b",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/smoke/ID-042__qwen2.5-14b__s0.json",
+    "duration": 60.0,
+    "warmup": 10.0,
+    "kill_at": 30.0,
+    "guard": 3.3333333333333335,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 1,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "run_root": "/tmp/chamoso-e7/8323",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 8,
+    "findings_L1_L3": [
+      "L2:unknown-field:FlinkDeployment.spec.job.jar is not a field of this resource",
+      "L2:unknown-key:execution.checkpointing.max-concurrent is not a Flink 1.20 configuration option",
+      "L2:unknown-key:execution.parallelism is not a Flink 1.20 configuration option",
+      "L2:unknown-key:'sink.partitioner.key-extractor' is not an option of connector kafka"
+    ]
+  },
+  "topology": {
+    "port_base": 12000,
+    "cores_per_role": {
+      "kafka": 1,
+      "flink": 4,
+      "jm": 1,
+      "control": 2
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        1
+      ]
+    },
+    "nodes": {
+      "k1": "38,150",
+      "k2": "39,151",
+      "k3": "40,152",
+      "f1": "41,42,43,44,153,154,155,156",
+      "f2": "45,46,47,48,157,158,159,160",
+      "f3": "49,50,51,52,161,162,163,164",
+      "j1": "53,165",
+      "ctl": "54,55,166,167"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12010,2@127.0.0.1:12011,3@127.0.0.1:12012",
+    "listeners=PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8323/e7-996347/k1/kafka-data"
+  ],
+  "topics_after_commands": {},
+  "topics_created": {
+    "source": false,
+    "sink": false
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 12030,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 16,
+    "parallelism.default": 1,
+    "rest.address": "127.0.0.1",
+    "state.checkpoints.num-retained": "10",
+    "state.backend": "rocksdb",
+    "state.checkpoints.dir": "file:///tmp/chamoso-e7/8323/e7-996347/objstore/flink-state/checkpoints",
+    "state.savepoints.dir": "file:///tmp/chamoso-e7/8323/e7-996347/objstore/flink-state/savepoints",
+    "execution.checkpointing.mode": "EXACTLY_ONCE",
+    "execution.checkpointing.interval": 5000,
+    "execution.checkpointing.timeout": 60000,
+    "execution.checkpointing.min-pause": 500,
+    "execution.checkpointing.max-concurrent": 1,
+    "execution.parallelism": 16,
+    "taskmanager.memory.process.size": "8g",
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 12031,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8323/e7-996347/flink-io"
+  },
+  "taskmanagers": {
+    "started": 1,
+    "registered": 1,
+    "slots_per_tm": 16
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 3.7,
+    "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.table.api.ValidationException: The rowtime attribute field 'ts' is not defined in the table schema, at line 6, column 19\nAvailable fields: ['instrument_id', 'trade_data', '__sent_ms', '__seq']\u001b[0m\nShutting down the session...\ndone."
+  },
+  "failure_stage": "sql-submit",
+  "topics_after_run": {},
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T18:37:24+0100"
+}

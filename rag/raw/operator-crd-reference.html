@@ -1,0 +1,2250 @@
+
+<!DOCTYPE html>
+<html lang="en" dir=>
+
+<head>
+  <meta name="generator" content="Hugo 0.104.0" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Custom Resource Defintion Reference # This serves as a full reference for FlinkDeployment and FlinkSessionJob custom resource definitions, including all possible configuration parameters.
+FlinkDeployment # Class: org.apache.flink.kubernetes.operator.crd.FlinkDeployment
+Description: Custom resource that represents both Application and Session deployments.
+Parameter Type Docs spec org.apache.flink.kubernetes.operator.crd.spec.FlinkDeploymentSpec Spec that describes a Flink application or session cluster deployment. status org.apache.flink.kubernetes.operator.crd.status.FlinkDeploymentStatus Last observed status of the Flink deployment. FlinkSessionJob # Class: org.apache.flink.kubernetes.operator.crd.FlinkSessionJob
+Description: Custom resource that represents a session job deployment.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="Reference" />
+<meta property="og:description" content="Custom Resource Defintion Reference # This serves as a full reference for FlinkDeployment and FlinkSessionJob custom resource definitions, including all possible configuration parameters.
+FlinkDeployment # Class: org.apache.flink.kubernetes.operator.crd.FlinkDeployment
+Description: Custom resource that represents both Application and Session deployments.
+Parameter Type Docs spec org.apache.flink.kubernetes.operator.crd.spec.FlinkDeploymentSpec Spec that describes a Flink application or session cluster deployment. status org.apache.flink.kubernetes.operator.crd.status.FlinkDeploymentStatus Last observed status of the Flink deployment. FlinkSessionJob # Class: org.apache.flink.kubernetes.operator.crd.FlinkSessionJob
+Description: Custom resource that represents a session job deployment." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/reference/" /><meta property="article:section" content="docs" />
+
+
+
+<title>Reference | Apache Flink Kubernetes Operator</title>
+<link rel="manifest" href="/flink/flink-kubernetes-operator-docs-release-1.13/manifest.json">
+<link rel="icon" href="/flink/flink-kubernetes-operator-docs-release-1.13/favicon.png" type="image/x-icon">
+<link rel="alternate" hreflang="zh" href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/zh/docs/custom-resource/reference/" title="Reference">
+
+<link rel="stylesheet" href="/flink/flink-kubernetes-operator-docs-release-1.13/book.min.b952fefba7a2e6dac79b3035a33b021d21a5f84843c9890ad9ab605f3bfe0eac.css" integrity="sha256-uVL&#43;&#43;6ei5trHmzA1ozsCHSGl&#43;EhDyYkK2atgXzv&#43;Dqw=">
+<script defer src="/flink/flink-kubernetes-operator-docs-release-1.13/en.search.min.0b1b62ffa8c98cc3db9dc15e4b506ad3b38c189abdfbac02bcf6c0d9ecd45dfb.js" integrity="sha256-Cxti/6jJjMPbncFeS1Bq07OMGJq9&#43;6wCvPbA2ezUXfs="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+
+<link rel="stylesheet" type="text/css" href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/font-awesome/css/font-awesome.min.css">
+<script src="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/js/anchor.min.js"></script>
+<script src="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/js/flink.js"></script>
+
+
+  
+  <script>
+    var _paq = window._paq = window._paq || [];
+     
+     
+    _paq.push(['disableCookies']);
+     
+    _paq.push(["setDomains", ["*.flink.apache.org","*.nightlies.apache.org/flink"]]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="//analytics.apache.org/";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', '1']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  
+</head>
+
+<body dir=>
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      
+  
+
+<nav>
+
+
+<a id="logo" href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13">
+    <img width="70%" src="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/navbar-brand-logo.jpg">
+</a>
+<p style="text-align:right">v1.13.0</p>
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-4dd9cb641a390ed95bcf39ced08717dd" class="toggle"  />
+    <label for="section-4dd9cb641a390ed95bcf39ced08717dd" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Try the Flink Kubernetes Operator</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/try-flink-kubernetes-operator/quick-start/" class="">Quick Start</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-6c07f7e07850a28420f21d62041fba0d" class="toggle"  />
+    <label for="section-6c07f7e07850a28420f21d62041fba0d" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Concepts</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/concepts/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/concepts/architecture/" class="">Architecture</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/concepts/controller-flow/" class="">Controller Flow</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-79db1868389f630f6e8d85ef48f3be40" class="toggle" checked />
+    <label for="section-79db1868389f630f6e8d85ef48f3be40" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-code title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Custom Resource</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/job-management/" class="">Job Management</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/pod-template/" class="">Pod Template</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/snapshots/" class="">Snapshots</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/autoscaler/" class="">Autoscaler</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/autotuning/" class="">Autotuning</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/reference/" class=" active">Reference</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-edeb15b4bac51ae5b725de958354b931" class="toggle"  />
+    <label for="section-edeb15b4bac51ae5b725de958354b931" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-cogs title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Operations</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/helm/" class="">Helm</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/configuration/" class="">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/rbac/" class="">RBAC model</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/ingress/" class="">Ingress</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/health/" class="">Operator Health Monitoring</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/compatibility/" class="">Compatibility Guarantees</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/metrics-logging/" class="">Metrics and Logging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/upgrade/" class="">Operator Upgrades</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/plugins/" class="">Custom Operator Plugins</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-75a1b849ec817b105e0397971f02e977" class="toggle"  />
+    <label for="section-75a1b849ec817b105e0397971f02e977" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-book title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Development</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/development/guide/" class="">Guide</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/development/roadmap/" class="">Roadmap</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/>
+<hr class="menu-break">
+
+<a href="//flink.apache.org" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> Project Homepage</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/api/java/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> JavaDocs</a>
+<br/>
+
+<hr class="menu-break">
+<li style="list-style-type: none">
+  <br>
+  <input type="checkbox" id="section-version-picker" class="toggle">
+  <label for="section-version-picker" class="flex justify-between">
+     <div style="font-weight:450;margin-bottom:0.5em">Pick Docs Version</div>
+     <span>▾</span>
+  </label>
+  <ul>
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13">
+      1.13 (✓)
+    </a>
+    <hr class="menu-break">
+    
+      <li>
+        <a href="https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.12">
+          v1.12
+        </a>
+      </li>
+    
+      <li>
+        <a href="https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.11">
+          v1.11
+        </a>
+      </li>
+    
+    <hr class="menu-break">
+    <li>
+      <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/versions">
+          All Versions
+      </a>
+    </li>
+  </ul>
+</li>
+
+
+
+
+  
+
+  
+
+
+  
+
+
+
+
+
+
+<a  href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/zh/docs/custom-resource/reference/" class="flex align-center">
+  <i class="fa fa-globe" aria-hidden="true"></i>&nbsp;&nbsp;
+  中文版
+</a>
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/flink/flink-kubernetes-operator-docs-release-1.13/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Reference</strong>
+
+  <label for="toc-control">
+    
+    <img src="/flink/flink-kubernetes-operator-docs-release-1.13/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#flinkdeployment">FlinkDeployment</a></li>
+    <li><a href="#flinksessionjob">FlinkSessionJob</a></li>
+    <li><a href="#spec">Spec</a>
+      <ul>
+        <li><a href="#checkpointspec">CheckpointSpec</a></li>
+        <li><a href="#configobjectnode">ConfigObjectNode</a></li>
+        <li><a href="#configobjectnodedeserializer">ConfigObjectNodeDeserializer</a></li>
+        <li><a href="#flinkdeploymentspec">FlinkDeploymentSpec</a></li>
+        <li><a href="#flinksessionjobspec">FlinkSessionJobSpec</a></li>
+        <li><a href="#flinkstatesnapshotspec">FlinkStateSnapshotSpec</a></li>
+        <li><a href="#flinkversion">FlinkVersion</a></li>
+        <li><a href="#ingressspec">IngressSpec</a></li>
+        <li><a href="#jobkind">JobKind</a></li>
+        <li><a href="#jobmanagerspec">JobManagerSpec</a></li>
+        <li><a href="#jobreference">JobReference</a></li>
+        <li><a href="#jobspec">JobSpec</a></li>
+        <li><a href="#jobstate">JobState</a></li>
+        <li><a href="#kubernetesdeploymentmode">KubernetesDeploymentMode</a></li>
+        <li><a href="#resource">Resource</a></li>
+        <li><a href="#savepointspec">SavepointSpec</a></li>
+        <li><a href="#taskmanagerspec">TaskManagerSpec</a></li>
+        <li><a href="#upgrademode">UpgradeMode</a></li>
+      </ul>
+    </li>
+    <li><a href="#status">Status</a>
+      <ul>
+        <li><a href="#checkpoint">Checkpoint</a></li>
+        <li><a href="#checkpointinfo">CheckpointInfo</a></li>
+        <li><a href="#checkpointtype">CheckpointType</a></li>
+        <li><a href="#flinkdeploymentreconciliationstatus">FlinkDeploymentReconciliationStatus</a></li>
+        <li><a href="#flinkdeploymentstatus">FlinkDeploymentStatus</a></li>
+        <li><a href="#flinksessionjobreconciliationstatus">FlinkSessionJobReconciliationStatus</a></li>
+        <li><a href="#flinksessionjobstatus">FlinkSessionJobStatus</a></li>
+        <li><a href="#flinkstatesnapshotstatus">FlinkStateSnapshotStatus</a></li>
+        <li><a href="#state">State</a></li>
+        <li><a href="#state-1">State</a></li>
+        <li><a href="#jobmanagerdeploymentstatus">JobManagerDeploymentStatus</a></li>
+        <li><a href="#jobstatus">JobStatus</a></li>
+        <li><a href="#reconciliationstate">ReconciliationState</a></li>
+        <li><a href="#savepoint">Savepoint</a></li>
+        <li><a href="#savepointformattype">SavepointFormatType</a></li>
+        <li><a href="#savepointinfo">SavepointInfo</a></li>
+        <li><a href="#snapshottriggertype">SnapshotTriggerType</a></li>
+        <li><a href="#taskmanagerinfo">TaskManagerInfo</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+
+
+
+
+
+      
+  <article class="markdown"><!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<h1 id="custom-resource-defintion-reference">
+  Custom Resource Defintion Reference
+  <a class="anchor" href="#custom-resource-defintion-reference">#</a>
+</h1>
+<p>This serves as a full reference for FlinkDeployment and FlinkSessionJob custom resource definitions, including all possible configuration parameters.</p>
+<h2 id="flinkdeployment">
+  FlinkDeployment
+  <a class="anchor" href="#flinkdeployment">#</a>
+</h2>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.crd.FlinkDeployment</p>
+<p><strong>Description</strong>: Custom resource that represents both Application and Session deployments.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spec</td>
+<td>org.apache.flink.kubernetes.operator.crd.spec.FlinkDeploymentSpec</td>
+<td>Spec that describes a Flink application or session cluster deployment.</td>
+</tr>
+<tr>
+<td>status</td>
+<td>org.apache.flink.kubernetes.operator.crd.status.FlinkDeploymentStatus</td>
+<td>Last observed status of the Flink deployment.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="flinksessionjob">
+  FlinkSessionJob
+  <a class="anchor" href="#flinksessionjob">#</a>
+</h2>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.crd.FlinkSessionJob</p>
+<p><strong>Description</strong>: Custom resource that represents a session job deployment.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spec</td>
+<td>org.apache.flink.kubernetes.operator.crd.spec.FlinkSessionJobSpec</td>
+<td>Spec that describes a session job deployment.</td>
+</tr>
+<tr>
+<td>status</td>
+<td>org.apache.flink.kubernetes.operator.crd.status.FlinkSessionJobStatus</td>
+<td>Last observed status of the session job deployment.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="spec">
+  Spec
+  <a class="anchor" href="#spec">#</a>
+</h2>
+<h3 id="checkpointspec">
+  CheckpointSpec
+  <a class="anchor" href="#checkpointspec">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.CheckpointSpec</p>
+<p><strong>Description</strong>: Spec for checkpoint state snapshots. This is an empty class, used to instruct the operator to
+trigger a checkpoint.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+</table>
+<h3 id="configobjectnode">
+  ConfigObjectNode
+  <a class="anchor" href="#configobjectnode">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.ConfigObjectNode</p>
+<p><strong>Description</strong>: Allows parsing configurations as YAML, and adds related utility methods.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+</table>
+<h3 id="configobjectnodedeserializer">
+  ConfigObjectNodeDeserializer
+  <a class="anchor" href="#configobjectnodedeserializer">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.ConfigObjectNodeDeserializer</p>
+<p><strong>Description</strong>: Allows to deserialize to ConfigObjectNode.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+</table>
+<h3 id="flinkdeploymentspec">
+  FlinkDeploymentSpec
+  <a class="anchor" href="#flinkdeploymentspec">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.FlinkDeploymentSpec</p>
+<p><strong>Description</strong>: Spec that describes a Flink application or session cluster deployment.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>job</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.JobSpec</td>
+<td>Job specification for application deployments/session job. Null for session clusters.</td>
+</tr>
+<tr>
+<td>restartNonce</td>
+<td>java.lang.Long</td>
+<td>Nonce used to manually trigger restart for the cluster/session job. In order to trigger restart, change the number to a different non-null value.</td>
+</tr>
+<tr>
+<td>flinkConfiguration</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.ConfigObjectNode</td>
+<td>Flink configuration overrides for the Flink deployment or Flink session job.</td>
+</tr>
+<tr>
+<td>image</td>
+<td>java.lang.String</td>
+<td>Flink docker image used to start the Job and TaskManager pods.</td>
+</tr>
+<tr>
+<td>imagePullPolicy</td>
+<td>java.lang.String</td>
+<td>Image pull policy of the Flink docker image.</td>
+</tr>
+<tr>
+<td>serviceAccount</td>
+<td>java.lang.String</td>
+<td>Kubernetes service used by the Flink deployment.</td>
+</tr>
+<tr>
+<td>flinkVersion</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.FlinkVersion</td>
+<td>Flink image version.</td>
+</tr>
+<tr>
+<td>ingress</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.IngressSpec</td>
+<td>Ingress specs.</td>
+</tr>
+<tr>
+<td>podTemplate</td>
+<td>io.fabric8.kubernetes.api.model.PodTemplateSpec</td>
+<td>Base pod template for job and task manager pods. Can be overridden by the jobManager and taskManager pod templates.</td>
+</tr>
+<tr>
+<td>jobManager</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.JobManagerSpec</td>
+<td>JobManager specs.</td>
+</tr>
+<tr>
+<td>taskManager</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.TaskManagerSpec</td>
+<td>TaskManager specs.</td>
+</tr>
+<tr>
+<td>logConfiguration</td>
+<td>java.util.Map&lt;java.lang.String,java.lang.String&gt;</td>
+<td>Log configuration overrides for the Flink deployment. Format logConfigFileName -&gt; configContent.</td>
+</tr>
+<tr>
+<td>mode</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.KubernetesDeploymentMode</td>
+<td>Deployment mode of the Flink cluster, native or standalone.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flinksessionjobspec">
+  FlinkSessionJobSpec
+  <a class="anchor" href="#flinksessionjobspec">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.FlinkSessionJobSpec</p>
+<p><strong>Description</strong>: Spec that describes a Flink session job.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>job</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.JobSpec</td>
+<td>Job specification for application deployments/session job. Null for session clusters.</td>
+</tr>
+<tr>
+<td>restartNonce</td>
+<td>java.lang.Long</td>
+<td>Nonce used to manually trigger restart for the cluster/session job. In order to trigger restart, change the number to a different non-null value.</td>
+</tr>
+<tr>
+<td>flinkConfiguration</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.ConfigObjectNode</td>
+<td>Flink configuration overrides for the Flink deployment or Flink session job.</td>
+</tr>
+<tr>
+<td>deploymentName</td>
+<td>java.lang.String</td>
+<td>The name of the target session cluster deployment.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flinkstatesnapshotspec">
+  FlinkStateSnapshotSpec
+  <a class="anchor" href="#flinkstatesnapshotspec">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.FlinkStateSnapshotSpec</p>
+<p><strong>Description</strong>: Spec that describes a FlinkStateSnapshot.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jobReference</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.JobReference</td>
+<td>Source to take a snapshot of. Not required if it&rsquo;s a savepoint and alreadyExists is true.</td>
+</tr>
+<tr>
+<td>savepoint</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.SavepointSpec</td>
+<td>Spec in case of savepoint.</td>
+</tr>
+<tr>
+<td>checkpoint</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.CheckpointSpec</td>
+<td>Spec in case of checkpoint.</td>
+</tr>
+<tr>
+<td>backoffLimit</td>
+<td>int</td>
+<td>Maximum number of retries before the snapshot is considered as failed. Set to -1 for unlimited or 0 for no retries.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flinkversion">
+  FlinkVersion
+  <a class="anchor" href="#flinkversion">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.FlinkVersion</p>
+<p><strong>Description</strong>: Enumeration for supported Flink versions.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1_13</td>
+<td>No longer supported since 1.7 operator release.</td>
+</tr>
+<tr>
+<td>v1_14</td>
+<td>No longer supported since 1.7 operator release.</td>
+</tr>
+<tr>
+<td>v1_15</td>
+<td>Deprecated since 1.10 operator release.</td>
+</tr>
+<tr>
+<td>v1_16</td>
+<td>Deprecated since 1.11 operator release.</td>
+</tr>
+<tr>
+<td>v1_17</td>
+<td></td>
+</tr>
+<tr>
+<td>v1_18</td>
+<td></td>
+</tr>
+<tr>
+<td>v1_19</td>
+<td></td>
+</tr>
+<tr>
+<td>v1_20</td>
+<td></td>
+</tr>
+<tr>
+<td>v2_0</td>
+<td></td>
+</tr>
+<tr>
+<td>v2_1</td>
+<td></td>
+</tr>
+<tr>
+<td>v2_2</td>
+<td></td>
+</tr>
+<tr>
+<td>majorVersion</td>
+<td>int</td>
+</tr>
+<tr>
+<td>minorVersion</td>
+<td>int</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ingressspec">
+  IngressSpec
+  <a class="anchor" href="#ingressspec">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.IngressSpec</p>
+<p><strong>Description</strong>: Ingress spec.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>template</td>
+<td>java.lang.String</td>
+<td>Ingress template for the JobManager service.</td>
+</tr>
+<tr>
+<td>className</td>
+<td>java.lang.String</td>
+<td>Ingress className for the Flink deployment.</td>
+</tr>
+<tr>
+<td>annotations</td>
+<td>java.util.Map&lt;java.lang.String,java.lang.String&gt;</td>
+<td>Ingress annotations.</td>
+</tr>
+<tr>
+<td>labels</td>
+<td>java.util.Map&lt;java.lang.String,java.lang.String&gt;</td>
+<td>Ingress labels.</td>
+</tr>
+<tr>
+<td>tls</td>
+<td>java.util.List&lt;io.fabric8.kubernetes.api.model.networking.v1.IngressTLS&gt;</td>
+<td>Ingress tls.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jobkind">
+  JobKind
+  <a class="anchor" href="#jobkind">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.JobKind</p>
+<p><strong>Description</strong>: Describes the Kubernetes kind of job reference.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FlinkDeployment</td>
+<td>FlinkDeployment CR kind.</td>
+</tr>
+<tr>
+<td>FlinkSessionJob</td>
+<td>FlinkSessionJob CR kind.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jobmanagerspec">
+  JobManagerSpec
+  <a class="anchor" href="#jobmanagerspec">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.JobManagerSpec</p>
+<p><strong>Description</strong>: JobManager spec.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>resource</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.Resource</td>
+<td>Resource specification for the JobManager pods.</td>
+</tr>
+<tr>
+<td>replicas</td>
+<td>int</td>
+<td>Number of JobManager replicas. Must be 1 for non-HA deployments.</td>
+</tr>
+<tr>
+<td>podTemplate</td>
+<td>io.fabric8.kubernetes.api.model.PodTemplateSpec</td>
+<td>JobManager pod template. It will be merged with FlinkDeploymentSpec.podTemplate.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jobreference">
+  JobReference
+  <a class="anchor" href="#jobreference">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.JobReference</p>
+<p><strong>Description</strong>: Flink resource reference that can be a FlinkDeployment or FlinkSessionJob.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kind</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.JobKind</td>
+<td>Kind of the Flink resource, FlinkDeployment or FlinkSessionJob.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>java.lang.String</td>
+<td>Name of the Flink resource.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jobspec">
+  JobSpec
+  <a class="anchor" href="#jobspec">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.JobSpec</p>
+<p><strong>Description</strong>: Flink job spec.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jarURI</td>
+<td>java.lang.String</td>
+<td>Optional URI of the job jar within the Flink docker container. For example: local:///opt/flink/examples/streaming/StateMachineExample.jar. If not specified the job jar should be available in the system classpath.</td>
+</tr>
+<tr>
+<td>parallelism</td>
+<td>int</td>
+<td>Parallelism of the Flink job.</td>
+</tr>
+<tr>
+<td>entryClass</td>
+<td>java.lang.String</td>
+<td>Fully qualified main class name of the Flink job.</td>
+</tr>
+<tr>
+<td>args</td>
+<td>java.lang.String[]</td>
+<td>Arguments for the Flink job main class.</td>
+</tr>
+<tr>
+<td>state</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.JobState</td>
+<td>Desired state for the job.</td>
+</tr>
+<tr>
+<td>savepointTriggerNonce</td>
+<td>java.lang.Long</td>
+<td>Nonce used to manually trigger savepoint for the running job. In order to trigger a savepoint, change the number to a different non-null value.</td>
+</tr>
+<tr>
+<td>initialSavepointPath</td>
+<td>java.lang.String</td>
+<td>Savepoint path used by the job the first time it is deployed or during savepoint redeployments (triggered by changing the savepointRedeployNonce).</td>
+</tr>
+<tr>
+<td>checkpointTriggerNonce</td>
+<td>java.lang.Long</td>
+<td>Nonce used to manually trigger checkpoint for the running job. In order to trigger a checkpoint, change the number to a different non-null value.</td>
+</tr>
+<tr>
+<td>upgradeMode</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.UpgradeMode</td>
+<td>Upgrade mode of the Flink job.</td>
+</tr>
+<tr>
+<td>allowNonRestoredState</td>
+<td>java.lang.Boolean</td>
+<td>Allow checkpoint state that cannot be mapped to any job vertex in tasks.</td>
+</tr>
+<tr>
+<td>savepointRedeployNonce</td>
+<td>java.lang.Long</td>
+<td>Nonce used to trigger a full redeployment of the job from the savepoint path specified in initialSavepointPath. In order to trigger redeployment, change the number to a different non-null value. Rollback is not possible after redeployment.</td>
+</tr>
+<tr>
+<td>autoscalerResetNonce</td>
+<td>java.lang.Long</td>
+<td>Nonce used to reset the autoscaler metrics, parallelism overrides and history for the job. This can be used to quickly go back to the initial user-provided parallelism settings without having to toggle the autoscaler on and off. In order to trigger the reset behaviour simply change the nonce to a new non-null value.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jobstate">
+  JobState
+  <a class="anchor" href="#jobstate">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.JobState</p>
+<p><strong>Description</strong>: Enum describing the desired job state.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>running</td>
+<td>Job is expected to be processing data.</td>
+</tr>
+<tr>
+<td>suspended</td>
+<td>Processing is suspended with the intention of continuing later.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kubernetesdeploymentmode">
+  KubernetesDeploymentMode
+  <a class="anchor" href="#kubernetesdeploymentmode">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.KubernetesDeploymentMode</p>
+<p><strong>Description</strong>: Enum to control Flink deployment mode on Kubernetes.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>native</td>
+<td>Deploys Flink using Flinks native Kubernetes support. Only supported for newer versions of Flink</td>
+</tr>
+<tr>
+<td>standalone</td>
+<td>Deploys Flink on-top of kubernetes in standalone mode.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="resource">
+  Resource
+  <a class="anchor" href="#resource">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.Resource</p>
+<p><strong>Description</strong>: Resource spec.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cpu</td>
+<td>java.lang.Double</td>
+<td>Amount of CPU allocated to the pod.</td>
+</tr>
+<tr>
+<td>memory</td>
+<td>java.lang.String</td>
+<td>Amount of memory allocated to the pod. Example: 1024m, 1g</td>
+</tr>
+<tr>
+<td>ephemeralStorage</td>
+<td>java.lang.String</td>
+<td>Amount of ephemeral storage allocated to the pod. Example: 1024m, 2G</td>
+</tr>
+</tbody>
+</table>
+<h3 id="savepointspec">
+  SavepointSpec
+  <a class="anchor" href="#savepointspec">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.SavepointSpec</p>
+<p><strong>Description</strong>: Spec for savepoint state snapshots.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>path</td>
+<td>java.lang.String</td>
+<td>Optional path for the savepoint.</td>
+</tr>
+<tr>
+<td>formatType</td>
+<td>org.apache.flink.kubernetes.operator.api.status.SavepointFormatType</td>
+<td>Savepoint format to use.</td>
+</tr>
+<tr>
+<td>disposeOnDelete</td>
+<td>java.lang.Boolean</td>
+<td>Dispose the savepoints upon CR deletion.</td>
+</tr>
+<tr>
+<td>alreadyExists</td>
+<td>java.lang.Boolean</td>
+<td>Indicates that the savepoint already exists on the given path. The Operator will not trigger any new savepoints, just update the status of the resource as a completed snapshot.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="taskmanagerspec">
+  TaskManagerSpec
+  <a class="anchor" href="#taskmanagerspec">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.TaskManagerSpec</p>
+<p><strong>Description</strong>: TaskManager spec.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>resource</td>
+<td>org.apache.flink.kubernetes.operator.api.spec.Resource</td>
+<td>Resource specification for the TaskManager pods.</td>
+</tr>
+<tr>
+<td>replicas</td>
+<td>java.lang.Integer</td>
+<td>Number of TaskManager replicas. If defined, takes precedence over parallelism</td>
+</tr>
+<tr>
+<td>podTemplate</td>
+<td>io.fabric8.kubernetes.api.model.PodTemplateSpec</td>
+<td>TaskManager pod template. It will be merged with FlinkDeploymentSpec.podTemplate.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="upgrademode">
+  UpgradeMode
+  <a class="anchor" href="#upgrademode">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.spec.UpgradeMode</p>
+<p><strong>Description</strong>: Enum to control Flink job upgrade behavior.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>savepoint</td>
+<td>Job is upgraded by first taking a savepoint of the running job, shutting it down and restoring from the savepoint.</td>
+</tr>
+<tr>
+<td>last-state</td>
+<td>Job is upgraded using any latest checkpoint or savepoint available.</td>
+</tr>
+<tr>
+<td>stateless</td>
+<td>Job is upgraded with empty state.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="status">
+  Status
+  <a class="anchor" href="#status">#</a>
+</h2>
+<h3 id="checkpoint">
+  Checkpoint
+  <a class="anchor" href="#checkpoint">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.Checkpoint</p>
+<p><strong>Description</strong>: Represents information about a finished checkpoint.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>timeStamp</td>
+<td>long</td>
+<td>Millisecond timestamp at the start of the checkpoint operation.</td>
+</tr>
+<tr>
+<td>triggerType</td>
+<td>org.apache.flink.kubernetes.operator.api.status.SnapshotTriggerType</td>
+<td>Checkpoint trigger mechanism.</td>
+</tr>
+<tr>
+<td>formatType</td>
+<td>org.apache.flink.kubernetes.operator.api.status.CheckpointType</td>
+<td>Checkpoint format.</td>
+</tr>
+<tr>
+<td>triggerNonce</td>
+<td>java.lang.Long</td>
+<td>Nonce value used when the checkpoint was triggered manually {@link SnapshotTriggerType#MANUAL}, null for other types of checkpoint.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="checkpointinfo">
+  CheckpointInfo
+  <a class="anchor" href="#checkpointinfo">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.CheckpointInfo</p>
+<p><strong>Description</strong>: Stores checkpoint-related information.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lastCheckpoint</td>
+<td>org.apache.flink.kubernetes.operator.api.status.Checkpoint</td>
+<td>Last completed checkpoint by the operator.</td>
+</tr>
+<tr>
+<td>triggerId</td>
+<td>java.lang.String</td>
+<td>Trigger id of a pending checkpoint operation.</td>
+</tr>
+<tr>
+<td>triggerTimestamp</td>
+<td>java.lang.Long</td>
+<td>Trigger timestamp of a pending checkpoint operation.</td>
+</tr>
+<tr>
+<td>triggerType</td>
+<td>org.apache.flink.kubernetes.operator.api.status.SnapshotTriggerType</td>
+<td>Checkpoint trigger mechanism.</td>
+</tr>
+<tr>
+<td>formatType</td>
+<td>org.apache.flink.kubernetes.operator.api.status.CheckpointType</td>
+<td>Checkpoint format.</td>
+</tr>
+<tr>
+<td>lastPeriodicCheckpointTimestamp</td>
+<td>long</td>
+<td>Trigger timestamp of last periodic checkpoint operation.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="checkpointtype">
+  CheckpointType
+  <a class="anchor" href="#checkpointtype">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.CheckpointType</p>
+<p><strong>Description</strong>: Checkpoint format type.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FULL</td>
+<td></td>
+</tr>
+<tr>
+<td>INCREMENTAL</td>
+<td></td>
+</tr>
+<tr>
+<td>UNKNOWN</td>
+<td>Checkpoint format unknown, if the checkpoint was not triggered by the operator.</td>
+</tr>
+<tr>
+<td>description</td>
+<td>org.apache.flink.configuration.description.InlineElement</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flinkdeploymentreconciliationstatus">
+  FlinkDeploymentReconciliationStatus
+  <a class="anchor" href="#flinkdeploymentreconciliationstatus">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.FlinkDeploymentReconciliationStatus</p>
+<p><strong>Description</strong>: Status of the last reconcile step for the flink deployment.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>reconciliationTimestamp</td>
+<td>long</td>
+<td>Epoch timestamp of the last successful reconcile operation.</td>
+</tr>
+<tr>
+<td>lastReconciledSpec</td>
+<td>java.lang.String</td>
+<td>Last reconciled deployment spec. Used to decide whether further reconciliation steps are necessary.</td>
+</tr>
+<tr>
+<td>lastStableSpec</td>
+<td>java.lang.String</td>
+<td>Last stable deployment spec according to the specified stability condition. If a rollback strategy is defined this will be the target to roll back to.</td>
+</tr>
+<tr>
+<td>state</td>
+<td>org.apache.flink.kubernetes.operator.api.status.ReconciliationState</td>
+<td>Deployment state of the last reconciled spec.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flinkdeploymentstatus">
+  FlinkDeploymentStatus
+  <a class="anchor" href="#flinkdeploymentstatus">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.FlinkDeploymentStatus</p>
+<p><strong>Description</strong>: Last observed status of the Flink deployment.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jobStatus</td>
+<td>org.apache.flink.kubernetes.operator.api.status.JobStatus</td>
+<td>Last observed status of the Flink job on Application/Session cluster.</td>
+</tr>
+<tr>
+<td>error</td>
+<td>java.lang.String</td>
+<td>Error information about the FlinkDeployment/FlinkSessionJob.</td>
+</tr>
+<tr>
+<td>observedGeneration</td>
+<td>java.lang.Long</td>
+<td>Last observed generation of the FlinkDeployment/FlinkSessionJob.</td>
+</tr>
+<tr>
+<td>lifecycleState</td>
+<td>org.apache.flink.kubernetes.operator.api.lifecycle.ResourceLifecycleState</td>
+<td>Lifecycle state of the Flink resource (including being rolled back, failed etc.).</td>
+</tr>
+<tr>
+<td>clusterInfo</td>
+<td>java.util.Map&lt;java.lang.String,java.lang.String&gt;</td>
+<td>Information from running clusters.</td>
+</tr>
+<tr>
+<td>jobManagerDeploymentStatus</td>
+<td>org.apache.flink.kubernetes.operator.api.status.JobManagerDeploymentStatus</td>
+<td>Last observed status of the JobManager deployment.</td>
+</tr>
+<tr>
+<td>reconciliationStatus</td>
+<td>org.apache.flink.kubernetes.operator.api.status.FlinkDeploymentReconciliationStatus</td>
+<td>Status of the last reconcile operation.</td>
+</tr>
+<tr>
+<td>taskManager</td>
+<td>org.apache.flink.kubernetes.operator.api.status.TaskManagerInfo</td>
+<td>Information about the TaskManagers for the scale subresource.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flinksessionjobreconciliationstatus">
+  FlinkSessionJobReconciliationStatus
+  <a class="anchor" href="#flinksessionjobreconciliationstatus">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.FlinkSessionJobReconciliationStatus</p>
+<p><strong>Description</strong>: Status of the last reconcile step for the flink sessionjob.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>reconciliationTimestamp</td>
+<td>long</td>
+<td>Epoch timestamp of the last successful reconcile operation.</td>
+</tr>
+<tr>
+<td>lastReconciledSpec</td>
+<td>java.lang.String</td>
+<td>Last reconciled deployment spec. Used to decide whether further reconciliation steps are necessary.</td>
+</tr>
+<tr>
+<td>lastStableSpec</td>
+<td>java.lang.String</td>
+<td>Last stable deployment spec according to the specified stability condition. If a rollback strategy is defined this will be the target to roll back to.</td>
+</tr>
+<tr>
+<td>state</td>
+<td>org.apache.flink.kubernetes.operator.api.status.ReconciliationState</td>
+<td>Deployment state of the last reconciled spec.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flinksessionjobstatus">
+  FlinkSessionJobStatus
+  <a class="anchor" href="#flinksessionjobstatus">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.FlinkSessionJobStatus</p>
+<p><strong>Description</strong>: Last observed status of the Flink Session job.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jobStatus</td>
+<td>org.apache.flink.kubernetes.operator.api.status.JobStatus</td>
+<td>Last observed status of the Flink job on Application/Session cluster.</td>
+</tr>
+<tr>
+<td>error</td>
+<td>java.lang.String</td>
+<td>Error information about the FlinkDeployment/FlinkSessionJob.</td>
+</tr>
+<tr>
+<td>observedGeneration</td>
+<td>java.lang.Long</td>
+<td>Last observed generation of the FlinkDeployment/FlinkSessionJob.</td>
+</tr>
+<tr>
+<td>lifecycleState</td>
+<td>org.apache.flink.kubernetes.operator.api.lifecycle.ResourceLifecycleState</td>
+<td>Lifecycle state of the Flink resource (including being rolled back, failed etc.).</td>
+</tr>
+<tr>
+<td>reconciliationStatus</td>
+<td>org.apache.flink.kubernetes.operator.api.status.FlinkSessionJobReconciliationStatus</td>
+<td>Status of the last reconcile operation.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flinkstatesnapshotstatus">
+  FlinkStateSnapshotStatus
+  <a class="anchor" href="#flinkstatesnapshotstatus">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.FlinkStateSnapshotStatus</p>
+<p><strong>Description</strong>: Last observed status of the Flink state snapshot.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+</table>
+<h3 id="state">
+  State
+  <a class="anchor" href="#state">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.FlinkStateSnapshotStatus.State</p>
+<p><strong>Description</strong>: Describes state of a snapshot.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COMPLETED</td>
+<td>Snapshot was successful and available.</td>
+</tr>
+<tr>
+<td>FAILED</td>
+<td>Error during snapshot.</td>
+</tr>
+<tr>
+<td>IN_PROGRESS</td>
+<td>Snapshot in progress.</td>
+</tr>
+<tr>
+<td>TRIGGER_PENDING</td>
+<td>Not yet processed by the operator.</td>
+</tr>
+<tr>
+<td>ABANDONED</td>
+<td>Snapshot abandoned due to job failure/upgrade.</td>
+</tr>
+<tr>
+<td>state</td>
+<td>org.apache.flink.kubernetes.operator.api.status.FlinkStateSnapshotStatus.State</td>
+</tr>
+<tr>
+<td>triggerId</td>
+<td>java.lang.String</td>
+</tr>
+<tr>
+<td>triggerTimestamp</td>
+<td>java.lang.String</td>
+</tr>
+<tr>
+<td>resultTimestamp</td>
+<td>java.lang.String</td>
+</tr>
+<tr>
+<td>path</td>
+<td>java.lang.String</td>
+</tr>
+<tr>
+<td>error</td>
+<td>java.lang.String</td>
+</tr>
+<tr>
+<td>failures</td>
+<td>int</td>
+</tr>
+</tbody>
+</table>
+<h3 id="state-1">
+  State
+  <a class="anchor" href="#state-1">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.FlinkStateSnapshotStatus.State</p>
+<p><strong>Description</strong>: Describes state of a snapshot.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COMPLETED</td>
+<td>Snapshot was successful and available.</td>
+</tr>
+<tr>
+<td>FAILED</td>
+<td>Error during snapshot.</td>
+</tr>
+<tr>
+<td>IN_PROGRESS</td>
+<td>Snapshot in progress.</td>
+</tr>
+<tr>
+<td>TRIGGER_PENDING</td>
+<td>Not yet processed by the operator.</td>
+</tr>
+<tr>
+<td>ABANDONED</td>
+<td>Snapshot abandoned due to job failure/upgrade.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jobmanagerdeploymentstatus">
+  JobManagerDeploymentStatus
+  <a class="anchor" href="#jobmanagerdeploymentstatus">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.JobManagerDeploymentStatus</p>
+<p><strong>Description</strong>: Status of the Flink JobManager Kubernetes deployment.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>READY</td>
+<td>JobManager is running and ready to receive REST API calls.</td>
+</tr>
+<tr>
+<td>DEPLOYED_NOT_READY</td>
+<td>JobManager is running but not ready yet to receive REST API calls.</td>
+</tr>
+<tr>
+<td>DEPLOYING</td>
+<td>JobManager process is starting up.</td>
+</tr>
+<tr>
+<td>MISSING</td>
+<td>JobManager deployment not found, probably not started or killed by user.</td>
+</tr>
+<tr>
+<td>ERROR</td>
+<td>Deployment in terminal error, requires spec change for reconciliation to continue.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jobstatus">
+  JobStatus
+  <a class="anchor" href="#jobstatus">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.JobStatus</p>
+<p><strong>Description</strong>: Last observed status of the Flink job within an application deployment.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jobName</td>
+<td>java.lang.String</td>
+<td>Name of the job.</td>
+</tr>
+<tr>
+<td>jobId</td>
+<td>java.lang.String</td>
+<td>Flink JobId of the Job.</td>
+</tr>
+<tr>
+<td>state</td>
+<td>org.apache.flink.api.common.JobStatus</td>
+<td>Last observed state of the job.</td>
+</tr>
+<tr>
+<td>startTime</td>
+<td>java.lang.String</td>
+<td>Start time of the job.</td>
+</tr>
+<tr>
+<td>updateTime</td>
+<td>java.lang.String</td>
+<td>Update time of the job.</td>
+</tr>
+<tr>
+<td>upgradeSavepointPath</td>
+<td>java.lang.String</td>
+<td></td>
+</tr>
+<tr>
+<td>savepointInfo</td>
+<td>org.apache.flink.kubernetes.operator.api.status.SavepointInfo</td>
+<td>Information about pending and last savepoint for the job.</td>
+</tr>
+<tr>
+<td>checkpointInfo</td>
+<td>org.apache.flink.kubernetes.operator.api.status.CheckpointInfo</td>
+<td>Information about pending and last checkpoint for the job.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reconciliationstate">
+  ReconciliationState
+  <a class="anchor" href="#reconciliationstate">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.ReconciliationState</p>
+<p><strong>Description</strong>: Current state of the reconciliation.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DEPLOYED</td>
+<td>The lastReconciledSpec is currently deployed.</td>
+</tr>
+<tr>
+<td>UPGRADING</td>
+<td>The spec is being upgraded.</td>
+</tr>
+<tr>
+<td>ROLLING_BACK</td>
+<td>In the process of rolling back to the lastStableSpec.</td>
+</tr>
+<tr>
+<td>ROLLED_BACK</td>
+<td>Rolled back to the lastStableSpec.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="savepoint">
+  Savepoint
+  <a class="anchor" href="#savepoint">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.Savepoint</p>
+<p><strong>Description</strong>: Represents information about a finished savepoint.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>timeStamp</td>
+<td>long</td>
+<td>Millisecond timestamp at the start of the savepoint operation.</td>
+</tr>
+<tr>
+<td>location</td>
+<td>java.lang.String</td>
+<td>External pointer of the savepoint can be used to recover jobs.</td>
+</tr>
+<tr>
+<td>triggerType</td>
+<td>org.apache.flink.kubernetes.operator.api.status.SnapshotTriggerType</td>
+<td>Savepoint trigger mechanism.</td>
+</tr>
+<tr>
+<td>formatType</td>
+<td>org.apache.flink.kubernetes.operator.api.status.SavepointFormatType</td>
+<td>Savepoint format.</td>
+</tr>
+<tr>
+<td>triggerNonce</td>
+<td>java.lang.Long</td>
+<td>Nonce value used when the savepoint was triggered manually {@link SnapshotTriggerType#MANUAL}, null for other types of savepoints.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="savepointformattype">
+  SavepointFormatType
+  <a class="anchor" href="#savepointformattype">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.SavepointFormatType</p>
+<p><strong>Description</strong>: Savepoint format type.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CANONICAL</td>
+<td>A canonical, common for all state backends format.</td>
+</tr>
+<tr>
+<td>NATIVE</td>
+<td>A format specific for the chosen state backend.</td>
+</tr>
+<tr>
+<td>UNKNOWN</td>
+<td>Savepoint format unknown, if the savepoint was not triggered by the operator.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="savepointinfo">
+  SavepointInfo
+  <a class="anchor" href="#savepointinfo">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.SavepointInfo</p>
+<p><strong>Description</strong>: Stores savepoint related information.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lastSavepoint</td>
+<td>org.apache.flink.kubernetes.operator.api.status.Savepoint</td>
+<td>Last completed savepoint by the operator.</td>
+</tr>
+<tr>
+<td>triggerId</td>
+<td>java.lang.String</td>
+<td>Trigger id of a pending savepoint operation.</td>
+</tr>
+<tr>
+<td>triggerTimestamp</td>
+<td>java.lang.Long</td>
+<td>Trigger timestamp of a pending savepoint operation.</td>
+</tr>
+<tr>
+<td>triggerType</td>
+<td>org.apache.flink.kubernetes.operator.api.status.SnapshotTriggerType</td>
+<td>Savepoint trigger mechanism.</td>
+</tr>
+<tr>
+<td>formatType</td>
+<td>org.apache.flink.kubernetes.operator.api.status.SavepointFormatType</td>
+<td>Savepoint format.</td>
+</tr>
+<tr>
+<td>savepointHistory</td>
+<td>java.util.List&lt;org.apache.flink.kubernetes.operator.api.status.Savepoint&gt;</td>
+<td>List of recent savepoints.</td>
+</tr>
+<tr>
+<td>lastPeriodicSavepointTimestamp</td>
+<td>long</td>
+<td>Trigger timestamp of last periodic savepoint operation.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="snapshottriggertype">
+  SnapshotTriggerType
+  <a class="anchor" href="#snapshottriggertype">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.SnapshotTriggerType</p>
+<p><strong>Description</strong>: Snapshot trigger mechanism.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MANUAL</td>
+<td>Snapshot manually triggered by changing a triggerNonce.</td>
+</tr>
+<tr>
+<td>PERIODIC</td>
+<td>Snapshot periodically triggered by the operator.</td>
+</tr>
+<tr>
+<td>UPGRADE</td>
+<td>Snapshot triggered during stateful upgrade.</td>
+</tr>
+<tr>
+<td>UNKNOWN</td>
+<td>Snapshot trigger mechanism unknown, such as savepoint retrieved directly from Flink job.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="taskmanagerinfo">
+  TaskManagerInfo
+  <a class="anchor" href="#taskmanagerinfo">#</a>
+</h3>
+<p><strong>Class</strong>: org.apache.flink.kubernetes.operator.api.status.TaskManagerInfo</p>
+<p><strong>Description</strong>: Last observed status of the Flink job within an application deployment.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>labelSelector</td>
+<td>java.lang.String</td>
+<td>TaskManager label selector.</td>
+</tr>
+<tr>
+<td>replicas</td>
+<td>int</td>
+<td>Number of TaskManager replicas if defined in the spec.</td>
+</tr>
+</tbody>
+</table>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  
+
+
+
+
+<a href="//github.com/apache/flink-kubernetes-operator/edit/release-1.13/docs/content/docs/custom-resource/reference.md" style="color:black"><i class="fa fa-edit fa-fw"></i>Edit This Page</a>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#flinkdeployment">FlinkDeployment</a></li>
+    <li><a href="#flinksessionjob">FlinkSessionJob</a></li>
+    <li><a href="#spec">Spec</a>
+      <ul>
+        <li><a href="#checkpointspec">CheckpointSpec</a></li>
+        <li><a href="#configobjectnode">ConfigObjectNode</a></li>
+        <li><a href="#configobjectnodedeserializer">ConfigObjectNodeDeserializer</a></li>
+        <li><a href="#flinkdeploymentspec">FlinkDeploymentSpec</a></li>
+        <li><a href="#flinksessionjobspec">FlinkSessionJobSpec</a></li>
+        <li><a href="#flinkstatesnapshotspec">FlinkStateSnapshotSpec</a></li>
+        <li><a href="#flinkversion">FlinkVersion</a></li>
+        <li><a href="#ingressspec">IngressSpec</a></li>
+        <li><a href="#jobkind">JobKind</a></li>
+        <li><a href="#jobmanagerspec">JobManagerSpec</a></li>
+        <li><a href="#jobreference">JobReference</a></li>
+        <li><a href="#jobspec">JobSpec</a></li>
+        <li><a href="#jobstate">JobState</a></li>
+        <li><a href="#kubernetesdeploymentmode">KubernetesDeploymentMode</a></li>
+        <li><a href="#resource">Resource</a></li>
+        <li><a href="#savepointspec">SavepointSpec</a></li>
+        <li><a href="#taskmanagerspec">TaskManagerSpec</a></li>
+        <li><a href="#upgrademode">UpgradeMode</a></li>
+      </ul>
+    </li>
+    <li><a href="#status">Status</a>
+      <ul>
+        <li><a href="#checkpoint">Checkpoint</a></li>
+        <li><a href="#checkpointinfo">CheckpointInfo</a></li>
+        <li><a href="#checkpointtype">CheckpointType</a></li>
+        <li><a href="#flinkdeploymentreconciliationstatus">FlinkDeploymentReconciliationStatus</a></li>
+        <li><a href="#flinkdeploymentstatus">FlinkDeploymentStatus</a></li>
+        <li><a href="#flinksessionjobreconciliationstatus">FlinkSessionJobReconciliationStatus</a></li>
+        <li><a href="#flinksessionjobstatus">FlinkSessionJobStatus</a></li>
+        <li><a href="#flinkstatesnapshotstatus">FlinkStateSnapshotStatus</a></li>
+        <li><a href="#state">State</a></li>
+        <li><a href="#state-1">State</a></li>
+        <li><a href="#jobmanagerdeploymentstatus">JobManagerDeploymentStatus</a></li>
+        <li><a href="#jobstatus">JobStatus</a></li>
+        <li><a href="#reconciliationstate">ReconciliationState</a></li>
+        <li><a href="#savepoint">Savepoint</a></li>
+        <li><a href="#savepointformattype">SavepointFormatType</a></li>
+        <li><a href="#savepointinfo">SavepointInfo</a></li>
+        <li><a href="#snapshottriggertype">SnapshotTriggerType</a></li>
+        <li><a href="#taskmanagerinfo">TaskManagerInfo</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+ 
+    </aside>
+    <aside class="expand-toc">
+      <button class="toc" onclick="expandToc()">
+        <i class="fa fa-expand" aria-hidden="true"></i>
+      </button>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

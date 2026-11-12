@@ -1,0 +1,93 @@
+```bash
+# Create Kafka topics
+./bin/kafka-topics.sh --create --topic session-events --partitions 32 --replication-factor 3 --if-not-exists --config retention.ms=86400000 --config retention.bytes=21474836480 --command-config config.yaml
+./bin/kafka-topics.sh --create --topic session-events-enriched --partitions 32 --replication-factor 3 --if-not-exists --config retention.ms=86400000 --config retention.bytes=21474836480 --command-config config.yaml
+```
+
+```yaml
+# Flink configuration
+jobmanager.memory.process.size: 2048mb
+taskmanager.memory.process.size: 2048mb
+jobmanager.rpc.address: flink-jobmanager
+taskmanager.numberOfTaskSlots: 4
+parallelism.default: 32
+pekko.remote.port: 6123
+pekko.client-socket-worker-pool.pool-size-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.pool-size-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-min: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-max: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.blocking-threads-limit: 32
+pekko.client-socket-worker-pool.fork-join-executor.allow-core-timeout: 10000
+pekko.client-socket-worker-pool.fork-join-executor.keep-alive-time: 60
+pekko.client-socket-worker-pool.fork-join-executor.queue-capacity: 10000
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-min: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-max: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.blocking-threads-limit: 32
+pekko.client-socket-worker-pool.fork-join-executor.allow-core-timeout: 10000
+pekko.client-socket-worker-pool.fork-join-executor.keep-alive-time: 60
+pekko.client-socket-worker-pool.fork-join-executor.queue-capacity: 10000
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-min: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-max: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.blocking-threads-limit: 32
+pekko.client-socket-worker-pool.fork-join-executor.allow-core-timeout: 10000
+pekko.client-socket-worker-pool.fork-join-executor.keep-alive-time: 60
+pekko.client-socket-worker-pool.fork-join-executor.queue-capacity: 10000
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-min: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-max: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.blocking-threads-limit: 32
+pekko.client-socket-worker-pool.fork-join-executor.allow-core-timeout: 10000
+pekko.client-socket-worker-pool.fork-join-executor.keep-alive-time: 60
+pekko.client-socket-worker-pool.fork-join-executor.queue-capacity: 10000
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-min: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-max: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.blocking-threads-limit: 32
+pekko.client-socket-worker-pool.fork-join-executor.allow-core-timeout: 10000
+pekko.client-socket-worker-pool.fork-join-executor.keep-alive-time: 60
+pekko.client-socket-worker-pool.fork-join-executor.queue-capacity: 10000
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-min: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-max: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.blocking-threads-limit: 32
+pekko.client-socket-worker-pool.fork-join-executor.allow-core-timeout: 10000
+pekko.client-socket-worker-pool.fork-join-executor.keep-alive-time: 60
+pekko.client-socket-worker-pool.fork-join-executor.queue-capacity: 10000
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-min: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-max: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.blocking-threads-limit: 32
+pekko.client-socket-worker-pool.fork-join-executor.allow-core-timeout: 10000
+pekko.client-socket-worker-pool.fork-join-executor.keep-alive-time: 60
+pekko.client-socket-worker-pool.fork-join-executor.queue-capacity: 10000
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-min: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-max: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.blocking-threads-limit: 32
+pekko.client-socket-worker-pool.fork-join-executor.allow-core-timeout: 10000
+pekko.client-socket-worker-pool.fork-join-executor.keep-alive-time: 60
+pekko.client-socket-worker-pool.fork-join-executor.queue-capacity: 10000
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-min: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-max: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.blocking-threads-limit: 32
+pekko.client-socket-worker-pool.fork-join-executor.allow-core-timeout: 10000
+pekko.client-socket-worker-pool.fork-join-executor.keep-alive-time: 60
+pekko.client-socket-worker-pool.fork-join-executor.queue-capacity: 10000
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-min: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-max: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.blocking-threads-limit: 32
+pekko.client-socket-worker-pool.fork-join-executor.allow-core-timeout: 10000
+pekko.client-socket-worker-pool.fork-join-executor.keep-alive-time: 60
+pekko.client-socket-worker-pool.fork-join-executor.queue-capacity: 10000
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-min: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-max: 8
+pekko.client-socket-worker-pool.fork-join-executor.parallelism-factor: 3.0
+pekko.client-socket-worker-pool.fork-join-executor.blocking-threads-limit: 32
+pekko.client-socket-worker-pool.fork-join-executor.allow-core-timeout: 10000
+pekko.client-socket-worker-pool.fork-join-executor.keep-alive-time: 60
+pekko.client-socket-worker-pool.fork-join-executor.queue-capacity: 10000

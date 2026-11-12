@@ -1,0 +1,1919 @@
+{
+ "validator_version": "1.3",
+ "n_scenarios": 226,
+ "reference": {
+  "ID": {
+   "n": 192,
+   "valid": 192
+  },
+  "CASE": {
+   "n": 2,
+   "valid": 2
+  },
+  "OOD": {
+   "n": 32,
+   "valid": 32
+  },
+  "all": {
+   "n": 226,
+   "valid": 226
+  }
+ },
+ "neutral": {
+  "flat config.yaml keys": {
+   "n": 113,
+   "still_valid": 113,
+   "examples_rejected": []
+  },
+  "other duration units": {
+   "n": 226,
+   "still_valid": 226,
+   "examples_rejected": []
+  },
+  "other memory units": {
+   "n": 226,
+   "still_valid": 226,
+   "examples_rejected": []
+  },
+  "comments in every block": {
+   "n": 226,
+   "still_valid": 226,
+   "examples_rejected": []
+  },
+  "unquoted SQL identifiers": {
+   "n": 224,
+   "still_valid": 224,
+   "examples_rejected": []
+  },
+  "lower-case SQL keywords": {
+   "n": 226,
+   "still_valid": 226,
+   "examples_rejected": []
+  },
+  "reordered CLI options": {
+   "n": 113,
+   "still_valid": 113,
+   "examples_rejected": []
+  },
+  "CLI options as --opt=value": {
+   "n": 113,
+   "still_valid": 113,
+   "examples_rejected": []
+  },
+  "string-typed Strimzi config values": {
+   "n": 112,
+   "still_valid": 112,
+   "examples_rejected": []
+  },
+  "lower-case enum values": {
+   "n": 226,
+   "still_valid": 226,
+   "examples_rejected": []
+  },
+  "deprecated Flink alias": {
+   "n": 226,
+   "still_valid": 226,
+   "examples_rejected": []
+  }
+ },
+ "faults": {
+  "artefact missing (SQL block)": {
+   "group": "format",
+   "expected_level": "L1",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "YAML syntax error": {
+   "group": "format",
+   "expected_level": "L1",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "answer truncated at the token limit": {
+   "group": "format",
+   "expected_level": "L1",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "unbalanced SQL statement": {
+   "group": "format",
+   "expected_level": "L1",
+   "n": 224,
+   "detected": 224,
+   "at_expected_level": 224,
+   "missed": []
+  },
+  "misspelled Flink option": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "misspelled topic config": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "broker setting used as topic config": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "value of the wrong type": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "invalid enumeration value": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "value out of the documented range": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "unknown connector option": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 222,
+   "detected": 222,
+   "at_expected_level": 222,
+   "missed": []
+  },
+  "unknown connector": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 225,
+   "detected": 225,
+   "at_expected_level": 225,
+   "missed": []
+  },
+  "unknown format": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 223,
+   "detected": 223,
+   "at_expected_level": 223,
+   "missed": []
+  },
+  "unknown Kafka client property": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "unknown CRD field": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 113,
+   "detected": 113,
+   "at_expected_level": 113,
+   "missed": []
+  },
+  "CRD field of the wrong type": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 113,
+   "detected": 113,
+   "at_expected_level": 113,
+   "missed": []
+  },
+  "connector option in the cluster configuration": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "unknown kafka-topics.sh option": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 113,
+   "detected": 113,
+   "at_expected_level": 113,
+   "missed": []
+  },
+  "savepoint upgrade mode without savepoint directory": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 113,
+   "detected": 113,
+   "at_expected_level": 113,
+   "missed": []
+  },
+  "invalid FlinkDeployment name": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 113,
+   "detected": 113,
+   "at_expected_level": 113,
+   "missed": []
+  },
+  "FlinkDeployment without service account": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 113,
+   "detected": 113,
+   "at_expected_level": 113,
+   "missed": []
+  },
+  "required connector option missing": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 224,
+   "detected": 224,
+   "at_expected_level": 224,
+   "missed": []
+  },
+  "source without group.id (runtime-derived rule)": {
+   "group": "schema",
+   "expected_level": "L2",
+   "n": 225,
+   "detected": 225,
+   "at_expected_level": 225,
+   "missed": []
+  },
+  "topic config removed in Kafka 4.0": {
+   "group": "version",
+   "expected_level": "L2",
+   "n": 225,
+   "detected": 225,
+   "at_expected_level": 224,
+   "missed": []
+  },
+  "--zookeeper (removed in Kafka 3.0)": {
+   "group": "version",
+   "expected_level": "L3",
+   "n": 113,
+   "detected": 113,
+   "at_expected_level": 113,
+   "missed": []
+  },
+  "CRD apiVersion not served": {
+   "group": "version",
+   "expected_level": "L3",
+   "n": 113,
+   "detected": 113,
+   "at_expected_level": 113,
+   "missed": []
+  },
+  "flinkVersion other than the cluster's": {
+   "group": "version",
+   "expected_level": "L3",
+   "n": 113,
+   "detected": 113,
+   "at_expected_level": 113,
+   "missed": []
+  },
+  "retention differs from the requirement": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "min.insync.replicas missing (durability)": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 108,
+   "detected": 108,
+   "at_expected_level": 108,
+   "missed": []
+  },
+  "replication factor 1 (durability)": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 108,
+   "detected": 108,
+   "at_expected_level": 108,
+   "missed": []
+  },
+  "replication factor above the broker count": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "at-least-once sink for exactly-once": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 109,
+   "detected": 109,
+   "at_expected_level": 109,
+   "missed": []
+  },
+  "transactional-id prefix missing": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 110,
+   "detected": 110,
+   "at_expected_level": 110,
+   "missed": []
+  },
+  "transaction timeout above the broker maximum": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 110,
+   "detected": 110,
+   "at_expected_level": 110,
+   "missed": []
+  },
+  "AT_LEAST_ONCE checkpoints for exactly-once": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 110,
+   "detected": 110,
+   "at_expected_level": 110,
+   "missed": []
+  },
+  "checkpoint interval above the latency objective": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 110,
+   "detected": 110,
+   "at_expected_level": 110,
+   "missed": []
+  },
+  "checkpointing disabled": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "too few partitions for the input rate": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 203,
+   "detected": 203,
+   "at_expected_level": 203,
+   "missed": []
+  },
+  "parallelism too low for the input rate": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 109,
+   "detected": 109,
+   "at_expected_level": 109,
+   "missed": []
+  },
+  "parallelism above the slot capacity": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 225,
+   "detected": 225,
+   "at_expected_level": 225,
+   "missed": []
+  },
+  "TaskManager memory above the limit": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "TaskManager CPU above the limit": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 112,
+   "detected": 112,
+   "at_expected_level": 112,
+   "missed": []
+  },
+  "topic used by the job not created": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 226,
+   "detected": 226,
+   "at_expected_level": 226,
+   "missed": []
+  },
+  "table reads or writes the wrong topic": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 225,
+   "detected": 225,
+   "at_expected_level": 225,
+   "missed": []
+  },
+  "KafkaTopic bound to another cluster": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 113,
+   "detected": 113,
+   "at_expected_level": 113,
+   "missed": []
+  },
+  "family-specific setting removed (OOD)": {
+   "group": "requirements",
+   "expected_level": "L4",
+   "n": 47,
+   "detected": 47,
+   "at_expected_level": null,
+   "missed": [],
+   "not_a_defect_equals_default": [
+    "OOD-12-rocksdb-memory-native: rocksdb.memory.managed",
+    "OOD-12-rocksdb-memory-k8s: rocksdb.memory.managed",
+    "OOD-14-compact-delete-native: delete.retention.ms",
+    "OOD-14-compact-delete-k8s: delete.retention.ms"
+   ]
+  }
+ },
+ "fault_groups": {
+  "format": {
+   "classes": 4,
+   "n": 902,
+   "detected": 902
+  },
+  "schema": {
+   "classes": 19,
+   "n": 3605,
+   "detected": 3605
+  },
+  "version": {
+   "classes": 4,
+   "n": 564,
+   "detected": 564
+  },
+  "requirements": {
+   "classes": 19,
+   "n": 2929,
+   "detected": 2929
+  }
+ },
+ "official": [
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "env.java.opts.all: --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "env.java.opts.all: --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "jobmanager.bind-host: localhost",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "jobmanager.bind-host: localhost",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "jobmanager.rpc.address: localhost",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "jobmanager.rpc.address: localhost",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "jobmanager.rpc.port: 6123",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "jobmanager.rpc.port: 6123",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "jobmanager.memory.process.size: 1600m",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "jobmanager.memory.process.size: 1600m",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "jobmanager.execution.failover-strategy: region",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "jobmanager.execution.failover-strategy: region",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "taskmanager.bind-host: localhost",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "taskmanager.bind-host: localhost",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "taskmanager.host: localhost",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "taskmanager.host: localhost",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "taskmanager.numberOfTaskSlots: 1",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "taskmanager.numberOfTaskSlots: 1",
+   "rejected": false,
+   "findings": [],
+   "warnings": [
+    "duplicate YAML key taskmanager.numberOfTaskSlots"
+   ],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "taskmanager.memory.process.size: 1728m",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "taskmanager.memory.process.size: 1728m",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "parallelism.default: 1",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "parallelism.default: 1",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "native",
+   "item": "rest.address: localhost",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (active)",
+   "track": "k8s",
+   "item": "rest.address: localhost",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "fs.default-scheme: hdfs://mynamenode:12345",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "fs.default-scheme: hdfs://mynamenode:12345",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "high-availability.type: zookeeper",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "high-availability.type: zookeeper",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "high-availability.storageDir: hdfs:///flink/ha/",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "high-availability.storageDir: hdfs:///flink/ha/",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "high-availability.zookeeper.quorum: localhost:2181",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "high-availability.zookeeper.quorum: localhost:2181",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "high-availability.zookeeper.client.acl: open",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "high-availability.zookeeper.client.acl: open",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "execution.checkpointing.interval: 3min",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "execution.checkpointing.interval: 3min",
+   "rejected": false,
+   "findings": [],
+   "warnings": [
+    "duplicate YAML key execution.checkpointing.interval"
+   ],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "execution.checkpointing.externalized-checkpoint-retention: DELETE_ON_CANCELLATION",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "execution.checkpointing.externalized-checkpoint-retention: DELETE_ON_CANCELLATION",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "execution.checkpointing.max-concurrent-checkpoints: 1",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "execution.checkpointing.max-concurrent-checkpoints: 1",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "execution.checkpointing.min-pause: 0",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "execution.checkpointing.min-pause: 0",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "execution.checkpointing.mode: EXACTLY_ONCE",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "execution.checkpointing.mode: EXACTLY_ONCE",
+   "rejected": false,
+   "findings": [],
+   "warnings": [
+    "duplicate YAML key execution.checkpointing.mode"
+   ],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "execution.checkpointing.timeout: 10min",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "execution.checkpointing.timeout: 10min",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "execution.checkpointing.tolerable-failed-checkpoints: 0",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "execution.checkpointing.tolerable-failed-checkpoints: 0",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "execution.checkpointing.unaligned: False",
+   "rejected": false,
+   "findings": [],
+   "warnings": [
+    "execution.checkpointing.unaligned is deprecated in Flink 1.20"
+   ],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "execution.checkpointing.unaligned: False",
+   "rejected": false,
+   "findings": [],
+   "warnings": [
+    "execution.checkpointing.unaligned is deprecated in Flink 1.20"
+   ],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "state.backend.type: hashmap",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "state.backend.type: hashmap",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "state.backend.incremental: False",
+   "rejected": false,
+   "findings": [],
+   "warnings": [
+    "state.backend.incremental is deprecated in Flink 1.20"
+   ],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "state.backend.incremental: False",
+   "rejected": false,
+   "findings": [],
+   "warnings": [
+    "state.backend.incremental is deprecated in Flink 1.20"
+   ],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "state.checkpoints.dir: hdfs://namenode-host:port/flink-checkpoints",
+   "rejected": false,
+   "findings": [],
+   "warnings": [
+    "state.checkpoints.dir is deprecated in Flink 1.20"
+   ],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "state.checkpoints.dir: hdfs://namenode-host:port/flink-checkpoints",
+   "rejected": false,
+   "findings": [],
+   "warnings": [
+    "state.checkpoints.dir is deprecated in Flink 1.20"
+   ],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "state.savepoints.dir: hdfs://namenode-host:port/flink-savepoints",
+   "rejected": false,
+   "findings": [],
+   "warnings": [
+    "state.savepoints.dir is deprecated in Flink 1.20"
+   ],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "state.savepoints.dir: hdfs://namenode-host:port/flink-savepoints",
+   "rejected": false,
+   "findings": [],
+   "warnings": [
+    "state.savepoints.dir is deprecated in Flink 1.20"
+   ],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "web.submit.enable: False",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "web.submit.enable: False",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "web.cancel.enable: False",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "web.cancel.enable: False",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "io.tmp.dirs: /tmp",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "io.tmp.dirs: /tmp",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "classloader.resolve.order: child-first",
+   "rejected": true,
+   "findings": [
+    "L2 unknown-key: classloader.resolve.order is not a Flink 1.20 configuration option"
+   ],
+   "warnings": [],
+   "expected_rejection": "Flink's commented template nests classloader.resolve-order as classloader.resolve.order, which is not an option of Flink 1.20 (Flink ignores unknown keys)",
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "classloader.resolve.order: child-first",
+   "rejected": true,
+   "findings": [
+    "L2 unknown-key: classloader.resolve.order is not a Flink 1.20 configuration option"
+   ],
+   "warnings": [],
+   "expected_rejection": "Flink's commented template nests classloader.resolve-order as classloader.resolve.order, which is not an option of Flink 1.20 (Flink ignores unknown keys)",
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "taskmanager.memory.network.fraction: 0.1",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "taskmanager.memory.network.fraction: 0.1",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "taskmanager.memory.network.min: 64mb",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "taskmanager.memory.network.min: 64mb",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "taskmanager.memory.network.max: 1gb",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "taskmanager.memory.network.max: 1gb",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "security.kerberos.login.use-ticket-cache: True",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "security.kerberos.login.use-ticket-cache: True",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "security.kerberos.login.keytab: /path/to/kerberos/keytab",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "security.kerberos.login.keytab: /path/to/kerberos/keytab",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "security.kerberos.login.principal: flink-user",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "security.kerberos.login.principal: flink-user",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "security.kerberos.login.contexts: Client,KafkaClient",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "security.kerberos.login.contexts: Client,KafkaClient",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "zookeeper.sasl.login-context-name: Client",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "zookeeper.sasl.login-context-name: Client",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "jobmanager.archive.fs.dir: hdfs:///completed-jobs/",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "jobmanager.archive.fs.dir: hdfs:///completed-jobs/",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "historyserver.web.address: 0.0.0.0",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "historyserver.web.address: 0.0.0.0",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "historyserver.web.port: 8082",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "historyserver.web.port: 8082",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "historyserver.archive.fs.dir: hdfs:///completed-jobs/",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "historyserver.archive.fs.dir: hdfs:///completed-jobs/",
+   "rejected": false,
+   "findings": [],
+   "warnings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "native",
+   "item": "historyserver.archive.fs.fs.refresh-interval: 10000",
+   "rejected": true,
+   "findings": [
+    "L2 unknown-key: historyserver.archive.fs.fs.refresh-interval is not a Flink 1.20 configuration option"
+   ],
+   "warnings": [],
+   "expected_rejection": "the template nests historyserver.archive.fs.refresh-interval under archive.fs a second time; the resulting key does not exist",
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "config.yaml (commented examples)",
+   "track": "k8s",
+   "item": "historyserver.archive.fs.fs.refresh-interval: 10000",
+   "rejected": true,
+   "findings": [
+    "L2 unknown-key: historyserver.archive.fs.fs.refresh-interval is not a Flink 1.20 configuration option"
+   ],
+   "warnings": [],
+   "expected_rejection": "the template nests historyserver.archive.fs.refresh-interval under archive.fs a second time; the resulting key does not exist",
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Kafka 4.1.2 docs: configuration/topic-configs.md",
+   "track": "native",
+   "item": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic my-topic --partitions 1 --replication-factor 1 --config max.message.bytes=64000 --config flush.messages=1",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Kafka 4.1.2 docs: getting-started/quickstart.md",
+   "track": "native",
+   "item": "kafka-topics.sh --create --topic quickstart-events --bootstrap-server kafka:9092",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Kafka 4.1.2 docs: operations/tiered-storage.md",
+   "track": "native",
+   "item": "kafka-topics.sh --create --topic tieredTopic --bootstrap-server kafka:9092 --config remote.storage.enable=true --config local.retention.ms=1000 --config retention.ms=3600000 --config segment.bytes=1048576 --config file.delete.delay.ms=1000",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Kafka 4.1.2 docs: streams/quickstart.md",
+   "track": "native",
+   "item": "kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1 --topic streams-plaintext-input",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Kafka 4.1.2 docs: streams/quickstart.md",
+   "track": "native",
+   "item": "kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1 --topic streams-wordcount-output --config cleanup.policy=compact",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Strimzi 0.48.0 strimzi-0.48.0/examples/security/scram-sha-512-auth/topic.yaml",
+   "track": "k8s",
+   "item": "my-topic",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Strimzi 0.48.0 strimzi-0.48.0/examples/security/tls-auth/topic.yaml",
+   "track": "k8s",
+   "item": "my-topic",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Strimzi 0.48.0 strimzi-0.48.0/examples/topic/kafka-topic.yaml",
+   "track": "k8s",
+   "item": "my-topic",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_advanced-ingress.yaml",
+   "track": "k8s",
+   "item": "advanced-ingress (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_autoscaling_autoscaling-dynamic.yaml",
+   "track": "k8s",
+   "item": "autoscaling-dynamic (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_autoscaling_autoscaling.yaml",
+   "track": "k8s",
+   "item": "autoscaling-example (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_basic-checkpoint-ha.yaml",
+   "track": "k8s",
+   "item": "basic-checkpoint-ha-example (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_basic-ingress.yaml",
+   "track": "k8s",
+   "item": "basic-ingress (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_basic-reactive.yaml",
+   "track": "k8s",
+   "item": "basic-reactive-example (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_basic-session-deployment-and-job.yaml",
+   "track": "k8s",
+   "item": "basic-session-deployment-example (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_basic-session-deployment-only.yaml",
+   "track": "k8s",
+   "item": "basic-session-deployment-only-example (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_basic.yaml",
+   "track": "k8s",
+   "item": "basic-example (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_canary.yaml",
+   "track": "k8s",
+   "item": "canary (flinkVersion None)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_custom-logging.yaml",
+   "track": "k8s",
+   "item": "custom-logging-example (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_flink-beam-example_beam-example.yaml",
+   "track": "k8s",
+   "item": "beam-example (flinkVersion v1_19)",
+   "rejected": true,
+   "findings": [
+    "L3 version-mismatch: flinkVersion v1_19 but the cluster runs Flink 1.20"
+   ],
+   "expected_rejection": "the example targets Flink 1.19 (flinkVersion v1_19), not the 1.20 cluster of the benchmark",
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_flink-python-example_python-example.yaml",
+   "track": "k8s",
+   "item": "python-example (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_flink-sql-runner-example_sql-example.yaml",
+   "track": "k8s",
+   "item": "sql-example (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_flink-tls-example_basic-secure-deployment-only.yaml",
+   "track": "k8s",
+   "item": "basic-secure-deployment-only (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_flink-tls-example_basic-secure.yaml",
+   "track": "k8s",
+   "item": "basic-secure (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_pod-template.yaml",
+   "track": "k8s",
+   "item": "pod-template-example (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kubernetes Operator 1.13 examples_snapshot_job-from-savepoint.yaml",
+   "track": "k8s",
+   "item": "example-deployment (flinkVersion v1_20)",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kafka connector 3.3 docs: kafka.md",
+   "track": "native",
+   "item": "CREATE TABLE KafkaTable ( `user_id` BIGINT, `item_id` BIGINT, `behavior` STRING, `ts` TIMESTAMP_LTZ(3) METADATA FROM 'timestamp' ) WITH ( 'connector' = 'kafka',",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kafka connector 3.3 docs: kafka.md",
+   "track": "native",
+   "item": "CREATE TABLE KafkaTable ( `event_time` TIMESTAMP_LTZ(3) METADATA FROM 'timestamp', `partition` BIGINT METADATA VIRTUAL, `offset` BIGINT METADATA VIRTUAL, `user_",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kafka connector 3.3 docs: kafka.md",
+   "track": "native",
+   "item": "CREATE TABLE KafkaTable ( `event_time` TIMESTAMP_LTZ(3) METADATA FROM 'value.source.timestamp' VIRTUAL, -- from Debezium format `origin_table` STRING METADATA F",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kafka connector 3.3 docs: kafka.md",
+   "track": "native",
+   "item": "CREATE TABLE KafkaTable ( `ts` TIMESTAMP_LTZ(3) METADATA FROM 'timestamp', `user_id` BIGINT, `item_id` BIGINT, `behavior` STRING ) WITH ( 'connector' = 'kafka',",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kafka connector 3.3 docs: kafka.md",
+   "track": "native",
+   "item": "CREATE TABLE KafkaTable ( `ts` TIMESTAMP_LTZ(3) METADATA FROM 'timestamp', `user_id` BIGINT, `item_id` BIGINT, `behavior` STRING ) WITH ( 'connector' = 'kafka',",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kafka connector 3.3 docs: kafka.md",
+   "track": "native",
+   "item": "CREATE TABLE KafkaTable ( `k_version` INT, `k_user_id` BIGINT, `k_item_id` BIGINT, `version` INT, `behavior` STRING ) WITH ( 'connector' = 'kafka', 'topic' = 'u",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kafka connector 3.3 docs: kafka.md",
+   "track": "native",
+   "item": "CREATE TABLE KafkaTable ( `user_id` BIGINT, `item_id` BIGINT, `behavior` STRING, `ts` TIMESTAMP_LTZ(3) METADATA FROM 'timestamp' ) WITH ( 'connector' = 'kafka',",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kafka connector 3.3 docs: kafka.md",
+   "track": "native",
+   "item": "CREATE TABLE KafkaTable ( `user_id` BIGINT, `item_id` BIGINT, `behavior` STRING, `ts` TIMESTAMP_LTZ(3) METADATA FROM 'timestamp' ) WITH ( 'connector' = 'kafka',",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kafka connector 3.3 docs: upsert-kafka.md",
+   "track": "native",
+   "item": "CREATE TABLE pageviews_per_region ( user_region STRING, pv BIGINT, uv BIGINT, PRIMARY KEY (user_region) NOT ENFORCED ) WITH ( 'connector' = 'upsert-kafka', 'top",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kafka connector 3.3 docs: upsert-kafka.md",
+   "track": "native",
+   "item": "CREATE TABLE pageviews ( user_id BIGINT, page_id BIGINT, viewtime TIMESTAMP, user_region STRING, WATERMARK FOR viewtime AS viewtime - INTERVAL '2' SECOND ) WITH",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  },
+  {
+   "source": "Flink Kafka connector 3.3 docs: upsert-kafka.md",
+   "track": "native",
+   "item": "CREATE TABLE KafkaTable ( `ts` TIMESTAMP_LTZ(3) METADATA FROM 'timestamp', `user_id` BIGINT, `item_id` BIGINT, `behavior` STRING, PRIMARY KEY (`user_id`) NOT EN",
+   "rejected": false,
+   "findings": [],
+   "expected_rejection": null,
+   "false_rejection": false,
+   "missed_expected_rejection": false
+  }
+ ],
+ "official_summary": {
+  "config.yaml (active)": {
+   "n": 24,
+   "rejected": 0
+  },
+  "config.yaml (commented": {
+   "n": 68,
+   "rejected": 4
+  },
+  "Kafka 4.1.2 docs": {
+   "n": 5,
+   "rejected": 0
+  },
+  "Strimzi 0.48.0": {
+   "n": 3,
+   "rejected": 0
+  },
+  "Flink Kubernetes Operator 1.13": {
+   "n": 18,
+   "rejected": 1
+  },
+  "Flink Kafka connector 3.3 docs": {
+   "n": 11,
+   "rejected": 0
+  }
+ }
+}

@@ -1,0 +1,47 @@
+Nov 10, 2026 8:03:06 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE sensor_readings_source (
+>     sensor_id STRING,
+>     reading_data STRING,
+>     event_time TIMESTAMP(3),
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'sensor-readings',
+>     'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>     'format' = 'json',
+>     'scan.startup.mode' = 'latest-offset',
+>     'properties.group.id' = 'sensor-readings-group'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE sensor_readings_sink (
+>     sensor_id STRING,
+>     reading_data STRING,
+>     enriched_data STRING,
+>     event_time TIMESTAMP(3),
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'sensor-readings-clean',
+>     'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>     'format' = 'json',
+>     'sink.partitioner' = 'org.apache.flink.connector.kafka.sink.GreedyPartitioner',
+>     'sink.parallelism' = '10'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO sensor_readings_sink (`sensor_id`, `reading_data`, `enriched_data`, `event_time`, `__sent_ms`, `__seq`)
+> SELECT `sensor_id`,
+>        `reading_data`,
+>        CAST(NULL AS STRING)[31;1m[ERROR] Could not execute SQL statement. Reason:
+java.lang.ClassNotFoundException: org.apache.flink.connector.kafka.sink.GreedyPartitioner[0m
+
+Shutting down the session...
+done.

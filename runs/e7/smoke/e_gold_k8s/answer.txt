@@ -1,0 +1,53 @@
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+  labels: {strimzi.io/cluster: my-cluster}
+spec:
+  partitions: 12
+  replicas: 3
+  config: {min.insync.replicas: 2, retention.ms: 604800000}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+  labels: {strimzi.io/cluster: my-cluster}
+spec:
+  partitions: 12
+  replicas: 3
+  config: {min.insync.replicas: 2, retention.ms: 604800000}
+```
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: banking
+spec:
+  image: flink:1.20
+  flinkVersion: v1_20
+  serviceAccount: flink
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "4"
+    execution.checkpointing.interval: "100 ms"
+    execution.checkpointing.mode: EXACTLY_ONCE
+    execution.checkpointing.dir: s3://flink-state/checkpoints
+  jobManager:
+    resource: {memory: "2048m", cpu: 1}
+  taskManager:
+    resource: {memory: "8Gi", cpu: 4}
+  job:
+    jarURI: local:///opt/flink/usrlib/sql-runner.jar
+    parallelism: 3
+    upgradeMode: savepoint
+```
+```sql
+CREATE TABLE src (account_id STRING) WITH ('connector'='kafka','topic'='banking-transactions',
+ 'properties.bootstrap.servers'='my-cluster-kafka-bootstrap:9092','format'='json');
+CREATE TABLE snk (account_id STRING) WITH ('connector'='kafka','topic'='banking-transactions-validated',
+ 'properties.bootstrap.servers'='my-cluster-kafka-bootstrap:9092','format'='json',
+ 'sink.delivery-guarantee'='exactly-once','sink.transactional-id-prefix'='bank',
+ 'properties.transaction.timeout.ms'='600000');
+```

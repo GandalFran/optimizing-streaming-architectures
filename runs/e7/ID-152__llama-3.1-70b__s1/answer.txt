@@ -1,0 +1,123 @@
+**Kafka Topics**
+```yml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    'retention.ms': '604800000'  # 7 days
+    'segment.ms': '604800000'  # 7 days
+
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    'retention.ms': '604800000'  # 7 days
+    'segment.ms': '604800000'  # 7 days
+```
+
+**Flink Deployment**
+```yml
+apiVersion: flinkoperator.k8s.io/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: payments-validation
+spec:
+  image:
+    name: flink:1.20
+  flinkVersion: v1_20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.cpu.cores: 4
+    taskmanager.memory.process.size: 8192m
+    execution.checkpointing.interval: 10000
+    execution.checkpointing.timeout: 300000
+    execution.checkpointing.unaligned: true
+    execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+    execution.checkpointing.checkpoints.list: 3
+    execution.checkpointing.tolerable-failed-checkpoints: 3
+    execution.savepoint.pause-job.timeout: 300000
+    execution.savepoint.pause-job.unaligned: true
+    execution.recovery.mode: ZOOKEEPER
+    execution.recovery.zookeeper.path.root: /flink
+    state.backend: fs
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.savepoints.dir: s3://flink-state/savepoints
+  resources:
+    taskManager:
+      cpu: 4
+      memory: 8Gi
+  job:
+    jarURI: local:///opt/flink/usrlib/sql-runner.jar
+    parallelism: 10
+  podTemplate:
+    containers:
+      - name: flink-main-container
+        volumeMounts:
+          - name: flink-config-volume
+            mountPath: /opt/flink/conf
+    volumes:
+      - name: flink-config-volume
+        configMap:
+          name: flink-config
+  serviceAccountName: flink
+```
+
+**Flink SQL**
+```sql
+CREATE TABLE payments (
+  `account_id` STRING,
+  `event_data` STRING,
+  `event_timestamp` TIMESTAMP(3) METADATA FROM 'timestamp'
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'payments',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'payments-validation',
+  'format' = 'json',
+  'json.fail-on-missing-field' = 'false',
+  'json.ignore-parse-errors' = 'true'
+);
+
+CREATE TABLE payments_validated (
+  `account_id` STRING,
+  `event_data` STRING,
+  `event_timestamp` TIMESTAMP(3),
+  `derived_field` STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'payments-validated',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'payments-validation',
+  'format' = 'json',
+  'json.fail-on-missing-field' = 'false',
+  'json.ignore-parse-errors' = 'true',
+  'sink.partitioner' = 'org.apache.flink.streaming.connectors.kafka.FlinkKafkaPartitioner'
+);
+
+INSERT INTO payments_validated
+SELECT
+  `account_id`,
+  `event_data`,
+  `event_timestamp`,
+  derive_field(`event_data`) AS `derived_field`
+FROM payments;
+```
+
+**Justification:**
+
+*   **Kafka Topic Partitions:** Each Kafka partition is expected to handle up to 5 MB/s of produce traffic. With an average event size of 2048 bytes and an input rate of 50,000 events/s, we can calculate the total produce traffic as 50,000 \* 2048 bytes / 1024^2 = 97.66 MB/s. To stay within the partition limit, we need at least 20 partitions (97.66 MB/s / 5 MB/s = 19.53). To account for future growth and ensure even data distribution, we create each topic with 10 partitions.
+*   **Kafka Topic Replicas:** To ensure durability and survive the loss of any single Kafka broker without losing acknowledged data, we configure each topic with a replication factor of 3.
+*   **Flink TaskManager Resources:** Each TaskManager pod is limited to 4 CPU and 8 GiB of memory. We configure the Flink job to use these resources to ensure efficient processing and minimize waste.
+*   **Flink Parallelism:** With an input rate of 50,000 events/s and each Flink source subtask processing up to 20,000 events/s, we need at least 3 subtasks (50,000 / 20,000 = 2.5) to handle the input rate. To account for potential fluctuations and ensure even data distribution, we configure the Flink job with a parallelism of 10.
+*   **Flink Checkpointing:** We configure Flink checkpointing to occur every 10 seconds, which should provide a good balance between recovery time and overhead. We also set the checkpointing timeout to 5 minutes to account for potential network issues or other delays.
+*   **Flink State Backend:** We use the file system state backend with S3 as the storage location to ensure that Flink's state is persisted and can be recovered in case of failures.

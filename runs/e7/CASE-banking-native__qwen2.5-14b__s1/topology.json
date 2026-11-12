@@ -1,0 +1,132 @@
+{
+  "instance": "e7-1840533",
+  "nodes": [
+    {
+      "name": "k1",
+      "role": "kafka",
+      "numa": 0,
+      "cpus": [
+        18,
+        19,
+        130,
+        131
+      ],
+      "mem_mb": 32768,
+      "state_dir": "/tmp/chamoso-e7/8387/e7-1840533/k1"
+    },
+    {
+      "name": "k2",
+      "role": "kafka",
+      "numa": 0,
+      "cpus": [
+        20,
+        21,
+        132,
+        133
+      ],
+      "mem_mb": 32768,
+      "state_dir": "/tmp/chamoso-e7/8387/e7-1840533/k2"
+    },
+    {
+      "name": "k3",
+      "role": "kafka",
+      "numa": 0,
+      "cpus": [
+        22,
+        23,
+        134,
+        135
+      ],
+      "mem_mb": 32768,
+      "state_dir": "/tmp/chamoso-e7/8387/e7-1840533/k3"
+    },
+    {
+      "name": "f1",
+      "role": "flink",
+      "numa": 2,
+      "cpus": [
+        68,
+        69,
+        70,
+        71,
+        180,
+        181,
+        182,
+        183
+      ],
+      "mem_mb": 32768,
+      "state_dir": "/tmp/chamoso-e7/8387/e7-1840533/f1"
+    },
+    {
+      "name": "f2",
+      "role": "flink",
+      "numa": 3,
+      "cpus": [
+        88,
+        89,
+        90,
+        91,
+        200,
+        201,
+        202,
+        203
+      ],
+      "mem_mb": 32768,
+      "state_dir": "/tmp/chamoso-e7/8387/e7-1840533/f2"
+    },
+    {
+      "name": "f3",
+      "role": "flink",
+      "numa": "2,3",
+      "cpus": [
+        72,
+        73,
+        74,
+        92,
+        184,
+        185,
+        186,
+        204
+      ],
+      "mem_mb": 32768,
+      "state_dir": "/tmp/chamoso-e7/8387/e7-1840533/f3"
+    },
+    {
+      "name": "j1",
+      "role": "jm",
+      "numa": 0,
+      "cpus": [
+        24,
+        136
+      ],
+      "mem_mb": 32768,
+      "state_dir": "/tmp/chamoso-e7/8387/e7-1840533/j1"
+    },
+    {
+      "name": "ctl",
+      "role": "control",
+      "numa": 1,
+      "cpus": [
+        54,
+        55,
+        166,
+        167
+      ],
+      "mem_mb": 32768,
+      "state_dir": "/tmp/chamoso-e7/8387/e7-1840533/ctl"
+    },
+    {
+      "name": "m1",
+      "role": "meas",
+      "numa": 3,
+      "cpus": [
+        93,
+        205
+      ],
+      "mem_mb": 32768,
+      "state_dir": "/tmp/chamoso-e7/8387/e7-1840533/m1"
+    }
+  ],
+  "port_base": 12500,
+  "root": "/tmp/chamoso-e7/8387"
+}

@@ -1,0 +1,73 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic session-events --partitions 3 --replication-factor 3 --config retention.ms=604800000 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic session-events-enriched --partitions 3 --replication-factor 3 --config retention.ms=604800000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+jobmanager.rpc.address: jobmanager
+jobmanager.web.port: 8081
+jobmanager.heap.mb: 8192
+taskmanager.heap.mb: 8192
+taskmanager.numberOfTaskSlots: 4
+state.backend: rocksdb
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.checkpoints.min-pause: 10s
+state.checkpoints.num-retained: 3
+parallelism.default: 3
+taskmanager.network.memory.fraction: 0.8
+jobmanager.network.memory.fraction: 0.8
+taskmanager.memory.fraction: 0.8
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements
+CREATE TABLE session_events (
+    user_id STRING,
+    event_json STRING,
+    event_time TIMESTAMP(3),
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events',
+    'properties.bootstrap-server' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'value.format' = 'json',
+    'scan.startup.mode' = 'earliest-offset',
+    'key.format' = 'json'
+);
+
+CREATE TABLE session_events_enriched (
+    user_id STRING,
+    event_json STRING,
+    enriched_field1 STRING,
+    enriched_field2 STRING,
+    event_time TIMESTAMP(3),
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events-enriched',
+    'properties.bootstrap-server' = 'kafka:9092',
+    'format' = 'json',
+    'key.format' = 'json',
+    'sink.checkpointing-mode' = 'METADATA',
+    'sink.parallelism' = '3',
+    'sink.delivery-guarantee' = 'at-least-once'
+);
+```
+
+### Justification of Main Values:
+1. **Kafka Topics Creation:**
+   - **Partitions and Replication Factor:** 3 partitions and 3 replicas ensure that the system can tolerate the loss of a single broker without losing any data.
+   - **Retention Time:** 7 days (604800000 ms) is set to retain data for a sufficient period, ensuring that historical data is available for analysis.
+
+2. **Flink Configuration:**
+   - **Parallelism:** Set to 3, matching the number of partitions in the Kafka topics to ensure that the load is evenly distributed.
+   - **State Backend:** `rocksdb` is chosen for reliable state management, and checkpoints are stored in S3 to ensure durability.
+   - **Checkpointing:** Configured to ensure that checkpoints are retained for 3 iterations and have a minimum pause of 10 seconds, which is crucial for fault tolerance and recovery.
+
+3. **Flink SQL Table Definitions:**
+   - **Session Events Table:** Configured to read from `session-events`, using JSON format for both key and value, and setting up a watermark for event-time processing.
+   - **Session Events Enriched Table:** Configured to write to `session-events-enriched`, using JSON format, and setting the `sink.checkpointing-mode` to `METADATA` to ensure exactly-once semantics for the sink, even though the source guarantees at-least-once. The `sink.delivery-guarantee` is set to `at-least-once` as per the requirements.

@@ -1,0 +1,65 @@
+ ```bash
+# Create Kafka topics
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic session-events --partitions 3 --replication-factor 3
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic session-events-enriched --partitions 3 --replication-factor 3
+```
+
+```yaml
+# Flink configuration (config.yaml)
+
+# Kafka consumer configuration
+kafka-consumer-config:
+  bootstrap-servers: kafka:9092
+  group-id: session-events-consumer
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  auto-offset-reset: earliest
+  enable.auto.commit: false
+  session.timeout.ms: 10000
+  max.poll.interval.ms: 10000
+
+# Flink job configuration
+flink-job:
+  execution-mode: standalone
+  parallelism: 3
+  taskmanager.numberOfTaskSlots: 4
+  taskmanager.heap.mb: 8
+  checkpoint.interval: 10
+  state.backend: s3://flink-state/checkpoints
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.save.checkpoints.interval: 10000
+  state.save.checkpoints.s3.endpoint: http://s3.amazonaws.com
+  state.save.checkpoints.s3.access.key: <your-access-key>
+  state.save.checkpoints.s3.secret.key: <your-secret-key>
+  state.save.checkpoints.s3.region: us-west-2
+  state.save.checkpoints.s3.bucket: flink-state
+  state.save.checkpoints.s3.path: checkpoints
+  state.save.checkpoints.s3.prefix: checkpoints
+  state.save.checkpoints.s3.use.url: true
+  state.save.checkpoints.s3.use.ssl: false
+  state.save.checkpoints.s3.use.existing.bucket: true
+  state.save.checkpoints.s3.use.existing.bucket.force: false
+  state.save.checkpoints.s3.use.existing.bucket.force.on.startup: false
+  state.save.checkpoints.s3.use.existing.bucket.on.startup: true
+  state.save.checkpoints.s3.use.existing.bucket.on.startup.force: false
+  state.save.checkpoints.s3.use.existing.bucket.on.startup.force.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure: true
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure.on.failure: false
+  state.save.checkpoints.s3.use.existing.bucket.on.failure.force.on.failure.on.failure.on.failure

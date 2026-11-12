@@ -1,0 +1,144 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+    segment.bytes: 1073741824 # 1 GB
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+    segment.bytes: 1073741824 # 1 GB
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: card-transactions-enricher
+spec:
+  jobManager:
+    serviceAccountName: flink-sa
+    requests:
+      cpu: 2
+      memory: 4Gi
+    limits:
+      cpu: 2
+      memory: 4Gi
+  taskManager:
+    replicas: 3
+    requests:
+      cpu: 4
+      memory: 8Gi
+    limits:
+      cpu: 4
+      memory: 8Gi
+    serviceAccountName: flink-sa
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 3
+    taskmanager.heap.size: 1024m
+    taskmanager.network.memory.fraction: 0.8
+    jobmanager.heap.size: 2048m
+    jobmanager.memory.fraction: 0.8
+    state.backend: rocksdb
+    state.backend.rocksdb.path: /tmp/flink-state
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.checkpoints.min-pause: 60s
+    state.checkpoints.max-pause: 120s
+    state.checkpoints.max-concurrent-checkpoints: 1
+    state.checkpoints.savepoints.dir: s3://flink-state/savepoints
+    state.backend.rocksdb.flush-frequency: 30s
+    state.backend.rocksdb.flush-on-checkpoint: true
+    state.backend.rocksdb.compaction.strategy: "level"
+    state.backend.rocksdb.max-sst-file-size: 536870912 # 512 MB
+    state.backend.rocksdb.block-cache.size: 1024m
+    state.backend.rocksdb.block-cache.size-per-level: 1024m
+    state.backend.rocksdb.block-cache.size-per-level-multiplier: 2.0
+    state.backend.rocksdb.block-cache.size-per-level-max: 8192m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block-cache.size-per-level-min: 256m
+    state.backend.rocksdb.block

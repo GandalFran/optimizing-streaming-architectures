@@ -1,0 +1,87 @@
+# 1. `kafka-topics.sh` commands to create all topics
+```bash
+# create topic 'session-events'
+kafka-topics.sh --create --topic session-events --partitions 3 --replication-factor 2 --config retention.ms=604800000 --config min.insync.replicas=2 --bootstrap-server kafka:9092
+
+# create topic 'session-events-enriched'
+kafka-topics.sh --create --topic session-events-enriched --partitions 3 --replication-factor 2 --config retention.ms=604800000 --config min.insync.replicas=2 --bootstrap-server kafka:9092
+```
+
+# 2. Flink configuration (`config.yaml`)
+```yaml
+# flink-conf.yaml
+# see https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/deployment/config/#jobmanager
+jobmanager.rpc.port: 6123
+jobmanager.rpc.address: jobmanager
+# see https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/deployment/config/#jobmanager
+jobmanager.heap.mb: 1536
+# see https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/deployment/config/#jobmanager
+jobmanager.web.port: 8081
+
+# flink-conf.yaml
+# see https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/deployment/config/#taskmanager
+taskmanager.numberOfTaskSlots: 4
+taskmanager.heap.mb: 8192
+taskmanager.rpc.port: 6124
+taskmanager.rpc.address: taskmanager
+# see https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/deployment/config/#taskmanager
+taskmanager.heap.mb: 8192
+# see https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/deployment/config/#taskmanager
+taskmanager.network.memory.min-fraction: 0.1
+
+# flink-conf.yaml
+# see https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/deployment/config/#statebackends
+state.backend: filesystem
+# see https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/deployment/config/#statebackends
+state.checkpoints.dir: s3://flink-state/checkpoints
+
+# flink-conf.yaml
+# see https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/deployment/config/#statebackends
+state.backend: filesystem
+# see https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/deployment/config/#statebackends
+state.checkpoints.dir: s3://flink-state/checkpoints
+# see https://nightlies.apache.org/flink/flink-docs-release-1.13/docs/deployment/config/#statebackends
+state.savepoints.dir: s3://flink-state/savepoints
+```
+
+# 3. Flink SQL `CREATE TABLE` statements
+```sql
+-- CREATE TABLE for source
+CREATE TABLE session_events (
+    user_id STRING,
+    event JSON,
+    -- properties
+    event_time TIMESTAMP(3) GENERATED ALWAYS AS (event['time'] AS TIMESTAMP(3))
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'sink.topic.name' = 'session-events-enriched'
+);
+
+-- CREATE TABLE for sink
+CREATE TABLE session_events_enriched (
+    user_id STRING,
+    event JSON,
+    -- properties
+    event_time TIMESTAMP(3)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'round-robin'
+);
+```
+
+The above configuration aims to achieve the following:
+
+- The topic sizes of 3 partitions with replication factor 2 are chosen based on the rate of 5,000 events/s and the average event size of 2048 bytes.
+- The Flink configuration limits the maximum number of events per second per subtask to 20,000 and sets the heap size to 8 GB per TaskManager.
+- The state backend is configured to use a filesystem sink to ensure data durability and persistence.
+- The checkpoint storage is configured to use S3 to ensure that data is available after failures.
+- The source and sink topics are configured with retention of 7 days.
+- The source topic is configured with the 'scan.startup.mode' property set to 'latest-offset' to ensure that the job starts processing from the latest offset.
+- The sink topic is configured with a round-robin partitioner to ensure that data is distributed evenly across partitions.

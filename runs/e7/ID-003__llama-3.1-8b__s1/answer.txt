@@ -1,0 +1,129 @@
+### 1. Kafka Topic Creation
+
+```bash
+# Create the topics with the desired configuration
+kafka-topics.sh --create --bootstrap-server kafka:9092 \
+  --replication-factor 3 \
+  --config min.insync.replicas=2 \
+  --config segment.bytes=500000000 \
+  --config cleanup.policy=delete \
+  --config retention.ms=604800000 \
+  session-events
+kafka-topics.sh --alter --bootstrap-server kafka:9092 --topic session-events \
+  --config min.insync.replicas=2 \
+  --config segment.bytes=500000000 \
+  --config cleanup.policy=delete \
+  --config retention.ms=604800000 \
+  --partitions 10
+kafka-topics.sh --create --bootstrap-server kafka:9092 \
+  --replication-factor 3 \
+  --config min.insync.replicas=2 \
+  --config segment.bytes=500000000 \
+  --config cleanup.policy=delete \
+  --config retention.ms=604800000 \
+  session-events-enriched
+kafka-topics.sh --alter --bootstrap-server kafka:9092 --topic session-events-enriched \
+  --config min.insync.replicas=2 \
+  --config segment.bytes=500000000 \
+  --config cleanup.policy=delete \
+  --config retention.ms=604800000 \
+  --partitions 10
+```
+
+### 2. Flink Configuration (`config.yaml`)
+
+```yaml
+# config.yaml
+flink:
+  checkpoint:
+    enabled: true
+    externalized-checkpoint: true
+    interval: 5s
+  job:
+    parallelism: 5
+  kafka:
+    bootstrap.servers: kafka:9092
+    properties:
+      acks: all
+      retries: 3
+      retry.backoff.ms: 100
+  sinks:
+    properties:
+      retries: 3
+      retry.backoff.ms: 100
+  taskmanager:
+    memory:
+      per-job-memory: 8g
+      per-job-memory-beyond-initial: 2g
+      checkpoint-storage: s3://flink-state/checkpoints
+      off-heap-memory: 2g
+  state:
+    backend: fs
+```
+
+### 3. Flink SQL `CREATE TABLE` Statements
+
+```sql
+-- Create source table
+CREATE TABLE session_events (
+  user_id STRING,
+  event_data VARCHAR
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'session-events',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'session_events_group',
+  'scan.startup.mode' = 'latest-offsets',
+  'value.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer'
+);
+
+-- Create sink table
+CREATE TABLE session_events_enriched (
+  user_id STRING,
+  event_data VARCHAR,
+  -- derived fields
+  field1 VARCHAR,
+  field2 VARCHAR
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'session-events-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.producer.acks' = 'all',
+  'properties.retries' = '3',
+  'properties.retry.backoff.ms' = '100',
+  'format' = 'json',
+  'json.timestamp-format' = 'millis',
+  'json.fail-on-missing-field' = 'true'
+);
+
+-- Filter out malformed events and enrich the data
+INSERT INTO session_events_enriched
+SELECT user_id, event_data,
+  -- derived fields
+  field1,
+  field2
+FROM session_events
+WHERE TRY_CAST(event_data AS JSON) IS NOT NULL;
+```
+
+**Justification of main values:**
+
+- `replication-factor 3` and `min.insync.replicas 2` ensure that both topics survive the loss of any single Kafka broker without losing acknowledged data.
+- `segment.bytes 500000000` and `cleanup.policy delete` are chosen to balance between storage usage and performance.
+- `retention.ms 604800000` (7 days) is set to match the retention requirement.
+- `partitions 10` is chosen to allow for high throughput and low latency in the Kafka topics.
+- Flink configuration:
+  - `checkpoint.interval 5s` ensures frequent checkpoints to prevent data loss in case of failures.
+  - `flink.taskmanager.memory.per-job-memory 8g` and `flink.taskmanager.memory.per-job-memory-beyond-initial 2g` provide sufficient memory for the TaskManagers to process the events.
+  - `flink.state.backend fs` is used for checkpoint storage, and `checkpoint-storage s3://flink-state/checkpoints` ensures that checkpoints are stored durably.
+  - `flink.sinks.properties.retries 3` and `flink.sinks.properties.retry.backoff.ms 100` are chosen to handle temporary failures during sink operations.
+- The SQL configuration:
+  - `parallelism 5` is chosen to balance between throughput and latency.
+  - `properties.bootstrap.servers kafka:9092` connects the Flink job to the Kafka cluster.
+  - `properties.group.id session_events_group` is a unique group ID for the Flink job to consume from the Kafka topic.
+  - `scan.startup.mode latest-offsets` ensures that the Flink job starts consuming from the latest available offsets.
+  - `value.deserializer org.apache.kafka.common.serialization.StringDeserializer` is chosen to deserialize the events from the Kafka topic.
+  - `properties.producer.acks all` ensures that the events are acked by all in-sync replicas before considering them successfully sent to the Kafka topic.
+  - `properties.retries 3` and `properties.retry.backoff.ms 100` are chosen to handle temporary failures during producer operations.

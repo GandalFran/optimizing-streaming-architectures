@@ -1,0 +1,94 @@
+# 1. `kafka-topics.sh` commands to create all topics
+```bash
+# create topic 'clicks'
+kafka-topics.sh --create --topic clicks --bootstrap-server kafka:9092 --partitions 3 --replication-factor 3 --config retention.ms=2592000000
+
+# create topic 'clicks-enriched'
+kafka-topics.sh --create --topic clicks-enriched --bootstrap-server kafka:9092 --partitions 3 --replication-factor 3 --config retention.ms=2592000000
+```
+
+# 2. Flink configuration (`config.yaml` keys)
+```yaml
+# TaskManager configuration
+taskmanager.memory.fraction: 0.8
+taskmanager.memory.process.size: 8.0 GB
+taskmanager.numberOfTaskSlots: 4
+
+# JobManager configuration
+jobmanager.rpc.address: jobmanager
+jobmanager.rpc.port: 6123
+jobmanager.web.port: 8081
+
+# State backend configuration
+state.backend: s3
+state.backend.path: s3://flink-state
+state.backend.checkpoints.dir: s3://flink-state/checkpoints
+state.backend.rocksdb.path: /tmp/flink_state
+
+# Checkpointing configuration
+jobmanager.checkpoints.global-state-only: true
+jobmanager.checkpoints.min-pause: 0s
+jobmanager.checkpoints.max-pause: 0s
+jobmanager.checkpoints.min-pause-reached: false
+jobmanager.checkpoints.stale-checkpoints.delete: false
+
+# Source and sink configurations
+# ...
+```
+
+# 3. Flink SQL `CREATE TABLE` statements
+```sql
+CREATE TABLE clicks (
+  session_id STRING,
+  event STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'latest-offset',
+  'scan.startup.offsets.file.path' = '/tmp/flink_state/flink-state/checkpoints/startup-offsets.json',
+  'connector.incremental-poll.enabled' = 'true',
+  'connector.incremental-poll.interval' = '1000',
+  'connector.incremental-poll.max-offset-difference' = '200000',
+  'connector.incremental-poll.max-offset-difference-per-partition' = '100000',
+  'sink.type' = 'kafka',
+  'sink.topic' = 'clicks-enriched',
+  'sink.bootstrap.servers' = 'kafka:9092',
+  'sink.partition-grouper' = 'round-robin',
+  'sink.partition-assigner' = 'round-robin',
+  'sink.partitioner' = 'round-robin',
+  'sink.max-rate' = '5000'
+);
+
+CREATE TABLE clicks_enriched (
+  session_id STRING,
+  event STRING,
+  derived_field STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'latest-offset',
+  'scan.startup.offsets.file.path' = '/tmp/flink_state/flink-state/checkpoints/startup-offsets.json',
+  'connector.incremental-poll.enabled' = 'true',
+  'connector.incremental-poll.interval' = '1000',
+  'connector.incremental-poll.max-offset-difference' = '200000',
+  'connector.incremental-poll.max-offset-difference-per-partition' = '100000',
+  'sink.type' = 'kafka',
+  'sink.topic' = 'clicks-enriched',
+  'sink.bootstrap.servers' = 'kafka:9092',
+  'sink.partition-grouper' = 'round-robin',
+  'sink.partition-assigner' = 'round-robin',
+  'sink.partitioner' = 'round-robin',
+  'sink.max-rate' = '5000'
+);
+```
+
+# Justification
+- We create two Kafka topics: `clicks` and `clicks-enriched`. We partition each topic with three partitions and replication factor of 3 to achieve high availability and throughput.
+- In the Flink configuration, we set the number of TaskManagers to 3 and the number of task slots to 4 to handle the input rate of 5,000 events/s.
+- We set the Flink state backend to S3 to store the checkpoint data and use RocksDB as the state backend storage.
+- We set the checkpointing configuration to achieve exactly-once end-to-end delivery guarantee.
+- We configure the Kafka source and sink connectors to consume and produce messages from the Kafka topics respectively.

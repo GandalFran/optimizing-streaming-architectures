@@ -1,0 +1,220 @@
+This tool helps to manipulate and describe entity config for a topic, client, user, broker, ip, client-metrics or group
+Option                                 Description                            
+------                                 -----------                            
+--add-config <String>                  Key Value pairs of configs to add.     
+                                         Square brackets can be used to group 
+                                         values which contain commas: 'k1=v1, 
+                                         k2=[v1,v2,v2],k3=v3'. The following  
+                                         is a list of valid configurations:   
+                                         For entity-type 'topics':            
+                                       	cleanup.policy                        
+                                       	compression.gzip.level                
+                                       	compression.lz4.level                 
+                                       	compression.type                      
+                                       	compression.zstd.level                
+                                       	delete.retention.ms                   
+                                       	file.delete.delay.ms                  
+                                       	flush.messages                        
+                                       	flush.ms                              
+                                       	follower.replication.throttled.       
+                                         replicas                             
+                                       	index.interval.bytes                  
+                                       	leader.replication.throttled.replicas 
+                                       	local.retention.bytes                 
+                                       	local.retention.ms                    
+                                       	max.compaction.lag.ms                 
+                                       	max.message.bytes                     
+                                       	message.timestamp.after.max.ms        
+                                       	message.timestamp.before.max.ms       
+                                       	message.timestamp.type                
+                                       	min.cleanable.dirty.ratio             
+                                       	min.compaction.lag.ms                 
+                                       	min.insync.replicas                   
+                                       	preallocate                           
+                                       	remote.log.copy.disable               
+                                       	remote.log.delete.on.disable          
+                                       	remote.storage.enable                 
+                                       	retention.bytes                       
+                                       	retention.ms                          
+                                       	segment.bytes                         
+                                       	segment.index.bytes                   
+                                       	segment.jitter.ms                     
+                                       	segment.ms                            
+                                       	unclean.leader.election.enable        
+                                       For entity-type 'brokers':             
+                                       	background.threads                    
+                                       	compression.gzip.level                
+                                       	compression.lz4.level                 
+                                       	compression.type                      
+                                       	compression.zstd.level                
+                                       	follower.replication.throttled.rate   
+                                       	leader.replication.throttled.rate     
+                                       	listener.security.protocol.map        
+                                       	listeners                             
+                                       	log.cleaner.backoff.ms                
+                                       	log.cleaner.dedupe.buffer.size        
+                                       	log.cleaner.delete.retention.ms       
+                                       	log.cleaner.io.buffer.load.factor     
+                                       	log.cleaner.io.buffer.size            
+                                       	log.cleaner.io.max.bytes.per.second   
+                                       	log.cleaner.max.compaction.lag.ms     
+                                       	log.cleaner.min.cleanable.ratio       
+                                       	log.cleaner.min.compaction.lag.ms     
+                                       	log.cleaner.threads                   
+                                       	log.cleanup.policy                    
+                                       	log.flush.interval.messages           
+                                       	log.flush.interval.ms                 
+                                       	log.index.interval.bytes              
+                                       	log.index.size.max.bytes              
+                                       	log.local.retention.bytes             
+                                       	log.local.retention.ms                
+                                       	log.message.timestamp.after.max.ms    
+                                       	log.message.timestamp.before.max.ms   
+                                       	log.message.timestamp.type            
+                                       	log.preallocate                       
+                                       	log.retention.bytes                   
+                                       	log.retention.ms                      
+                                       	log.roll.jitter.ms                    
+                                       	log.roll.ms                           
+                                       	log.segment.bytes                     
+                                       	log.segment.delete.delay.ms           
+                                       	max.connection.creation.rate          
+                                       	max.connections                       
+                                       	max.connections.per.ip                
+                                       	max.connections.per.ip.overrides      
+                                       	message.max.bytes                     
+                                       	metric.reporters                      
+                                       	min.insync.replicas                   
+                                       	num.io.threads                        
+                                       	num.network.threads                   
+                                       	num.recovery.threads.per.data.dir     
+                                       	num.replica.fetchers                  
+                                       	principal.builder.class               
+                                       	producer.id.expiration.ms             
+                                       	remote.fetch.max.wait.ms              
+                                       	remote.list.offsets.request.timeout.ms
+                                       	remote.log.index.file.cache.total.    
+                                         size.bytes                           
+                                       	remote.log.manager.copier.thread.pool.
+                                         size                                 
+                                       	remote.log.manager.copy.max.bytes.per.
+                                         second                               
+                                       	remote.log.manager.expiration.thread. 
+                                         pool.size                            
+                                       	remote.log.manager.fetch.max.bytes.   
+                                         per.second                           
+                                       	remote.log.reader.threads             
+                                       	replica.alter.log.dirs.io.max.bytes.  
+                                         per.second                           
+                                       	sasl.enabled.mechanisms               
+                                       	sasl.jaas.config                      
+                                       	sasl.kerberos.kinit.cmd               
+                                       	sasl.kerberos.min.time.before.relogin 
+                                       	sasl.kerberos.principal.to.local.rules
+                                       	sasl.kerberos.service.name            
+                                       	sasl.kerberos.ticket.renew.jitter     
+                                       	sasl.kerberos.ticket.renew.window.    
+                                         factor                               
+                                       	sasl.login.refresh.buffer.seconds     
+                                       	sasl.login.refresh.min.period.seconds 
+                                       	sasl.login.refresh.window.factor      
+                                       	sasl.login.refresh.window.jitter      
+                                       	sasl.mechanism.inter.broker.protocol  
+                                       	ssl.cipher.suites                     
+                                       	ssl.client.auth                       
+                                       	ssl.enabled.protocols                 
+                                       	ssl.endpoint.identification.algorithm 
+                                       	ssl.engine.factory.class              
+                                       	ssl.key.password                      
+                                       	ssl.keymanager.algorithm              
+                                       	ssl.keystore.certificate.chain        
+                                       	ssl.keystore.key                      
+                                       	ssl.keystore.location                 
+                                       	ssl.keystore.password                 
+                                       	ssl.keystore.type                     
+                                       	ssl.protocol                          
+                                       	ssl.provider                          
+                                       	ssl.secure.random.implementation      
+                                       	ssl.trustmanager.algorithm            
+                                       	ssl.truststore.certificates           
+                                       	ssl.truststore.location               
+                                       	ssl.truststore.password               
+                                       	ssl.truststore.type                   
+                                       	transaction.partition.verification.   
+                                         enable                               
+                                       	unclean.leader.election.enable        
+                                       For entity-type 'users':               
+                                       	SCRAM-SHA-256                         
+                                       	SCRAM-SHA-512                         
+                                       	consumer_byte_rate                    
+                                       	controller_mutation_rate              
+                                       	producer_byte_rate                    
+                                       	request_percentage                    
+                                       For entity-type 'clients':             
+                                       	consumer_byte_rate                    
+                                       	controller_mutation_rate              
+                                       	producer_byte_rate                    
+                                       	request_percentage                    
+                                       For entity-type 'ips':                 
+                                       	connection_creation_rate              
+                                       For entity-type 'client-metrics':      
+                                       	interval.ms                           
+                                       	match                                 
+                                       	metrics                               
+                                       For entity-type 'groups':              
+                                       	consumer.heartbeat.interval.ms        
+                                       	consumer.session.timeout.ms           
+                                       	share.auto.offset.reset               
+                                       	share.heartbeat.interval.ms           
+                                       	share.isolation.level                 
+                                       	share.record.lock.duration.ms         
+                                       	share.session.timeout.ms              
+                                       	streams.heartbeat.interval.ms         
+                                       	streams.num.standby.replicas          
+                                       	streams.session.timeout.ms            
+                                       Entity types 'users' and 'clients' may 
+                                         be specified together to update      
+                                         config for clients of a specific     
+                                         user.                                
+--add-config-file <String>             Path to a properties file with configs 
+                                         to add. See add-config for a list of 
+                                         valid configurations.                
+--all                                  List all configs for the given entity, 
+                                         including static configs if          
+                                         available.                           
+--alter                                Alter the configuration for the entity.
+--bootstrap-controller <String:        The Kafka controllers to connect to.   
+  controller to connect to>                                                   
+--bootstrap-server <String: server to  The Kafka servers to connect to.       
+  connect to>                                                                 
+--broker <String>                      The broker's ID.                       
+--broker-defaults                      The config defaults for all brokers.   
+--broker-logger <String>               The broker's ID for its logger config. 
+--client <String>                      The client's ID.                       
+--client-defaults                      The config defaults for all clients.   
+--client-metrics <String>              The client metrics config resource     
+                                         name.                                
+--command-config <String: command      Property file containing configs to be 
+  config property file>                  passed to Admin Client. This is used 
+                                         only with --bootstrap-server option  
+                                         for describing and altering broker   
+                                         configs.                             
+--delete-config <String>               config keys to remove 'k1,k2'          
+--describe                             List configs for the given entity.     
+--entity-default                       Default entity name for                
+                                         clients/users/brokers/ips (applies   
+                                         to corresponding entity type)        
+--entity-name <String>                 Name of entity (topic name/client      
+                                         id/user principal name/broker        
+                                         id/ip/client metrics/group id)       
+--entity-type <String>                 Type of entity                         
+                                         (topics/clients/users/brokers/broker-
+                                         loggers/ips/client-metrics/groups)   
+--group <String>                       The group's ID.                        
+--help                                 Print usage information.               
+--ip <String>                          The IP address.                        
+--ip-defaults                          The config defaults for all IPs.       
+--topic <String>                       The topic's name.                      
+--user <String>                        The user's principal name.             
+--user-defaults                        The config defaults for all users.     
+--version                              Display Kafka version.                 

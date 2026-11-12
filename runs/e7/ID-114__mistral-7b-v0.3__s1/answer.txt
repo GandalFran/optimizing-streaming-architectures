@@ -1,0 +1,195 @@
+ 1. Strimzi `KafkaTopic` resources for all topics:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  kafka:
+    replicas: 3
+    listeners:
+    - name: plain
+      port: 9092
+      tls: false
+    inter broker:
+      tls: false
+    config:
+      schema.registry.url: http://my-schema-registry:8081
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+spec:
+  topic: card-transactions
+  partitions: 30
+  replication:
+    replicas: 3
+    eachReplica:
+      partition: 1
+  config:
+    retention.ms: 2592000000  # 30 days in milliseconds
+    compression.type: lz4
+    message.format: kafka
+    segment.bytes: 10485760  # 10 MB segment size
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+spec:
+  topic: card-transactions-enriched
+  partitions: 30
+  replication:
+    replicas: 3
+    eachReplica:
+      partition: 1
+  config:
+    retention.ms: 2592000000  # 30 days in milliseconds
+    compression.type: lz4
+    message.format: kafka
+    segment.bytes: 10485760  # 10 MB segment size
+```
+
+Justification: We have created two Kafka topics: `card-transactions` and `card-transactions-enriched`. Both topics have 30 partitions to handle the given input rate. The segment.bytes configuration is set to 10 MB to ensure that each segment can handle at least 20,000 events (assuming an average event size of 2048 bytes) and to optimize for throughput. Retention is set to 30 days, and the compression type is set to lz4 for storage efficiency.
+
+2. `FlinkDeployment` resource:
+
+```yaml
+apiVersion: kustomize.io/v1beta1
+kind: Deployment
+metadata:
+  name: flink-sql-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: flink
+        image: apache/flink:1.13-1.20
+        ports:
+        - name: jobmanager-rest
+          containerPort: 8081
+        - name: jobmanager-rpc
+          containerPort: 8082
+        - name: taskmanager-rest
+          containerPort: 8083
+        env:
+        - name: JAVA_OPTS
+          value: "-Dflink.jobmanager.rpc.address=localhost:8082 -Dflink.taskmanager.rpc.address=localhost:8083"
+        volumeMounts:
+        - name: flink-conf
+          mountPath: /opt/flink/conf
+        - name: flink-lib
+          mountPath: /opt/flink/lib
+      volumes:
+      - name: flink-conf
+        configMap:
+          name: flink-config
+      - name: flink-lib
+        emptyDir: {}
+      restartPolicy: OnFailure
+  spec:
+    replicas: 3
+    selector:
+      matchLabels:
+        app: flink-sql-job
+    template:
+      metadata:
+        labels:
+          app: flink-sql-job
+      spec:
+        containers:
+        - name: flink
+          image: apache/flink:1.13-1.20
+          resources:
+            limits:
+              memory: 8Gi
+              cpu: 4
+            requests:
+              memory: 4Gi
+              cpu: 2
+          command:
+          - /bin/bash
+          - -c
+          - |
+            /opt/flink/bin/start-cluster.sh && \
+            /opt/flink/bin/flink run -m yarn-client -c local:///opt/flink/usrlib/sql-runner.jar
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - flink-sql-job
+              topologyKey: kubernetes.io/hostname
+        volumeClaimTemplates:
+        - metadata:
+            name: checkpoint-storage
+          spec:
+            storageClassName: standard
+            accessModes: [ReadWriteOnce]
+            resources:
+              requests:
+                storage: 50Gi
+        terminationGracePeriodSeconds: 30
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: Recreate
+
+  triggers:
+  - type: ConfigChange
+```
+
+Justification: The Flink Kubernetes Operator deploys the Flink SQL job as a Kubernetes deployment with three replicas. Each TaskManager pod is configured to use at most 4 CPU and 8 GiB of memory, and at most 3 TaskManager pods can run at a time. The checkpoint storage is set to S3, and the deployment is configured to recreate pods when updated.
+
+3. Flink SQL `CREATE TABLE` statements for every Kafka source and sink table:
+
+```sql
+-- Create Kafka source table
+CREATE TABLE card_transactions (
+  card_id VARCHAR,
+  -- Add other fields as needed
+  -- Assume a JSON format for simplicity: JSON_KEYS(card_id)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'card-transactions',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'card-transactions-group',
+  'format' = 'json',
+  'json.ignore-parse-errors' = 'true'
+);
+
+-- Create Flink SQL table for filtering, enriching, and writing to the sink
+CREATE TABLE enriched_card_transactions AS (
+  SELECT
+    card_id,
+    -- Add derived fields calculation
+    -- ...
+  FROM card_transactions
+  WHERE is_valid_event = true  -- Assuming a function or UDF to check validity
+);
+
+-- Create Kafka sink table
+CREATE TABLE card_transactions_enriched (
+  card_id VARCHAR,
+  -- Add other fields as needed
+  -- Assume a JSON format for simplicity: JSON_KEYS(card_id)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'card-transactions-enriched',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.key.serializer' = 'org.apache.kafka.common.serialization.StringSerializer',
+  'properties.value.serializer' = 'io.confluent.kafka.serializers.KafkaAvroSerializer',
+  'properties.value.schema' = '<enriched_card_transactions_avro_schema>'
+);
+```
+
+Justification: The Flink SQL job creates a source table `card_transactions` from the `card-transactions` Kafka topic, filtering out malformed events and enriching each event with derived fields. The enriched data is written to the sink table `card_transactions_enriched`. Both source and sink tables use the Kafka connector with the specified properties. The sink table uses an Avro serializer for efficient serialization.

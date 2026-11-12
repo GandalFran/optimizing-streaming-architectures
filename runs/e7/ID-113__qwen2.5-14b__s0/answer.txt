@@ -1,0 +1,66 @@
+```bash
+# Create the 'clicks' topic with 10 partitions and replication factor 3
+kafka-topics.sh --create --topic clicks --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=2592000000
+
+# Create the 'clicks-enriched' topic with 10 partitions and replication factor 3
+kafka-topics.sh --create --topic clicks-enriched --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=2592000000
+```
+
+```yaml
+# Flink configuration
+config:
+  state.backend: rocksdb
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.checkpoints.num-retained: 10
+  execution.checkpointing.mode: EXACTLY_ONCE
+  execution.checkpointing.interval: 60000
+  execution.checkpointing.timeout: 60000
+  execution.checkpointing.min-pause: 5000
+  parallelism.default: 10
+  taskmanager.memory.managed.size: 6000000000
+  taskmanager.numberOfTaskSlots: 4
+  jobmanager.execution.failover-strategy: region
+```
+
+```sql
+-- Define the source table for the 'clicks' topic
+CREATE TABLE clicks (
+    session_id STRING,
+    event_data STRING,
+    event_time TIMESTAMP(3) METADATA FROM 'timestamp'
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'properties.group.id' = 'clicks-group'
+);
+
+-- Define the sink table for the 'clicks-enriched' topic
+CREATE TABLE clicks_enriched (
+    session_id STRING,
+    event_data STRING,
+    enriched_data STRING,
+    event_time TIMESTAMP(3)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'round-robin',
+    'sink.parallelism' = '10'
+);
+```
+
+**Justification of main values:**
+
+- **Kafka Topic Partitions:** The `clicks` and `clicks-enriched` topics each have 10 partitions to handle the input rate of 5,000 events/s (50,000 events/s total) and to ensure load balancing across Flink subtasks. Each partition can handle up to 5 MB/s, which is sufficient for the average event size of 2048 bytes.
+
+- **Flink Parallelism:** The default parallelism is set to 10 to match the number of Kafka partitions, ensuring that each Flink subtask processes events from a single Kafka partition, which helps in maintaining state consistency and reducing the overhead of redistributing data.
+
+- **Checkpointing Configuration:** Checkpointing is configured for exactly-once semantics with a 1-minute interval to ensure fault tolerance and end-to-end exactly-once delivery. The checkpoint timeout is set to 60 seconds to allow for sufficient time to complete checkpoints, and the minimum pause between checkpoints is set to 5 seconds to avoid frequent checkpointing.
+
+- **Memory Configuration:** The managed memory size is set to 6 GB per TaskManager to accommodate the processing of large events and to ensure that there is enough memory for state management and processing.
+
+- **Retention:** Both Kafka topics retain data for 30 days, which is configured using the `retention.ms` property. This ensures that data is available for downstream consumers for the required duration.

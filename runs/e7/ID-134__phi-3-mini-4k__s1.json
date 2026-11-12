@@ -1,0 +1,259 @@
+{
+  "id": "ID-134",
+  "model": "phi-3-mini-4k",
+  "seed": 1,
+  "track": "k8s",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 2048,
+    "latency_slo_ms": 100,
+    "retention_days": 1,
+    "sink": "vehicle-positions-clean",
+    "src": "vehicle-positions",
+    "throughput_eps": 20000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8388",
+  "started": "2026-11-10T20:09:06+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "KafkaTopic/vehicle-positions",
+      "kind": "bootstrap-server",
+      "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    }
+  ],
+  "translations": [
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/vehicle-positions",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic vehicle-positions --partitions 1 --replication-factor 2 --config retention.ms=86400000 --config segment.bytes=1073741824",
+      "skipped": null
+    },
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/vehicle-positions-clean",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/vehicle-positions",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    }
+  ],
+  "augmentations": [],
+  "topic_commands": [
+    {
+      "answer_cmd": "KafkaTopic/vehicle-positions",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic vehicle-positions --partitions 1 --replication-factor 2 --config retention.ms=86400000 --config segment.bytes=1073741824 --bootstrap-server 127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002",
+      "substitutions": [
+        {
+          "kind": "bootstrap-server",
+          "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic vehicle-positions.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "KafkaTopic/vehicle-positions-clean",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_head": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "answer_cmd": "KafkaTopic/vehicle-positions",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_head": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "no FlinkDeployment resource: no Flink cluster would be created",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 100,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C1_deploy": "no FlinkDeployment resource: no Flink cluster would be created",
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794337754.904,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.5,
+      "bootstrap": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    },
+    {
+      "t": 1794337757.33,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "vehicle-positions"
+      ],
+      "ok": false
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-134",
+    "answer_file": null,
+    "answers": "runs/main/phi-3-mini-4k.sample.jsonl",
+    "model": "phi-3-mini-4k",
+    "seed": 1,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-134__phi-3-mini-4k__s1.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8388",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 8,
+    "findings_L1_L3": [
+      "L1:missing-artefact:no FlinkDeployment resource found",
+      "L2:unknown-field:KafkaTopic.spec.replicaCount is not a field of this resource",
+      "L2:unknown-field:KafkaTopic.spec.replicaCount is not a field of this resource",
+      "L2:unknown-field:KafkaTopic.spec.replicaCount is not a field of this resource",
+      "L2:invalid-value:column gps_event: 'JSON' is not a Flink SQL data type",
+      "L2:invalid-value:PRIMARY KEY on an insert-only 'kafka' table is rejected (use upsert-kafka)",
+      "L2:invalid-value:column gps_event: 'JSON' is not a Flink SQL data type",
+      "L2:invalid-value:PRIMARY KEY on an insert-only 'kafka' table is rejected (use upsert-kafka)"
+    ]
+  },
+  "topology": {
+    "port_base": 13000,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        2,
+        3
+      ]
+    },
+    "nodes": {
+      "k1": "94,95,206,207",
+      "k2": "96,97,208,209",
+      "k3": "98,99,210,211",
+      "f1": "100,101,102,103,212,213,214,215",
+      "f2": "75,76,77,78,187,188,189,190",
+      "f3": "79,80,81,82,191,192,193,194",
+      "j1": "83,195",
+      "ctl": "25,26,137,138",
+      "m1": "27,139"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:13010,2@127.0.0.1:13011,3@127.0.0.1:13012",
+    "listeners=PLAINTEXT://127.0.0.1:13000,CONTROLLER://127.0.0.1:13010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:13000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8388/e7-1930544/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "vehicle-positions": {
+      "partitions": 1,
+      "replication_factor": 2,
+      "configs": {
+        "min.insync.replicas": "1",
+        "segment.bytes": "1073741824",
+        "retention.ms": "86400000"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": false
+  },
+  "failure_stage": "answer",
+  "topics_after_run": {
+    "vehicle-positions": {
+      "partitions": 1,
+      "replication_factor": 2,
+      "configs": {
+        "min.insync.replicas": "1",
+        "segment.bytes": "1073741824",
+        "retention.ms": "86400000"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T20:09:24+0100"
+}

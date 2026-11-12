@@ -1,0 +1,1316 @@
+{
+  "id": "CASE-banking-native",
+  "model": "gold",
+  "seed": 0,
+  "track": "native",
+  "family": "case-study",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "high",
+    "event_bytes": 1024,
+    "latency_slo_ms": 100,
+    "retention_days": 7,
+    "sink": "banking-transactions-validated",
+    "src": "banking-transactions",
+    "throughput_eps": 50000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8322",
+  "started": "2026-11-10T18:06:48+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions-validated --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions-validated --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "execution.checkpointing.dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8322/e7-921498/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "src",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "snk",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    }
+  ],
+  "translations": [],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "src",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "snk",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO snk (`account_id`, `amount`, `__sent_ms`, `__seq`)\nSELECT `account_id`,\n       `amount`,\n       `__sent_ms`,\n       `__seq`\nFROM src;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002 --create --topic banking-transactions --partitions 12 --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic banking-transactions.\n",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions-validated --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002 --create --topic banking-transactions-validated --partitions 12 --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic banking-transactions-validated.\n",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": true,
+  "job_id": "86dd095c908c8ceb44b69f2eff6c7cfc",
+  "job_state_final": "RUNNING",
+  "root_exception": "org.apache.flink.runtime.jobmaster.JobMasterException: TaskManager with id tm0 is no longer reachable.",
+  "checkpoints_completed": 251,
+  "checkpoints_failed": 26,
+  "offered_eps": 49976.3,
+  "sink_eps": 72908.5,
+  "latency_ms": {
+    "p50": 2375.1,
+    "p95": 6027.8,
+    "p99": 7190.2,
+    "max": 7766.9,
+    "n": 799621
+  },
+  "slo_ms": 100,
+  "lost": 0,
+  "duplicates": 0,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": true,
+    "C2_checkpoints": true,
+    "C3_throughput": true,
+    "C4_latency": false,
+    "C5_delivery": true
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {},
+  "events": [
+    {
+      "t": 1794330419.253,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 9.6,
+      "bootstrap": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "t": 1794330423.014,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "banking-transactions",
+        "banking-transactions-validated"
+      ],
+      "ok": true
+    },
+    {
+      "t": 1794330432.54,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 9.2,
+      "taskmanagers": 3
+    },
+    {
+      "t": 1794330438.574,
+      "rel": null,
+      "event": "submitted",
+      "job": "86dd095c908c8ceb44b69f2eff6c7cfc",
+      "seconds": 6.0
+    },
+    {
+      "t": 1794330438.612,
+      "rel": null,
+      "event": "job_state",
+      "state": "RUNNING",
+      "vertices": {
+        "INITIALIZING": 1
+      }
+    },
+    {
+      "t": 1794330441.622,
+      "rel": null,
+      "event": "job_state",
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      }
+    },
+    {
+      "t": 1794330446.698,
+      "rel": -3.99,
+      "event": "load_started",
+      "rate": 50000.0,
+      "processes": 2,
+      "kill_at": 30.0
+    },
+    {
+      "t": 1794330480.695,
+      "rel": 30.0,
+      "event": "taskmanager_killed",
+      "victim": "taskmanager0",
+      "busy_slots": 3
+    },
+    {
+      "t": 1794330495.699,
+      "rel": 45.01,
+      "event": "taskmanager_restarted",
+      "victim": "taskmanager0",
+      "resource_id": "tm0-r"
+    },
+    {
+      "t": 1794330510.988,
+      "rel": 60.3,
+      "event": "load_stopped",
+      "acked": 2999338,
+      "sent": 2999338,
+      "failed": 0
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "CASE-banking-native",
+    "answer_file": "runs/e7/smoke_answers/a_gold_native.txt",
+    "answers": null,
+    "model": "gold",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/smoke/a_gold_native.json",
+    "duration": 60.0,
+    "warmup": 10.0,
+    "kill_at": 30.0,
+    "guard": 3.3333333333333335,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 1,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "run_root": "/tmp/chamoso-e7/8322",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 0,
+    "findings_L1_L3": []
+  },
+  "topology": {
+    "port_base": 12000,
+    "cores_per_role": {
+      "kafka": 1,
+      "flink": 4,
+      "jm": 1,
+      "control": 2
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        1
+      ]
+    },
+    "nodes": {
+      "k1": "38,150",
+      "k2": "39,151",
+      "k3": "40,152",
+      "f1": "41,42,43,44,153,154,155,156",
+      "f2": "45,46,47,48,157,158,159,160",
+      "f3": "49,50,51,52,161,162,163,164",
+      "j1": "53,165",
+      "ctl": "54,55,166,167"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12010,2@127.0.0.1:12011,3@127.0.0.1:12012",
+    "listeners=PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8322/e7-921498/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "banking-transactions-validated": {
+      "partitions": 12,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "2",
+        "retention.ms": "604800000"
+      }
+    },
+    "banking-transactions": {
+      "partitions": 12,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "2",
+        "retention.ms": "604800000"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 12030,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 4,
+    "parallelism.default": 3,
+    "rest.address": "127.0.0.1",
+    "execution.checkpointing.interval": "100 ms",
+    "execution.checkpointing.mode": "EXACTLY_ONCE",
+    "execution.checkpointing.dir": "file:///tmp/chamoso-e7/8322/e7-921498/objstore/flink-state/checkpoints",
+    "taskmanager.memory.process.size": "8g",
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 12031,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8322/e7-921498/flink-io"
+  },
+  "taskmanagers": {
+    "started": 3,
+    "registered": 3,
+    "slots_per_tm": 4
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 6.0,
+    "error": null
+  },
+  "seconds_to_running": 9.1,
+  "load": {
+    "rate_requested": 50000.0,
+    "rate_target": 50000.0,
+    "rate_capped": false,
+    "duration_s": 60.0,
+    "records": {
+      "value_format": "json",
+      "key_format": null,
+      "kafka_key": "none",
+      "pooled_id_columns": [
+        "account_id"
+      ],
+      "pad_column": "account_id",
+      "pad_short_records": 0,
+      "value_columns": [
+        "account_id",
+        "amount"
+      ],
+      "target_event_bytes": 1024,
+      "mean_value_bytes": 1024.0,
+      "timestamp_standard": "SQL"
+    }
+  },
+  "t0": 1794330450.6918077,
+  "failure_injection_planned": true,
+  "failure_injection": {
+    "victim": "taskmanager0",
+    "resource_id": "tm0",
+    "busy_slots": 3,
+    "t_kill": 1794330480.6952403,
+    "rel_kill": 30.0,
+    "t_restart": 1794330495.6992192,
+    "down_s": 15.0
+  },
+  "drain_s": 16.4,
+  "vertex_states_final": {
+    "RUNNING": 1
+  },
+  "checkpoint_summary": {
+    "end_to_end_duration": {
+      "min": 103,
+      "max": 5385,
+      "avg": 272,
+      "p50": 114.0,
+      "p90": 400.0000000000005,
+      "p95": 1110.3999999999942,
+      "p99": 4040.04,
+      "p999": 5385.0
+    },
+    "state_size": {
+      "min": 3087,
+      "max": 3939,
+      "avg": 3400,
+      "p50": 3225.0,
+      "p90": 3939.0,
+      "p95": 3939.0,
+      "p99": 3939.0,
+      "p999": 3939.0
+    }
+  },
+  "checkpoint_config_effective": {
+    "mode": "exactly_once",
+    "interval": 100,
+    "timeout": 600000,
+    "min_pause": 0,
+    "max_concurrent": 1,
+    "externalization": {
+      "enabled": false,
+      "delete_on_cancellation": true
+    },
+    "state_backend": "HashMapStateBackend",
+    "checkpoint_storage": "FileSystemCheckpointStorage",
+    "unaligned_checkpoints": false,
+    "tolerable_failed_checkpoints": 0,
+    "aligned_checkpoint_timeout": 0,
+    "checkpoints_after_tasks_finish": true,
+    "state_changelog_enabled": false,
+    "changelog_periodic_materialization_interval": 600000,
+    "changelog_storage": "memory"
+  },
+  "num_restarts": 1,
+  "exception_history": [
+    {
+      "t": 1794330497429,
+      "task": "Source: src[1] -> snk[2]: Writer -> snk[2]: Committer (1/3) - execution #0",
+      "chain": "org.apache.flink.runtime.jobmaster.JobMasterException: TaskManager with id tm0 is no longer reachable."
+    }
+  ],
+  "produced": {
+    "sent": 2999338,
+    "acked": 2999338,
+    "delivery_failed": 0,
+    "error_counts": {},
+    "unflushed": 0
+  },
+  "offered_eps_whole_load": 49988.4,
+  "steady_window": {
+    "start_rel_s": 10.308192253112793,
+    "end_rel_s": 26.308192253112793,
+    "length_s": 16
+  },
+  "offered_per_second": {
+    "0": 15255,
+    "1": 50006,
+    "2": 49996,
+    "3": 50000,
+    "4": 49993,
+    "5": 50019,
+    "6": 49983,
+    "7": 50005,
+    "8": 49995,
+    "9": 50005,
+    "10": 49995,
+    "11": 49997,
+    "12": 49909,
+    "13": 50108,
+    "14": 49613,
+    "15": 50014,
+    "16": 49981,
+    "17": 50003,
+    "18": 50011,
+    "19": 50006,
+    "20": 49999,
+    "21": 49983,
+    "22": 50018,
+    "23": 49999,
+    "24": 49644,
+    "25": 50350,
+    "26": 49986,
+    "27": 50006,
+    "28": 50001,
+    "29": 50007,
+    "30": 49986,
+    "31": 50014,
+    "32": 49988,
+    "33": 50010,
+    "34": 50010,
+    "35": 49999,
+    "36": 49979,
+    "37": 50005,
+    "38": 50014,
+    "39": 49995,
+    "40": 49994,
+    "41": 50004,
+    "42": 49996,
+    "43": 49995,
+    "44": 50008,
+    "45": 50004,
+    "46": 49997,
+    "47": 49994,
+    "48": 50013,
+    "49": 49988,
+    "50": 50013,
+    "51": 49994,
+    "52": 50001,
+    "53": 49988,
+    "54": 50017,
+    "55": 49994,
+    "56": 49996,
+    "57": 48818,
+    "58": 50337,
+    "59": 50683,
+    "60": 34617
+  },
+  "sink_reader": {
+    "t": 1794330527.2519467,
+    "n": 2999338,
+    "distinct": 2999338,
+    "assigned": 12,
+    "t_assigned": 1794330438.1681628,
+    "unparsed": 0,
+    "tombstones": 0,
+    "errors": 0,
+    "last_error": null,
+    "final": true
+  },
+  "sink_records_received": 2999338,
+  "duplicate_extra_copies": 0,
+  "received_not_acked": 0,
+  "sink_eps_count": 70554.7,
+  "sink_per_second": {
+    "1": 1941,
+    "2": 6385,
+    "4": 45801,
+    "7": 55988,
+    "11": 117757,
+    "12": 76379,
+    "13": 74302,
+    "14": 67626,
+    "16": 58029,
+    "17": 140005,
+    "18": 100242,
+    "19": 78593,
+    "20": 81560,
+    "21": 74024,
+    "22": 60026,
+    "23": 105551,
+    "24": 27324,
+    "25": 57851,
+    "26": 9606,
+    "27": 95878,
+    "28": 22747,
+    "29": 13142,
+    "30": 25018,
+    "49": 150,
+    "50": 45303,
+    "51": 24432,
+    "52": 85764,
+    "53": 56491,
+    "54": 1454,
+    "55": 121583,
+    "56": 99438,
+    "57": 85000,
+    "58": 4149,
+    "59": 16000,
+    "61": 107379,
+    "62": 64266,
+    "63": 69035,
+    "64": 69737,
+    "65": 94825,
+    "66": 83025,
+    "67": 45424,
+    "69": 86910,
+    "70": 104846,
+    "71": 78210,
+    "72": 82659,
+    "73": 83010,
+    "74": 93970,
+    "75": 503
+  },
+  "latency_ms_all_records": {
+    "p50": 9762.0,
+    "p95": 25093.2,
+    "p99": 27957.5,
+    "max": 30404.6,
+    "n": 2999338
+  },
+  "cpu_cores_steady": {
+    "flink-jm": 0.05,
+    "flink-tm0": 0.78,
+    "flink-tm1": 0.01,
+    "flink-tm2": 0.01,
+    "generator0": 1.03,
+    "generator1": 1.02,
+    "kafka0": 0.68,
+    "kafka1": 0.64,
+    "kafka2": 0.64,
+    "sink_reader": 0.32
+  },
+  "cpu_capacity_logical": {
+    "kafka": 2,
+    "flink": 8,
+    "jm": 2,
+    "control": 4
+  },
+  "topics_after_run": {
+    "banking-transactions-validated": {
+      "partitions": 12,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "2",
+        "retention.ms": "604800000"
+      }
+    },
+    "banking-transactions": {
+      "partitions": 12,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "2",
+        "retention.ms": "604800000"
+      }
+    }
+  },
+  "timeline": [
+    {
+      "t": 1794330446.7,
+      "rel": -4.0,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 67,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794330448.75,
+      "rel": -1.9,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 67,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794330450.76,
+      "rel": 0.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 104,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794330452.77,
+      "rel": 2.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 104,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1941,
+      "sink_distinct": 1941
+    },
+    {
+      "t": 1794330454.77,
+      "rel": 4.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 110,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 16341,
+      "sink_distinct": 16341
+    },
+    {
+      "t": 1794330456.78,
+      "rel": 6.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 110,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 54127,
+      "sink_distinct": 54127
+    },
+    {
+      "t": 1794330458.79,
+      "rel": 8.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 111,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 110115,
+      "sink_distinct": 110115
+    },
+    {
+      "t": 1794330460.8,
+      "rel": 10.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 111,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 110115,
+      "sink_distinct": 110115
+    },
+    {
+      "t": 1794330462.81,
+      "rel": 12.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 113,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 227872,
+      "sink_distinct": 227872
+    },
+    {
+      "t": 1794330464.81,
+      "rel": 14.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 113,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 378553,
+      "sink_distinct": 378553
+    },
+    {
+      "t": 1794330466.82,
+      "rel": 16.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 114,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 497183,
+      "sink_distinct": 497183
+    },
+    {
+      "t": 1794330468.83,
+      "rel": 18.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 114,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 660029,
+      "sink_distinct": 660029
+    },
+    {
+      "t": 1794330470.84,
+      "rel": 20.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 119,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 823048,
+      "sink_distinct": 823048
+    },
+    {
+      "t": 1794330472.84,
+      "rel": 22.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 119,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 981696,
+      "sink_distinct": 981696
+    },
+    {
+      "t": 1794330474.85,
+      "rel": 24.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 141,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1165906,
+      "sink_distinct": 1165906
+    },
+    {
+      "t": 1794330476.86,
+      "rel": 26.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 141,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1231930,
+      "sink_distinct": 1231930
+    },
+    {
+      "t": 1794330478.87,
+      "rel": 28.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 158,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1338972,
+      "sink_distinct": 1338972
+    },
+    {
+      "t": 1794330480.88,
+      "rel": 30.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 158,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1374261,
+      "sink_distinct": 1374261
+    },
+    {
+      "t": 1794330482.89,
+      "rel": 32.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 162,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1395775,
+      "sink_distinct": 1395775
+    },
+    {
+      "t": 1794330484.9,
+      "rel": 34.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 162,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1395775,
+      "sink_distinct": 1395775
+    },
+    {
+      "t": 1794330486.9,
+      "rel": 36.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 162,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1395775,
+      "sink_distinct": 1395775
+    },
+    {
+      "t": 1794330488.91,
+      "rel": 38.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 162,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1395775,
+      "sink_distinct": 1395775
+    },
+    {
+      "t": 1794330490.91,
+      "rel": 40.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 162,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1395775,
+      "sink_distinct": 1395775
+    },
+    {
+      "t": 1794330492.92,
+      "rel": 42.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 162,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1395775,
+      "sink_distinct": 1395775
+    },
+    {
+      "t": 1794330494.92,
+      "rel": 44.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 162,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1395775,
+      "sink_distinct": 1395775
+    },
+    {
+      "t": 1794330496.93,
+      "rel": 46.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 162,
+        "failed": 13,
+        "in_progress": 1,
+        "restored": 0
+      },
+      "sink_n": 1395775,
+      "sink_distinct": 1395775
+    },
+    {
+      "t": 1794330498.94,
+      "rel": 48.2,
+      "state": "RUNNING",
+      "vertices": {
+        "INITIALIZING": 1
+      },
+      "ckpt": {
+        "completed": 162,
+        "failed": 18,
+        "in_progress": 0,
+        "restored": 3
+      },
+      "sink_n": 1395775,
+      "sink_distinct": 1395775
+    },
+    {
+      "t": 1794330500.95,
+      "rel": 50.3,
+      "state": "RUNNING",
+      "vertices": {
+        "INITIALIZING": 1
+      },
+      "ckpt": {
+        "completed": 162,
+        "failed": 18,
+        "in_progress": 0,
+        "restored": 3
+      },
+      "sink_n": 1401750,
+      "sink_distinct": 1401750
+    },
+    {
+      "t": 1794330502.96,
+      "rel": 52.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 180,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 1496742,
+      "sink_distinct": 1496742
+    },
+    {
+      "t": 1794330504.96,
+      "rel": 54.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 180,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 1609369,
+      "sink_distinct": 1609369
+    },
+    {
+      "t": 1794330506.97,
+      "rel": 56.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 193,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 1730952,
+      "sink_distinct": 1730952
+    },
+    {
+      "t": 1794330508.98,
+      "rel": 58.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 193,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 1918205,
+      "sink_distinct": 1918205
+    },
+    {
+      "t": 1794330510.99,
+      "rel": 60.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 195,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 1935539,
+      "sink_distinct": 1935539
+    },
+    {
+      "t": 1794330513.0,
+      "rel": 62.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 195,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 2089364,
+      "sink_distinct": 2089364
+    },
+    {
+      "t": 1794330515.0,
+      "rel": 64.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 197,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 2195956,
+      "sink_distinct": 2195956
+    },
+    {
+      "t": 1794330517.01,
+      "rel": 66.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 197,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 2393806,
+      "sink_distinct": 2393806
+    },
+    {
+      "t": 1794330519.02,
+      "rel": 68.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 198,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 2469230,
+      "sink_distinct": 2469230
+    },
+    {
+      "t": 1794330521.03,
+      "rel": 70.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 198,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 2660986,
+      "sink_distinct": 2660986
+    },
+    {
+      "t": 1794330523.03,
+      "rel": 72.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 215,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 2821855,
+      "sink_distinct": 2821855
+    },
+    {
+      "t": 1794330525.04,
+      "rel": 74.3,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 215,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 2984217,
+      "sink_distinct": 2984217
+    },
+    {
+      "t": 1794330527.04,
+      "rel": 76.4,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 251,
+        "failed": 26,
+        "in_progress": 1,
+        "restored": 3
+      },
+      "sink_n": 2999338,
+      "sink_distinct": 2999338
+    }
+  ],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T18:08:58+0100"
+}

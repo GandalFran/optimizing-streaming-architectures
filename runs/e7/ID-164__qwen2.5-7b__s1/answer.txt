@@ -1,0 +1,153 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-pipeline
+spec:
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  flinkConfiguration:
+    taskmanager.heap.size: 8Gi
+    taskmanager.numberOfTaskSlots: 2
+    jobmanager.heap.size: 16Gi
+    parallelism.default: 24
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.checkpoints.min-pending-checkpoints-to-retain: 3
+    state.checkpoints.num-retained: 3
+    state.backend.rocksdb.path: /tmp/rocksdb-state
+    state.backend.rocksdb.block-size: 512KiB
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.level0-file-num-compaction-trigger: 32
+    state.backend.rocksdb.level0-max-compaction-level: 1
+    state.backend.rocksdb.level-compaction-deffered-time: 0ms
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.write-buffer-asynchronous: true
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 128MiB
+    state.backend.rocksdb.block-cache-allocation-factor: 1.25
+    state.backend.rocksdb.block-cache-size: 1Gi
+    state.backend.rocksdb.write-buffer-size: 12

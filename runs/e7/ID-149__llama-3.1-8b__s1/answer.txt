@@ -1,0 +1,97 @@
+### 1. Kafka Topic Creation
+
+```bash
+# Create the ad-impressions topic
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --config cleanup.policy=compact,delete compacted.topic.max.message.size=1048576 ad-impressions
+
+# Create the ad-impressions-enriched topic
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --config cleanup.policy=compact,delete compacted.topic.max.message.size=1048576 ad-impressions-enriched
+
+# Set topic retention to 30 days
+kafka-configs.sh --bootstrap-server kafka:9092 --alter --add-config retention.ms=2592000000 --entity-type topics --entity-name ad-impressions
+kafka-configs.sh --bootstrap-server kafka:9092 --alter --add-config retention.ms=2592000000 --entity-type topics --entity-name ad-impressions-enriched
+```
+
+### 2. Flink Configuration (`config.yaml`)
+
+```yaml
+# Flink configuration for the job
+environment:
+  parallelism.default: 4
+  taskmanager.numberOfTaskSlots: 4
+
+jobmanager:
+  high-availability: true
+
+execution:
+  checkpointing:
+    interval: 10000
+    type: EL-retaining
+  checkpoint storage:
+    type: fs
+    fs.checkpoint.dir: s3://flink-state/checkpoints
+
+# Kafka consumer configuration
+kafka:
+  properties:
+    bootstrap.servers: kafka:9092
+    enable.auto.commit: false
+    isolation.level: read_uncommitted
+    max.poll.records: 50000
+
+# Kafka producer configuration
+kafka:
+  producer:
+    properties:
+      bootstrap.servers: kafka:9092
+      retries: 3
+      linger.ms: 50
+      batch.size: 33554432
+```
+
+### 3. Flink SQL Table Definitions
+
+```sql
+-- Create the source table for ad impressions
+CREATE TABLE ad_impressions (
+  campaign_id STRING,
+  -- Add other event fields...
+  WATERMARK FOR campaign_id AS PROCTIME(),
+  PRIMARY KEY (campaign_id) NOT ENFORCED
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'ad-impressions',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'ad-impressions-group',
+  'scan.startup.mode' = 'earliest-offset'
+);
+
+-- Create the sink table for enriched ad impressions
+CREATE TABLE ad_impressions_enriched (
+  campaign_id STRING,
+  -- Add other enriched event fields...
+  WATERMARK FOR campaign_id AS PROCTIME(),
+  PRIMARY KEY (campaign_id) NOT ENFORCED
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'ad-impressions-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.transactional.id' = 'ad-impressions-enriched-group'
+);
+
+-- Filter and enrich the ad impressions table
+INSERT INTO ad_impressions_enriched
+SELECT
+  campaign_id,
+  -- Add enrichment logic...
+FROM ad_impressions;
+```
+
+**Justification:**
+
+- We create two Kafka topics: `ad-impressions` for raw event input and `ad-impressions-enriched` for the processed output. Both topics have 8 partitions and use the `compact` cleanup policy to reduce storage usage.
+- In the Flink configuration (`config.yaml`), we set the parallelism to 4 and the task manager to have 4 slots each, ensuring that each task manager can handle the input rate of 50,000 events/s. We also configure the checkpointing to use the `EL-retaining` policy and store checkpoints in S3.
+- In the Flink SQL code, we define two tables: `ad_impressions` for the Kafka source and `ad_impressions_enriched` for the Kafka sink. We use the `universal` connector for Kafka and set the `scan.startup.mode` to `earliest-offset` to start consuming from the beginning of the topic. We also use a `properties.transactional.id` to enable transactional writes to the sink topic.
+- We use a watermark to ensure that events with the same `campaign_id` are processed in order, which is necessary for the enrichment logic.

@@ -1,0 +1,205 @@
+{
+  "id": "ID-152",
+  "model": "mistral-7b-v0.3",
+  "seed": 0,
+  "track": "k8s",
+  "family": "grid",
+  "spec": {
+    "delivery": "at-least-once",
+    "durability": "high",
+    "event_bytes": 2048,
+    "latency_slo_ms": 1000,
+    "retention_days": 7,
+    "sink": "payments-validated",
+    "src": "payments",
+    "throughput_eps": 50000
+  },
+  "finish_reason": "length",
+  "host": "cn001",
+  "slurm_job": "8388",
+  "started": "2026-11-10T19:59:44+0100",
+  "substitutions": [],
+  "translations": [
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/payments",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/payments-validated",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    }
+  ],
+  "augmentations": [],
+  "topic_commands": [
+    {
+      "answer_cmd": "KafkaTopic/payments",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_head": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "answer_cmd": "KafkaTopic/payments-validated",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_head": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "no FlinkDeployment resource: no Flink cluster would be created",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 1000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C1_deploy": "no FlinkDeployment resource: no Flink cluster would be created",
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794337193.116,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.4,
+      "bootstrap": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    },
+    {
+      "t": 1794337194.347,
+      "rel": null,
+      "event": "topics",
+      "created": [],
+      "ok": false
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-152",
+    "answer_file": null,
+    "answers": "runs/main/mistral-7b-v0.3.greedy.jsonl",
+    "model": "mistral-7b-v0.3",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-152__mistral-7b-v0.3__s0.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8388",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 3,
+    "findings_L1_L3": [
+      "L1:truncated:generation stopped at the token limit",
+      "L1:missing-artefact:no FlinkDeployment resource found",
+      "L1:missing-artefact:no SQL block with CREATE TABLE statements"
+    ]
+  },
+  "topology": {
+    "port_base": 13000,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        2,
+        3
+      ]
+    },
+    "nodes": {
+      "k1": "94,95,206,207",
+      "k2": "96,97,208,209",
+      "k3": "98,99,210,211",
+      "f1": "100,101,102,103,212,213,214,215",
+      "f2": "75,76,77,78,187,188,189,190",
+      "f3": "79,80,81,82,191,192,193,194",
+      "j1": "83,195",
+      "ctl": "25,26,137,138",
+      "m1": "27,139"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:13010,2@127.0.0.1:13011,3@127.0.0.1:13012",
+    "listeners=PLAINTEXT://127.0.0.1:13000,CONTROLLER://127.0.0.1:13010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:13000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8388/e7-1554562/k1/kafka-data"
+  ],
+  "topics_after_commands": {},
+  "topics_created": {
+    "source": false,
+    "sink": false
+  },
+  "failure_stage": "answer",
+  "topics_after_run": {},
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T20:00:01+0100"
+}

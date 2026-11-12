@@ -1,0 +1,175 @@
+# 1. `kafka-topics.sh` commands to create the Kafka topics
+bash
+# create topic 'clicks'
+kafka-topics.sh --create --topic clicks \
+    --partitions 8 --replication-factor 3 \
+    --config retention.ms=2592000000 --config cleanup.policy=compact \
+    --bootstrap-server kafka:9092
+
+# create topic 'clicks-enriched'
+kafka-topics.sh --create --topic clicks-enriched \
+    --partitions 8 --replication-factor 3 \
+    --config retention.ms=2592000000 --config cleanup.policy=compact \
+    --bootstrap-server kafka:9092
+```
+
+# 2. Flink configuration
+yaml
+# set the number of parallel source subtasks
+jobmanager.memory.process.size: 2048
+taskmanager.memory.task.cached: 2048
+taskmanager.memory.task.heap.size: 2048
+
+# set the checkpoint interval to 1 min
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.backend: local
+state.backend.fs.checkpointdir: s3://flink-state/checkpoints
+state.backend.local dir.checkpoints: /tmp/checkpoints
+state.backend.local dir.savepoints: /tmp/savepoints
+state.backend.rocksdb.checkpoints.enabled: true
+state.backend.rocksdb.checkpoints.interval-millis: 60000
+state.backend.rocksdb.checkpoints.num-retained: 3
+
+# enable exactly-once semantics
+jobmanager.webui.execution.default.parallelism: 3
+taskmanager.memory.tasks.max: 8192
+taskmanager.memory.cpu.max: 8192
+taskmanager.numberOfTaskSlots: 4
+jobmanager.rpc.address: localhost
+jobmanager.rpc.port: 6123
+taskmanager.rpc.port: 6124
+taskmanager.network.memory.fraction: 0.8
+taskmanager.network.memory.max: 4096
+taskmanager.memory.managed.min: 512
+taskmanager.memory.managed.max: 4096
+taskmanager.memory.managed.fraction: 0.3
+taskmanager.memory.managed.size: 4096
+taskmanager.memory.jvm-heap.min: 512
+taskmanager.memory.jvm-heap.max: 4096
+taskmanager.memory.jvm-heap.fraction: 0.7
+taskmanager.memory.jvm-heap.size: 4096
+taskmanager.memory.non-managed.min: 512
+taskmanager.memory.non-managed.max: 4096
+taskmanager.memory.non-managed.fraction: 0.2
+taskmanager.memory.non-managed.size: 4096
+taskmanager.memory.heap.size: 4096
+taskmanager.memory.off-heap.size: 4096
+taskmanager.memory.off-heap.fraction: 0.7
+taskmanager.memory.off-heap.max: 4096
+taskmanager.memory.off-heap.min: 512
+taskmanager.memory.off-heap.fraction: 0.7
+taskmanager.memory.off-heap.size: 4096
+taskmanager.memory.total.max: 8192
+taskmanager.memory.total.min: 4096
+taskmanager.memory.total.fraction: 0.5
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory.total.size: 8192
+taskmanager.memory

@@ -1,0 +1,1597 @@
+{
+  "id": "CASE-banking-native",
+  "model": "gold-no-ckpt-interval",
+  "seed": 0,
+  "track": "native",
+  "family": "case-study",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "high",
+    "event_bytes": 1024,
+    "latency_slo_ms": 100,
+    "retention_days": 7,
+    "sink": "banking-transactions-validated",
+    "src": "banking-transactions",
+    "throughput_eps": 50000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8323",
+  "started": "2026-11-10T18:27:50+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions-validated --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions-validated --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "execution.checkpointing.dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8323/e7-955723/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "src",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "snk",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    }
+  ],
+  "translations": [],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "src",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "snk",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO snk (`account_id`, `amount`, `__sent_ms`, `__seq`)\nSELECT `account_id`,\n       `amount`,\n       `__sent_ms`,\n       `__seq`\nFROM src;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002 --create --topic banking-transactions --partitions 12 --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic banking-transactions.\n",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions-validated --partitions 12    --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002 --create --topic banking-transactions-validated --partitions 12 --replication-factor 3 --config min.insync.replicas=2 --config retention.ms=604800000",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic banking-transactions-validated.\n",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": true,
+  "job_id": "4e1815e50050a2f6a46234a775e176fe",
+  "job_state_final": "FAILED",
+  "root_exception": "org.apache.flink.runtime.JobException: Recovery is suppressed by NoRestartBackoffTimeStrategy\nCaused by: org.apache.flink.runtime.jobmaster.JobMasterException: TaskManager with id tm1 is no longer reachable.",
+  "checkpoints_completed": 0,
+  "checkpoints_failed": 0,
+  "offered_eps": 49962.6,
+  "sink_eps": 0.0,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 100,
+  "lost": 2999268,
+  "duplicates": 0,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": true,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {
+    "latency_ms": "no record became visible to a read_committed consumer"
+  },
+  "criteria_reasons": {
+    "C4_latency": "no record became visible to a read_committed consumer"
+  },
+  "events": [
+    {
+      "t": 1794331680.03,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 8.1,
+      "bootstrap": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "t": 1794331683.761,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "banking-transactions",
+        "banking-transactions-validated"
+      ],
+      "ok": true
+    },
+    {
+      "t": 1794331690.432,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 6.6,
+      "taskmanagers": 3
+    },
+    {
+      "t": 1794331695.616,
+      "rel": null,
+      "event": "submitted",
+      "job": "4e1815e50050a2f6a46234a775e176fe",
+      "seconds": 5.2
+    },
+    {
+      "t": 1794331695.647,
+      "rel": null,
+      "event": "job_state",
+      "state": "RUNNING",
+      "vertices": {
+        "INITIALIZING": 1
+      }
+    },
+    {
+      "t": 1794331698.66,
+      "rel": null,
+      "event": "job_state",
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      }
+    },
+    {
+      "t": 1794331703.733,
+      "rel": -3.99,
+      "event": "load_started",
+      "rate": 50000.0,
+      "processes": 2,
+      "kill_at": 30.0
+    },
+    {
+      "t": 1794331737.732,
+      "rel": 30.0,
+      "event": "taskmanager_killed",
+      "victim": "taskmanager1",
+      "busy_slots": 3
+    },
+    {
+      "t": 1794331752.737,
+      "rel": 45.01,
+      "event": "taskmanager_restarted",
+      "victim": "taskmanager1",
+      "resource_id": "tm1-r"
+    },
+    {
+      "t": 1794331768.011,
+      "rel": 60.28,
+      "event": "load_stopped",
+      "acked": 2999268,
+      "sent": 2999268,
+      "failed": 0
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "CASE-banking-native",
+    "answer_file": "runs/e7/smoke_answers/c_no_ckpt_interval.txt",
+    "answers": null,
+    "model": "gold-no-ckpt-interval",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/smoke/c_no_ckpt_interval.json",
+    "duration": 60.0,
+    "warmup": 10.0,
+    "kill_at": 30.0,
+    "guard": 3.3333333333333335,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 1,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "run_root": "/tmp/chamoso-e7/8323",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 0,
+    "findings_L1_L3": []
+  },
+  "topology": {
+    "port_base": 12000,
+    "cores_per_role": {
+      "kafka": 1,
+      "flink": 4,
+      "jm": 1,
+      "control": 2
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        1
+      ]
+    },
+    "nodes": {
+      "k1": "38,150",
+      "k2": "39,151",
+      "k3": "40,152",
+      "f1": "41,42,43,44,153,154,155,156",
+      "f2": "45,46,47,48,157,158,159,160",
+      "f3": "49,50,51,52,161,162,163,164",
+      "j1": "53,165",
+      "ctl": "54,55,166,167"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12010,2@127.0.0.1:12011,3@127.0.0.1:12012",
+    "listeners=PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8323/e7-955723/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "banking-transactions-validated": {
+      "partitions": 12,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "2",
+        "retention.ms": "604800000"
+      }
+    },
+    "banking-transactions": {
+      "partitions": 12,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "2",
+        "retention.ms": "604800000"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 12030,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 4,
+    "parallelism.default": 3,
+    "rest.address": "127.0.0.1",
+    "execution.checkpointing.mode": "EXACTLY_ONCE",
+    "execution.checkpointing.dir": "file:///tmp/chamoso-e7/8323/e7-955723/objstore/flink-state/checkpoints",
+    "taskmanager.memory.process.size": "8g",
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 12031,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8323/e7-955723/flink-io"
+  },
+  "taskmanagers": {
+    "started": 3,
+    "registered": 3,
+    "slots_per_tm": 4
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 5.2,
+    "error": null
+  },
+  "seconds_to_running": 8.2,
+  "load": {
+    "rate_requested": 50000.0,
+    "rate_target": 50000.0,
+    "rate_capped": false,
+    "duration_s": 60.0,
+    "records": {
+      "value_format": "json",
+      "key_format": null,
+      "kafka_key": "none",
+      "pooled_id_columns": [
+        "account_id"
+      ],
+      "pad_column": "account_id",
+      "pad_short_records": 0,
+      "value_columns": [
+        "account_id",
+        "amount"
+      ],
+      "target_event_bytes": 1024,
+      "mean_value_bytes": 1024.0,
+      "timestamp_standard": "SQL"
+    }
+  },
+  "t0": 1794331707.7283134,
+  "failure_injection_planned": true,
+  "failure_injection": {
+    "victim": "taskmanager1",
+    "resource_id": "tm1",
+    "busy_slots": 3,
+    "t_kill": 1794331737.7319577,
+    "rel_kill": 30.0,
+    "t_restart": 1794331752.736725,
+    "down_s": 15.0
+  },
+  "drain_s": 60.4,
+  "vertex_states_final": {
+    "FAILED": 1
+  },
+  "checkpoint_summary": {
+    "end_to_end_duration": {
+      "min": 0,
+      "max": 0,
+      "avg": 0,
+      "p50": "NaN",
+      "p90": "NaN",
+      "p95": "NaN",
+      "p99": "NaN",
+      "p999": "NaN"
+    },
+    "state_size": {
+      "min": 0,
+      "max": 0,
+      "avg": 0,
+      "p50": "NaN",
+      "p90": "NaN",
+      "p95": "NaN",
+      "p99": "NaN",
+      "p999": "NaN"
+    }
+  },
+  "checkpoint_config_effective": {
+    "mode": "at_least_once",
+    "interval": 9223372036854775807,
+    "timeout": 600000,
+    "min_pause": 0,
+    "max_concurrent": 1,
+    "externalization": {
+      "enabled": false,
+      "delete_on_cancellation": true
+    },
+    "state_backend": "HashMapStateBackend",
+    "checkpoint_storage": "FileSystemCheckpointStorage",
+    "unaligned_checkpoints": false,
+    "tolerable_failed_checkpoints": 0,
+    "aligned_checkpoint_timeout": 0,
+    "checkpoints_after_tasks_finish": true,
+    "state_changelog_enabled": false,
+    "changelog_periodic_materialization_interval": 600000,
+    "changelog_storage": "memory"
+  },
+  "num_restarts": 0,
+  "exception_history": [
+    {
+      "t": 1794331754460,
+      "task": null,
+      "chain": "org.apache.flink.runtime.JobException: Recovery is suppressed by NoRestartBackoffTimeStrategy\nCaused by: org.apache.flink.runtime.jobmaster.JobMasterException: TaskManager with id tm1 is no longer reachable."
+    }
+  ],
+  "produced": {
+    "sent": 2999268,
+    "acked": 2999268,
+    "delivery_failed": 0,
+    "error_counts": {},
+    "unflushed": 0
+  },
+  "offered_eps_whole_load": 49987.9,
+  "steady_window": {
+    "start_rel_s": 10.271686553955078,
+    "end_rel_s": 26.271686553955078,
+    "length_s": 16
+  },
+  "offered_per_second": {
+    "0": 13511,
+    "1": 49887,
+    "2": 49987,
+    "3": 50011,
+    "4": 50000,
+    "5": 50006,
+    "6": 49984,
+    "7": 49297,
+    "8": 50469,
+    "9": 50168,
+    "10": 49991,
+    "11": 49993,
+    "12": 49744,
+    "13": 50053,
+    "14": 50003,
+    "15": 49803,
+    "16": 50193,
+    "17": 50002,
+    "18": 49956,
+    "19": 50039,
+    "20": 49909,
+    "21": 50072,
+    "22": 48995,
+    "23": 51040,
+    "24": 49706,
+    "25": 49570,
+    "26": 50323,
+    "27": 50399,
+    "28": 49485,
+    "29": 50278,
+    "30": 50002,
+    "31": 50001,
+    "32": 50003,
+    "33": 49995,
+    "34": 50001,
+    "35": 50003,
+    "36": 50002,
+    "37": 50001,
+    "38": 50003,
+    "39": 49993,
+    "40": 50008,
+    "41": 49980,
+    "42": 50007,
+    "43": 50010,
+    "44": 50006,
+    "45": 49984,
+    "46": 50014,
+    "47": 49991,
+    "48": 50002,
+    "49": 50000,
+    "50": 49996,
+    "51": 50015,
+    "52": 49991,
+    "53": 50000,
+    "54": 49998,
+    "55": 49989,
+    "56": 50006,
+    "57": 50004,
+    "58": 49997,
+    "59": 50006,
+    "60": 36386
+  },
+  "sink_reader": {
+    "t": 1794331828.2374995,
+    "n": 0,
+    "distinct": 0,
+    "assigned": 12,
+    "t_assigned": 1794331695.7274706,
+    "unparsed": 0,
+    "tombstones": 0,
+    "errors": 0,
+    "last_error": null,
+    "final": true
+  },
+  "sink_records_received": 0,
+  "duplicate_extra_copies": 0,
+  "received_not_acked": 0,
+  "sink_eps_count": 0.0,
+  "sink_per_second": {},
+  "cpu_cores_steady": {
+    "flink-jm": 0.02,
+    "flink-tm0": 0.01,
+    "flink-tm1": 0.64,
+    "flink-tm2": 0.01,
+    "generator0": 1.89,
+    "generator1": 1.86,
+    "kafka0": 0.54,
+    "kafka1": 0.43,
+    "kafka2": 0.51,
+    "sink_reader": 0.01
+  },
+  "cpu_capacity_logical": {
+    "kafka": 2,
+    "flink": 8,
+    "jm": 2,
+    "control": 4
+  },
+  "topics_after_run": {
+    "banking-transactions-validated": {
+      "partitions": 12,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "2",
+        "retention.ms": "604800000"
+      }
+    },
+    "banking-transactions": {
+      "partitions": 12,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "2",
+        "retention.ms": "604800000"
+      }
+    }
+  },
+  "timeline": [
+    {
+      "t": 1794331703.74,
+      "rel": -4.0,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331705.78,
+      "rel": -1.9,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331707.79,
+      "rel": 0.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331709.8,
+      "rel": 2.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331711.81,
+      "rel": 4.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331713.82,
+      "rel": 6.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331715.82,
+      "rel": 8.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331717.83,
+      "rel": 10.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331719.84,
+      "rel": 12.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331721.85,
+      "rel": 14.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331723.86,
+      "rel": 16.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331725.86,
+      "rel": 18.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331727.87,
+      "rel": 20.1,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331729.88,
+      "rel": 22.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331731.89,
+      "rel": 24.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331733.89,
+      "rel": 26.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331735.9,
+      "rel": 28.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331737.91,
+      "rel": 30.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331739.92,
+      "rel": 32.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331741.93,
+      "rel": 34.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331743.93,
+      "rel": 36.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331745.94,
+      "rel": 38.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331747.95,
+      "rel": 40.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331749.96,
+      "rel": 42.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331751.97,
+      "rel": 44.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331753.97,
+      "rel": 46.2,
+      "state": "RUNNING",
+      "vertices": {
+        "RUNNING": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331755.98,
+      "rel": 48.2,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331757.98,
+      "rel": 50.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331759.99,
+      "rel": 52.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331761.99,
+      "rel": 54.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331764.0,
+      "rel": 56.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331766.0,
+      "rel": 58.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331768.01,
+      "rel": 60.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331770.02,
+      "rel": 62.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331772.02,
+      "rel": 64.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331774.03,
+      "rel": 66.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331776.04,
+      "rel": 68.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331778.04,
+      "rel": 70.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331780.05,
+      "rel": 72.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331782.05,
+      "rel": 74.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331784.06,
+      "rel": 76.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331786.07,
+      "rel": 78.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331788.07,
+      "rel": 80.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331790.07,
+      "rel": 82.3,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331792.08,
+      "rel": 84.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331794.09,
+      "rel": 86.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331796.09,
+      "rel": 88.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331798.1,
+      "rel": 90.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331800.1,
+      "rel": 92.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331802.11,
+      "rel": 94.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331804.11,
+      "rel": 96.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331806.12,
+      "rel": 98.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331808.12,
+      "rel": 100.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331810.13,
+      "rel": 102.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331812.13,
+      "rel": 104.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331814.14,
+      "rel": 106.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331816.14,
+      "rel": 108.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331818.15,
+      "rel": 110.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331820.15,
+      "rel": 112.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331822.16,
+      "rel": 114.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331824.16,
+      "rel": 116.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    },
+    {
+      "t": 1794331826.17,
+      "rel": 118.4,
+      "state": "FAILED",
+      "vertices": {
+        "FAILED": 1
+      },
+      "ckpt": {
+        "completed": 0,
+        "failed": 0,
+        "in_progress": 0,
+        "restored": 0
+      },
+      "sink_n": 0,
+      "sink_distinct": 0
+    }
+  ],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T18:30:36+0100"
+}

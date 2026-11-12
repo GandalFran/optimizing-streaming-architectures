@@ -1,0 +1,378 @@
+{
+  "id": "ID-141",
+  "model": "ft-v1fix-s1",
+  "seed": 1,
+  "track": "native",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 512,
+    "latency_slo_ms": 10000,
+    "retention_days": 1,
+    "sink": "app-logs-parsed",
+    "src": "app-logs",
+    "throughput_eps": 20000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8460",
+  "started": "2026-11-11T08:08:48+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "./bin/kafka-topics.sh --create --topic app-logs --partitions 4 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092",
+      "kind": "binary-path",
+      "from": "./bin/kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "./bin/kafka-topics.sh --create --topic app-logs --partitions 4 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "./bin/kafka-topics.sh --create --topic app-logs-parsed --partitions 4 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092",
+      "kind": "binary-path",
+      "from": "./bin/kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "./bin/kafka-topics.sh --create --topic app-logs-parsed --partitions 4 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.checkpoints.dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8460/e7-2585178/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "app_logs",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "app_logs_parsed",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    }
+  ],
+  "translations": [],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "app_logs",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "app_logs_parsed",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO app_logs_parsed (`service`, `log`, `message:`, `parsed_message:`, `action:`, `status:`, `__sent_ms`, `__seq`)\nSELECT `service`,\n       `log`,\n       CAST(`message:` AS STRING),\n       CAST(NULL AS STRUCT<user: STRING),\n       CAST(NULL AS STRING),\n       CAST(NULL AS INT>>),\n       `__sent_ms`,\n       `__seq`\nFROM app_logs;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "./bin/kafka-topics.sh --create --topic app-logs --partitions 4 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic app-logs --partitions 4 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "./bin/kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic app-logs.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "./bin/kafka-topics.sh --create --topic app-logs-parsed --partitions 4 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic app-logs-parsed --partitions 4 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "./bin/kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic app-logs-parsed.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.sql.parser.impl.ParseException: Encountered \"<\" at line 3, column 15.\nWas expecting one of:\n    \"CONSTRAINT\" ...\n    \"NOT\" ...\n    \"NULL\" ...\n    \"PRIMARY\" ...\n    \"UNIQUE\" ...\n    \"COMMENT\" ...\n    \"METADATA\" ...\n    \")\" ...\n    \",\" ...",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 10000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794380936.748,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.3,
+      "bootstrap": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "t": 1794380940.196,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "app-logs",
+        "app-logs-parsed"
+      ],
+      "ok": true
+    },
+    {
+      "t": 1794380946.432,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 6.2,
+      "taskmanagers": 3
+    },
+    {
+      "t": 1794380949.763,
+      "rel": null,
+      "event": "submit_failed",
+      "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.sql.parser.impl.ParseException: Encountered \"<\" at line 3, column 15.\nWas expecting one of:\n    \"CONSTRAINT\" ...\n    \"NOT\" ...\n    \"NULL\" ...\n    \"PRIMARY\" ...\n    \"UNIQUE\" ...\n    \"COMMENT\" ...\n    \"METADATA\" ...\n    \")\" ...\n    \",\" "
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-141",
+    "answer_file": null,
+    "answers": "runs/main/ft-v1fix-s1.sample.jsonl",
+    "model": "ft-v1fix-s1",
+    "seed": 1,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-141__ft-v1fix-s1__s1.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8460",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 9,
+    "findings_L1_L3": [
+      "L2:unknown-key:jobmanager.numberOfTaskManagers is not a Flink 1.20 configuration option",
+      "L2:unknown-key:source.parallelism is not a Flink 1.20 configuration option",
+      "L2:misplaced-key:sink.parallelism is a SQL connector option; it has no effect in the cluster configuration",
+      "L2:unknown-key:checkpointing.parallelism is not a Flink 1.20 configuration option",
+      "L2:invalid-value:column log: 'STRUCT' is not a Flink SQL data type",
+      "L2:invalid-value:sink.partition-commit.trigger='retained-after' is not a valid FileSystemConnectorOptions$PartitionCommitTriggerType",
+      "L2:unknown-key:'sink.partition-commit.retained-after' is not an option of connector kafka",
+      "L2:invalid-value:column log: 'STRUCT' is not a Flink SQL data type"
+    ]
+  },
+  "topology": {
+    "port_base": 12000,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        1
+      ]
+    },
+    "nodes": {
+      "k1": "32,33,144,145",
+      "k2": "34,35,146,147",
+      "k3": "36,37,148,149",
+      "f1": "38,39,40,41,150,151,152,153",
+      "f2": "42,43,44,45,154,155,156,157",
+      "f3": "46,47,48,49,158,159,160,161",
+      "j1": "50,162",
+      "ctl": "51,52,163,164",
+      "m1": "53,165"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12010,2@127.0.0.1:12011,3@127.0.0.1:12012",
+    "listeners=PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8460/e7-2585178/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "app-logs": {
+      "partitions": 4,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "delete",
+        "retention.ms": "86400000"
+      }
+    },
+    "app-logs-parsed": {
+      "partitions": 4,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "delete",
+        "retention.ms": "86400000"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 12030,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 1,
+    "taskmanager.memory.process.size": "1728m",
+    "parallelism.default": 4,
+    "rest.address": "127.0.0.1",
+    "jobmanager.numberOfTaskManagers": 3,
+    "source.parallelism": 1,
+    "sink.parallelism": 1,
+    "checkpointing.parallelism": 1,
+    "state.checkpoints.dir": "file:///tmp/chamoso-e7/8460/e7-2585178/objstore/flink-state/checkpoints",
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 12031,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8460/e7-2585178/flink-io"
+  },
+  "taskmanagers": {
+    "started": 3,
+    "registered": 3,
+    "slots_per_tm": 1
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 3.3,
+    "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.sql.parser.impl.ParseException: Encountered \"<\" at line 3, column 15.\nWas expecting one of:\n    \"CONSTRAINT\" ...\n    \"NOT\" ...\n    \"NULL\" ...\n    \"PRIMARY\" ...\n    \"UNIQUE\" ...\n    \"COMMENT\" ...\n    \"METADATA\" ...\n    \")\" ...\n    \",\" ..."
+  },
+  "failure_stage": "sql-submit",
+  "topics_after_run": {
+    "app-logs": {
+      "partitions": 4,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "delete",
+        "retention.ms": "86400000"
+      }
+    },
+    "app-logs-parsed": {
+      "partitions": 4,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "delete",
+        "retention.ms": "86400000"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-11T08:09:19+0100"
+}

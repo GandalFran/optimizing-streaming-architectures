@@ -1,0 +1,60 @@
+ 1. Here's the `kafka-topics.sh` commands for creating the Kafka topics:
+
+```bash
+# Create the clicks topic with 10 partitions and replication factor 3
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --topic clicks --config retention.ms=2592000000
+
+# Create the clicks-enriched topic with 10 partitions and replication factor 3
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --topic clicks-enriched --config retention.ms=2592000000
+```
+
+These commands create two topics, `clicks` and `clicks-enriched`, with 10 partitions each. The replication factor is set to 3 for fault tolerance. The retention is set to 30 days (2,592,000,000 ms).
+
+2. Here's the Flink configuration (`config.yaml`):
+
+```yaml
+job.type: Streaming
+parallelism.default: 3
+taskmanager.numberOfTaskSlots: 4
+checkpointing.enabled: true
+checkpointing.failure-tolerance: failure-by-log-and-checkpoint
+checkpointing.checkpoint-interval: 5000
+checkpointing.min-pause-between-checkpoints: 1000
+state.backend: filesystem
+state.filesystem.type: s3
+state.filesystem.bucket: flink-state
+```
+
+This configuration sets the job type to streaming, sets the parallelism, and configures checkpointing to ensure exactly-once processing with a 5-second checkpoint interval and a minimum pause of 1 second between checkpoints. Flink will store state in an S3 bucket.
+
+3. Here's the Flink SQL `CREATE TABLE` statements:
+
+```sql
+CREATE TABLE clicks (
+  session_id VARCHAR,
+  event JSON
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'flink-clicks',
+  'format' = 'json',
+  'json.ignore-parse-errors' = 'true'
+);
+
+CREATE TABLE clicks-enriched (
+  session_id VARCHAR,
+  event JSON,
+  derived_field1 INT,
+  derived_field2 STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'flink-clicks-enriched'
+);
+```
+
+These statements create the Kafka source and sink tables for the Flink job. The `clicks` table is configured to ignore parse errors to handle malformed events. The `clicks-enriched` table does not have the `json.ignore-parse-errors` property since it only processes valid events.
+
+The number of Kafka partitions (10) is aligned with the Flink parallelism (3), allowing one Flink source subtask to process one Kafka partition. This ensures the input rate of 5,000 events/s can be sustained. The end-to-end latency should be below 1 s at p99 due to the low latency of Kafka and the parallel processing in Flink. The retention and durability requirements are met by the Kafka and Flink configurations.

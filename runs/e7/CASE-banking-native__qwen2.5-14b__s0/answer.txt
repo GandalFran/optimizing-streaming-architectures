@@ -1,0 +1,69 @@
+```bash
+# Create the banking-transactions topic with 25 partitions and replication factor 3
+kafka-topics.sh --create --topic banking-transactions --bootstrap-server kafka:9092 --replication-factor 3 --partitions 25 --config retention.ms=604800000 --config segment.ms=604800000
+
+# Create the banking-transactions-validated topic with 25 partitions and replication factor 3
+kafka-topics.sh --create --topic banking-transactions-validated --bootstrap-server kafka:9092 --replication-factor 3 --partitions 25 --config retention.ms=604800000 --config segment.ms=604800000
+```
+
+```yaml
+# Flink configuration
+config:
+  state.backend: rocksdb
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.checkpointing.interval: 60000
+  state.checkpointing.mode: exactly-once
+  parallelism.default: 10
+  taskmanager.numberOfTaskSlots: 4
+  jobmanager.execution.failover-strategy: region
+  s3.access-key: <your-access-key>
+  s3.secret-key: <your-secret-key>
+  s3.endpoint: <your-s3-endpoint>
+  s3.path-style-access: true
+```
+
+```sql
+-- Define the source table for banking transactions
+CREATE TABLE banking_transactions (
+    account_id BIGINT,
+    transaction_id BIGINT,
+    amount DECIMAL(19,4),
+    transaction_time TIMESTAMP(3),
+    transaction_type STRING,
+    PRIMARY KEY (account_id) NOT ENFORCED
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'properties.group.id' = 'banking-transactions-group',
+    'scan.subtasks' = '25'
+);
+
+-- Define the sink table for validated banking transactions
+CREATE TABLE banking_transactions_validated (
+    account_id BIGINT,
+    transaction_id BIGINT,
+    amount DECIMAL(19,4),
+    transaction_time TIMESTAMP(3),
+    transaction_type STRING,
+    PRIMARY KEY (account_id) NOT ENFORCED
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions-validated',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'round-robin',
+    'sink.parallelism' = '25'
+);
+```
+
+**Justification of main values:**
+
+- **Kafka Topic Partitions:** Each topic has 25 partitions to handle the input rate of 50,000 events/s (20,000 events/s per partition). This ensures that the data is evenly distributed and can be processed in parallel.
+- **Kafka Replication Factor:** A replication factor of 3 ensures durability and availability, as the data will survive the loss of any single broker.
+- **Flink Parallelism:** The default parallelism is set to 10, and each TaskManager has 4 slots, allowing for 12 slots in total. The source and sink tables are configured with 25 subtasks to match the number of Kafka partitions, ensuring that each partition is processed independently.
+- **Checkpointing:** Checkpointing is configured for exactly-once semantics to ensure no duplicates or data loss. The interval is set to 60 seconds to balance between overhead and fault tolerance.
+- **S3 Configuration:** The S3 configuration is necessary for storing Flink's state and checkpoints, ensuring durability and fault tolerance.
+- **End-to-End Latency:** The chosen configuration should meet the latency requirement of below 100 ms at p99, given the parallel processing and efficient data flow between Kafka and Flink.

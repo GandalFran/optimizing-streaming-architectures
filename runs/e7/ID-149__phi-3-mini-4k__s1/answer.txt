@@ -1,0 +1,82 @@
+ ```bash
+# Creating Kafka topics
+kafka-topics --bootstrap-server kafka:9092 --create --topic ad-impressions --partitions 3 --replication-factor 1
+kafka-topics --bootstrap-server kafka:9092 --create --topic ad-impressions-enriched --partitions 3 --replication-factor 1
+```
+
+```yaml
+# Flink configuration (config.yaml)
+jobmanager.heap.size: 8G
+taskmanager.heap.size: 8G
+parallelism.default: 3
+taskmanager.heap.min.free: 1G
+akka.dispatcher.type: slf4j-thread-pool-executor
+akka.dispatcher.thread-pool-executor.type: fixed
+akka.dispatcher.thread-pool-executor.executor-options.fair-allocation: false
+akka.dispatcher.thread-pool-executor.executor-options.queue-size: 0
+akka.dispatcher.thread-pool-executor.executor-options.queue-size-limit: 0
+akka.dispatcher.thread-pool-executor.executor-options.thread-name-prefix: flink-thread-pool
+akka.dispatcher.thread-pool-executor.executor-options.daemon: false
+akka.dispatcher.thread-pool-executor.thread-name-prefix: flink-thread-pool
+akka.dispatcher.thread-pool-executor.queue-size: 1048576
+akka.dispatcher.thread-pool-executor.queue-size-limit: 0
+akka.dispatcher.thread-pool-executor.number-of-threads: 10
+akka.actor.deployment: /flink/jobmanager:akka.tcp://flink@jobmanager:6123/user/jobmanager
+akka.actor.deployment: /flink/taskmanagers/*:akka.tcp://flink@taskmanager:6124/user/taskmanager
+akka.actor.deployment: /flink/network-dispatcher:akka.tcp://flink@taskmanager:6125/user/network-dispatcher
+akka.actor.deployment: /flink/checkpoint-store:akka.tcp://flink@taskmanager:6126/user/checkpoint-store
+akka.actor.deployment: /flink/checkpoint-state:akka.tcp://flink@taskmanager:6127/user/checkpoint-state
+akka.actor.deployment: /flink/jobmanager-store:akka.tcp://flink@jobmanager:6128/user/jobmanager-store
+akka.actor.deployment: /flink/taskmanager-store:akka.tcp://flink@taskmanager:6129/user/taskmanager-store
+akka.actor.deployment: /flink/network-dispatcher-store:akka.tcp://flink@taskmanager:6130/user/network-dispatcher-store
+akka.actor.deployment: /flink/checkpoint-state-store:akka.tcp://flink@taskmanager:6131/user/checkpoint-state-store
+akka.actor.deployment: /flink/checkpoint-store-dispatcher:akka.tcp://flink@taskmanager:6132/user/checkpoint-store-dispatcher
+akka.actor.deployment: /flink/checkpoint-state-store-dispatcher:akka.tcp://flink@taskmanager:6133/user/checkpoint-state-store-dispatcher
+akka.actor.deployment: /flink/jobmanager-dispatcher:akka.tcp://flink@jobmanager:6134/user/jobmanager-dispatcher
+akka.actor.deployment: /flink/taskmanager-dispatcher:akka.tcp://flink@taskmanager:6135/user/taskmanager-dispatcher
+akka.actor.deployment: /flink/network-dispatcher-dispatcher:akka.tcp://flink@taskmanager:6136/user/network-dispatcher-dispatcher
+akka.actor.deployment: /flink/checkpoint-store-dispatcher:akka.tcp://flink@taskmanager:6137/user/checkpoint-store-dispatcher
+akka.actor.deployment: /flink/checkpoint-state-store-dispatcher:akka.tcp://flink@taskmanager:6138/user/checkpoint-state-store-dispatcher
+akka.actor.deployment: /flink/jobmanager-state:akka.tcp://flink@jobmanager:6139/user/jobmanager-state
+akka.actor.deployment: /flink/taskmanager-state:akka.tcp://flink@taskmanager:6140/user/taskmanager-state
+akka.actor.deployment: /flink/network-dispatcher-state:akka.tcp://flink@taskmanager:6141/user/network-dispatcher-state
+akka.actor.deployment: /flink/checkpoint-store-state:akka.tcp://flink@taskmanager:6142/user/checkpoint-store-state
+akka.actor.deployment: /flink/checkpoint-state-state:akka.tcp://flink@taskmanager:6143/user/checkpoint-state-state
+akka.actor.deployment: /flink/network-dispatcher-state-state:akka.tcp://flink@taskmanager:6144/user/network-dispatcher-state-state
+akka.actor.deployment: /flink/checkpoint-store-dispatcher-state:akka.tcp://flink@taskmanager:6145/user/checkpoint-store-dispatcher-state
+akka.actor.deployment: /flink/checkpoint-state-store-dispatcher-state:akka.tcp://flink@taskmanager:6146/user/checkpoint-state-store-dispatcher-state
+akka.actor.deployment: /flink/network-dispatcher-state-dispatcher:akka.tcp://flink@taskmanager:6147/user/network-dispatcher-state-dispatcher
+akka.actor.deployment: /flink/checkpoint-store-state-dispatcher:akka.tcp://flink@taskmanager:6148/user/checkpoint-store-state-dispatcher
+akka.actor.deployment: /flink/checkpoint-state-state-dispatcher:akka.tcp://flink@taskmanager:6149/user/checkpoint-state-state-dispatcher
+akka.actor.deployment: /flink/network-dispatcher-state-state-dispatcher:akka.tcp://flink@taskmanager:6150/user/network-dispatcher-state-state-dispatcher
+akka.actor.deployment: /flink/checkpoint-store-dispatcher-state-dispatcher:akka.tcp://flink@taskmanager:6151/user/checkpoint-store-dispatcher-state-dispatcher
+akka.actor.deployment: /flink/checkpoint-state-state-state-dispatcher:akka.tcp://flink@taskmanager:6152/user/checkpoint-state-state-state-dispatcher
+```
+
+```sql
+-- Create Kafka source table for ad-impressions
+CREATE TABLE ad-impressions (
+  `campaign_id` VARCHAR,
+  `ad_id` VARCHAR,
+  `impressions` INT,
+  `time` TIMESTAMP,
+  `user_id` VARCHAR,
+  `clicks` INT,
+  `spend` DOUBLE,
+  PRIMARY KEY (`campaign_id`, `time`)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'ad-impressions',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'flink-jobmanager',
+  'format' = 'json',
+  'json.ignore-parse-errors' = 'true',
+  'scan.startup.mode' = 'latest-offset'
+);
+
+-- Create Kafka sink table for ad-impressions-enriched
+CREATE TABLE ad-impressions-enriched (
+  `campaign_id` VARCHAR,
+  `ad_id` VARCHAR,
+  `impressions` INT,
+ 

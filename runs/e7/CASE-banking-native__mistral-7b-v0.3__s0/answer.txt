@@ -1,0 +1,104 @@
+ 1. Kafka Topic Creation (`bash`):
+
+```bash
+# Create banking-transactions topic with 3 replication factors and 10 partitions
+kafka-topics.sh --create --topic banking-transactions --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=604800000
+
+# Create banking-transactions-validated topic with 3 replication factors and 10 partitions
+kafka-topics.sh --create --topic banking-transactions-validated --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=604800000
+```
+
+The replication factor is set to 3 to ensure data durability, and 10 partitions are created to balance the input rate and partition throughput. The retention period is set to 7 days (604800000 milliseconds).
+
+2. Flink Configuration (`config.yaml`):
+
+```yaml
+job.type: Streaming
+parallelism.default: 3
+taskmanager.numberOfTaskSlots: 4
+rest.port: 8081
+rest.bind-host: 0.0.0.0
+jobmanager.rpc.address: localhost
+jobmanager.rpc.port: 6123
+jobmanager.numberOfTaskSlots: 12
+jobmanager.recovery.enabled: true
+jobmanager.recovery.enabled.checkpoints: true
+jobmanager.recovery.enabled.state-backend: filesystem
+state.backend: filesystem
+state.checkpoints.dir: s3://flink-state/checkpoints
+checkpointing.checkpoint-interval: 5000
+checkpointing.min-pause-between-checkpoints: 100
+checkpointing.max-consecutive-checkpoints: 3
+checkpointing.failure-tolerance.max-failure-ratio: 0.1
+checkpointing.failure-tolerance.max-compact-retries: 3
+taskmanager.heartbeat.interval: 3000
+taskmanager.heartbeat.timeout: 10000
+taskmanager.client-heartbeat-interval: 3000
+taskmanager.client-heartbeat-timeout: 10000
+taskmanager.client-idle-timeout: 120000
+taskmanager.client-idle-timeout-multiplier: 1.5
+taskmanager.client-idle-timeout-check-interval: 10000
+taskmanager.client-idle-timeout-check-interval-multiplier: 1.5
+taskmanager.client-idle-timeout-check-interval-max: 600000
+taskmanager.client-idle-timeout-check-interval-max-multiplier: 1.5
+taskmanager.client-idle-timeout-check-interval-max-exponential-backoff: true
+taskmanager.client-idle-timeout-check-interval-max-exponential-backoff-multiplier: 1.5
+taskmanager.client-idle-timeout-check-interval-max-exponential-backoff-max: 600000
+taskmanager.client-idle-timeout-check-interval-max-exponential-backoff-max-multiplier: 1.5
+```
+
+The configuration is set to handle the high input rate and low latency requirements. The parallelism is set to 3 for the job, and each TaskManager has 4 slots. The checkpointing interval is set to 5 seconds, and the maximum consecutive checkpoints is set to 3 to minimize the impact on the end-to-end latency. The failure tolerance settings are configured to handle transient failures.
+
+3. Flink SQL `CREATE TABLE` statements:
+
+```sql
+-- Create Kafka source table for banking-transactions
+CREATE TABLE banking_transactions (
+    account_id VARCHAR,
+    transaction_data STRUCT<
+        transaction_type VARCHAR,
+        amount DOUBLE,
+        timestamp BIGINT
+    >
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'banking-transactions-source',
+    'format' = 'json',
+    'json.ignore-parse-errors' = 'true'
+);
+
+-- Create Flink table for transaction validation and enrichment
+CREATE TABLE validated_transactions AS (
+    SELECT
+        account_id,
+        transaction_data,
+        -- Add validation and enrichment logic here
+    FROM banking_transactions
+);
+
+-- Create Kafka sink table for banking-transactions-validated
+CREATE TABLE banking_transactions_validated (
+    account_id VARCHAR,
+    transaction_data STRUCT<
+        transaction_type VARCHAR,
+        amount DOUBLE,
+        timestamp BIGINT
+    >
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions-validated',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.key.serializer' = 'org.apache.kafka.common.serialization.StringSerializer',
+    'properties.value.serializer' = 'org.apache.kafka.common.serialization.KafkaAvroSerializer',
+    'properties.value.schema' = '...', -- Provide the Avro schema for the transaction data
+    'format' = 'avro'
+);
+
+-- Insert validated transactions into the Kafka sink table
+INSERT INTO banking_transactions_validated
+SELECT account_id, transaction_data FROM validated_transactions;
+```
+
+The Flink SQL statements create a Kafka source table for the input topic, a Flink table for transaction validation and enrichment, and a Kafka sink table for the output topic. The sink table uses Avro serialization for efficient data transfer and better compression. The Avro schema for the transaction data should be provided according to the JSON structure.

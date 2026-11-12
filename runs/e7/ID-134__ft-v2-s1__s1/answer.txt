@@ -1,0 +1,134 @@
+```yaml
+# Topic definitions
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+spec:
+  partitions: 1
+  replicationFactor: 3
+  topicNameFormat: vehicle-positions
+  retentionMs: 86400000
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions-clean
+spec:
+  partitions: 1
+  replicationFactor: 3
+  topicNameFormat: vehicle-positions-clean
+  retentionMs: 86400000
+```
+
+```yaml
+# Flink Deployment
+
+apiVersion: flink.apache.org/v1alpha1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+  labels:
+    app: sql-runner
+spec:
+  image: flink:1.20-scala_2.12-java8-scalenav_3.3
+  flinkConfiguration:
+    jobmanager.memory.process.size: 4096m
+    taskmanager.memory.process.size: 8192m
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.numberOfTaskSlots: 1
+    blob.server.port: 6124
+    queryable-state.enabled: "true"
+    state.backend.rocksdb.options-level0-file-num-compaction-trigger: 4
+    state.backend.rocksdb.metrics-approximate-quantiles-enabled: "true"
+    state.backend.rocksdb.metrics-bloom-filter-enabled: "true"
+    state.backend.rocksdb.metrics-block-based-tables-internal-page-stats-enabled: "true"
+    state.backend.rocksdb.metrics-compression-stats-enabled: "true"
+    state.backend.rocksdb.metrics-stats-enabled: "true"
+    state.backend.rocksdb.metrics-threads-enabled: "true"
+    state.backend.rocksdb.metrics-utilities-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-stats-enabled: "true"
+    state.backend.rocksdb.metrics-block-cache-enabled: "true"
+    state.backend.rocksdb.metrics-merge-tree-enabled: "true"
+    state.backend.rocksdb.metrics-sst-files-enabled: "true"
+    state.backend.rocksdb.metrics-block-cache-enabled: "true"
+    state.backend.rocksdb.metrics-log-files-enabled: "true"
+    state.backend.rocksdb.metrics-transactional-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-bytes-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-cells-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-mem-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-hard-cap-rows-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-soft-cap-entries-enabled: "true"
+    state.backend.rocksdb.metrics-mem-tables-cap-entries-enabled: "true

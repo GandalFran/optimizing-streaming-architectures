@@ -1,0 +1,54 @@
+```bash
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic clicks --partitions 3 --replication-factor 3 \
+  --config retention.ms=2592000000
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic clicks-enriched --partitions 3 --replication-factor 3 \
+  --config retention.ms=2592000000
+```
+
+```yaml
+execution:
+  checkpointing:
+    dir: s3://flink-state/checkpoints
+    interval: 500 ms
+    mode: EXACTLY_ONCE
+parallelism:
+  default: 1
+taskmanager:
+  memory:
+    process:
+      size: 8g
+  numberOfTaskSlots: 4
+```
+
+```sql
+CREATE TABLE src (
+  `session_id` STRING,
+  `payload` STRING,
+  `event_time` TIMESTAMP(3)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'clicks-enriched-job',
+  'scan.startup.mode' = 'group-offsets',
+  'properties.auto.offset.reset' = 'earliest',
+  'format' = 'json'
+);
+
+CREATE TABLE snk (
+  `session_id` STRING,
+  `payload` STRING,
+  `event_time` TIMESTAMP(3),
+  `enriched_at` TIMESTAMP(3)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'sink.delivery-guarantee' = 'exactly-once',
+  'sink.transactional-id-prefix' = 'clicks-enriched-tx',
+  'properties.transaction.timeout.ms' = '600000'
+);
+```
+
+3 partitions: 5,000 events/s x 2048 B = 10.24 MB/s at 5 MB/s per partition (and at least the parallelism); parallelism 1 at 20,000 events/s per source subtask; replication factor 3; retention 30 days. Exactly-once: checkpointing in EXACTLY_ONCE mode with an interval of half the latency objective (read_committed consumers see results only when the checkpoint commits the Kafka transaction, so the checkpoint itself must fit in the objective), a transactional sink with a transactional-id prefix and a transaction timeout above the checkpoint interval and below the broker maximum of 15 minutes.

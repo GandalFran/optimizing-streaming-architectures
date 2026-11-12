@@ -1,0 +1,88 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 1
+  replicas: 3
+  config:
+      min.insync.replicas: 2
+      retention.ms: 86400000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 1
+  replicas: 3
+  config:
+      min.insync.replicas: 2
+      retention.ms: 86400000
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: ad-impressions-enriched
+spec:
+  image: flink-sql-runner:1.20  # flink:1.20 with sql-runner.jar and the SQL script in /opt/flink/usrlib
+  flinkVersion: v1_20
+  serviceAccount: flink
+  flinkConfiguration:
+    execution.checkpointing.dir: "s3://flink-state/checkpoints"
+    execution.checkpointing.interval: "10 s"
+    execution.checkpointing.mode: "AT_LEAST_ONCE"
+    taskmanager.numberOfTaskSlots: "4"
+    execution.checkpointing.savepoint-dir: "s3://flink-state/savepoints"
+  jobManager:
+    resource:
+      memory: "2048m"
+      cpu: 1
+  taskManager:
+    resource:
+      memory: "8Gi"
+      cpu: 4
+  job:
+    jarURI: local:///opt/flink/usrlib/sql-runner.jar
+    args: ["/opt/flink/usrlib/sql-scripts/pipeline.sql"]
+    parallelism: 1
+    upgradeMode: savepoint
+```
+
+```sql
+CREATE TABLE src (
+  `campaign_id` STRING,
+  `payload` STRING,
+  `event_time` TIMESTAMP(3)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'ad-impressions',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'ad-impressions-enriched-job',
+  'scan.startup.mode' = 'group-offsets',
+  'properties.auto.offset.reset' = 'earliest',
+  'format' = 'json'
+);
+
+CREATE TABLE snk (
+  `campaign_id` STRING,
+  `payload` STRING,
+  `event_time` TIMESTAMP(3),
+  `enriched_at` TIMESTAMP(3)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'ad-impressions-enriched',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format' = 'json',
+  'sink.delivery-guarantee' = 'at-least-once'
+);
+```
+
+1 partition: 5,000 events/s x 512 B = 2.56 MB/s at 5 MB/s per partition (and at least the parallelism); parallelism 1 at 20,000 events/s per source subtask; replication factor 3 with min.insync.replicas=2, so acknowledged writes survive the loss of one broker; retention 1 days. At-least-once: checkpointing enabled so the sink flushes on every checkpoint.

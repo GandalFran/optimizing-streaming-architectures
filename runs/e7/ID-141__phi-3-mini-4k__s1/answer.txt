@@ -1,0 +1,73 @@
+ ```bash
+# Creating Kafka topics
+kafka-topics --bootstrap-server kafka:9092 --create --topic app-logs --partitions 3 --replication-factor 1
+kafka-topics --bootstrap-server kafka:9092 --create --topic app-logs-parsed --partitions 3 --replication-factor 1
+```
+
+```yaml
+# Flink configuration (config.yaml)
+streaming:
+  execution:
+    checkpoint:
+      interval: 1s
+      retention: 1h
+    asynchronous: true
+  parallelism: 3
+  sliding-eventtimeflink:
+    batchDuration: 1s
+  state:
+    checkpoints:
+      external:
+        dir: s3://flink-state/checkpoints
+      type: checkpoint
+  state.checkpoints.edits: true
+  state.savepoints:
+    dir: s3://flink-state/savepoints
+    cleanup-checkpoints: false
+```
+
+```sql
+-- Flink SQL table creation (app-logs.sql)
+CREATE TABLE app_logs (
+  service STRING,
+  event_json STRING,
+  error_code STRING,
+  timestamp TIMESTAMP(3)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'app-logs',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'flink-app-logs-consumer',
+  'format' = 'json',
+  'scan.startup.mode' = 'earliest-offset',
+  'value.format' = 'json'
+);
+
+-- Flink SQL table creation (app-logs-parsed.sql)
+CREATE TABLE app_logs_parsed (
+  service STRING,
+  event_json STRING,
+  error_code STRING,
+  timestamp TIMESTAMP(3),
+  parsed_field STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'app-logs-parsed',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'flink-app-logs-parsed-consumer',
+  'format' = 'json',
+  'scan.startup.mode' = 'latest-offset',
+  'value.format' = 'json'
+);
+```
+
+Justification:
+- The Kafka topic creation ensures that there are enough partitions for the anticipated throughput, with a replication factor of 1 for simplicity in this scenario.
+- The Flink configuration:
+  - `checkpoint interval` and `retention` are set to ensure the system can handle the required durability and data retention.
+  - `asynchronous` mode is set to true to ensure exactly-once semantics.
+  - The `parallelism` setting is chosen to match the number of TaskManagers.
+  - The `sliding-eventtimeflink` settings are configured to support the processing window if needed, although the current requirement is per-event transformation.
+  - State savepoints are configured to ensure durability of the state and the ability to recover from checkpoints.
+- The SQL table creation assumes the use of JSON parsers and formatters for Kafka connectors to correctly read and write JSON data.
+- The Flink SQL tables include appropriate schema definitions and Kafka connector configurations to match the data in the input and output topics.

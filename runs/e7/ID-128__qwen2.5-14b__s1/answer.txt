@@ -1,0 +1,100 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks
+  namespace: my-namespace
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+  namespace: my-namespace
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 604800000
+```
+
+```yaml
+apiVersion: flinkoperator.k8s.io/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-enricher
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    state.checkpoints.numRetries: "10"
+    state.checkpoints.externalizedCheckpointCleanup: "delete"
+    state.backend: "rocksdb"
+    state.checkpoints.dir: "s3://flink-state/checkpoints"
+    state.savepoints.dir: "s3://flink-state/savepoints"
+  serviceAccount: flink
+  podTemplate:
+    spec:
+      containers:
+      - name: taskmanager
+        resources:
+          limits:
+            cpu: "4"
+            memory: "8Gi"
+  job:
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    entryClass: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
+    parallelism: 4
+```
+
+```sql
+CREATE TABLE clicks (
+    session_id STRING,
+    event_data STRING,
+    event_time TIMESTAMP(3),
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'properties.group.id' = 'clickstream-enricher',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset'
+);
+
+CREATE TABLE clicks_enriched (
+    session_id STRING,
+    event_data STRING,
+    enriched_field1 STRING,
+    enriched_field2 INT,
+    event_time TIMESTAMP(3),
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks-enriched',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topic Partitions and Replicas:**
+   - **Partitions:** 4 partitions are chosen for the `clicks` topic to handle the input rate of 20,000 events/s (5 MB/s per partition). This ensures that the input rate is evenly distributed across the partitions.
+   - **Replicas:** 3 replicas provide durability, ensuring data survives the loss of any single broker without losing acknowledged data.
+   - **Retention:** Data retention is set to 7 days (604800000 ms) as per the requirements.
+
+2. **Flink Configuration:**
+   - **Parallelism:** The parallelism is set to 4 to match the number of partitions in the Kafka topic, ensuring efficient parallel processing.
+   - **Checkpointing:** Checkpointing is enabled with externalized checkpoint cleanup to `delete`, ensuring that checkpoints are retained only during the job execution.
+   - **Resources:** Each TaskManager is limited to 4 CPUs and 8 GiB of memory to align with the sizing assumptions and to prevent overloading the cluster.
+
+3. **Flink SQL Tables:**
+   - **WATERMARK:** The WATERMARK is defined to handle late events, with a lag of 5 seconds to account for any potential delays in event arrival.
+   - **Format:** JSON format is used to match the input event format.
+   - **Scan Startup Mode:** The scan startup mode is set to `latest-offset` to ensure that the Flink job starts processing from the latest available offset.
+
+This setup ensures that the pipeline meets the requirements for throughput, latency, and durability while efficiently utilizing the available resources.

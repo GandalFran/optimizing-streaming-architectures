@@ -1,0 +1,382 @@
+{
+  "id": "CASE-banking-native",
+  "model": "llama-3.1-8b",
+  "seed": 1,
+  "track": "native",
+  "family": "case-study",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "high",
+    "event_bytes": 1024,
+    "latency_slo_ms": 100,
+    "retention_days": 7,
+    "sink": "banking-transactions-validated",
+    "src": "banking-transactions",
+    "throughput_eps": 50000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8388",
+  "started": "2026-11-10T20:07:13+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --config min.insync.replicas=2 --config acks=all --config retention.ms=604800000 --config segment.bytes=500",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --config min.insync.replicas=2 --config acks=all --config retention.ms=604800000 --config segment.bytes=500",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --config min.insync.replicas=2 --config acks=all --config retention.ms=604800000 --config segment.bytes=500",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --config min.insync.replicas=2 --config acks=all --config retention.ms=604800000 --config segment.bytes=500",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "testbed-owned",
+      "key": "jobmanager.host",
+      "from": "flink-jobmanager",
+      "reason": "address/port/temp-dir/JVM/reporter keys are owned by the loopback testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "testbed-owned",
+      "key": "jobmanager.port",
+      "from": 6123,
+      "reason": "address/port/temp-dir/JVM/reporter keys are owned by the loopback testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "testbed-owned",
+      "key": "jobmanager.web.address",
+      "from": "0.0.0.0:8081",
+      "reason": "address/port/temp-dir/JVM/reporter keys are owned by the loopback testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "kafka.state.checkpoint.dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8388/e7-1845280/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "banking_transactions",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "banking_transactions_validated",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    }
+  ],
+  "translations": [],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "banking_transactions",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "banking_transactions_validated",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO banking_transactions_validated (`account_id`, `event_timestamp`, `amount`, `__sent_ms`, `__seq`)\nSELECT `account_id`,\n       `event_timestamp`,\n       `amount`,\n       `__sent_ms`,\n       `__seq`\nFROM banking_transactions;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --config min.insync.replicas=2 --config acks=all --config retention.ms=604800000 --config segment.bytes=50000000 --config flush.ms=1000 banking-transactions",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002 --create --replication-factor 3 --partitions 8 --config min.insync.replicas=2 --config acks=all --config retention.ms=604800000 --config segment.bytes=50000000 --config flush.ms=1000 banking-transactions",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+        }
+      ],
+      "rc": 1,
+      "stdout_tail": "",
+      "stderr_head": "Missing required argument \"[topic]\"\nOption                                   Description                            \n------                                   -----------                            \n--alter                                  Alter the number of partitions and     \n                                           replica assignment. (To alter topic  \n                                           configurations, the kafka-configs    \n                                           tool can be used.)                   \n--at-min-isr-partitions                  If set when describing topics, only  ",
+      "stderr_tail": "                            escape regular expression symbols; e.\n                                           g. \"test\\.topic\".                    \n--topic-id <String: topic-id>            The topic-id to describe.              \n--topics-with-overrides                  If set when describing topics, only    \n                                           show topics that have overridden     \n                                           configs.                             \n--unavailable-partitions                 If set when describing topics, only    \n                                           show partitions whose leader is not  \n                                           available.                           \n--under-min-isr-partitions               If set when describing topics, only    \n                                           show partitions whose isr count is   \n                                           less than the configured minimum.    \n--under-replicated-partitions            If set when describing topics, only    \n                                           show under-replicated partitions.    \n--version                                Display Kafka version.                 \n"
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --config min.insync.replicas=2 --config acks=all --config retention.ms=604800000 --config segment.bytes=50000000 --config flush.ms=1000 banking-transactions-validated",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002 --create --replication-factor 3 --partitions 8 --config min.insync.replicas=2 --config acks=all --config retention.ms=604800000 --config segment.bytes=50000000 --config flush.ms=1000 banking-transactions-validated",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+        }
+      ],
+      "rc": 1,
+      "stdout_tail": "",
+      "stderr_head": "Missing required argument \"[topic]\"\nOption                                   Description                            \n------                                   -----------                            \n--alter                                  Alter the number of partitions and     \n                                           replica assignment. (To alter topic  \n                                           configurations, the kafka-configs    \n                                           tool can be used.)                   \n--at-min-isr-partitions                  If set when describing topics, only  ",
+      "stderr_tail": "                            escape regular expression symbols; e.\n                                           g. \"test\\.topic\".                    \n--topic-id <String: topic-id>            The topic-id to describe.              \n--topics-with-overrides                  If set when describing topics, only    \n                                           show topics that have overridden     \n                                           configs.                             \n--unavailable-partitions                 If set when describing topics, only    \n                                           show partitions whose leader is not  \n                                           available.                           \n--under-min-isr-partitions               If set when describing topics, only    \n                                           show partitions whose isr count is   \n                                           less than the configured minimum.    \n--under-replicated-partitions            If set when describing topics, only    \n                                           show under-replicated partitions.    \n--version                                Display Kafka version.                 \n"
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.sql.parser.impl.ParseException: Encountered \"3\" at line 16, column 24.\nWas expecting one of:\n    <BINARY_STRING_LITERAL> ...\n    <QUOTED_STRING> ...\n    <PREFIXED_STRING_LITERAL> ...\n    <UNICODE_STRING_LITERAL> ...\n    <BIG_QUERY_DOUBLE_QUOTED_STRING> ...\n    <BIG_QUERY_QUOTED_STRING> ...\nShutting down the session...\ndone.",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 100,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794337642.676,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.6,
+      "bootstrap": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    },
+    {
+      "t": 1794337645.754,
+      "rel": null,
+      "event": "topics",
+      "created": [],
+      "ok": false
+    },
+    {
+      "t": 1794337652.381,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 6.6,
+      "taskmanagers": 3
+    },
+    {
+      "t": 1794337655.91,
+      "rel": null,
+      "event": "submit_failed",
+      "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.sql.parser.impl.ParseException: Encountered \"3\" at line 16, column 24.\nWas expecting one of:\n    <BINARY_STRING_LITERAL> ...\n    <QUOTED_STRING> ...\n    <PREFIXED_STRING_LITERAL> ...\n    <UNICODE_STRING_LITERAL> ...\n    <BIG_QUERY_DOU"
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "CASE-banking-native",
+    "answer_file": null,
+    "answers": "runs/main/llama-3.1-8b.sample.jsonl",
+    "model": "llama-3.1-8b",
+    "seed": 1,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/CASE-banking-native__llama-3.1-8b__s1.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8388",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": [
+      "CREATE TABLE validated_transactions AS\nSELECT\n  account_id,\n  event_timestamp,\n  amount\nFROM\n  banking_transactions\nWHERE\n  amount > 0 AND event_timestamp > timestamp('2024-01-01')"
+    ]
+  },
+  "static_validator": {
+    "n_findings": 24,
+    "findings_L1_L3": [
+      "L2:cli-syntax:unexpected token 'banking-transactions'",
+      "L2:missing-required-option:--create without --topic",
+      "L2:cli-syntax:unexpected token 'banking-transactions-validated'",
+      "L2:missing-required-option:--create without --topic",
+      "L2:unknown-key:jobmanager.high-availability.standby-mode is not a Flink 1.20 configuration option",
+      "L2:unknown-key:jobmanager.host is not a Flink 1.20 configuration option",
+      "L2:unknown-key:jobmanager.port is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.taskmanager.numberOfTaskSlots is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.taskmanager.memory.fraction is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.taskmanager.heap.size is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.bootstrap.servers is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.transactional.id is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.checkpointing.enabled is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.checkpointing.interval is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.checkpointing.mode is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.state.backend is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.state.checkpoint.dir is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.state.updates.ttl is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.state.retention is not a Flink 1.20 configuration option",
+      "L2:unknown-key:logging.level is not a Flink 1.20 configuration option"
+    ]
+  },
+  "topology": {
+    "port_base": 13000,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        2,
+        3
+      ]
+    },
+    "nodes": {
+      "k1": "94,95,206,207",
+      "k2": "96,97,208,209",
+      "k3": "98,99,210,211",
+      "f1": "100,101,102,103,212,213,214,215",
+      "f2": "75,76,77,78,187,188,189,190",
+      "f3": "79,80,81,82,191,192,193,194",
+      "j1": "83,195",
+      "ctl": "25,26,137,138",
+      "m1": "27,139"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:13010,2@127.0.0.1:13011,3@127.0.0.1:13012",
+    "listeners=PLAINTEXT://127.0.0.1:13000,CONTROLLER://127.0.0.1:13010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:13000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8388/e7-1845280/k1/kafka-data"
+  ],
+  "topics_after_commands": {},
+  "topics_created": {
+    "source": false,
+    "sink": false
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 13030,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 1,
+    "taskmanager.memory.process.size": "1728m",
+    "parallelism.default": 1,
+    "rest.address": "127.0.0.1",
+    "jobmanager.high-availability.standby-mode": true,
+    "taskmanager.taskmanager.numberOfTaskSlots": 4,
+    "taskmanager.taskmanager.memory.fraction": 0.7,
+    "taskmanager.taskmanager.heap.size": "8g",
+    "kafka.bootstrap.servers": "kafka:9092",
+    "kafka.transactional.id": "flink-transactional-id",
+    "kafka.checkpointing.enabled": true,
+    "kafka.checkpointing.interval": 10000,
+    "kafka.checkpointing.mode": "EXACTLY_ONCE",
+    "kafka.state.backend": "ROCKSDB",
+    "kafka.state.checkpoint.dir": "file:///tmp/chamoso-e7/8388/e7-1845280/objstore/flink-state/checkpoints",
+    "kafka.state.updates.ttl": 604800000,
+    "kafka.state.retention": 604800000,
+    "logging.level": "INFO",
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 13031,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8388/e7-1845280/flink-io"
+  },
+  "taskmanagers": {
+    "started": 3,
+    "registered": 3,
+    "slots_per_tm": 1
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 3.5,
+    "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.sql.parser.impl.ParseException: Encountered \"3\" at line 16, column 24.\nWas expecting one of:\n    <BINARY_STRING_LITERAL> ...\n    <QUOTED_STRING> ...\n    <PREFIXED_STRING_LITERAL> ...\n    <UNICODE_STRING_LITERAL> ...\n    <BIG_QUERY_DOUBLE_QUOTED_STRING> ...\n    <BIG_QUERY_QUOTED_STRING> ...\nShutting down the session...\ndone."
+  },
+  "failure_stage": "sql-submit",
+  "topics_after_run": {},
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T20:07:43+0100"
+}

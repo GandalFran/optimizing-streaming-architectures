@@ -1,0 +1,112 @@
+### Step 1: Create Kafka topics
+
+```bash
+# Create topic sensor-readings with 4 partitions and 1 replica
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic sensor-readings --partitions 4 --replication-factor 3
+
+# Create topic sensor-readings-clean with 4 partitions and 1 replica
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic sensor-readings-clean --partitions 4 --replication-factor 3
+
+# Describe topic sensor-readings to verify the configuration
+kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic sensor-readings
+
+# Describe topic sensor-readings-clean to verify the configuration
+kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic sensor-readings-clean
+```
+
+### Step 2: Flink configuration
+
+```yaml
+# config.yaml
+flink:
+  cluster:
+    type: standalone
+    parallelism: 4
+  checkpointing:
+    enabled: true
+    interval: 10s
+    storage: s3
+    storage.checkpoint.dir: s3://flink-state/checkpoints
+  kafka:
+    bootstrap.servers: kafka:9092
+    properties:
+      key.deserialization.failure.handler: org.apache.flink.streaming.runtime.tasksSerializationRegistry
+      value.deserialization.failure.handler: org.apache.flink.streaming.runtime.tasksSerializationRegistry
+  taskmanager:
+    taskmanager.numberOfTaskSlots: 4
+    taskmanager.memory.fraction: 0.6
+  jobmanager:
+    web.port: 8081
+```
+
+### Step 3: Flink SQL table definitions
+
+```sql
+-- Create table for sensor-readings topic
+CREATE TABLE sensor_readings (
+  `sensor_id` VARCHAR,
+  `event_time` TIMESTAMP(3),
+  `value` DOUBLE,
+  `temperature` DOUBLE,
+  `humidity` DOUBLE
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'sensor-readings',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'connector.properties.group.id' = 'sensor-readings-group',
+  'connector.properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'connector.properties.value.deserializer' = 'io.confluent.kafka.serializers.KafkaJsonDeserializer',
+  'connector.properties.value.deserializer.schema.registry.url' = 'http://schema-registry:8081',
+  'scan.startup.mode' = 'latest-offset',
+  'update-mode' = 'append'
+);
+
+-- Create table for sensor-readings-clean topic
+CREATE TABLE sensor_readings_clean (
+  `sensor_id` VARCHAR,
+  `event_time` TIMESTAMP(3),
+  `value` DOUBLE,
+  `temperature` DOUBLE,
+  `humidity` DOUBLE
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'sensor-readings-clean',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'connector.properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'connector.properties.value.deserializer' = 'io.confluent.kafka.serializers.KafkaJsonDeserializer',
+  'connector.properties.value.deserializer.schema.registry.url' = 'http://schema-registry:8081',
+  'scan.startup.mode' = 'latest-offset',
+  'update-mode' = 'append'
+);
+
+-- Create table for the Flink SQL job to write to
+CREATE TABLE cleaned_sensor_readings (
+  `sensor_id` VARCHAR,
+  `event_time` TIMESTAMP(3),
+  `value` DOUBLE,
+  `temperature` DOUBLE,
+  `humidity` DOUBLE
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'sensor-readings-clean',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'connector.properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'connector.properties.value.deserializer' = 'io.confluent.kafka.serializers.KafkaJsonDeserializer',
+  'connector.properties.value.deserializer.schema.registry.url' = 'http://schema-registry:8081',
+  'scan.startup.mode' = 'latest-offset',
+  'update-mode' = 'append'
+);
+```
+
+### Justification of main values:
+
+- **Kafka topic configuration**: We create two topics, `sensor-readings` and `sensor-readings-clean`, each with 4 partitions and 3 replicas. This configuration allows for a high throughput of 50,000 events/s and ensures that the topics can survive the loss of any single Kafka broker without losing acknowledged data.
+
+- **Flink configuration**: We set the Flink cluster to standalone mode with 4 parallelism, which matches the number of TaskManagers. We enable checkpointing with a 10-second interval and store the checkpoints in S3. This configuration ensures that the Flink job can recover from failures and maintain exactly-once end-to-end delivery.
+
+- **Flink SQL table definitions**: We create three tables: `sensor_readings` for the Kafka source, `sensor_readings_clean` for the Kafka sink, and `cleaned_sensor_readings` for the Flink SQL job to write to. We use the `universal` connector for Kafka and specify the necessary properties for deserialization and serialization. We set the `update-mode` to `append` to ensure that new events are appended to the topic without overwriting existing ones.
+
+- **Sizing assumptions**: We assume that one Kafka partition can sustain at most 5 MB/s of produce traffic, which is a reasonable assumption for a high-throughput topic. We also assume that one Flink source subtask can process at most 20,000 events/s, which is a reasonable assumption for a high-throughput Flink job.

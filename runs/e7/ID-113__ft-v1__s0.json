@@ -1,0 +1,371 @@
+{
+  "id": "ID-113",
+  "model": "ft-v1",
+  "seed": 0,
+  "track": "native",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 2048,
+    "latency_slo_ms": 1000,
+    "retention_days": 30,
+    "sink": "clicks-enriched",
+    "src": "clicks",
+    "throughput_eps": 5000
+  },
+  "finish_reason": "length",
+  "host": "cn001",
+  "slurm_job": "8382",
+  "started": "2026-11-10T19:13:43+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks-enriched --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks-enriched --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.backend.fs.checkpointdir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8382/e7-1299236/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "clicks",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "clicks_enriched",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    }
+  ],
+  "translations": [],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "clicks",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "clicks_enriched",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO clicks_enriched (`session_id`, `event`, `__sent_ms`, `__seq`)\nSELECT `session_id`,\n       `event`,\n       `__sent_ms`,\n       `__seq`\nFROM clicks;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics.sh --create --topic clicks --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic clicks --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config cleanup.policy=compact --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic clicks.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --create --topic clicks-enriched --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic clicks-enriched --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config cleanup.policy=compact --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic clicks-enriched.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.calcite.sql.validate.SqlValidatorException: Unknown identifier 'JSON'\nShutting down the session...\ndone.",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 1000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794334432.712,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.6,
+      "bootstrap": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "t": 1794334436.454,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "clicks",
+        "clicks-enriched"
+      ],
+      "ok": true
+    },
+    {
+      "t": 1794334443.614,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 7.1,
+      "taskmanagers": 3
+    },
+    {
+      "t": 1794334446.992,
+      "rel": null,
+      "event": "submit_failed",
+      "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.calcite.sql.validate.SqlValidatorException: Unknown identifier 'JSON'\nShutting down the session...\ndone."
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-113",
+    "answer_file": null,
+    "answers": "runs/main/ft-v1.greedy.jsonl",
+    "model": "ft-v1",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-113__ft-v1__s0.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8382",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": [
+      "# Flink SQL CREATE TABLE statements"
+    ]
+  },
+  "static_validator": {
+    "n_findings": 3,
+    "findings_L1_L3": [
+      "L1:truncated:generation stopped at the token limit"
+    ]
+  },
+  "topology": {
+    "port_base": 12000,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        1,
+        2
+      ]
+    },
+    "nodes": {
+      "k1": "44,45,156,157",
+      "k2": "46,47,158,159",
+      "k3": "48,49,160,161",
+      "f1": "50,51,52,53,162,163,164,165",
+      "f2": "74,75,76,77,186,187,188,189",
+      "f3": "78,79,80,81,190,191,192,193",
+      "j1": "54,166",
+      "ctl": "82,83,194,195",
+      "m1": "55,167"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12010,2@127.0.0.1:12011,3@127.0.0.1:12012",
+    "listeners=PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8382/e7-1299236/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "clicks-enriched": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "compact",
+        "retention.ms": "2592000000"
+      }
+    },
+    "clicks": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "compact",
+        "retention.ms": "2592000000"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 12030,
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 1,
+    "parallelism.default": 30,
+    "rest.address": "127.0.0.1",
+    "taskmanager.memory.process.size": "8000m",
+    "jobmanager.memory.process.size": "8000m",
+    "state.backend": "filesystem",
+    "state.backend.fs.checkpointdir": "file:///tmp/chamoso-e7/8382/e7-1299236/objstore/flink-state/checkpoints",
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 12031,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8382/e7-1299236/flink-io"
+  },
+  "taskmanagers": {
+    "started": 3,
+    "registered": 3,
+    "slots_per_tm": 1
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 3.4,
+    "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.calcite.sql.validate.SqlValidatorException: Unknown identifier 'JSON'\nShutting down the session...\ndone."
+  },
+  "failure_stage": "sql-submit",
+  "topics_after_run": {
+    "clicks-enriched": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "compact",
+        "retention.ms": "2592000000"
+      }
+    },
+    "clicks": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "compact",
+        "retention.ms": "2592000000"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T19:14:16+0100"
+}

@@ -1,0 +1,367 @@
+{
+  "id": "ID-152",
+  "model": "qwen2.5-14b",
+  "seed": 0,
+  "track": "k8s",
+  "family": "grid",
+  "spec": {
+    "delivery": "at-least-once",
+    "durability": "high",
+    "event_bytes": 2048,
+    "latency_slo_ms": 1000,
+    "retention_days": 7,
+    "sink": "payments-validated",
+    "src": "payments",
+    "throughput_eps": 50000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8382",
+  "started": "2026-11-10T19:07:41+0100",
+  "substitutions": [
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.checkpoints.dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8382/e7-1117137/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "payments",
+      "from": "my-cluster-kafka-bootstrap:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "payments_validated",
+      "from": "my-cluster-kafka-bootstrap:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    }
+  ],
+  "translations": [
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/payments",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "artefact": "topics",
+      "from": "KafkaTopic/payments-validated",
+      "to": null,
+      "skipped": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "artefact": "flink-conf",
+      "from": "FlinkDeployment.spec.flinkConfiguration",
+      "to": "config.yaml keys (verbatim)"
+    },
+    {
+      "artefact": "taskmanagers",
+      "from": "ceil(parallelism 5 / 2 slots) = 3 pods",
+      "to": "3 TaskManager processes (the prompt allows at most 3 pods)"
+    }
+  ],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "payments",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "before first WATERMARK/PRIMARY KEY clause"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "payments_validated",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO payments_validated (`account_id`, `event_time`, `payload`, `derived_field`, `__sent_ms`, `__seq`)\nSELECT `account_id`,\n       `event_time`,\n       `payload`,\n       CAST(NULL AS STRING),\n       `__sent_ms`,\n       `__seq`\nFROM payments;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "KafkaTopic/payments",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_head": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    },
+    {
+      "answer_cmd": "KafkaTopic/payments-validated",
+      "cmd": null,
+      "substitutions": [],
+      "rc": null,
+      "stdout_tail": null,
+      "stderr_head": null,
+      "stderr_tail": "label strimzi.io/cluster=None does not select cluster 'my-cluster': the Topic Operator ignores the resource"
+    }
+  ],
+  "job_submitted": true,
+  "job_id": "4bb7c90738bb87c407557b9988a37860",
+  "job_state_final": "FAILED",
+  "root_exception": "org.apache.flink.runtime.JobException: Recovery is suppressed by NoRestartBackoffTimeStrategy\nCaused by: org.apache.flink.util.FlinkException: Global failure triggered by OperatorCoordinator for 'Source: payments[1] -> Calc[2] -> StreamRecordTimestampInserter[3] -> payments_validated[3]: Writer -> payments_validated[3]: Committer' (operator cbc357ccb763df2852fee8c4fc7d55f2).\nCaused by: org.apache.flink.util.FlinkRuntimeException: Failed to list subscribed topic partitions due to\nCaused by: java.lang.RuntimeException: Failed to get metadata for topics [payments].\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.kafka.shaded.org.apache.kafka.common.errors.UnknownTopicOrPartitionException: This server does not host this topic-partition.\nCaused by: org.apache.flink.kafka.shaded.org.apache.kafka.common.errors.UnknownTopicOrPartitionException: This server does not host this topic-partition.",
+  "checkpoints_completed": 0,
+  "checkpoints_failed": 0,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 1000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {
+    "num_restarts": "metric not exposed by the JobManager REST API at the end"
+  },
+  "criteria_reasons": {
+    "C1_deploy": "source and/or sink topic not created by the answer's commands",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794334070.334,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.4,
+      "bootstrap": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "t": 1794334071.487,
+      "rel": null,
+      "event": "topics",
+      "created": [],
+      "ok": false
+    },
+    {
+      "t": 1794334078.66,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 7.2,
+      "taskmanagers": 3
+    },
+    {
+      "t": 1794334083.742,
+      "rel": null,
+      "event": "submitted",
+      "job": "4bb7c90738bb87c407557b9988a37860",
+      "seconds": 5.1
+    },
+    {
+      "t": 1794334083.764,
+      "rel": null,
+      "event": "job_state",
+      "state": "FAILED",
+      "vertices": {
+        "CANCELED": 1
+      }
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-152",
+    "answer_file": null,
+    "answers": "runs/main/qwen2.5-14b.greedy.jsonl",
+    "model": "qwen2.5-14b",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-152__qwen2.5-14b__s0.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8382",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 4,
+    "findings_L1_L3": [
+      "L2:unknown-field:FlinkDeployment.spec.job.jar is not a field of this resource"
+    ]
+  },
+  "topology": {
+    "port_base": 12000,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        1,
+        2
+      ]
+    },
+    "nodes": {
+      "k1": "44,45,156,157",
+      "k2": "46,47,158,159",
+      "k3": "48,49,160,161",
+      "f1": "50,51,52,53,162,163,164,165",
+      "f2": "74,75,76,77,186,187,188,189",
+      "f3": "78,79,80,81,190,191,192,193",
+      "j1": "54,166",
+      "ctl": "82,83,194,195",
+      "m1": "55,167"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12010,2@127.0.0.1:12011,3@127.0.0.1:12012",
+    "listeners=PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8382/e7-1117137/k1/kafka-data"
+  ],
+  "topics_after_commands": {},
+  "topics_created": {
+    "source": false,
+    "sink": false
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 12030,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": "2",
+    "taskmanager.memory.process.size": "1728m",
+    "parallelism.default": "5",
+    "rest.address": "127.0.0.1",
+    "state.checkpoints.num-retained": "10",
+    "state.backend": "rocksdb",
+    "state.checkpoints.dir": "file:///tmp/chamoso-e7/8382/e7-1117137/objstore/flink-state/checkpoints",
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 12031,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8382/e7-1117137/flink-io"
+  },
+  "taskmanagers": {
+    "started": 3,
+    "registered": 3,
+    "slots_per_tm": 2
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 5.1,
+    "error": null
+  },
+  "seconds_to_running": null,
+  "vertex_states_final": {
+    "CANCELED": 1
+  },
+  "checkpoint_summary": {
+    "end_to_end_duration": {
+      "min": 0,
+      "max": 0,
+      "avg": 0,
+      "p50": "NaN",
+      "p90": "NaN",
+      "p95": "NaN",
+      "p99": "NaN",
+      "p999": "NaN"
+    },
+    "state_size": {
+      "min": 0,
+      "max": 0,
+      "avg": 0,
+      "p50": "NaN",
+      "p90": "NaN",
+      "p95": "NaN",
+      "p99": "NaN",
+      "p999": "NaN"
+    }
+  },
+  "checkpoint_config_effective": {
+    "mode": "at_least_once",
+    "interval": 9223372036854775807,
+    "timeout": 600000,
+    "min_pause": 0,
+    "max_concurrent": 1,
+    "externalization": {
+      "enabled": false,
+      "delete_on_cancellation": true
+    },
+    "state_backend": "EmbeddedRocksDBStateBackend",
+    "checkpoint_storage": "FileSystemCheckpointStorage",
+    "unaligned_checkpoints": false,
+    "tolerable_failed_checkpoints": 0,
+    "aligned_checkpoint_timeout": 0,
+    "checkpoints_after_tasks_finish": true,
+    "state_changelog_enabled": false,
+    "changelog_periodic_materialization_interval": 600000,
+    "changelog_storage": "memory"
+  },
+  "num_restarts": null,
+  "exception_history": [
+    {
+      "t": 1794334083138,
+      "task": null,
+      "chain": "org.apache.flink.runtime.JobException: Recovery is suppressed by NoRestartBackoffTimeStrategy\nCaused by: org.apache.flink.util.FlinkException: Global failure triggered by OperatorCoordinator for 'Source: payments[1] -> Calc[2] -> StreamRecordTimestampInserter[3] -> payments_validated[3]: Writer -> payments_validated[3]: Committer' (operator cbc357ccb763df2852fee8c4fc7d55f2).\nCaused by: org.apache.flink.util.FlinkRuntimeException: Failed to list subscribed topic partitions due to\nCaused by: java.lang.RuntimeException: Failed to get metadata for topics [payments].\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.kafka.shaded.org.apache.kafka.common.errors.UnknownTopicOrPartitionException: This server does not host this topic-partition.\nCaused by: org.apache.flink.kafka.shaded.org.apache.kafka.common.errors.UnknownTopicOrPartitionException: This server does not host this topic-partition."
+    }
+  ],
+  "topics_after_run": {},
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T19:08:11+0100"
+}

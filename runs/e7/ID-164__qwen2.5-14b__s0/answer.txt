@@ -1,0 +1,91 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks
+  namespace: my-namespace
+spec:
+  partitions: 25
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+  namespace: my-namespace
+spec:
+  partitions: 25
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-enrichment
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    state.checkpoints.num-retained: "10"
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.savepoints.dir: s3://flink-state/savepoints
+    execution.checkpointing.mode: EXACTLY_ONCE
+    execution.checkpointing.interval: 5000
+    execution.checkpointing.timeout: 60000
+    execution.checkpointing.min-pause: 5000
+    execution.parallelism: "50"
+  job:
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    savepointPath: ""
+    entryClass: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
+```
+
+```sql
+CREATE TABLE clicks (
+    session_id STRING,
+    event_data STRING,
+    event_time TIMESTAMP(3) METADATA FROM 'timestamp'
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'properties.group.id' = 'clicks-consumer-group'
+);
+
+CREATE TABLE clicks_enriched (
+    session_id STRING,
+    event_data STRING,
+    enriched_field STRING,
+    event_time TIMESTAMP(3)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks-enriched',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'org.apache.flink.connector.kafka.sink.KeyPartitioner',
+    'sink.partitioner-keys' = 'session_id',
+    'sink.parallelism' = '25'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topic Partitions and Replicas**:
+   - **Partitions**: 25 partitions are chosen to distribute the input rate of 50,000 events/s across the Kafka cluster, ensuring each partition handles up to 2,000 events/s (well below the assumed 5 MB/s limit). This also helps in achieving the desired end-to-end latency.
+   - **Replicas**: 3 replicas ensure durability and availability, as the loss of any single broker will not result in data loss.
+
+2. **Flink Configuration**:
+   - **Parallelism**: 50 parallel subtasks are set to handle the input rate, with each subtask processing up to 1,000 events/s (since each TaskManager can handle up to 20,000 events/s and there are 3 TaskManagers).
+   - **Checkpointing**: Configured for exactly-once semantics with a checkpoint interval of 5 seconds to ensure fault tolerance and low latency.
+   - **State Backend**: RocksDB is used for state backend to ensure efficient state management and recovery.
+
+3. **SQL Table Definitions**:
+   - **Clicks Table**: Defines the source Kafka topic with JSON format and metadata extraction for timestamps.
+   - **Clicks Enriched Table**: Defines the sink Kafka topic with a key partitioner to ensure data is written to the same partition based on `session_id`, which helps in maintaining order and reducing latency.

@@ -1,0 +1,131 @@
+ 1. Strimzi `KafkaTopic` resources for all topics:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  kafka:
+    replicas: 3
+    listeners:
+    - name: plain
+      port: 9092
+      tls: false
+      config:
+        advertisingListenerEnabled: "true"
+        listenerType: "PLAINTEXT"
+        listenerSecurityPolicy: "PLAINTEXT_LISTENER"
+        zookeeperConnect: "zookeeper:2181"
+        bootstrapServer: "my-cluster-kafka-bootstrap:9092"
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  replicas: 3
+  partitions: 12
+  compaction:
+    strategy: "compact"
+  config:
+    retention.ms: 2592000000
+    segment.bytes: 1073741824
+    cleanup.policy: "delete"
+    min.insync.replicas: 2
+    max.message.bytes: 1048576
+    inter.broker.timeout.ms: 300
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  replicas: 3
+  partitions: 12
+  compaction:
+    strategy: "compact"
+  config:
+    retention.ms: 2592000000
+    segment.bytes: 1073741824
+    cleanup.policy: "delete"
+    min.insync.replicas: 2
+    max.message.bytes: 1048576
+    inter.broker.timeout.ms: 300
+```
+
+2. Flink Deployment resource:
+
+```yaml
+apiVersion: batch.flink.org/v1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-enrichment
+spec:
+  replicas: 3
+  image: flink:1.13.0
+  containerPort: 8081
+  flinkConfiguration: |
+    taskmanager.numberOfTaskSlots: 4
+    taskmanager.memory.process-heap-size-mb: 8192
+    taskmanager.memory.off-heap-size-mb: 1024
+    taskmanager.memory.java-heap-growth-mb: 512
+    taskmanager.memory.java-heap-initial-mb: 4096
+    taskmanager.memory.java-heap-max-mb: 8192
+    taskmanager.numberOfTaskManagers: 3
+    checkpointing.checkpointing-mode: EXACTLY_ONCE
+    checkpointing.minPauseBetweenCheckpoints: 5000
+    checkpointing.maxConcurrentCheckpoints: 3
+    checkpointing.checkpointInterval: 10000
+    checkpointing.enabled: true
+    checkpointing.failure-tolerance.max-concurrent-checkpoints: 3
+    checkpointing.failure-tolerance.min-pause-between-checkpoints: 5000
+    checkpointing.failure-tolerance.mode: EXACTLY_ONCE
+    checkpointing.failure-tolerance.max-checkpoint-retries: 3
+    checkpointing.failure-tolerance.max-failure-rate-for-checkpoint: 0.1
+    checkpointing.failure-tolerance.max-time-for-checkpoint: 600000
+    checkpointing.storage.fs.type: s3
+    checkpointing.storage.fs.s3.bucket: s3://flink-state/checkpoints
+    checkpointing.storage.fs.s3.region: us-west-2
+    checkpointing.storage.fs.s3.access-key: <ACCESS_KEY>
+    checkpointing.storage.fs.s3.secret-key: <SECRET_KEY>
+    jobmanager.rpc.address: 0.0.0.0:8081
+    jobmanager.rpc.web-interface.port: 8081
+    jobmanager.numberOfTaskSlots: 1
+    jobmanager.memory.process-heap-size-mb: 4096
+    jobmanager.memory.off-heap-size-mb: 1024
+    jobmanager.memory.java-heap-growth-mb: 512
+    jobmanager.memory.java-heap-initial-mb: 4096
+    jobmanager.memory.java-heap-max-mb: 8192
+    jobmanager.rack-aware: false
+    parallelism.default: 12
+    parallelism.default.min: 1
+    parallelism.default.max: 12
+    parallelism.default.scaling-step: 1
+    parallelism.default.scaling-factor: 1.5
+    parallelism.default.scaling-graceful-period: 60000
+    parallelism.default.scaling-min-parallelism: 1
+    parallelism.default.scaling-max-parallelism: 12
+    parallelism.default.scaling-strategy: "fixed"
+    parallelism.default.scaling-strategy-class: "org.apache.flink.runtime.parallelism.FixedScalingStrategy"
+    parallelism.default.scaling-strategy-properties: {}
+    parallelism.default.scaling-strategy-state-backend: "filesystem"
+    parallelism.default.scaling-strategy-state-backend-class: "org.apache.flink.runtime.parallelism.filesystem.FsStateBackend"
+    parallelism.default.scaling-strategy-state-backend-properties: {}
+    parallelism.default.scaling-strategy-state-backend-checkpoint-interval: 10000
+    parallelism.default.scaling-strategy-state-backend-checkpoint-timeout: 600000
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries: 3
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max: 3
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max-interval: 60000
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max-interval-multiplier: 1.5
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max-interval-multiplier-multiplier: 1.5
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max-interval-multiplier-multiplier-multiplier: 1.5
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max-interval-multiplier-multiplier-multiplier-multiplier: 1.5
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max-interval-multiplier-multiplier-multiplier-multiplier-multiplier: 1.5
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max-interval-multiplier-multiplier-multiplier-multiplier-multiplier-multiplier: 1.5
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max-interval-multiplier-multiplier-multiplier-multiplier-multiplier-multiplier-multiplier: 1.5
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max-interval-multiplier-multiplier-multiplier-multiplier-multiplier-multiplier-multiplier-multiplier: 1.5
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max-interval-multiplier-multiplier-multiplier-multiplier-multiplier-multiplier-multiplier-multiplier-multiplier: 1.5
+    parallelism.default.scaling-strategy-state-backend-checkpoint-retries-max-

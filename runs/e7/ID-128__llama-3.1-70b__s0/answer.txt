@@ -1,0 +1,117 @@
+```yaml
+# KafkaTopic resources for clicks and clicks-enriched topics
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.ms: 604800000
+```
+
+```yaml
+# FlinkDeployment resource with Flink configuration
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-enricher
+spec:
+  image:
+    name: flink:1.20
+  flinkVersion: v1_20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.memory.jvm-metaspace.size: 128m
+    taskmanager.memory.jvm-overhead.min: 128m
+    taskmanager.memory.jvm-overhead.max: 512m
+    taskmanager.memory.process.size: 8g
+    execution.checkpointing.interval: 10s
+    execution.checkpointing.timeout: 1min
+    execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+    execution.checkpointing.unaligned-checkpoints.enabled: true
+    execution.checkpointing.tolerable-failed-checkpoints: 3
+    execution.checkpointing.max-concurrent-checkpoints: 1
+    execution.savepoint.pause-job.timeout: 10min
+    execution.savepoint.cancel-job.timeout: 10min
+    execution.failover-strategy: region
+    restart-strategy: fixed-delay
+    restart-strategy.fixed-delay.attempts: 3
+    restart-strategy.fixed-delay.delay: 10s
+    state.backend: filesystem
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.savepoints.dir: s3://flink-state/savepoints
+    state.backend.fs.s3.endpoint: s3.amazonaws.com
+    state.backend.fs.s3.path.style.access: true
+    state.backend.fs.s3.impl: org.apache.hadoop.fs.s3a.S3AFileSystem
+    state.backend.fs.s3a.endpoint: s3.amazonaws.com
+    state.backend.fs.s3a.path.style.access: true
+    state.backend.fs.s3a.impl: org.apache.hadoop.fs.s3a.S3AFileSystem
+  job:
+    jarURI: local:///opt/flink/usrlib/sql-runner.jar
+    parallelism: 8
+  resources:
+    taskManager:
+      cpu: 4
+      memory: 8G
+  serviceAccountName: flink
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements for Kafka source and sink tables
+CREATE TABLE clicks (
+  `session_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `event_type` STRING,
+  `event_data` MAP<STRING, STRING>
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'clicks',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.fail-on-missing-field' = 'true',
+  'update-mode' = 'append'
+);
+
+CREATE TABLE clicks_enriched (
+  `session_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `event_type` STRING,
+  `event_data` MAP<STRING, STRING>,
+  `derived_field1` STRING,
+  `derived_field2` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'clicks-enriched',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.fail-on-missing-field' = 'true',
+  'update-mode' = 'append'
+);
+```
+
+Justification:
+
+*   We create two Kafka topics (`clicks` and `clicks-enriched`) with 8 partitions each to handle the input rate of 20,000 events/s. This allows for a maximum produce traffic of 40 MB/s (8 partitions \* 5 MB/s per partition), which is above the required 10 MB/s (20,000 events/s \* 512 bytes per event / 1024).
+*   We set the replication factor to 3 to ensure that both topics can survive the loss of any single Kafka broker without losing acknowledged data.
+*   We configure the Flink job to use 8 task slots (one per Kafka partition) and set the parallelism to 8 to match the number of partitions.
+*   We set the checkpointing interval to 10 seconds to achieve an end-to-end latency of below 1 second at p99.
+*   We use the `filesystem` state backend with S3 as the checkpoint storage to ensure that checkpoints are persisted even in case of a failure.
+*   We configure the Flink job to use at-least-once delivery guarantee by setting `execution.checkpointing.externalized-checkpoint-retention` to `RETAIN_ON_CANCELLATION`.
+*   We set the restart strategy to `fixed-delay` with 3 attempts and a delay of 10 seconds to handle failures.
+*   We create two Flink SQL tables (`clicks` and `clicks_enriched`) to read from and write to the corresponding Kafka topics. We use the `json` format and set `format.fail-on-missing-field` to `true` to filter out malformed events.

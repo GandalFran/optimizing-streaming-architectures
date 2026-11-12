@@ -1,0 +1,126 @@
+ ```yaml
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+  namespace: default
+  labels:
+    app: vehicle-positions-topic
+spec:
+  partitions: 3
+  replicationFactor: 1
+  retention: 1d
+  cleanupPolicy: "compact"
+
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions-clean
+  namespace: default
+  labels:
+    app: vehicle-positions-clean-topic
+spec:
+  partitions: 3
+  replicationFactor: 1
+  retention: 1d
+  cleanupPolicy: "compact"
+```
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-sql-runner
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-sql-runner
+  template:
+    metadata:
+      labels:
+        app: flink-sql-runner
+    spec:
+      containers:
+      - name: flink-sql-runner
+        image: flink-operator/flink-sql-runner:1.20
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: FLINK_KAFKA_BOOTSTRAP_SERVERS
+          value: my-cluster-kafka-bootstrap:9092
+        - name: FLINK_KAFKA_TOPIC_VEHICLE_POSITIONS
+          value: vehicle-positions
+        - name: FLINK_KAFKA_TOPIC_VEHICLE_POSITIONS_CLEAN
+          value: vehicle-positions-clean
+        - name: FLINK_STATE_FALLBACK_SYSTEM_META_STORAGE_CLASS
+          value: "memory"
+        - name: FLINK_STATE_FALLBACK_SYSTEM_META_STORAGE_DIR
+          value: "/tmp/flink/state"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_INTERVAL_MS
+          value: "10000"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_CLEANUP_SECONDS
+          value: "600"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_INTERVAL_MS
+          value: "1000"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_DELTA_MS
+          value: "1000"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_MS
+          value: "10000"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_SYNC_MAX_AGE_SECONDS
+          value: "10"
+        - name: FLINK_STATE_FALLBACK_CHECKPOINT_SYSTEM_TIME_

@@ -1,0 +1,1029 @@
+
+<!DOCTYPE html>
+<html lang="en" dir=>
+
+<head>
+  <meta name="generator" content="Hugo 0.104.0" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Job Lifecycle Management # The core responsibility of the Flink operator is to manage the full production lifecycle of Flink applications.
+What is covered:
+Running, suspending and deleting applications Stateful and stateless application upgrades Triggering and managing savepoints Handling errors, rolling-back broken upgrades The behaviour is always controlled by the respective configuration fields of the JobSpec object as introduced in the FlinkDeployment/FlinkSessionJob overview.
+Let&rsquo;s take a look at these operations in detail.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="Job Management" />
+<meta property="og:description" content="Job Lifecycle Management # The core responsibility of the Flink operator is to manage the full production lifecycle of Flink applications.
+What is covered:
+Running, suspending and deleting applications Stateful and stateless application upgrades Triggering and managing savepoints Handling errors, rolling-back broken upgrades The behaviour is always controlled by the respective configuration fields of the JobSpec object as introduced in the FlinkDeployment/FlinkSessionJob overview.
+Let&rsquo;s take a look at these operations in detail." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/job-management/" /><meta property="article:section" content="docs" />
+
+
+
+<title>Job Management | Apache Flink Kubernetes Operator</title>
+<link rel="manifest" href="/flink/flink-kubernetes-operator-docs-release-1.13/manifest.json">
+<link rel="icon" href="/flink/flink-kubernetes-operator-docs-release-1.13/favicon.png" type="image/x-icon">
+<link rel="alternate" hreflang="zh" href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/zh/docs/custom-resource/job-management/" title="Job Management">
+
+<link rel="stylesheet" href="/flink/flink-kubernetes-operator-docs-release-1.13/book.min.b952fefba7a2e6dac79b3035a33b021d21a5f84843c9890ad9ab605f3bfe0eac.css" integrity="sha256-uVL&#43;&#43;6ei5trHmzA1ozsCHSGl&#43;EhDyYkK2atgXzv&#43;Dqw=">
+<script defer src="/flink/flink-kubernetes-operator-docs-release-1.13/en.search.min.0b1b62ffa8c98cc3db9dc15e4b506ad3b38c189abdfbac02bcf6c0d9ecd45dfb.js" integrity="sha256-Cxti/6jJjMPbncFeS1Bq07OMGJq9&#43;6wCvPbA2ezUXfs="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+
+<link rel="stylesheet" type="text/css" href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/font-awesome/css/font-awesome.min.css">
+<script src="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/js/anchor.min.js"></script>
+<script src="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/js/flink.js"></script>
+
+
+  
+  <script>
+    var _paq = window._paq = window._paq || [];
+     
+     
+    _paq.push(['disableCookies']);
+     
+    _paq.push(["setDomains", ["*.flink.apache.org","*.nightlies.apache.org/flink"]]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="//analytics.apache.org/";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', '1']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  
+</head>
+
+<body dir=>
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      
+  
+
+<nav>
+
+
+<a id="logo" href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13">
+    <img width="70%" src="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/navbar-brand-logo.jpg">
+</a>
+<p style="text-align:right">v1.13.0</p>
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-4dd9cb641a390ed95bcf39ced08717dd" class="toggle"  />
+    <label for="section-4dd9cb641a390ed95bcf39ced08717dd" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Try the Flink Kubernetes Operator</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/try-flink-kubernetes-operator/quick-start/" class="">Quick Start</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-6c07f7e07850a28420f21d62041fba0d" class="toggle"  />
+    <label for="section-6c07f7e07850a28420f21d62041fba0d" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Concepts</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/concepts/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/concepts/architecture/" class="">Architecture</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/concepts/controller-flow/" class="">Controller Flow</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-79db1868389f630f6e8d85ef48f3be40" class="toggle" checked />
+    <label for="section-79db1868389f630f6e8d85ef48f3be40" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-code title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Custom Resource</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/job-management/" class=" active">Job Management</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/pod-template/" class="">Pod Template</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/snapshots/" class="">Snapshots</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/autoscaler/" class="">Autoscaler</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/autotuning/" class="">Autotuning</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/reference/" class="">Reference</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-edeb15b4bac51ae5b725de958354b931" class="toggle"  />
+    <label for="section-edeb15b4bac51ae5b725de958354b931" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-cogs title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Operations</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/helm/" class="">Helm</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/configuration/" class="">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/rbac/" class="">RBAC model</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/ingress/" class="">Ingress</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/health/" class="">Operator Health Monitoring</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/compatibility/" class="">Compatibility Guarantees</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/metrics-logging/" class="">Metrics and Logging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/upgrade/" class="">Operator Upgrades</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/plugins/" class="">Custom Operator Plugins</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-75a1b849ec817b105e0397971f02e977" class="toggle"  />
+    <label for="section-75a1b849ec817b105e0397971f02e977" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-book title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Development</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/development/guide/" class="">Guide</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/development/roadmap/" class="">Roadmap</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/>
+<hr class="menu-break">
+
+<a href="//flink.apache.org" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> Project Homepage</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/api/java/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> JavaDocs</a>
+<br/>
+
+<hr class="menu-break">
+<li style="list-style-type: none">
+  <br>
+  <input type="checkbox" id="section-version-picker" class="toggle">
+  <label for="section-version-picker" class="flex justify-between">
+     <div style="font-weight:450;margin-bottom:0.5em">Pick Docs Version</div>
+     <span>▾</span>
+  </label>
+  <ul>
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13">
+      1.13 (✓)
+    </a>
+    <hr class="menu-break">
+    
+      <li>
+        <a href="https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.12">
+          v1.12
+        </a>
+      </li>
+    
+      <li>
+        <a href="https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.11">
+          v1.11
+        </a>
+      </li>
+    
+    <hr class="menu-break">
+    <li>
+      <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/versions">
+          All Versions
+      </a>
+    </li>
+  </ul>
+</li>
+
+
+
+
+  
+
+  
+
+
+  
+
+
+
+
+
+
+<a  href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/zh/docs/custom-resource/job-management/" class="flex align-center">
+  <i class="fa fa-globe" aria-hidden="true"></i>&nbsp;&nbsp;
+  中文版
+</a>
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/flink/flink-kubernetes-operator-docs-release-1.13/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Job Management</strong>
+
+  <label for="toc-control">
+    
+    <img src="/flink/flink-kubernetes-operator-docs-release-1.13/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#running-suspending-and-deleting-applications">Running, suspending and deleting applications</a></li>
+    <li><a href="#stateful-and-stateless-application-upgrades">Stateful and stateless application upgrades</a>
+      <ul>
+        <li><a href="#application-restarts-without-spec-change">Application restarts without spec change</a></li>
+      </ul>
+    </li>
+    <li><a href="#recovery-of-missing-job-deployments">Recovery of missing job deployments</a></li>
+    <li><a href="#restart-of-unhealthy-job-deployments">Restart of unhealthy job deployments</a></li>
+    <li><a href="#restart-failed-job-deployments">Restart failed job deployments</a></li>
+    <li><a href="#application-upgrade-rollbacks-experimental">Application upgrade rollbacks (Experimental)</a>
+      <ul>
+        <li><a href="#stability-condition">Stability condition</a></li>
+      </ul>
+    </li>
+    <li><a href="#manual-recovery">Manual Recovery</a>
+      <ul>
+        <li><a href="#redeploy-using-the-savepointredeploynonce">Redeploy using the savepointRedeployNonce</a></li>
+        <li><a href="#delete-and-recreate-the-custom-resource">Delete and recreate the custom resource</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+
+
+
+
+
+      
+  <article class="markdown"><!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<h1 id="job-lifecycle-management">
+  Job Lifecycle Management
+  <a class="anchor" href="#job-lifecycle-management">#</a>
+</h1>
+<p>The core responsibility of the Flink operator is to manage the full production lifecycle of Flink applications.</p>
+<p>What is covered:</p>
+<ul>
+<li>Running, suspending and deleting applications</li>
+<li>Stateful and stateless application upgrades</li>
+<li>Triggering and managing savepoints</li>
+<li>Handling errors, rolling-back broken upgrades</li>
+</ul>
+<p>The behaviour is always controlled by the respective configuration fields of the <code>JobSpec</code> object as introduced in the <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/overview/">FlinkDeployment/FlinkSessionJob overview</a>.</p>
+<p>Let&rsquo;s take a look at these operations in detail.</p>
+<blockquote class="book-hint info">
+  The management features detailed in this section apply (in most part) to both <code>FlinkDeployment</code> (application clusters) and <code>FlinkSessionJob</code> (session job) deployments.
+</blockquote>
+
+<h2 id="running-suspending-and-deleting-applications">
+  Running, suspending and deleting applications
+  <a class="anchor" href="#running-suspending-and-deleting-applications">#</a>
+</h2>
+<p>By controlling the <code>state</code> field of the <code>JobSpec</code> users can define the desired state of the application.</p>
+<p>Supported application states:</p>
+<ul>
+<li><code>running</code> : The job is expected to be running and processing data.</li>
+<li><code>suspended</code> : Data processing should be temporarily suspended, with the intention of continuing later.</li>
+</ul>
+<p><strong>Job State transitions</strong></p>
+<p>There are 4 possible state change scenarios when updating the current FlinkDeployment.</p>
+<ul>
+<li><code>running</code> -&gt; <code>running</code> : Job upgrade operation. In practice, a suspend followed by a restore operation.</li>
+<li><code>running</code> -&gt; <code>suspended</code> : Suspend operation. Stops the job while maintaining state information for stateful applications.</li>
+<li><code>suspended</code> -&gt; <code>running</code> : Restore operation. Start the application from current state using the latest spec.</li>
+<li><code>suspended</code> -&gt; <code>suspended</code> : Update spec, job is not started.</li>
+</ul>
+<p>The way state is handled for suspend and restore operations is described in detail in the next section.</p>
+<p><strong>Cancelling/Deleting applications</strong></p>
+<p>As you can see there is no cancelled or deleted among the possible desired states. When users no longer wish to process data with a given FlinkDeployment they can delete the deployment object using the Kubernetes api:</p>
+<pre tabindex="0"><code>kubectl delete flinkdeployment my-deployment
+</code></pre><blockquote class="book-hint danger">
+  Deleting a deployment will remove all checkpoint and status information. Future deployments will start from an empty state unless manually overridden by the user.
+</blockquote>
+
+<h2 id="stateful-and-stateless-application-upgrades">
+  Stateful and stateless application upgrades
+  <a class="anchor" href="#stateful-and-stateless-application-upgrades">#</a>
+</h2>
+<p>When the spec changes for FlinkDeployment and FlinkSessionJob resources, the running application must be upgraded.
+In order to do this the operator will stop the currently running job (unless already suspended) and redeploy it using the latest spec and state carried over from the previous run for stateful applications.</p>
+<p>Users have full control on how state should be managed when stopping and restoring stateful applications using the <code>upgradeMode</code> setting of the JobSpec.</p>
+<p>Supported values: <code>stateless</code>, <code>savepoint</code>, <code>last-state</code></p>
+<p>The <code>upgradeMode</code> setting controls both the stop and restore mechanisms as detailed in the following table:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Stateless</th>
+<th>Last State</th>
+<th>Savepoint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Config Requirement</td>
+<td>None</td>
+<td>Checkpointing Enabled</td>
+<td>Checkpoint/Savepoint directory defined</td>
+</tr>
+<tr>
+<td>Job Status Requirement</td>
+<td>None</td>
+<td>Job or HA metadata accessible</td>
+<td>Job Running*</td>
+</tr>
+<tr>
+<td>Suspend Mechanism</td>
+<td>Cancel / Delete</td>
+<td>Cancel / Delete (keep HA metadata)</td>
+<td>Cancel with savepoint</td>
+</tr>
+<tr>
+<td>Restore Mechanism</td>
+<td>Empty state</td>
+<td>Use HA metadata or last cp/sp</td>
+<td>Restore From savepoint</td>
+</tr>
+<tr>
+<td>Production Use</td>
+<td>Not recommended</td>
+<td>Recommended</td>
+<td>Recommended</td>
+</tr>
+</tbody>
+</table>
+<p><em>* When HA is enabled the <code>savepoint</code> upgrade mode may fall back to the <code>last-state</code> behaviour in cases where the job is in an unhealthy state.</em></p>
+<p>The three upgrade modes are intended to support different scenarios:</p>
+<ol>
+<li><strong>stateless</strong>: Stateless application upgrades from empty state</li>
+<li><strong>last-state</strong>: Quick upgrades in any application state (even for failing jobs), does not require a healthy job as it always uses the latest checkpoint information. Manual recovery may be necessary if HA metadata is lost. To limit the time the job may fall back when picking up the latest checkpoint you can configure <code>kubernetes.operator.job.upgrade.last-state.max.allowed.checkpoint.age</code>. If the checkpoint is older than the configured value a savepoint will be taken instead for healthy jobs.</li>
+<li><strong>savepoint</strong>: Use savepoint for upgrade, providing maximal safety and possibility to serve as backup/fork point. The savepoint will be created during the upgrade process. Note that the Flink job needs to be running to allow the savepoint to get created. If the job is in an unhealthy state, the last checkpoint will be used (unless <code>kubernetes.operator.job.upgrade.last-state-fallback.enabled</code> is set to <code>false</code>). If the last checkpoint is not available, the job upgrade will fail.</li>
+</ol>
+<p>During stateful upgrades there are always cases which might require user intervention to preserve the consistency of the application. Please see the <a href="#manual-recovery">manual Recovery section</a> for details.</p>
+<p>Full example using the <code>last-state</code> strategy:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">flink.apache.org/v1beta1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">FlinkDeployment</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">basic-checkpoint-ha-example</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">flink:1.20</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">flinkVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1_20</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">flinkConfiguration</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">taskmanager.numberOfTaskSlots</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">state.savepoints.dir</span><span class="p">:</span><span class="w"> </span><span class="l">file:///flink-data/savepoints</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">state.checkpoints.dir</span><span class="p">:</span><span class="w"> </span><span class="l">file:///flink-data/checkpoints</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">high-availability</span><span class="p">:</span><span class="w"> </span><span class="l">org.apache.flink.kubernetes.highavailability.KubernetesHaServicesFactory</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">high-availability.storageDir</span><span class="p">:</span><span class="w"> </span><span class="l">file:///flink-data/ha</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">serviceAccount</span><span class="p">:</span><span class="w"> </span><span class="l">flink</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">jobManager</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2048m&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">taskManager</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2048m&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">podTemplate</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">flink-main-container</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/flink-data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">flink-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">flink-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c"># directory location on host</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/tmp/flink</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c"># this field is optional</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Directory</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">job</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">jarURI</span><span class="p">:</span><span class="w"> </span><span class="l">local:///opt/flink/examples/streaming/StateMachineExample.jar</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">parallelism</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">upgradeMode</span><span class="p">:</span><span class="w"> </span><span class="l">last-state</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l">running</span><span class="w">
+</span></span></span></code></pre></div><h3 id="application-restarts-without-spec-change">
+  Application restarts without spec change
+  <a class="anchor" href="#application-restarts-without-spec-change">#</a>
+</h3>
+<p>There are cases when users would like to restart the Flink deployments to deal with some transient problem.</p>
+<p>For this purpose you can use the <code>restartNonce</code> top level field in the spec. Set a different value to this field to trigger a restart.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restartNonce</span><span class="p">:</span><span class="w"> </span><span class="m">123</span><span class="w">
+</span></span></span></code></pre></div><p>Restarts work exactly the same way as other application upgrades and follow the semantics detailed in the previous section.</p>
+<h2 id="recovery-of-missing-job-deployments">
+  Recovery of missing job deployments
+  <a class="anchor" href="#recovery-of-missing-job-deployments">#</a>
+</h2>
+<p>When HA is enabled, the operator can recover the Flink cluster deployments in cases when it was accidentally deleted
+by the user or some external process. Deployment recovery can be turned off in the configuration by setting <code>kubernetes.operator.jm-deployment-recovery.enabled</code> to <code>false</code>, however it is recommended to keep this setting on the default <code>true</code> value.</p>
+<p>This is not something that would usually happen during normal operation and can also indicate a deeper problem,
+therefore an Error event is also triggered by the system when it detects a missing deployment.</p>
+<p>One scenario which could lead to a loss of jobmanager deployment in Flink versions before 1.15 is the job entering a terminal state:</p>
+<ul>
+<li>Fatal job error</li>
+<li>Job Finished</li>
+<li>Loss of operator process after triggering savepoint shutdown but before recording the status</li>
+</ul>
+<p>In Flink version before 1.15 a terminal job state leads to a deployment shutdown, therefore it&rsquo;s impossible for the operator to know what happened.
+In these cases no recovery will be performed to avoid dataloss and an error will be thrown.</p>
+<p>Please check the <a href="#manual-recovery">manual Recovery section</a> to understand how to recover from these situations.</p>
+<h2 id="restart-of-unhealthy-job-deployments">
+  Restart of unhealthy job deployments
+  <a class="anchor" href="#restart-of-unhealthy-job-deployments">#</a>
+</h2>
+<p>When HA is enabled, the operator can restart the Flink cluster deployments in cases when it was considered
+unhealthy. Unhealthy deployment restart can be turned on in the configuration by setting <code>kubernetes.operator.cluster.health-check.enabled</code> to <code>true</code> (default: <code>false</code>).<br>
+In order this feature to work one must enable <a href="#recovery-of-missing-job-deployments">recovery of missing job deployments</a>.</p>
+<p>At the moment deployment is considered unhealthy when:</p>
+<ul>
+<li>Flink&rsquo;s restarts count reaches <code>kubernetes.operator.cluster.health-check.restarts.threshold</code> (default: <code>64</code>)
+within time window of <code>kubernetes.operator.cluster.health-check.restarts.window</code> (default: 2 minutes).</li>
+<li><code>cluster.health-check.checkpoint-progress.enabled</code> is turned on and Flink&rsquo;s successful checkpoints count is not
+changing within time window of within time window of <code>kubernetes.operator.cluster.health-check.checkpoint-progress.window</code> (default: 5 minutes).</li>
+</ul>
+<h2 id="restart-failed-job-deployments">
+  Restart failed job deployments
+  <a class="anchor" href="#restart-failed-job-deployments">#</a>
+</h2>
+<p>The operator can restart a failed Flink job. This could be useful in cases when the job main task is
+able to reconfigure the job to handle these failures.</p>
+<p>When <code>kubernetes.operator.job.restart.failed</code> is set to <code>true</code> then at the moment when the job status is
+set to <code>FAILED</code> the kubernetes operator will delete the current job and redeploy the job using the
+latest successful checkpoint.</p>
+<h2 id="application-upgrade-rollbacks-experimental">
+  Application upgrade rollbacks (Experimental)
+  <a class="anchor" href="#application-upgrade-rollbacks-experimental">#</a>
+</h2>
+<p>The operator supports upgrade rollbacks as an experimental feature.
+The rollback feature works based on the concept of stable deployments specs.</p>
+<p>When an application is upgraded, the new spec is initially considered unstable. Once the operator successfully observes the new job in a healthy running state, the spec is marked as stable.
+If a new upgrade is not marked stable within a certain configurable time period (<code>kubernetes.operator.deployment.readiness.timeout</code>) then a rollback operation will be performed, rolling back to the last stable spec.</p>
+<p>To enable rollbacks you need to set:</p>
+<pre tabindex="0"><code>kubernetes.operator.deployment.rollback.enabled: true
+</code></pre><p>HA is currently required for the rollback functionality.</p>
+<p>Applications are never rolled back to a previous running state if they were suspended before the upgrade.
+In these cases no rollback will be performed.</p>
+<p>Rollbacks exclusively affect the <code>FlinkDeployment</code>/<code>FlinkSession</code> CRDs.
+When releasing a new version of your Flink application that updates several Kubernetes resources (such as config maps and services), you must ensure backward compatibility. This means that your updates to non-FlinkDeployment/FlinkSession resources must be compatible with both old and new FlinkDeployment/FlinkSession resources.</p>
+<h3 id="stability-condition">
+  Stability condition
+  <a class="anchor" href="#stability-condition">#</a>
+</h3>
+<p>Currently, a new job is marked stable as soon as the operator could observe it running. This allows us to detect obvious errors, but it&rsquo;s not always enough to detect more complex issues.
+In the future we expect to introduce more sophisticated conditions.</p>
+<blockquote class="book-hint warning">
+  Rollback is currently only supported for <code>FlinkDeployments</code>.
+</blockquote>
+
+<h2 id="manual-recovery">
+  Manual Recovery
+  <a class="anchor" href="#manual-recovery">#</a>
+</h2>
+<p>There are cases when manual intervention is required from the user to recover a Flink application deployment or to restore to a user specified state.</p>
+<p>In most of these situations the main reason for this is that the deployment got into a state where the operator cannot determine the health of the application or the latest checkpoint information to be used for recovery.
+While these cases are not common, we need to be prepared to handle them.</p>
+<p>Users have two options to restore a job from a target savepoint / checkpoint</p>
+<h3 id="redeploy-using-the-savepointredeploynonce">
+  Redeploy using the savepointRedeployNonce
+  <a class="anchor" href="#redeploy-using-the-savepointredeploynonce">#</a>
+</h3>
+<p>It is possible to redeploy a <code>FlinkDeployment</code> or <code>FlinkSessionJob</code> resource from a target savepoint by using the combination of <code>savepointRedeployNonce</code> and <code>initialSavepointPath</code> in the job spec:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w"> </span><span class="nt">job</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">initialSavepointPath</span><span class="p">:</span><span class="w"> </span><span class="l">file://redeploy-target-savepoint</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="c"># If not set previously, set to 1, otherwise increment, e.g. 2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">savepointRedeployNonce</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></span></span></code></pre></div><p>When changing the <code>savepointRedeployNonce</code> the operator will redeploy the job to the savepoint defined in the <code>initialSavepointPath</code>. The savepoint path must not be empty.</p>
+<blockquote class="book-hint warning">
+  Rollbacks are not supported after redeployments.
+</blockquote>
+
+<h3 id="delete-and-recreate-the-custom-resource">
+  Delete and recreate the custom resource
+  <a class="anchor" href="#delete-and-recreate-the-custom-resource">#</a>
+</h3>
+<p>Alternatively you can completely delete and recreate the custom resources to solve almost any issues. This will fully reset the status information to start from a clean slate.
+However, this also means that savepoint history is lost and the operator won&rsquo;t clean up past periodic savepoints taken before the deletion.</p>
+<ol>
+<li>Locate the latest checkpoint/savepoint metafile in your configured checkpoint/savepoint directory.</li>
+<li>Delete the <code>FlinkDeployment</code> resource for your application</li>
+<li>Check that you have the current savepoint, and that your <code>FlinkDeployment</code> is deleted completely</li>
+<li>Modify your <code>FlinkDeployment</code> JobSpec and set <code>initialSavepointPath</code> to your last checkpoint location</li>
+<li>Recreate the deployment</li>
+</ol>
+<p>These steps ensure that the operator will start completely fresh from the user defined savepoint path and can hopefully fully recover.
+Keep an eye on your job to see what could have cause the problem in the first place.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  
+
+
+
+
+<a href="//github.com/apache/flink-kubernetes-operator/edit/release-1.13/docs/content/docs/custom-resource/job-management.md" style="color:black"><i class="fa fa-edit fa-fw"></i>Edit This Page</a>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#running-suspending-and-deleting-applications">Running, suspending and deleting applications</a></li>
+    <li><a href="#stateful-and-stateless-application-upgrades">Stateful and stateless application upgrades</a>
+      <ul>
+        <li><a href="#application-restarts-without-spec-change">Application restarts without spec change</a></li>
+      </ul>
+    </li>
+    <li><a href="#recovery-of-missing-job-deployments">Recovery of missing job deployments</a></li>
+    <li><a href="#restart-of-unhealthy-job-deployments">Restart of unhealthy job deployments</a></li>
+    <li><a href="#restart-failed-job-deployments">Restart failed job deployments</a></li>
+    <li><a href="#application-upgrade-rollbacks-experimental">Application upgrade rollbacks (Experimental)</a>
+      <ul>
+        <li><a href="#stability-condition">Stability condition</a></li>
+      </ul>
+    </li>
+    <li><a href="#manual-recovery">Manual Recovery</a>
+      <ul>
+        <li><a href="#redeploy-using-the-savepointredeploynonce">Redeploy using the savepointRedeployNonce</a></li>
+        <li><a href="#delete-and-recreate-the-custom-resource">Delete and recreate the custom resource</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+ 
+    </aside>
+    <aside class="expand-toc">
+      <button class="toc" onclick="expandToc()">
+        <i class="fa fa-expand" aria-hidden="true"></i>
+      </button>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

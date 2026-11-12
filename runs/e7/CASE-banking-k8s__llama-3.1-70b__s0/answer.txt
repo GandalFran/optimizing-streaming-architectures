@@ -1,0 +1,157 @@
+```yaml
+# KafkaTopic resources for Strimzi
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.ms: 604800000
+```
+
+```yaml
+# FlinkDeployment resource
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: banking-transactions-validator
+spec:
+  image: flink:1.20
+  flinkVersion: v1_20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.memory.jvm-metaspace.size: 128m
+    taskmanager.memory.jvm-overhead.min: 128m
+    taskmanager.memory.jvm-overhead.max: 512m
+    taskmanager.memory.process.size: 7680m
+    execution.checkpointing.interval: 10000
+    execution.checkpointing.timeout: 10000
+    execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+    execution.checkpointing.unaligned-checkpoints.enabled: true
+    execution.checkpointing.tolerable-failed-checkpoints: 3
+    execution.checkpointing.max-concurrent-checkpoints: 1
+    execution.savepoint.pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.dir: s3://flink-state/checkpoints
+    execution.savepoint.checkpoints.max-concurrent: 1
+    execution.savepoint.checkpoints.max-history: 16
+    execution.savepoint.checkpoints.interval: 600000
+    execution.savepoint.checkpoints.timeout: 600000
+    execution.savepoint.checkpoints.tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.unaligned-enabled: true
+    execution.savepoint.checkpoints.max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint.checkpoints.checkpoint-timeout: 600000
+    execution.savepoint.checkpoints.checkpoint-tolerable-failed-checkpoints: 3
+    execution.savepoint.checkpoints.checkpoint-unaligned-enabled: true
+    execution.savepoint.checkpoints.checkpoint-max-concurrent-checkpoints: 1
+    execution.savepoint.checkpoints.checkpoint-pause-job-after-checkpoint: true
+    execution.savepoint.checkpoints.checkpoint-id: latest
+    execution.savepoint.checkpoints.checkpoint-interval: 600000
+    execution.savepoint

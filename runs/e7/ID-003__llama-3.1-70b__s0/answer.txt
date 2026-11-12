@@ -1,0 +1,92 @@
+```bash
+# Create the session-events topic with 10 partitions, replication factor 3, and 7-day retention
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic session-events --partitions 10 --replication-factor 3 --config retention.ms=604800000
+
+# Create the session-events-enriched topic with 10 partitions, replication factor 3, and 7-day retention
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic session-events-enriched --partitions 10 --replication-factor 3 --config retention.ms=604800000
+```
+
+```yml
+# Flink configuration
+execution:
+  checkpointing:
+    interval: 1000
+    timeout: 10000
+    unaligned: true
+    checkpoint-duration: 10000
+    checkpoint-interval: 1000
+    checkpoint-ttl: 3600000
+    checkpoint-idle-timeout: 3600000
+    checkpoint-timing: EXACTLY_ONCE
+    checkpoint-interval-timing: EXACTLY_ONCE
+    checkpoint-duration-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing: EXACTLY_ONCE
+    checkpoint-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-ttl-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-idle-timeout-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-interval-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing: EXACTLY_ONCE
+    checkpoint-duration-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing-timing

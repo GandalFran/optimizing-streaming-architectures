@@ -1,0 +1,297 @@
+{
+  "id": "ID-141",
+  "model": "phi-3-mini-4k",
+  "seed": 0,
+  "track": "native",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 512,
+    "latency_slo_ms": 10000,
+    "retention_days": 1,
+    "sink": "app-logs-parsed",
+    "src": "app-logs",
+    "throughput_eps": 20000
+  },
+  "finish_reason": "length",
+  "host": "cn001",
+  "slurm_job": "8381",
+  "started": "2026-11-10T19:12:41+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic app-logs --partitions 3 --replication-factor 1",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic app-logs --partitions 3 --replication-factor 1",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic app-logs-parsed --partitions 3 --replication-factor 1",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic app-logs-parsed --partitions 3 --replication-factor 1",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    }
+  ],
+  "translations": [],
+  "augmentations": [],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic app-logs --partitions 3 --replication-factor 1",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502 --create --topic app-logs --partitions 3 --replication-factor 1",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic app-logs.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic app-logs-parsed --partitions 3 --replication-factor 1",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502 --create --topic app-logs-parsed --partitions 3 --replication-factor 1",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic app-logs-parsed.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "the answer has no CREATE TABLE statement",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 10000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C1_deploy": "the answer has no CREATE TABLE statement",
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794334370.032,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.8,
+      "bootstrap": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "t": 1794334373.455,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "app-logs",
+        "app-logs-parsed"
+      ],
+      "ok": true
+    }
+  ],
+  "notes": [
+    "duplicate YAML keys ['state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms', 'state.checkpointing.mini-checkpoints.max-delay-ms']: the last value is used (as the validator does)"
+  ],
+  "driver_args": {
+    "id": "ID-141",
+    "answer_file": null,
+    "answers": "runs/main/phi-3-mini-4k.greedy.jsonl",
+    "model": "phi-3-mini-4k",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-141__phi-3-mini-4k__s0.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8381",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 76,
+    "findings_L1_L3": [
+      "L1:truncated:generation stopped at the token limit",
+      "L2:unknown-key:kafka-source.bootstrap-servers is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.topics is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.key-deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.value-deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.properties.auto.offset.reset is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.properties.enable.auto.commit is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.properties.fetch.max.bytes is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.properties.fetch.min.bytes is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.properties.fetch.max.wait.ms is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.properties.max.partition.fetch.bytes is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.properties.max.poll.interval.ms is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-source.properties.max.poll.records is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.bootstrap-servers is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.topics is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.key-deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.value-deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.properties.auto.offset.reset is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.properties.enable.auto.commit is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka-sink.properties.fetch.max.bytes is not a Flink 1.20 configuration option"
+    ]
+  },
+  "topology": {
+    "port_base": 12500,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "nodes": {
+      "k1": "38,39,150,151",
+      "k2": "40,41,152,153",
+      "k3": "42,43,154,155",
+      "f1": "68,69,70,71,180,181,182,183",
+      "f2": "88,89,90,91,200,201,202,203",
+      "f3": "18,19,20,21,130,131,132,133",
+      "j1": "72,184",
+      "ctl": "92,93,204,205",
+      "m1": "73,185"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12510,2@127.0.0.1:12511,3@127.0.0.1:12512",
+    "listeners=PLAINTEXT://127.0.0.1:12500,CONTROLLER://127.0.0.1:12510",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12500",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8381/e7-1268204/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "app-logs": {
+      "partitions": 3,
+      "replication_factor": 1,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    },
+    "app-logs-parsed": {
+      "partitions": 3,
+      "replication_factor": 1,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "failure_stage": "answer",
+  "topics_after_run": {
+    "app-logs": {
+      "partitions": 3,
+      "replication_factor": 1,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    },
+    "app-logs-parsed": {
+      "partitions": 3,
+      "replication_factor": 1,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T19:13:00+0100"
+}

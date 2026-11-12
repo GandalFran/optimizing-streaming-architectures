@@ -1,0 +1,95 @@
+Nov 10, 2026 7:31:01 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE card_transactions (
+>     card_id STRING,
+>     transaction_time TIMESTAMP(3),
+>     amount DECIMAL(10, 2),
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'card-transactions',
+>     'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>     'format' = 'json',
+>     'scan.startup.mode' = 'latest-offset',
+>     'properties.group.id' = 'card-transactions-group'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE card_transactions_enriched (
+>     card_id STRING,
+>     transaction_time TIMESTAMP(3),
+>     amount DECIMAL(10, 2),
+>     derived_field1 STRING,
+>     derived_field2 INT,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'card-transactions-enriched',
+>     'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>     'format' = 'json',
+>     'sink.partitioner' = 'org.apache.flink.connector.kafka.sink.KeyPartitioner',
+>     'sink.partitioner.key-extractor' = 'org.apache.flink.connector.kafka.sink.KeySelector',
+>     'sink.parallelism' = '20',
+>     'sink.max-parallelism' = '20'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO card_transactions_enriched (`card_id`, `transaction_time`, `amount`, `derived_field1`, `derived_field2`, `__sent_ms`, `__seq`)
+> SELECT `card_id`,
+>        `transaction_time`,
+>        `amount`,
+>        CAST(NULL AS STRING),
+>        CAST(NULL AS INT)[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.table.api.ValidationException: Unsupported options found for 'kafka'.
+
+Unsupported options:
+
+sink.max-parallelism
+sink.partitioner.key-extractor
+
+Supported options:
+
+connector
+format
+json.encode.decimal-as-plain-number
+json.encode.ignore-null-fields
+json.fail-on-missing-field
+json.ignore-parse-errors
+json.map-null-key.literal
+json.map-null-key.mode
+json.timestamp-format.standard
+key.fields
+key.fields-prefix
+key.format
+properties.bootstrap.servers
+properties.group.id
+property-version
+scan.bounded.mode
+scan.bounded.specific-offsets
+scan.bounded.timestamp-millis
+scan.startup.mode
+scan.startup.specific-offsets
+scan.startup.timestamp-millis
+scan.topic-partition-discovery.interval
+scan.watermark.alignment.group
+scan.watermark.alignment.max-drift
+scan.watermark.alignment.update-interval
+scan.watermark.emit.strategy
+scan.watermark.idle-timeout
+sink.delivery-guarantee
+sink.parallelism
+sink.partitioner
+sink.semantic
+sink.transactional-id-prefix
+topic
+topic-pattern
+value.fields-include
+value.format[0m
+
+Shutting down the session...
+done.

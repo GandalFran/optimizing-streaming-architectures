@@ -1,0 +1,198 @@
+### 1. Strimzi KafkaTopic resources
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+spec:
+  kafka:
+    bootstrap:
+      service:
+        name: my-cluster-kafka-bootstrap
+        port: 9092
+    replicas: 3
+  partitions: 16
+  replicationFactor: 3
+  config:
+    num.partitions: 16
+    min.insync.replicas: 2
+    retention.ms: 604800000
+    segment.ms: 604800000
+    message.max.bytes: 1048576
+    max.message.bytes: 1048576
+    flush.messages: 9223372036854775807
+    flush.ms: 9223372036854775807
+    cleanup.policy: DELETE
+---
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+spec:
+  kafka:
+    bootstrap:
+      service:
+        name: my-cluster-kafka-bootstrap
+        port: 9092
+    replicas: 3
+    partitions: 16
+    replicationFactor: 3
+  config:
+    num.partitions: 16
+    min.insync.replicas: 2
+    retention.ms: 604800000
+    segment.ms: 604800000
+    message.max.bytes: 1048576
+    max.message.bytes: 1048576
+    flush.messages: 9223372036854775807
+    flush.ms: 9223372036854775807
+    cleanup.policy: DELETE
+```
+
+### 2. Flink Deployment resource
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: banking-transactions-flink-job
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: banking-transactions-flink-job
+  template:
+    metadata:
+      labels:
+        app: banking-transactions-flink-job
+    spec:
+      containers:
+      - name: flink
+        image: flink:latest
+        ports:
+        - containerPort: 6123
+        volumeMounts:
+        - name: flink-state-checkpoints
+          mountPath: /opt/flink/checkpoints
+        - name: sql-runner
+          mountPath: /opt/flink/usrlib
+      volumes:
+      - name: flink-state-checkpoints
+        persistentVolumeClaim:
+          claimName: flink-checkpoints
+      - name: sql-runner
+        configMap:
+          name: sql-runner-config
+  template:
+    spec:
+      serviceAccountName: flink-service-account
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: banking-transactions-flink-job
+              topologyKey: kubernetes.io/hostname
+              topologyKey: kubernetes.io/hostname
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sql-runner-config
+data:
+  flink-configuration: |
+    configuration:
+      # Flink configuration
+      configuration:
+        jobmanager.heap.size: "4g"
+        taskmanager.heap.size: "8g"
+        taskmanager.numberOfTaskSlots: 4
+        taskmanager.numberOfTaskManagers: 3
+        parallelism.default: 4
+        state.backend: fs
+        state.checkpointing.checkpointing-mode: EXACTLY_ONCE
+        state.checkpointing.global-checkpoint-interval: 10000
+        state.checkpointing.type: elided
+        state.fs.checkpoint.dir: s3://flink-state/checkpoints
+        state.fs.checkpoint.timeout: 300000
+      # Kafka configuration
+      configuration:
+        properties:
+          bootstrap.servers: my-cluster-kafka-bootstrap:9092
+          group.id: banking-transactions-group
+          key.deserialization.schema.registry.url: http://localhost:8081
+          value.deserialization.schema.registry.url: http://localhost:8081
+```
+
+### 3. Flink SQL `CREATE TABLE` statements
+
+```sql
+CREATE TABLE banking_transactions (
+  account_id STRING,
+  transaction_id STRING,
+  transaction_time TIMESTAMP,
+  amount DECIMAL(10, 2)
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'banking-transactions',
+  'connector.startup.mode' = 'earliest-offset',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'scan.startup.mode' = 'latest-offset',
+  'properties.group.id' = 'banking-transactions-group',
+  'format' = 'json',
+  'json.timestamp-format' = 'iso-8601/Basic',
+  'json.ignore-parse-errors' = 'true',
+  'json.fail-on-missing-field' = 'false'
+);
+
+CREATE TABLE banking_transactions_validated (
+  account_id STRING,
+  transaction_id STRING,
+  transaction_time TIMESTAMP,
+  amount DECIMAL(10, 2)
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'banking-transactions-validated',
+  'connector.startup.mode' = 'earliest-offset',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'scan.startup.mode' = 'latest-offset',
+  'properties.group.id' = 'banking-transactions-group',
+  'format' = 'json',
+  'json.timestamp-format' = 'iso-8601/Basic',
+  'json.ignore-parse-errors' = 'true',
+  'json.fail-on-missing-field' = 'false'
+);
+```
+
+Justification:
+
+1.  **Kafka Topic Configuration:**
+
+    *   We create two Kafka topics: `banking-transactions` for the input data and `banking-transactions-validated` for the output data.
+    *   Each topic has 16 partitions, a replication factor of 3 for high availability, and a retention period of 7 days.
+    *   The `message.max.bytes` and `max.message.bytes` are set to 1 MB to match the expected average event size of 1024 bytes.
+2.  **Flink Deployment Configuration:**
+
+    *   We create a Flink deployment with 1 replica, 4 CPU, and 8 GB of memory per TaskManager.
+    *   The Flink job is configured to use exactly-once end-to-end delivery with a checkpoint interval of 10 seconds.
+    *   The Flink configuration is stored in a ConfigMap, which is mounted as a volume to the Flink container.
+3.  **Flink SQL `CREATE TABLE` Statements:**
+
+    *   We create two tables: `banking_transactions` for the input data and `banking_transactions_validated` for the output data.
+    *   Both tables use the `kafka` connector with the `universal` version and are configured to use the `banking-transactions-group` consumer group.
+    *   The `banking_transactions` table is configured to read from the `banking-transactions` topic, while the `banking_transactions_validated` table is configured to write to the `banking-transactions-validated` topic.
+    *   Both tables use the `json` format with timestamp parsing and ignore parse errors.
+
+The main values chosen are based on the provided requirements and assumptions:
+
+*   **50,000 events/s**: We assume one Flink source subtask can process at most 20,000 events/s, so we need at least 3 source subtasks to handle the input rate. We also assume one Kafka partition can sustain at most 5 MB/s of produce traffic, so we need at least 3 partitions to handle the output rate.
+*   **Below 100 ms end-to-end latency**: We choose a checkpoint interval of 10 seconds, which is a good trade-off between latency and throughput.
+*   **Exactly-once end-to-end delivery**: We use the `EXACTLY_ONCE` checkpointing mode to ensure that all events are processed exactly once, even in the presence of failures.
+*   **High availability**: We use a replication factor of 3 for both Kafka topics and 3 TaskManager replicas for the Flink job to ensure high availability.
+*   **Durable checkpoint storage**: We use an S3 bucket as durable checkpoint storage for the Flink job.

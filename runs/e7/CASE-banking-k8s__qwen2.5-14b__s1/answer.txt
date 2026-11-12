@@ -1,0 +1,110 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+  namespace: default
+spec:
+  partitions: 25
+  replicationFactor: 3
+  config:
+    retention.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+  namespace: default
+spec:
+  partitions: 25
+  replicationFactor: 3
+  config:
+    retention.ms: 604800000
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: banking-transactions-processing
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "2"
+    state.checkpoints.numRetries: "3"
+    state.checkpoints.externalizedCheckpointCleanup: "delete"
+    state.backend: "rocksdb"
+    state.checkpoints.dir: "s3://flink-state/checkpoints"
+    state.savepoints.dir: "s3://flink-state/savepoints"
+    s3.access-key: "<ACCESS_KEY>"
+    s3.secret-key: "<SECRET_KEY>"
+  serviceAccount: flink-deployment-sa
+  podTemplate:
+    spec:
+      containers:
+        - name: flink-main-container
+          resources:
+            limits:
+              cpu: "4"
+              memory: "8Gi"
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              value: "<ACCESS_KEY>"
+            - name: AWS_SECRET_ACCESS_KEY
+              value: "<SECRET_KEY>"
+  job:
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    entryClass: com.example.BankingTransactionsProcessing
+```
+
+```sql
+CREATE TABLE banking_transactions (
+  account_id BIGINT,
+  transaction_id BIGINT,
+  amount DECIMAL(10, 2),
+  timestamp TIMESTAMP(3),
+  event_time AS PROCTIME(),
+  WATERMARK FOR timestamp AS timestamp - INTERVAL '5' SECOND
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'banking-transactions',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'banking-transactions-group',
+  'format' = 'json',
+  'scan.startup.mode' = 'latest-offset'
+);
+
+CREATE TABLE banking_transactions_validated (
+  account_id BIGINT,
+  transaction_id BIGINT,
+  amount DECIMAL(10, 2),
+  timestamp TIMESTAMP(3)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'banking-transactions-validated',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format' = 'json',
+  'sink.partitioner' = 'org.apache.flink.connector.kafka.sink.KeyPartitioner',
+  'sink.parallelism' = '25'
+);
+```
+
+**Justification:**
+
+1. **Kafka Topics Configuration:**
+   - **Partitions:** 25 partitions are chosen to sustain the input rate of 50,000 events/s, considering each partition can handle up to 5 MB/s, and the average event size is 1024 bytes (1024 * 50,000 / 1,000,000 = 50 MB/s total, so 50 / 2 = 25 partitions). The number of partitions also matches the number of sink parallelism in the Flink job.
+   - **Retention:** Data is retained for 7 days, matching the requirement.
+   - **Replication Factor:** 3 to ensure data durability and availability in case of a broker failure.
+
+2. **Flink Deployment Configuration:**
+   - **Task Slots:** Each TaskManager pod is configured with 2 slots to maximize resource utilization while ensuring that the input rate is handled efficiently.
+   - **Resources:** CPU and memory limits are set to ensure that the Flink job does not exceed the allowed resource consumption.
+   - **State Backend:** RocksDB is used for state backend for its efficient storage and retrieval characteristics.
+   - **Checkpointing:** Checkpoints are configured for durability and exactly-once processing semantics.
+   - **Externalized Checkpoints:** Cleanup is set to delete mode to ensure space management.
+   - **Parallelism:** The sink parallelism is set to 25 to match the number of partitions in Kafka, ensuring optimal distribution of data writes.
+
+3. **Flink SQL Statements:**
+   - **Input Table:** Configured with the appropriate Kafka connector settings, including the specified bootstrap servers and topic name.
+   - **Watermark Definition:** A watermark is defined to handle out-of-order events within a 5-second window, aligning with the need for accurate event time processing.
+   - **Output Table:** The sink partitioner is set to `KeyPartitioner` to ensure that data is written to Kafka based on the `account_id` key, and the sink parallelism is set to 25 to match the topic's partition count, ensuring even distribution of writes.

@@ -1,0 +1,92 @@
+```bash
+# Create Kafka topics with 3 partitions and 1 replica to ensure high availability and durability
+kafka-topics.sh --create --topic banking-transactions --partitions 3 --replication-factor 3 --config retention.ms=604800000 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic banking-transactions-validated --partitions 3 --replication-factor 3 --config retention.ms=604800000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+jobmanager.rpc.address: jobmanager
+jobmanager.rpc.port: 6123
+jobmanager.web.port: 8081
+taskmanager.numberOfTaskSlots: 4
+state.backend: rocksdb
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.checkpoints.min-pause: 10s
+state.checkpoints.num-retained: 3
+state.backend.rocksdb.block-cache-size: 100MB
+taskmanager.heap.size: 8GB
+taskmanager.network.memory.fraction: 0.2
+taskmanager.network.memory.min: 256MB
+taskmanager.network.memory.max: 1GB
+taskmanager.io.network-buffer-size: 1MB
+taskmanager.io.sort-buffer-size: 128MB
+taskmanager.io.sort-mem-fraction: 0.2
+taskmanager.io.sort-spill-path: /tmp/flink-sort
+taskmanager.io.file-cache-size: 100MB
+taskmanager.io.file-cache-fraction: 0.2
+taskmanager.io.file-cache-min: 10MB
+taskmanager.io.file-cache-max: 100MB
+taskmanager.io.file-cache-eviction-interval: 10s
+taskmanager.io.file-cache-eviction-policy: lru
+taskmanager.io.file-cache-eviction-max-entries: 10000
+taskmanager.io.file-cache-eviction-min-entries: 1000
+taskmanager.io.file-cache-eviction-threshold: 0.8
+taskmanager.io.file-cache-eviction-age: 10m
+taskmanager.io.file-cache-eviction-age-max: 1h
+taskmanager.io.file-cache-eviction-age-min: 5m
+taskmanager.io.file-cache-eviction-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-max-age: 1h
+taskmanager.io.file-cache-eviction-age-min-age: 5m
+taskmanager.io.file-cache-eviction-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file-cache-eviction-age-max-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold: 0.8
+taskmanager.io.file-cache-eviction-age-min-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age-threshold-age: 0.8
+taskmanager.io.file

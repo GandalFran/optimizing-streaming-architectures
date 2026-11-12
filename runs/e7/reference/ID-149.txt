@@ -1,0 +1,52 @@
+```bash
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions --partitions 21 --replication-factor 3 \
+  --config retention.ms=2592000000
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions-enriched --partitions 21 --replication-factor 3 \
+  --config retention.ms=2592000000
+```
+
+```yaml
+execution:
+  checkpointing:
+    dir: s3://flink-state/checkpoints
+    interval: 10 s
+    mode: AT_LEAST_ONCE
+parallelism:
+  default: 3
+taskmanager:
+  memory:
+    process:
+      size: 8g
+  numberOfTaskSlots: 4
+```
+
+```sql
+CREATE TABLE src (
+  `campaign_id` STRING,
+  `payload` STRING,
+  `event_time` TIMESTAMP(3)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'ad-impressions',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'ad-impressions-enriched-job',
+  'scan.startup.mode' = 'group-offsets',
+  'properties.auto.offset.reset' = 'earliest',
+  'format' = 'json'
+);
+
+CREATE TABLE snk (
+  `campaign_id` STRING,
+  `payload` STRING,
+  `event_time` TIMESTAMP(3),
+  `enriched_at` TIMESTAMP(3)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'ad-impressions-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'sink.delivery-guarantee' = 'at-least-once'
+);
+```
+
+21 partitions: 50,000 events/s x 2048 B = 102.40 MB/s at 5 MB/s per partition (and at least the parallelism); parallelism 3 at 20,000 events/s per source subtask; replication factor 3; retention 30 days. At-least-once: checkpointing enabled so the sink flushes on every checkpoint.

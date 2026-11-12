@@ -1,0 +1,148 @@
+ ```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 10
+  replicas: 3
+  ipc: disabled
+  retention: 604800s
+  cleanup.policy: "compact"
+  config:
+    retention.bytes: "524288000"
+    segment.bytes: "104857600"
+    min.cleanable.dirty.ratio: "0.01"
+    unclean.leader.election.enable: "false"
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 10
+  replicas: 3
+  ipc: disabled
+  retention: 604800s
+  cleanup.policy: "compact"
+  config:
+    retention.bytes: "524288000"
+    segment.bytes: "104857600"
+    min.cleanable.dirty.ratio: "0.01"
+    unclean.leader.election.enable: "false"
+```
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-sql-runner
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-sql-runner
+  template:
+    metadata:
+      labels:
+        app: flink-sql-runner
+    spec:
+      containers:
+      - name: flink-sql-runner
+        image: flink:1.20
+        resources:
+          requests:
+            cpu: "400m"
+            memory: "8Gi"
+          limits:
+            cpu: "800m"
+            memory: "16Gi"
+        env:
+        - name: FLINK_PROPERTIES
+          value: |
+            taskmanager.numberOfTaskSlots: 1
+            state.checkpoints.dir: s3://flink-state/checkpoints
+            parallelism.default: 1
+            execution.parallelism: 1
+        volumeMounts:
+        - name: flink-state
+          mountPath: /flink-state
+      volumes:
+      - name: flink-state
+        persistentVolumeClaim:
+          claimName: flink-state-pvc
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flink-sql-runner
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: flink-sql-runner-role
+rules:
+- apiGroups: [""]
+  resources: ["services", "endpoints"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flink-sql-runner-rolebinding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: flink-sql-runner
+  namespace: default
+roleRef:
+  kind: Role
+  name: flink-sql-runner-role
+  apiGroup: rbac.authorization.k8s.io
+```
+
+```sql
+CREATE TABLE banking_transactions (
+  account_id VARCHAR,
+  amount DOUBLE,
+  transaction_type STRING,
+  transaction_date TIMESTAMP,
+  -- other relevant columns
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'banking-transactions',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'banking_transactions_group',
+  'scan.startup.mode' = 'earliest-offset',
+  'format.schema.regex' = '$.account_id,$.amount,$.transaction_type,$.transaction_date'
+);
+
+CREATE TABLE banking_transactions_validated (
+  account_id VARCHAR,
+  amount DOUBLE,
+  transaction_type STRING,
+  transaction_date TIMESTAMP,
+  -- other relevant columns
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'banking-transactions-validated',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'banking_transactions_validated_group',
+  'scan.startup.mode' = 'earliest-offset',
+  'format.schema.regex' = '$.account_id,$.amount,$.transaction_type,$.transaction_date'
+);
+```
+
+The main values in the Kafka topics configuration are based on the given requirements. The number of partitions is set to 10, which allows for sustained input rate of 50,000 events per second with an average event size of 1024 bytes. The retention policy is set to 604800 seconds (7 days) to meet the retention requirement.
+
+The Flink deployment configuration ensures that only one task manager pod can process at most 20,000 events per second. The Flink SQL job is packaged as a local JAR and deployed using Kubernetes Operator for Flink. The `spec.flinkConfiguration` includes the necessary settings for Flink to use the Kafka topic as a data source and sink.
+
+The Flink SQL statements create two tables, one for the input Kafka topic and one for the output Kafka topic. The `format.schema.regex` property is used to parse the JSON input events. The `scan.startup.mode` property is set to `earliest-offset` to ensure that the Flink job starts processing the earliest available offset and maintains exactly-once semantics.

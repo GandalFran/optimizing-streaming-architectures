@@ -1,0 +1,136 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 86400000
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 86400000
+    cleanup.policy: delete
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+spec:
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  flinkConfiguration:
+    jobmanager.heap.size: 2g
+    taskmanager.heap.size: 2g
+    taskmanager.numberOfTaskSlots: 1
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.checkpoints.min-pending-checkpoints-to-retain: 2
+    state.checkpoints.num-retained: 5
+    state.backend.rocksdb.checkpoint.interval: 10s
+    state.backend.rocksdb.checkpoint.max-pending-checkpoints: 2
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+    state.backend.rocksdb.checkpoint.min-pending-checkpoints-to-retain: 1
+   

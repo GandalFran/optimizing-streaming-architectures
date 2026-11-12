@@ -1,0 +1,118 @@
+```bash
+# Create Kafka topics
+./bin/kafka-topics.sh --create --topic session-events --partitions 3 --replication-factor 3 --if-not-exists --bootstrap-server kafka:9092
+./bin/kafka-topics.sh --create --topic session-events-enriched --partitions 3 --replication-factor 3 --if-not-exists --bootstrap-server kafka:9092
+./bin/kafka-configs.sh --bootstrap-server kafka:9092 --entity-type topics --entity-name session-events --add-config retention.ms=604800000
+./bin/kafka-configs.sh --bootstrap-server kafka:9092 --entity-type topics --entity-name session-events-enriched --add-config retention.ms=604800000
+```
+
+```yaml
+# Flink configuration
+execution.checkpointing.interval: 1000
+execution.checkpointing.max-concurrent-checkpoints: 1
+execution.checkpointing.type: EXACTLY_ONCE
+execution.checkpointing.unaligned: false
+execution.checkpointing.unaligned-mode: DISABLED
+execution.checkpointing.min-pause: 0
+execution.checkpointing.max-concurrent-checkpoints: 1
+execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+execution.checkpointing.storage.type: filesystem
+execution.checkpointing.storage.fs.checkpointdir: s3://flink-state/checkpoints
+execution.checkpointing.storage.fs.max-parallelism: 1
+execution.checkpointing.storage.fs.cleanup-on-restore: false
+execution.checkpointing.storage.fs.max-in-flight-checkpoints: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-metadata-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage.fs.max-in-flight-checkpoint-meta-data-files: 1
+execution.checkpointing.storage

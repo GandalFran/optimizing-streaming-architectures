@@ -1,0 +1,52 @@
+Nov 10, 2026 8:07:58 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE session_events (
+>     user_id STRING,
+>     event_time TIMESTAMP(3),
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> )
+> WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'session-events',
+>     'properties.bootstrap-server' = 'kafka:9092',
+>     'format' = 'json',
+>     'scan.start-offset' = 'latest',
+>     'value.format.option' = 'skipMalformedRecords=true'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE session_events_enriched (
+>     user_id STRING,
+>     event_time TIMESTAMP(3),
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> )
+> WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'session-events-enriched',
+>     'properties.bootstrap-server' = 'kafka:9092',
+>     'format' = 'json',
+>     'sink.partitioner' = 'fixed',
+>     'sink.checkpointing-mode' = 'exactly-once',
+>     'sink.checkpointing-interval' = '5000',
+>     'sink.buffer-flush.max-rows' = '10000',
+>     'sink.buffer-flush.max-bytes' = '5242880', 
+>     'sink.buffer-flush.interval' = '2000',
+>     'sink.parallelism' = '3',
+>     'sink.delivery-guarantee' = 'at-least-once'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO session_events_enriched (`user_id`, `event_time`, `__sent_ms`, `__seq`)[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.table.api.ValidationException: One or more required options are missing.
+
+Missing required options are:
+
+properties.bootstrap.servers[0m
+
+Shutting down the session...
+done.

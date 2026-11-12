@@ -1,0 +1,447 @@
+{
+  "id": "ID-063",
+  "model": "ft-v1fix-s1",
+  "seed": 1,
+  "track": "native",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "high",
+    "event_bytes": 512,
+    "latency_slo_ms": 100,
+    "retention_days": 7,
+    "sink": "sensor-readings-clean",
+    "src": "sensor-readings",
+    "throughput_eps": 50000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8460",
+  "started": "2026-11-11T08:09:19+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "./bin/kafka-topics.sh --create --topic sensor-readings --partitions 4 --replication-factor 3 --config retention.ms=604800000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "kind": "binary-path",
+      "from": "./bin/kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "./bin/kafka-topics.sh --create --topic sensor-readings --partitions 4 --replication-factor 3 --config retention.ms=604800000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "./bin/kafka-topics.sh --create --topic sensor-readings-clean --partitions 4 --replication-factor 3 --config retention.ms=604800000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "kind": "binary-path",
+      "from": "./bin/kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "./bin/kafka-topics.sh --create --topic sensor-readings-clean --partitions 4 --replication-factor 3 --config retention.ms=604800000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.checkpoints.dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8460/e7-2593104/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.checkpoints.savepoint-dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8460/e7-2593104/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "job.state-backend.fs.checkpoint-dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8460/e7-2593104/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "job.state-backend.fs.dir",
+      "from": "s3://flink-state/state",
+      "to": "file:///tmp/chamoso-e7/8460/e7-2593104/objstore/flink-state/state",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "job.state-backend.fs.savepoint-dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8460/e7-2593104/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "sensor_readings",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "sensor_readings_clean",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    }
+  ],
+  "translations": [],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "sensor_readings",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "sensor_readings_clean",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "after the last column"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO sensor_readings_clean (`sensor_id`, `data`, `__sent_ms`, `__seq`)\nSELECT `sensor_id`,\n       `data`,\n       `__sent_ms`,\n       `__seq`\nFROM sensor_readings;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "./bin/kafka-topics.sh --create --topic sensor-readings --partitions 4 --replication-factor 3 --config retention.ms=604800000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic sensor-readings --partitions 4 --replication-factor 3 --config retention.ms=604800000 --config cleanup.policy=compact --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "./bin/kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic sensor-readings.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "./bin/kafka-topics.sh --create --topic sensor-readings-clean --partitions 4 --replication-factor 3 --config retention.ms=604800000 --config cleanup.policy=compact --bootstrap-server kafka:9092",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic sensor-readings-clean --partitions 4 --replication-factor 3 --config retention.ms=604800000 --config cleanup.policy=compact --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "./bin/kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic sensor-readings-clean.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.sql.parser.impl.TokenMgrError: Lexical error at line 12, column 63.  Encountered: \"\\\\\" (92), after : \"\"\nShutting down the session...\ndone.",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 100,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794380967.888,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.3,
+      "bootstrap": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "t": 1794380971.34,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "sensor-readings",
+        "sensor-readings-clean"
+      ],
+      "ok": true
+    },
+    {
+      "t": 1794380977.988,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 6.6,
+      "taskmanagers": 3
+    },
+    {
+      "t": 1794380980.265,
+      "rel": null,
+      "event": "submit_failed",
+      "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.sql.parser.impl.TokenMgrError: Lexical error at line 12, column 63.  Encountered: \"\\\\\" (92), after : \"\"\nShutting down the session...\ndone."
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-063",
+    "answer_file": null,
+    "answers": "runs/main/ft-v1fix-s1.sample.jsonl",
+    "model": "ft-v1fix-s1",
+    "seed": 1,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-063__ft-v1fix-s1__s1.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8460",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": [
+      "# sensor readings source table",
+      "# sensor readings sink table"
+    ]
+  },
+  "static_validator": {
+    "n_findings": 31,
+    "findings_L1_L3": [
+      "L2:unknown-key:jobmanager.numberOfTaskManagers is not a Flink 1.20 configuration option",
+      "L2:unknown-key:source.parallelism is not a Flink 1.20 configuration option",
+      "L2:misplaced-key:sink.parallelism is a SQL connector option; it has no effect in the cluster configuration",
+      "L2:unknown-key:state.checkpoints.type is not a Flink 1.20 configuration option",
+      "L2:unknown-key:state.checkpoints.min-pause-between-checkpoints.ms is not a Flink 1.20 configuration option",
+      "L2:unknown-key:state.checkpoints.max-pause-between-checkpoints.ms is not a Flink 1.20 configuration option",
+      "L2:unknown-key:state.checkpoints.savepoint-dir is not a Flink 1.20 configuration option",
+      "L2:unknown-key:job.name is not a Flink 1.20 configuration option",
+      "L2:unknown-key:job.result-partitioning.num-partitions is not a Flink 1.20 configuration option",
+      "L2:unknown-key:job.state-backend.type is not a Flink 1.20 configuration option",
+      "L2:unknown-key:job.state-backend.fs.checkpoint-dir is not a Flink 1.20 configuration option",
+      "L2:unknown-key:job.state-backend.fs.dir is not a Flink 1.20 configuration option",
+      "L2:unknown-key:job.state-backend.fs.savepoint-dir is not a Flink 1.20 configuration option",
+      "L2:unknown-key:network.host is not a Flink 1.20 configuration option",
+      "L2:unknown-key:network.port-range is not a Flink 1.20 configuration option",
+      "L2:unknown-key:network.rpc-port is not a Flink 1.20 configuration option",
+      "L2:unknown-key:network.rpc-threads is not a Flink 1.20 configuration option",
+      "L2:unknown-key:network.rpc-timeout is not a Flink 1.20 configuration option",
+      "L2:unknown-key:network.io-threads is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.memory.fraction is not a Flink 1.20 configuration option"
+    ]
+  },
+  "topology": {
+    "port_base": 12000,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        1
+      ]
+    },
+    "nodes": {
+      "k1": "32,33,144,145",
+      "k2": "34,35,146,147",
+      "k3": "36,37,148,149",
+      "f1": "38,39,40,41,150,151,152,153",
+      "f2": "42,43,44,45,154,155,156,157",
+      "f3": "46,47,48,49,158,159,160,161",
+      "j1": "50,162",
+      "ctl": "51,52,163,164",
+      "m1": "53,165"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12010,2@127.0.0.1:12011,3@127.0.0.1:12012",
+    "listeners=PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8460/e7-2593104/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "sensor-readings-clean": {
+      "partitions": 4,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "compact",
+        "retention.ms": "604800000"
+      }
+    },
+    "sensor-readings": {
+      "partitions": 4,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "compact",
+        "retention.ms": "604800000"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 12030,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 1,
+    "parallelism.default": 4,
+    "rest.address": "127.0.0.1",
+    "jobmanager.numberOfTaskManagers": 3,
+    "source.parallelism": 20000,
+    "sink.parallelism": 20000,
+    "state.checkpoints.dir": "file:///tmp/chamoso-e7/8460/e7-2593104/objstore/flink-state/checkpoints",
+    "state.checkpoints.type": "snapshot",
+    "state.checkpoints.num-retained": 3,
+    "state.checkpoints.min-pause-between-checkpoints.ms": 1000,
+    "state.checkpoints.max-pause-between-checkpoints.ms": 60000,
+    "state.checkpoints.savepoint-dir": "file:///tmp/chamoso-e7/8460/e7-2593104/objstore/flink-state/checkpoints",
+    "job.name": "SensorReadings",
+    "job.result-partitioning.num-partitions": 4,
+    "job.state-backend.type": "filesystem",
+    "job.state-backend.fs.checkpoint-dir": "file:///tmp/chamoso-e7/8460/e7-2593104/objstore/flink-state/checkpoints",
+    "job.state-backend.fs.dir": "file:///tmp/chamoso-e7/8460/e7-2593104/objstore/flink-state/state",
+    "job.state-backend.fs.savepoint-dir": "file:///tmp/chamoso-e7/8460/e7-2593104/objstore/flink-state/checkpoints",
+    "network.host": "0.0.0.0",
+    "network.port-range": "50000-59999",
+    "network.rpc-port": 6123,
+    "network.rpc-threads": 4,
+    "network.rpc-timeout": 30000,
+    "network.io-threads": 10,
+    "taskmanager.memory.process.size": "8GB",
+    "taskmanager.memory.fraction": 0.8,
+    "taskmanager.memory.network.max": "2GB",
+    "taskmanager.memory.heap.size": "4GB",
+    "taskmanager.memory.heap.size.min": "2GB",
+    "taskmanager.memory.off-heap.size": "2GB",
+    "taskmanager.memory.off-heap.size.min": "2GB",
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 12031,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8460/e7-2593104/flink-io"
+  },
+  "taskmanagers": {
+    "started": 3,
+    "registered": 3,
+    "slots_per_tm": 1
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 2.3,
+    "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.flink.sql.parser.impl.TokenMgrError: Lexical error at line 12, column 63.  Encountered: \"\\\\\" (92), after : \"\"\nShutting down the session...\ndone."
+  },
+  "failure_stage": "sql-submit",
+  "topics_after_run": {
+    "sensor-readings-clean": {
+      "partitions": 4,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "compact",
+        "retention.ms": "604800000"
+      }
+    },
+    "sensor-readings": {
+      "partitions": 4,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "cleanup.policy": "compact",
+        "retention.ms": "604800000"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-11T08:09:50+0100"
+}

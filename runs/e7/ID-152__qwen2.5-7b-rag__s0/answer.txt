@@ -1,0 +1,165 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    cleanup.policy: delete
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: payment-validation
+spec:
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  flinkConfiguration:
+    jobmanager.heap.size: 2g
+    taskmanager.heap.size: 2g
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.network.memory.fraction: 0.8
+    taskmanager.memory.process.fraction: 0.8
+    taskmanager.memory.network.fraction: 0.1
+    taskmanager.memory.flink.fraction: 0.1
+    taskmanager.memory.managed.fraction: 0.1
+    taskmanager.memory.heap.size: 2g
+    taskmanager.memory.off-heap.size: 2g
+    taskmanager.memory.off-heap.fraction: 0.1
+    taskmanager.memory.off-heap.heap.fraction: 0.1
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off-heap.managed.fraction: 0.1
+    taskmanager.memory.off-heap.flink.fraction: 0.1
+    taskmanager.memory.off-heap.managed.size: 2g
+    taskmanager.memory.off-heap.flink.size: 2g
+    taskmanager.memory.off

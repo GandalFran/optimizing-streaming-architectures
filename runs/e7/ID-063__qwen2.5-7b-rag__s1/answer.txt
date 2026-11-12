@@ -1,0 +1,89 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic sensor-readings --partitions 8 --replication-factor 3 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic sensor-readings-clean --partitions 8 --replication-factor 3 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+flink-conf.yaml:
+  jobmanager.heap.mb: 4096
+  taskmanager.heap.mb: 4096
+  taskmanager.numberOfTaskSlots: 4
+  checkpointing.mode: EXACTLY_ONCE
+  checkpointing.interval: 6000
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.backend: rocksdb
+  kafka.bootstrap.servers: kafka:9092
+  kafka.consumer.group.id: flink-consumer-group
+  kafka.producer.bootstrap.servers: kafka:9092
+  kafka.producer.transaction.timeout.ms: 60000
+  kafka.producer.flush.ms: 5000
+  kafka.producer.buffer.memory: 33554432
+  parallelism.default: 3
+```
+
+```sql
+-- Create Kafka tables
+CREATE TABLE sensor_readings (
+  sensor_id STRING,
+  event_time TIMESTAMP(3),
+  derived_field1 INT,
+  derived_field2 STRING,
+  -- other fields as necessary
+  PRIMARY KEY (sensor_id) NOT ENFORCED
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings',
+  'scan.startup.mode' = 'latest-offset',
+  'format' = 'json',
+  'value.format' = 'json',
+  'key.format' = 'json',
+  'value deserialization-schema' = 'org.apache.flink.formats.json.JsonDeserializationSchema',
+  'key deserialization-schema' = 'org.apache.flink.formats.json.JsonDeserializationSchema',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'flink-consumer-group',
+  'update-mode' = 'upsert'
+);
+
+CREATE TABLE sensor_readings_clean (
+  sensor_id STRING,
+  event_time TIMESTAMP(3),
+  derived_field1 INT,
+  derived_field2 STRING,
+  -- other fields as necessary
+  PRIMARY KEY (sensor_id) NOT ENFORCED
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings-clean',
+  'scan.startup.mode' = 'latest-offset',
+  'format' = 'json',
+  'value.format' = 'json',
+  'key.format' = 'json',
+  'value deserialization-schema' = 'org.apache.flink.formats.json.JsonDeserializationSchema',
+  'key deserialization-schema' = 'org.apache.flink.formats.json.JsonDeserializationSchema',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'flink-consumer-group',
+  'update-mode' = 'upsert'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topics Creation:**
+   - **Partitions (8):** Given the input rate of 50,000 events/s and the sizing assumption that one Kafka partition sustains at most 5 MB/s, 8 partitions can handle the load.
+   - **Replication Factor (3):** Ensures that data is replicated across multiple brokers to survive the loss of any single broker without data loss.
+
+2. **Flink Configuration:**
+   - **Checkpointing Mode (EXACTLY_ONCE):** Ensures exactly-once delivery guarantees.
+   - **Checkpoint Interval (6000 ms):** A reasonable interval for ensuring timely recovery while balancing latency.
+   - **State Backend (rocksdb):** Provides efficient storage for checkpoints.
+   - **Kafka Producer Settings:**
+     - **Transaction Timeout (60000 ms):** Ensures that transactions are committed within a reasonable time frame.
+     - **Flush Interval (5000 ms):** Ensures that data is periodically flushed to ensure durability.
+     - **Buffer Memory (33554432 bytes):** Aims to balance between memory usage and performance.
+
+3. **Flink SQL Tables:**
+   - **Partition Key (sensor_id):** Ensures that data is processed in a way that respects the key and can be efficiently partitioned.
+   - **Update Mode (upsert):** Ensures that only the latest record for each key is retained, aligning with the upsert semantics required for the pipeline.
+   - **Deserialization Schemas:** JSON deserialization is used for both key and value to handle JSON events.

@@ -1,0 +1,156 @@
+# 1. Strimzi KafkaTopic resources for all topics
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 86400000
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions-clean
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 86400000
+
+# 2. FlinkDeployment resource
+
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+  namespace: default
+spec:
+  flinkVersion: 1.20
+  job:
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    parallelism: 3
+    savepoint:
+      path: s3://flink-state/checkpoints/sql-runner-savepoint
+      stateBackend: s3
+  taskManager:
+    resources:
+      requests:
+        memory: 8Gi
+        cpu: 4
+    slots:
+      num: 3
+  jobManager:
+    resources:
+      requests:
+        memory: 8Gi
+        cpu: 4
+    slots:
+      num: 1
+  flinkConfiguration:
+    jobmanager.rpc.address: jobmanager
+    taskmanager.network.netty.buffer-pool-size: 8192
+    jobmanager.web.port: 8081
+    taskmanager.memory.process.size: 8Gi
+    taskmanager.memory.network.size: 1Gi
+    taskmanager.memory.flink.size: 8Gi
+    parallelism.default: 3
+    checkpointing.mode: exactly-once
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.backend: s3
+    state.backend.s3.checkpoints.location: s3://flink-state/checkpoints
+    state.backend.s3.partitions: 4
+    state.backend.s3.part-size: 104857600
+    state.backend.s3.max-size: 107374182400
+    state.backend.s3.request.timeout: 120000
+    state.backend.s3.retry.interval: 5000
+    state.backend.s3.num-retries: 5
+    state.backend.s3.batch-size: 100
+    state.backend.s3.batch-interval: 100
+    state.backend.s3.batch-flush-interval: 100
+    state.backend.s3.batch-flush-threshold: 100
+    state.backend.s3.batch-flush-threshold-mb: 100
+    state.backend.s3.batch-flush-threshold-records: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 100
+    state.backend.s3.batch-flush-threshold-bytes: 100
+    state.backend.s3.batch-flush-threshold-millis: 1

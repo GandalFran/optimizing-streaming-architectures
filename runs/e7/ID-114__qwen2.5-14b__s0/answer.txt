@@ -1,0 +1,115 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+  namespace: my-namespace
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+  namespace: my-namespace
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-sql-job
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    state.checkpoints.num-retained: "10"
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    s3.access-key: my-access-key
+    s3.secret-key: my-secret-key
+    s3.endpoint: s3.amazonaws.com
+    s3.path-style-access: "true"
+    taskmanager.numberOfTaskSlots: "2"
+    parallelism.default: "20"
+    execution.checkpointing.interval: "60000"
+    execution.checkpointing.mode: "EXACTLY_ONCE"
+    execution.checkpointing.min-pause-between-checkpoints: "10000"
+    execution.checkpointing.timeout: "300000"
+    execution.state.backend.rocksdb.flush-threads: "4"
+  job:
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    entryClass: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
+  serviceAccount: flink-service-account
+  podTemplate:
+    spec:
+      containers:
+        - name: flink-main-container
+          resources:
+            limits:
+              cpu: "4"
+              memory: "8Gi"
+            requests:
+              cpu: "2"
+              memory: "4Gi"
+      restartPolicy: Never
+  strategy:
+    type: kubernetes-session
+```
+
+```sql
+CREATE TABLE card_transactions (
+    card_id STRING,
+    transaction_time TIMESTAMP(3),
+    amount DECIMAL(10, 2),
+    -- other fields
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'card-transactions',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'properties.group.id' = 'card-transactions-group'
+);
+
+CREATE TABLE card_transactions_enriched (
+    card_id STRING,
+    transaction_time TIMESTAMP(3),
+    amount DECIMAL(10, 2),
+    -- other fields
+    derived_field1 STRING,
+    derived_field2 INT
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'card-transactions-enriched',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'org.apache.flink.connector.kafka.sink.KeyPartitioner',
+    'sink.partitioner.key-extractor' = 'org.apache.flink.connector.kafka.sink.KeySelector',
+    'sink.parallelism' = '20',
+    'sink.max-parallelism' = '20'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topic Partitions and Replicas**: 
+   - **Partitions**: 10 partitions are chosen to handle the input rate of 5,000 events/s (5 MB/s per partition). This ensures that the load is distributed across multiple partitions.
+   - **Replicas**: 3 replicas provide fault tolerance and high availability.
+
+2. **Flink Configuration**:
+   - **TaskManager Slots**: Each TaskManager has 2 slots to allow for parallel execution of the Flink job.
+   - **Parallelism**: Default parallelism is set to 20 to match the number of partitions in Kafka, ensuring that each partition is processed by a separate subtask.
+   - **Checkpointing**: Checkpointing is configured for exactly-once semantics with a 1-minute interval to ensure fault tolerance and low latency.
+   - **Resources**: TaskManager resources are set to 4 CPU and 8 GiB of memory, with requests set to half of the limits to allow for efficient scaling.
+
+3. **SQL Table Definitions**:
+   - **Kafka Source Table**: Configured to read from the `card-transactions` topic with JSON format and the latest offset startup mode.
+   - **Kafka Sink Table**: Configured to write to the `card-transactions-enriched` topic with JSON format, using a key partitioner to ensure exactly-once delivery. The parallelism is set to 20 to match the source table's parallelism.

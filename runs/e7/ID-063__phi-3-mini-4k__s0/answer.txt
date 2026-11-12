@@ -1,0 +1,86 @@
+ ```bash
+# Create Kafka topics
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic sensor-readings --partitions 3 --replication-factor 3
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic sensor-readings-clean --partitions 3 --replication-factor 3
+```
+
+```yaml
+# Flink configuration (config.yaml)
+
+# Kafka consumer configuration
+kafka-consumer-config:
+  bootstrap-servers: kafka:9092
+  group-id: sensor-reading-group
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  auto-offset-reset: earliest
+  enable.auto.commit: false
+  session.timeout.ms: 30000
+  max.poll.interval.ms: 30000
+  max.poll.records: 100
+
+# Flink job configuration
+flink-job:
+  execution-mode: standalone
+  parallelism: 3
+  taskmanager.numberOfTaskSlots: 4
+  taskmanager.heap.mb: 8
+  checkpoint.interval: 1000
+  state.backend: s3://flink-state/checkpoints
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.save.checkpoints.interval: 10000
+  state.save.checkpoints.s3.endpoint: http://localhost:9000
+  state.save.checkpoints.s3.access.key: my-access-key
+  state.save.checkpoints.s3.secret.key: my-secret-key
+  state.save.checkpoints.s3.region: us-west-2
+  state.save.checkpoints.s3.bucket: flink-state
+  state.save.checkpoints.s3.path: checkpoints
+  state.save.checkpoints.s3.prefix: flink-checkpoints
+  state.save.checkpoints.s3.use.url: true
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.save.checkpoints.s3.endpoint: http://localhost:9000
+  state.save.checkpoints.s3.access.key: my-access-key
+  state.save.checkpoints.s3.secret.key: my-secret-key
+  state.save.checkpoints.s3.region: us-west-2
+  state.save.checkpoints.s3.bucket: flink-state
+  state.save.checkpoints.s3.path: checkpoints
+  state.save.checkpoints.s3.prefix: flink-checkpoints
+  state.save.checkpoints.s3.use.url: true
+```
+
+```sql
+-- Flink SQL table creation for sensor-readings topic
+CREATE TABLE sensor_readings (
+  sensor_id STRING,
+  event_time TIMESTAMP(3),
+  data STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'sensor-reading-group',
+  'properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'properties.value.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'format' = 'json'
+);
+
+-- Flink SQL table creation for sensor-readings-clean topic
+CREATE TABLE sensor_readings_clean (
+  sensor_id STRING,
+  event_time TIMESTAMP(3),
+  data STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings-clean',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'sensor-reading-group',
+  'properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'properties.value.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'format' = 'json'
+);
+```
+
+Justification:
+- The Kafka topics are created with 3 partitions each, ensuring that the system can handle the input rate of 50,000 events per second. The replication factor of 3 ensures durability and fault tolerance.
+- The Flink configuration is set up for a standalone session cluster with 3 task managers, each with 4 CPU cores and 8 GB of memory. The checkpointing interval is set to 1 second to meet the end-to-end latency requirement. The state backend is configured to use S3 for durable checkpoints.
+- The Flink SQL table creation statements define the schema for the input and output Kafka topics. The JSON format is used for both topics. The `event_time` field is included to support event time processing if needed in the future.

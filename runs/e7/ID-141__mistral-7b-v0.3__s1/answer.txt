@@ -1,0 +1,82 @@
+ 1. Here's the `kafka-topics.sh` commands for creating the Kafka topics:
+
+```bash
+# Create app-logs topic with 10 partitions and replication factor 3
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --topic app-logs
+
+# Create app-logs-parsed topic with 10 partitions and replication factor 3
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --topic app-logs-parsed
+```
+
+Both topics have the same number of partitions and replication factor to ensure parallel processing and data durability.
+
+2. Here's the Flink configuration (`config.yaml` keys):
+
+```yaml
+job.type: Streaming
+parallelism.default: 4
+taskmanager.numberOfTaskSlots: 4
+jobmanager.rpc.address: localhost
+rest.port: 8081
+checkpointing.mode: EXACTLY_ONCE
+checkpointing.failure-tolerance.max-failure-ratio: 0.01
+checkpointing.failure-tolerance.max-compacted-checkpoints: 1
+checkpointing.min-pause-between-checkpoints: 5000
+state.backend: filesystem
+state.backends.filesystem.checkpoint.fs.type: s3a
+state.backends.filesystem.checkpoint.fs.s3a.endpoint: s3.amazonaws.com
+state.backends.filesystem.checkpoint.fs.s3a.access-key: your_access_key
+state.backends.filesystem.checkpoint.fs.s3a.secret-key: your_secret_key
+state.backends.filesystem.checkpoint.fs.s3a.path: s3://flink-state/checkpoints
+```
+
+The Flink configuration sets up a streaming job with the required parallelism, checkpointing mode, and state backend for exactly-once processing.
+
+3. Here's the Flink SQL `CREATE TABLE` statements for every Kafka source and sink table:
+
+```sql
+-- Create Kafka source table for app-logs
+CREATE TABLE app_logs (
+    service VARCHAR,
+    -- Add other event fields here
+    TIMESTAMP_TYPE AS PROCTIME(),
+    WATERMARK FOR TIMESTAMP_TYPE AS PROCTIME() - INTERVAL '10 seconds'
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'app-logs',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'app-logs-consumer-group',
+    'format' = 'json'
+);
+
+-- Create a temporary table for malformed event filtering
+CREATE TEMPORARY TABLE malformed_events (
+    -- Add event fields here
+);
+
+-- Filter out malformed events and enrich with derived fields
+CREATE TABLE valid_events AS
+SELECT
+    service,
+    -- Add derived fields here
+    TIMESTAMP_TYPE AS event_time
+FROM
+    app_logs
+WHERE
+    IS_VALID();
+
+-- Create Kafka sink table for app-logs-parsed
+CREATE TABLE app_logs_parsed (
+    service VARCHAR,
+    -- Add event fields here
+    event_time TIMESTAMP(3)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'app-logs-parsed',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.key.serializer' = 'org.apache.kafka.common.serialization.StringSerializer',
+    'properties.value.serializer' = 'org.apache.kafka.common.serialization.KafkaJsonSerializer'
+);
+```
+
+The Flink SQL code reads events from the `app-logs` topic, filters out malformed events, enriches with derived fields, and writes valid events to the `app-logs-parsed` topic. The malformed events are stored temporarily for further analysis or error handling if needed.

@@ -1,0 +1,44 @@
+```bash
+# Create the Kafka topics
+kafka-topics.sh --create --topic banking-transactions --partitions 3 --replication-factor 3 --config retention.ms=604800000 --if-not-exists --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic banking-transactions-validated --partitions 3 --replication-factor 3 --config retention.ms=604800000 --if-not-exists --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+flink.jobmanager.rpc.address: jobmanager
+flink.resourcemanager.address: resourcemanager
+flink.resourcemanager.cluster-id: my-cluster
+flink.resourcemanager.client.timeout: 00:01:00
+flink.resourcemanager.exited-taskmanager-wait-timeout: 00:00:10
+flink.resourcemanager.jvm-exit-on-failure: true
+flink.resourcemanager.restart-strategy: exponential-delay
+flink.resourcemanager.restart-strategy.attempts: 3
+flink.resourcemanager.restart-strategy.delay: 00:00:05
+flink.runtime.state.checkpoint-storage: s3://flink-state/checkpoints
+flink.runtime.state.checkpointing.enabled: true
+flink.runtime.state.checkpointing.interval: 00:00:30
+flink.runtime.state.checkpointing.min-pause: 00:00:05
+flink.runtime.state.checkpointing.min-pause-percentage: 5
+flink.runtime.state.checkpointing.min-pause-percentage-per-task: 20
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing: 30
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing: 40
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 50
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 60
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 70
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 80
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 90
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 100
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 110
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 120
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 130
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 140
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 150
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 160
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 170
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 180
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 190
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 200
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 210
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing: 220
+flink.runtime.state.checkpointing.min-pause-percentage-per-task-for-concurrent-checkpointing-for-concurrent-checkpointing-for-concurrent-checkpointing-for

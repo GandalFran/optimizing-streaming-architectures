@@ -1,0 +1,107 @@
+### Step 1: Create Kafka topics
+
+```bash
+# Create topic banking-transactions with 4 partitions and 1 replica
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions --partitions 4 --replication-factor 3
+
+# Create topic banking-transactions-validated with 4 partitions and 1 replica
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions-validated --partitions 4 --replication-factor 3
+
+# Describe topics to verify the configuration
+kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic banking-transactions
+kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic banking-transactions-validated
+```
+
+### Step 2: Flink configuration
+
+```yaml
+# config.yaml
+application:
+  name: banking-transactions-validator
+
+kafka:
+  bootstrap.servers: kafka:9092
+  transactional.id: banking-transactions-validator
+
+flink:
+  checkpointing:
+    interval: 10s
+    storage: s3://flink-state/checkpoints
+  taskmanager:
+    num.task.slots: 4
+    taskmanager.memory.flink.streams.max: 6g
+    taskmanager.memory.flink.streams.min: 2g
+    taskmanager.memory.jvm-metaspace.size: 512m
+    taskmanager.memory.jvm-heap.size: 4g
+
+kafka:
+  producer:
+    retries: 3
+    acks: all
+    linger.ms: 50
+    batch.size: 10000
+    buffer.memory: 10000000
+    compression.type: gzip
+```
+
+### Step 3: Flink SQL table definitions
+
+```sql
+-- Create source table for banking transactions
+CREATE TABLE banking_transactions (
+  account_id STRING,
+  transaction_id STRING,
+  amount DECIMAL(10, 2),
+  timestamp TIMESTAMP(3)
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'banking-transactions',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'banking-transactions-group',
+  'scan.startup.mode' = 'latest-offset',
+  'properties.sasl.mechanism' = 'PLAIN',
+  'properties.security.protocol.map' = 'PLAIN:SSL',
+  'properties.ssl.truststore.location' = '/path/to/truststore.jks',
+  'properties.ssl.truststore.password' = 'truststore-password',
+  'properties.ssl.keystore.location' = '/path/to/keystore.jks',
+  'properties.ssl.keystore.password' = 'keystore-password',
+  'properties.ssl.key.password' = 'key-password'
+);
+
+-- Create sink table for validated transactions
+CREATE TABLE banking_transactions_validated (
+  account_id STRING,
+  transaction_id STRING,
+  amount DECIMAL(10, 2),
+  timestamp TIMESTAMP(3)
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'banking-transactions-validated',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'banking-transactions-group',
+  'properties.sasl.mechanism' = 'PLAIN',
+  'properties.security.protocol.map' = 'PLAIN:SSL',
+  'properties.ssl.truststore.location' = '/path/to/truststore.jks',
+  'properties.ssl.truststore.password' = 'truststore-password',
+  'properties.ssl.keystore.location' = '/path/to/keystore.jks',
+  'properties.ssl.keystore.password' = 'keystore-password',
+  'properties.ssl.key.password' = 'key-password'
+);
+
+-- Validate and enrich transactions
+INSERT INTO banking_transactions_validated
+SELECT
+  account_id,
+  transaction_id,
+  amount,
+  timestamp
+FROM banking_transactions;
+```
+
+### Justification of main values:
+
+- **Kafka topic configuration**: We create two topics with 4 partitions each, which can handle the input rate of 50,000 events/s. The replication factor of 3 ensures durability in case of a single broker failure.
+- **Flink configuration**: We set the checkpointing interval to 10 seconds to balance between latency and durability. We allocate 6 GB of memory for Flink's stream processing and 4 GB for the JVM heap. We also configure the Kafka producer to use GZIP compression and set the batch size to 10,000 events.
+- **Flink SQL table definitions**: We create two tables, one for the source and one for the sink, with the same schema. We configure the source table to read from the `banking-transactions` topic and the sink table to write to the `banking-transactions-validated` topic. We also configure the security settings for Kafka authentication.

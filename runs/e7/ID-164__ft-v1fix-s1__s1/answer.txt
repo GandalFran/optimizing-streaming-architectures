@@ -1,0 +1,163 @@
+# 1. Strimzi KafkaTopic resources for all topics
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days
+
+# 2. FlinkDeployment resource
+
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    jobmanager.memory.process.size: 4g
+    taskmanager.memory.process.size: 4g
+    taskmanager.memory.network.size: 1g
+    parallelism.default: 3
+    state.savepoints.enable: true
+    state.savepoints.interval: 60s
+    state.savepoints.latest.path: s3://flink-state/checkpoints/sql-runner/
+    state.checkpoints.directory: s3://flink-state/checkpoints/sql-runner/checkpoints/
+    state.backend: rocksdb
+    state.backend.rocksdb.blocksize: 32768
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.write-buffer-size: 1g
+    state.backend.rocksdb.level0-file-num-compaction-trigger: 4
+    state.backend.rocksdb.level0-slowdown-writes-trigger: 2000
+    state.backend.rocksdb.level0-stop-writes-trigger: 4000
+    state.backend.rocksdb.level0-target-file-num-multiplier: 1.0
+    state.backend.rocksdb.level0-max-compaction-level: 0
+    state.backend.rocksdb.level0-min-compaction-level: 0
+    state.backend.rocksdb.max-sst-file-size: 1g
+    state.backend.rocksdb.max-background-jobs: 3
+    state.backend.rocksdb.max-background-compactions: 3
+    state.backend.rocksdb.max-background-flushes: 3
+    state.backend.rocksdb.max-open-files: 1000
+    state.backend.rocksdb.write-buffer-size: 1g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-size: 32768
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block-cache-size: 2g
+    state.backend.rocksdb.block

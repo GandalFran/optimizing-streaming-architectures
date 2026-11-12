@@ -1,0 +1,104 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+  namespace: default
+spec:
+  partitions: 16
+  replicationFactor: 3
+  config:
+    retention.ms: 2592000000 # 30 days retention
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+  namespace: default
+spec:
+  partitions: 16
+  replicationFactor: 3
+  config:
+    retention.ms: 2592000000 # 30 days retention
+```
+
+```yaml
+apiVersion: flinkoperator.k8s.io/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-job
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.backend: rocksdb
+    s3.access-key: <your-access-key>
+    s3.secret-key: <your-secret-key>
+    s3.endpoint: <your-s3-endpoint>
+    s3.path.style.access: true
+    parallelism.default: "2"
+    taskmanager.numberOfTaskSlots: "2"
+    execution.checkpointing.interval: "5s"
+    execution.checkpointing.mode: EXACTLY_ONCE
+    execution.checkpointing.minpause-between-checkpoints: "1s"
+    execution.state.backend.incremental: "false"
+    execution.checkpointing.max.concurrent.checkpoints: "1"
+  serviceAccount: flink
+  job:
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    parallelism: 2
+    savepointOnStop: delete
+```
+
+```sql
+CREATE TABLE card_transactions (
+    card_id STRING,
+    transaction_time TIMESTAMP(3),
+    amount DECIMAL(10, 2),
+    location STRING,
+    -- other fields...
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'card-transactions',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'properties.group.id' = 'card-transactions-group',
+    'json.timestamp.format' = 'yyyy-MM-dd HH:mm:ss.SSS'
+);
+
+CREATE TABLE card_transactions_enriched (
+    card_id STRING,
+    transaction_time TIMESTAMP(3),
+    amount DECIMAL(10, 2),
+    location STRING,
+    -- derived fields...
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'card-transactions-enriched',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'round-robin'
+);
+```
+
+### Justification of Values:
+1. **Kafka Topic Partitions:**
+   - **16 Partitions for `card-transactions` and `card-transactions-enriched`:** Given the input rate of 5,000 events/s and each event size of 2048 bytes, the total throughput is 10 MB/s. Since one partition can sustain up to 5 MB/s, 16 partitions are chosen to distribute the load evenly and achieve the desired throughput. Replication factor is set to 3 for redundancy and fault tolerance.
+
+2. **Flink Configuration:**
+   - **Parallelism:**
+     - `parallelism.default: 2`: The job will run with 2 parallel instances, each having 2 task slots. This allows for a total of 4 task slots (2 * 2), ensuring the job can handle the throughput while staying within the resource constraints.
+   - **Checkpointing:**
+     - `execution.checkpointing.interval: "5s"`: Checkpoints every 5 seconds to ensure quick recovery and minimize data loss in case of failure.
+     - `execution.checkpointing.mode: EXACTLY_ONCE`: Ensures exactly-once processing semantics, which is critical for the delivery guarantee.
+   - **Task Manager Resources:**
+     - `taskmanager.numberOfTaskSlots: 2`: Each task manager runs 2 slots, allowing for efficient resource utilization and scaling of the job.
+   - **S3 Configuration:**
+     - Provided necessary S3 configurations for checkpoint storage, ensuring durability and availability.
+
+3. **Flink SQL Table Definitions:**
+   - **Input Table (`card_transactions`):**
+     - Defined with a JSON format and configured to start from the latest offset to ensure no data is missed.
+   - **Output Table (`card_transactions_enriched`):**
+     - Uses a JSON format and configured with a round-robin partitioner to ensure balanced writes to Kafka topic partitions.

@@ -1,0 +1,142 @@
+ ```yaml
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+  namespace: default
+  labels:
+    app: card-transactions
+    type: source
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention: 30d
+  cleanupPolicy: "compact"
+
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+  namespace: default
+  labels:
+    app: card-transactions-enriched
+    type: sink
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention: 30d
+  cleanupPolicy: "compact"
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: card-transactions-flink-deployment
+  namespace: default
+spec:
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 3
+    taskmanager.memory.process.size: "8192"
+    taskmanager.heap.size: "4096"
+    taskmanager.numberOfTaskSlots: 3
+    state.backend: s3://flink-state/checkpoints
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.savepoints.dir: s3://flink-state/checkpoints
+    state.checkpoints.retention: 30d
+    state.savepoints.retention: 30d
+    kafka.bootstrapServers: my-cluster-kafka-bootstrap:9092
+    kafka.topic: card-transactions
+    kafka.topic: card-transactions-enriched
+    kafka.producer.retries: 3
+    kafka.producer.retry.backoff.ms: 1000
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 16384
+    kafka.producer.linger.ms: 100
+    kafka.producer.batch.size: 

@@ -1,0 +1,137 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 86400000
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 86400000
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: flink-sql-job
+spec:
+  jobManager:
+    resources:
+      requests:
+        memory: 2Gi
+        cpu: 1
+      limits:
+        memory: 2Gi
+        cpu: 1
+    serviceAccountName: flink-sa
+  taskManager:
+    resources:
+      requests:
+        memory: 4Gi
+        cpu: 2
+      limits:
+        memory: 8Gi
+        cpu: 4
+    replicas: 3
+    serviceAccountName: flink-sa
+  flinkConfiguration:
+    jobmanager.heap.size: 2g
+    taskmanager.heap.size: 4g
+    taskmanager.numberOfTaskSlots: 3
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.backend: rocksdb
+    state.checkpoints.min-pause: 10s
+    state.checkpoints.num-retained: 5
+    state.checkpoints.async-enabled: true
+    state.checkpoints.async.io-throttle.max-bytes-per-second: 10000000
+    parallelism.default: 3
+    checkpointing.mode: exactly-once
+    checkpointing.interval: 6000
+    checkpointing.externalized-checkpoints.dir: s3://flink-state/checkpoints
+    metrics.reporter.kafka.bootstrap.servers: my-cluster-kafka-bootstrap:9092
+    metrics.reporter.kafka.topic: flink-metrics
+    metrics.reporter.kafka.partitioner.class: org.apache.kafka.clients.producer.internals.DefaultPartitioner
+    metrics.reporter.kafka.flush.interval.ms: 10000
+    metrics.reporter.kafka.buffer.size: 10000
+    metrics.reporter.kafka.batch.size: 10000
+    metrics.reporter.kafka.attempts: 3
+    metrics.reporter.kafka.retry.backoff.ms: 5000
+    metrics.reporter.kafka.connection.timeout.ms: 10000
+    metrics.reporter.kafka.socket.timeout.ms: 10000
+    metrics.reporter.kafka.socket.buffer.size: 10000
+    metrics.reporter.kafka.ack.connect.timeout.ms: 10000
+    metrics.reporter.kafka.ack.request.timeout.ms: 10000
+    metrics.reporter.kafka.ack.connection.timeout.ms: 10000
+    metrics.reporter.kafka.ack.socket.timeout.ms: 10000
+    metrics.reporter.kafka.ack.socket.buffer.size: 10000
+    metrics.reporter.kafka.ack.connection.max.idle.ms: 10000
+    metrics.reporter.kafka.ack.connection.request.timeout.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.timeout.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.wait.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retries: 10
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.attempts: 10
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.factor: 1.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.jitter-factor: 0.5
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.max.ms: 10000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.backoff.min.ms: 1000
+    metrics.reporter.kafka.ack.connection.idle.max.retry.back

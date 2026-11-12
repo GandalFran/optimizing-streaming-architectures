@@ -1,0 +1,105 @@
+Nov 10, 2026 10:54:32 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE sensor_readings (
+>     `sensor_id` STRING,
+>     `reading` STRING,
+>     `event_time` TIMESTAMP(3),
+>     `PROCTIME` AS PROCTIME(),
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector' = 'kafka',
+>   'topic' = 'sensor-readings',
+>   'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>   'key.format' = 'json',
+>   'value.format' = 'json',
+>   'key.json.ignore-parse-errors' = 'true',
+>   'value.json.ignore-parse-errors' = 'false',
+>   'json.timestamp-format.standard' = 'ISO-8601'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE sensor_readings_clean (
+>     `sensor_id` STRING,
+>     `reading` STRING,
+>     `event_time` TIMESTAMP(3),
+>     `derived_field1` STRING,
+>     `derived_field2` STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector' = 'kafka',
+>   'topic' = 'sensor-readings-clean',
+>   'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>   'key.format' = 'json',
+>   'value.format' = 'json',
+>   'key.json.ignore-parse-errors' = 'true',
+>   'value.json.ignore-parse-errors' = 'false',
+>   'json.timestamp-format.standard' = 'ISO-8601',
+>   'upsert-kafka-partitioner' = 'fixed'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO sensor_readings_clean (`sensor_id`, `reading`, `event_time`, `derived_field1`, `derived_field2`, `__sent_ms`, `__seq`)
+> SELECT `sensor_id`,
+>        `reading`,
+>        `event_time`,
+>        CAST(NULL AS STRING),
+>        CAST(NULL AS STRING)[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.table.api.ValidationException: Unsupported options found for 'kafka'.
+
+Unsupported options:
+
+json.timestamp-format.standard
+
+Supported options:
+
+connector
+format
+key.fields
+key.fields-prefix
+key.format
+key.json.encode.decimal-as-plain-number
+key.json.encode.ignore-null-fields
+key.json.fail-on-missing-field
+key.json.ignore-parse-errors
+key.json.map-null-key.literal
+key.json.map-null-key.mode
+key.json.timestamp-format.standard
+properties.bootstrap.servers
+properties.group.id
+property-version
+scan.bounded.mode
+scan.bounded.specific-offsets
+scan.bounded.timestamp-millis
+scan.startup.mode
+scan.startup.specific-offsets
+scan.startup.timestamp-millis
+scan.topic-partition-discovery.interval
+scan.watermark.alignment.group
+scan.watermark.alignment.max-drift
+scan.watermark.alignment.update-interval
+scan.watermark.emit.strategy
+scan.watermark.idle-timeout
+sink.delivery-guarantee
+sink.parallelism
+sink.partitioner
+sink.semantic
+sink.transactional-id-prefix
+topic
+topic-pattern
+value.fields-include
+value.format
+value.json.encode.decimal-as-plain-number
+value.json.encode.ignore-null-fields
+value.json.fail-on-missing-field
+value.json.ignore-parse-errors
+value.json.map-null-key.literal
+value.json.map-null-key.mode
+value.json.timestamp-format.standard[0m
+
+Shutting down the session...
+done.

@@ -1,0 +1,25 @@
+env.java.opts.all: --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+jobmanager.bind-host: 127.0.0.1
+jobmanager.rpc.address: 127.0.0.1
+jobmanager.rpc.port: 12030
+jobmanager.memory.process.size: 1600m
+jobmanager.execution.failover-strategy: region
+taskmanager.bind-host: 127.0.0.1
+taskmanager.host: 127.0.0.1
+taskmanager.numberOfTaskSlots: 1
+taskmanager.memory.process.size: 1728m
+parallelism.default: 1
+rest.address: 127.0.0.1
+config.parallelism.default: 5
+config.taskmanager.numberOfTaskSlots: 4
+config.state.checkpoints.dir: file:///tmp/chamoso-e7/8383/e7-1380865/objstore/flink-state/checkpoints
+config.state.backend: rocksdb
+config.state.checkpointing.interval: 60000
+config.state.checkpointing.mode: exactly-once
+config.state.backend.rocksdb.checkpoint.compress: true
+config.metrics.reporter.kafka.class: org.apache.flink.metrics.kafka.KafkaReporter
+config.metrics.reporter.kafka.metrics.topic: flink-metrics
+config.metrics.reporter.kafka.bootstrap.servers: kafka:9092
+rest.bind-address: 127.0.0.1
+rest.port: 12031
+io.tmp.dirs: /tmp/chamoso-e7/8383/e7-1380865/flink-io

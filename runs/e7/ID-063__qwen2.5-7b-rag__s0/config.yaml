@@ -1,0 +1,31 @@
+env.java.opts.all: --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+jobmanager.bind-host: 127.0.0.1
+jobmanager.rpc.address: 127.0.0.1
+jobmanager.rpc.port: 12530
+jobmanager.memory.process.size: 1600m
+jobmanager.execution.failover-strategy: region
+taskmanager.bind-host: 127.0.0.1
+taskmanager.host: 127.0.0.1
+taskmanager.numberOfTaskSlots: 1
+taskmanager.memory.process.size: 1728m
+parallelism.default: 1
+rest.address: 127.0.0.1
+flink.parallelism.default: 3
+flink.checkpointing.mode: EXACTLY_ONCE
+flink.checkpointing.min-pause-between-checkpoints: 00:00:05
+flink.checkpointing.max-concurrent-checkpoints: 1
+flink.checkpointing.min-pause-between-batch-checkpoints: 00:00:05
+flink.checkpointing.externalized-checkpoints: file:///tmp/chamoso-e7/8381/e7-1149874/objstore/flink-state/checkpoints
+flink.taskmanager.memory: 8 GB
+flink.taskmanager.slots: 4
+flink.jobmanager.web-service.rest-backend: org.apache.flink.runtime.rest.RestBackendService
+flink.jobmanager.taskmanager-parallelism: 3
+flink.state.backend: rocksdb
+flink.state.backend.options.rocksdb.block-cache-size: 1000000000
+flink.state.backend.options.rocksdb.write-buffer-size: 1000000000
+flink.metrics.backend: prometheus
+flink.metrics.backend.options.prometheus.path: /tmp/chamoso-e7/8381/e7-1149874/localfs/metrics
+flink.metrics.backend.options.prometheus.port: 8088
+rest.bind-address: 127.0.0.1
+rest.port: 12531
+io.tmp.dirs: /tmp/chamoso-e7/8381/e7-1149874/flink-io

@@ -1,0 +1,76 @@
+ 1. Here's the `kafka-topics.sh` commands for creating the Kafka topics:
+
+```bash
+# Create sensor-readings topic with 10 partitions, replication factor 3, and configured to sustain 5 MB/s of produce traffic.
+bin/kafka-topics.sh --create --topic sensor-readings --partitions 10 --replication-factor 3 --config compression.type=lz4 --config retention.ms=604800000 --bootstrap-server kafka:9092
+
+# Create sensor-readings-clean topic with the same configuration as sensor-readings.
+bin/kafka-topics.sh --create --topic sensor-readings-clean --partitions 10 --replication-factor 3 --config compression.type=lz4 --config retention.ms=604800000 --bootstrap-server kafka:9092
+```
+
+The `--partitions` parameter is set to 10 to ensure that each Flink source subtask can consume from one partition, and the replication factor of 3 ensures durability. The `--config retention.ms` is set to 604800000 (7 days in milliseconds) for data retention.
+
+2. Here's the Flink configuration in `config.yaml`:
+
+```yaml
+job.type: Streaming
+parallelism.default: 3
+taskmanager.numberOfTaskSlots: 4
+parallelism.checkpointing: 3
+checkpointing.mode: EXACTLY_ONCE
+checkpointing.storage.filesystem.type: fs
+checkpointing.storage.fs.checkpoint.dir: s3://flink-state/checkpoints
+jobmanager.rpc.timeout: 10000
+state.backend: fsstatebackend
+rest.port: 8081
+```
+
+The `job.type` is set to `Streaming` for the streaming job. `parallelism.default` and `taskmanager.numberOfTaskSlots` are set to 3 and 4, respectively, to match the environment's TaskManagers. `parallelism.checkpointing` is set to 3 to balance parallelism, checkpointing latency, and resource usage. `checkpointing.mode` is set to `EXACTLY_ONCE` for exactly-once semantics. `checkpointing.storage.filesystem.type` is set to `fs` for using the file system as the checkpoint storage. `checkpointing.storage.fs.checkpoint.dir` is set to the provided S3 location. `jobmanager.rpc.timeout` is set to 10000 to improve the responsiveness of the Flink job manager. `state.backend` is set to `fsstatebackend` for using the file system as the state backend, and `rest.port` is set to 8081 for the Flink REST interface.
+
+3. Here's the Flink SQL `CREATE TABLE` statements for the Kafka source and sink tables:
+
+```sql
+-- Create the sensor-readings Kafka source table.
+CREATE TABLE sensor_readings (
+  sensor_id INT,
+  timestamp BIGINT,
+  data JSON,
+  PRIMARY KEY (sensor_id, timestamp)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'flink-sensor-source',
+  'format' = 'json',
+  'json.ignore-parse-errors' = 'true'
+);
+
+-- Create the derived sensor-readings-clean table from sensor_readings.
+CREATE TABLE sensor_readings_clean AS (
+  SELECT
+    sensor_id,
+    timestamp,
+    data,
+    -- Derived fields go here
+    FROM sensor_readings
+    WHERE is_valid = true
+);
+
+-- Create the sensor-readings-clean Kafka sink table.
+CREATE TABLE sensor_readings_clean_sink (
+  sensor_id INT,
+  timestamp BIGINT,
+  data JSON,
+  PRIMARY KEY (sensor_id, timestamp)
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings-clean',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.key.serializer' = 'org.apache.kafka.common.serialization.LongSerializer',
+  'properties.value.serializer' = 'org.apache.kafka.common.serialization.StringSerializer'
+);
+```
+
+The `sensor_readings` table is created as a Kafka source with the given properties, including the JSON deserialization and ignoring parse errors. The `sensor_readings_clean` table is created as a derived table from `sensor_readings` by filtering out malformed events (assuming an `is_valid` field is present). The `sensor_readings_clean_sink` table is created as a Kafka sink with the given properties, including the serialization of keys and values.
+
+The given configuration and SQL statements should meet the specified requirements for the streaming pipeline. Adjust the parallelism, checkpointing, and other settings as needed to optimize performance and meet the end-to-end latency and throughput goals.

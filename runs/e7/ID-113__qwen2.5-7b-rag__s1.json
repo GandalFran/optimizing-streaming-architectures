@@ -1,0 +1,422 @@
+{
+  "id": "ID-113",
+  "model": "qwen2.5-7b-rag",
+  "seed": 1,
+  "track": "native",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 2048,
+    "latency_slo_ms": 1000,
+    "retention_days": 30,
+    "sink": "clicks-enriched",
+    "src": "clicks",
+    "throughput_eps": 5000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8386",
+  "started": "2026-11-10T20:04:22+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks --bootstrap-server kafka:9092 --partitions 8 --replication-factor 3",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks --bootstrap-server kafka:9092 --partitions 8 --replication-factor 3",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks-enriched --bootstrap-server kafka:9092 --partitions 8 --replication-factor 3",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks-enriched --bootstrap-server kafka:9092 --partitions 8 --replication-factor 3",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "testbed-owned",
+      "key": "jobmanager.rpc.address",
+      "from": "jobmanager",
+      "reason": "address/port/temp-dir/JVM/reporter keys are owned by the loopback testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "testbed-owned",
+      "key": "jobmanager.rpc.port",
+      "from": 6123,
+      "reason": "address/port/temp-dir/JVM/reporter keys are owned by the loopback testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "testbed-owned",
+      "key": "jobmanager.web.port",
+      "from": 8081,
+      "reason": "address/port/temp-dir/JVM/reporter keys are owned by the loopback testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.checkpoints.dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8386/e7-1736244/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.backend.fs.checkpoint-dir",
+      "from": "s3://flink-state/checkpoints",
+      "to": "file:///tmp/chamoso-e7/8386/e7-1736244/objstore/flink-state/checkpoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "flink-conf",
+      "kind": "object-store-uri",
+      "key": "state.savepoints.dir",
+      "from": "s3://flink-state/savepoints",
+      "to": "file:///tmp/chamoso-e7/8386/e7-1736244/objstore/flink-state/savepoints",
+      "reason": "no object store on the testbed"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "clicks",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    },
+    {
+      "artefact": "sql",
+      "kind": "bootstrap-server",
+      "table": "clicks_enriched",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    }
+  ],
+  "translations": [],
+  "augmentations": [
+    {
+      "kind": "measurement-columns",
+      "table": "clicks",
+      "role": "source",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "before first WATERMARK/PRIMARY KEY clause"
+    },
+    {
+      "kind": "measurement-columns",
+      "table": "clicks_enriched",
+      "role": "sink",
+      "added": [
+        "`__sent_ms` BIGINT",
+        "`__seq` BIGINT"
+      ],
+      "position": "before first WATERMARK/PRIMARY KEY clause"
+    },
+    {
+      "kind": "generated-insert",
+      "sql": "INSERT INTO clicks_enriched (`session_id`, `event_time`, `event`, `__sent_ms`, `__seq`)\nSELECT `session_id`,\n       `event_time`,\n       `event`,\n       `__sent_ms`,\n       `__seq`\nFROM clicks;"
+    }
+  ],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics.sh --create --topic clicks --bootstrap-server kafka:9092 --partitions 8 --replication-factor 3",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic clicks --bootstrap-server 127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002 --partitions 8 --replication-factor 3",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic clicks.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --create --topic clicks-enriched --bootstrap-server kafka:9092 --partitions 8 --replication-factor 3",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic clicks-enriched --bootstrap-server 127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002 --partitions 8 --replication-factor 3",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic clicks-enriched.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.calcite.sql.validate.SqlValidatorException: Unknown identifier 'TEXT'\nShutting down the session...\ndone.",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 1000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794337470.887,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.6,
+      "bootstrap": "127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002"
+    },
+    {
+      "t": 1794337474.516,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "clicks",
+        "clicks-enriched"
+      ],
+      "ok": true
+    },
+    {
+      "t": 1794337481.158,
+      "rel": null,
+      "event": "flink_up",
+      "seconds": 6.6,
+      "taskmanagers": 3
+    },
+    {
+      "t": 1794337484.489,
+      "rel": null,
+      "event": "submit_failed",
+      "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.calcite.sql.validate.SqlValidatorException: Unknown identifier 'TEXT'\nShutting down the session...\ndone."
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-113",
+    "answer_file": null,
+    "answers": "runs/main/qwen2.5-7b-rag.sample.jsonl",
+    "model": "qwen2.5-7b-rag",
+    "seed": 1,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-113__qwen2.5-7b-rag__s1.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8386",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [
+      "kafka-configs.sh --alter --topic clicks --add-config retention.ms=2592000000 --bootstrap-server kafka:9092",
+      "kafka-configs.sh --alter --topic clicks-enriched --add-config retention.ms=2592000000 --bootstrap-server kafka:9092"
+    ],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 21,
+    "findings_L1_L3": [
+      "L2:unknown-key:state.backend.fs.checkpoint-dir is not a Flink 1.20 configuration option",
+      "L2:unknown-key:metrics.report.interval.seconds is not a Flink 1.20 configuration option",
+      "L2:unknown-key:metricsCENTER_DOT_CENTER_exporter.jmxCENTER_DOT_CENTER_port is not a Flink 1.20 configuration option",
+      "L2:unknown-key:metricsCENTER_DOT_CENTER_exporter.prometheusCENTER_DOT_CENTER_port is not a Flink 1.20 configuration option",
+      "L2:unknown-key:metricsCENTER_DOT_CENTER_exporter.prometheusCENTER_DOT_CENTER_scrape.interval.seconds is not a Flink 1.20 configuration option",
+      "L2:unknown-key:'sink.checkpoint.min-pause' is not an option of connector kafka",
+      "L2:unknown-key:'sink.checkpoint.max-pause' is not an option of connector kafka",
+      "L2:unknown-key:'sink.checkpoint.interval' is not an option of connector kafka",
+      "L2:unknown-key:'scan.startup.max-offsets-per-trigger' is not an option of connector kafka",
+      "L2:unknown-key:'connector.table_partition_discovery.interval' is not an option of connector kafka",
+      "L2:invalid-value:column event: 'TEXT' is not a Flink SQL data type",
+      "L2:invalid-value:PRIMARY KEY on an insert-only 'kafka' table is rejected (use upsert-kafka)",
+      "L2:unknown-key:'sink.checkpoint.min-pause' is not an option of connector kafka",
+      "L2:unknown-key:'sink.checkpoint.max-pause' is not an option of connector kafka",
+      "L2:unknown-key:'sink.checkpoint.interval' is not an option of connector kafka",
+      "L2:invalid-value:column event: 'TEXT' is not a Flink SQL data type",
+      "L2:invalid-value:PRIMARY KEY on an insert-only 'kafka' table is rejected (use upsert-kafka)"
+    ]
+  },
+  "topology": {
+    "port_base": 13000,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        1
+      ]
+    },
+    "nodes": {
+      "k1": "32,33,144,145",
+      "k2": "34,35,146,147",
+      "k3": "36,37,148,149",
+      "f1": "38,39,40,41,150,151,152,153",
+      "f2": "42,43,44,45,154,155,156,157",
+      "f3": "46,47,48,49,158,159,160,161",
+      "j1": "50,162",
+      "ctl": "51,52,163,164",
+      "m1": "53,165"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:13010,2@127.0.0.1:13011,3@127.0.0.1:13012",
+    "listeners=PLAINTEXT://127.0.0.1:13000,CONTROLLER://127.0.0.1:13010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:13000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8386/e7-1736244/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "clicks-enriched": {
+      "partitions": 8,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    },
+    "clicks": {
+      "partitions": 8,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "flink_config_deployed": {
+    "jobmanager.bind-host": "127.0.0.1",
+    "jobmanager.rpc.address": "127.0.0.1",
+    "jobmanager.rpc.port": 13030,
+    "jobmanager.memory.process.size": "1600m",
+    "jobmanager.execution.failover-strategy": "region",
+    "taskmanager.bind-host": "127.0.0.1",
+    "taskmanager.host": "127.0.0.1",
+    "taskmanager.numberOfTaskSlots": 4,
+    "taskmanager.memory.process.size": "1728m",
+    "parallelism.default": 8,
+    "rest.address": "127.0.0.1",
+    "state.backend": "filesystem",
+    "state.checkpoints.dir": "file:///tmp/chamoso-e7/8386/e7-1736244/objstore/flink-state/checkpoints",
+    "state.backend.fs.checkpoint-dir": "file:///tmp/chamoso-e7/8386/e7-1736244/objstore/flink-state/checkpoints",
+    "state.savepoints.dir": "file:///tmp/chamoso-e7/8386/e7-1736244/objstore/flink-state/savepoints",
+    "metrics.report.interval.seconds": 60,
+    "metricsCENTER_DOT_CENTER_exporter.jmxCENTER_DOT_CENTER_port": 8081,
+    "metricsCENTER_DOT_CENTER_exporter.prometheusCENTER_DOT_CENTER_port": 8082,
+    "metricsCENTER_DOT_CENTER_exporter.prometheusCENTER_DOT_CENTER_scrape.interval.seconds": 60,
+    "rest.bind-address": "127.0.0.1",
+    "rest.port": 13031,
+    "io.tmp.dirs": "/tmp/chamoso-e7/8386/e7-1736244/flink-io"
+  },
+  "taskmanagers": {
+    "started": 3,
+    "registered": 3,
+    "slots_per_tm": 4
+  },
+  "sql_client": {
+    "rc": 0,
+    "seconds": 3.3,
+    "error": "[ERROR] Could not execute SQL statement. Reason:\norg.apache.calcite.sql.validate.SqlValidatorException: Unknown identifier 'TEXT'\nShutting down the session...\ndone."
+  },
+  "failure_stage": "sql-submit",
+  "topics_after_run": {
+    "clicks-enriched": {
+      "partitions": 8,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    },
+    "clicks": {
+      "partitions": 8,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T20:04:53+0100"
+}

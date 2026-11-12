@@ -1,0 +1,89 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    cleanup.policy: delete
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-pipeline
+spec:
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  flinkConfiguration:
+    jobmanager.heap.size: 1024m
+    taskmanager.heap.size: 2048m
+    taskmanager.numberOfTaskSlots: 2
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.checkpoints.min-pause: 10s
+    state.checkpoints.num-retained: 3
+    state.backend.rocksdb.wal-dir: s3://flink-state/wal
+    state.backend.rocksdb.block-cache-size: 256m
+    state.backend.rocksdb.block-cache-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size: true
+    state.backend.rocksdb.block-cache-eviction-by-age: false
+    state.backend.rocksdb.block-cache-eviction-by-access: false
+    state.backend.rocksdb.block-cache-eviction-by-age-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-access-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold: 100m
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy: lru
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl-ttl: 1h
+    state.backend.rocksdb.block-cache-eviction-by-size-threshold-eviction-policy-ttl-ttl-ttl-ttl-ttl

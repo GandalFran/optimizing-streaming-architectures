@@ -1,0 +1,110 @@
+### Step 1: Create Kafka topics
+
+```bash
+# Create topic ad-impressions with 4 partitions and 1 replica
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions --partitions 4 --replication-factor 1
+
+# Create topic ad-impressions-enriched with 4 partitions and 1 replica
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions-enriched --partitions 4 --replication-factor 1
+
+# Describe topic ad-impressions to verify the configuration
+kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic ad-impressions
+
+# Describe topic ad-impressions-enriched to verify the configuration
+kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic ad-impressions-enriched
+```
+
+### Step 2: Flink configuration
+
+```yaml
+# config.yaml
+flink:
+  cluster:
+    type: standalone
+    parallelism: 4
+  jobmanager:
+    high-availability: false
+    checkpointing:
+      enabled: true
+      interval: 10s
+      storage: s3://flink-state/checkpoints
+  taskmanager:
+    num-executors: 4
+    cpu: 4
+    memory: 8g
+  checkpointing:
+    enabled: true
+    interval: 10s
+    storage: s3://flink-state/checkpoints
+  kafka:
+    bootstrap-servers: kafka:9092
+    properties:
+      retries: 3
+      retry-backoff-ms: 100
+      max-in-flight: 100
+  sql:
+    client:
+      parallelism: 4
+```
+
+### Step 3: Flink SQL table definitions
+
+```sql
+-- Create table for ad impression events
+CREATE TABLE ad_impressions (
+  `campaign_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `event_data` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'ad-impressions',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'connector.properties.group.id' = 'ad-impressions-group',
+  'connector.properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'connector.properties.value.deserializer' = 'io.confluent.kafka.serializers.KafkaJsonDeserializer',
+  'connector.properties.value.deserializer.schema.registry.url' = 'http://schema-registry:8081',
+  'scan.startup.mode' = 'latest-offset',
+  'table.deserialization.delay' = '1000'
+);
+
+-- Create table for enriched ad impression events
+CREATE TABLE ad_impressions_enriched (
+  `campaign_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `event_data` STRING,
+  `derived_field1` STRING,
+  `derived_field2` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'ad-impressions-enriched',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'connector.properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'connector.properties.value.deserializer' = 'io.confluent.kafka.serializers.KafkaJsonDeserializer',
+  'connector.properties.value.deserializer.schema.registry.url' = 'http://schema-registry:8081',
+  'scan.startup.mode' = 'latest-offset',
+  'table.deserialization.delay' = '1000'
+);
+
+-- Create a SQL query to read from ad_impressions, filter out malformed events, enrich each event with derived fields, and write to ad_impressions_enriched
+INSERT INTO ad_impressions_enriched
+SELECT
+  campaign_id,
+  event_time,
+  event_data,
+  derived_field1,
+  derived_field2
+FROM ad_impressions
+WHERE event_data IS NOT NULL AND event_time IS NOT NULL;
+```
+
+### Justification of main values:
+
+- **Kafka topic configuration**: We create two topics, `ad-impressions` and `ad-impressions-enriched`, each with 4 partitions and 1 replica. This configuration allows for a good balance between throughput and latency. With 4 partitions, we can handle a sustained input rate of 50,000 events/s, assuming each partition can handle 12,500 events/s (50,000 / 4). We use 1 replica to minimize storage requirements.
+
+- **Flink configuration**: We use a standalone Flink cluster with 3 TaskManagers, each with 4 CPU cores and 8 GB of memory. This configuration allows for a good balance between processing power and memory usage. We set the checkpointing interval to 10 seconds to ensure that we can recover from failures within a reasonable time frame. We use S3 as the durable checkpoint storage.
+
+- **Flink SQL table definitions**: We create two tables, `ad_impressions` and `ad_impressions_enriched`, with the same schema. We use the `kafka` connector to read from and write to the corresponding Kafka topics. We set the `scan.startup.mode` to `latest-offset` to ensure that we start reading from the latest available offset. We set the `table.deserialization.delay` to 1000ms to allow for some delay in deserialization.
+
+- **SQL query**: We create a SQL query that reads from `ad_impressions`, filters out malformed events, enriches each event with derived fields, and writes to `ad_impressions_enriched`. We use the `INSERT INTO` statement to write to the `ad_impressions_enriched` table.

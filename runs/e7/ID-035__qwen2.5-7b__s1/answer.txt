@@ -1,0 +1,75 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic session-events --partitions 10 --replication-factor 3 --config min.insync.replicas=2 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic session-events-enriched --partitions 10 --replication-factor 3 --config min.insync.replicas=2 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml for Flink
+jobmanager.rpc.address: jobmanager
+jobmanager.heap.size: 4g
+taskmanager.heap.size: 4g
+taskmanager.numberOfTaskSlots: 4
+taskmanager.network.memory.fraction: 0.2
+taskmanager.memory.process.fraction: 0.8
+state.backend: rocksdb
+state.backend.rocksdb.path: s3://flink-state/rocksdb
+state.backend.rocksdb.block-cache.size: 256m
+state.backend.rocksdb.io-cache.size: 512m
+state.checkpointing.mode: exactly-once
+state.checkpointing.interval: 30000
+state.checkpointing.min-pause: 5000
+state.checkpointing.max-pause: 10000
+parallelism.default: 3
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements
+CREATE TABLE session_events (
+    user_id STRING,
+    event_time TIMESTAMP(3),
+    event_data STRING,
+    PRIMARY KEY (user_id) NOT ENFORCED
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'scan.max.wait.time' = '10000',
+    'sink.partitioner.class' = 'org.apache.flink.streaming.connectors.kafka.partitioner.FlinkKafkaPartitioner'
+);
+
+CREATE TABLE session_events_enriched (
+    user_id STRING,
+    event_time TIMESTAMP(3),
+    event_data STRING,
+    derived_field STRING,
+    PRIMARY KEY (user_id) NOT ENFORCED
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'sink.partitioner.class' = 'org.apache.flink.streaming.connectors.kafka.partitioner.FlinkKafkaPartitioner'
+);
+```
+
+### Justification of Values:
+1. **Kafka Topics:**
+   - **Partitions (10):** Given the input rate of 20,000 events/s, 10 partitions ensure that the load is distributed across multiple partitions, allowing for parallel processing.
+   - **Replication Factor (3):** Ensures that data is replicated across 3 brokers for high availability.
+   - **min.insync.replicas (2):** Ensures that at least 2 replicas are available for any given partition, which helps in maintaining data durability.
+
+2. **Flink Configuration:**
+   - **Heap Size (4GB for JobManager, 4GB for TaskManagers):** Provides sufficient memory for processing and state storage.
+   - **Parallelism (3):** Set to the number of TaskManagers to ensure full utilization of the cluster.
+   - **State Backend (RocksDB):** Provides strong durability guarantees and is suitable for stateful operations.
+   - **Checkpointing Interval (30 seconds):** Ensures frequent checkpoints to maintain fault tolerance and recovery.
+   - **Scan Startup Mode (latest-offset):** Ensures that Flink starts consuming from the latest offset, which is crucial for real-time processing.
+
+3. **Flink SQL CREATE TABLE Statements:**
+   - **Kafka Connector:** Configured to read from `session-events` and write to `session-events-enriched`.
+   - **Partitioner:** Ensures that data is written to the correct partition in the target topic based on the `user_id` key.
+   - **Primary Key Enforcement:** Ensures that the events are processed and written in a consistent manner, which is crucial for the correct operation of the Flink job.

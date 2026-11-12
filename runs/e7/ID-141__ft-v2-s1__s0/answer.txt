@@ -1,0 +1,122 @@
+```bash
+# Create the Kafka topics
+kafka-topics.sh --create --topic app-logs --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic app-logs-parsed --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092
+```
+
+```yaml
+# Flink configuration
+flink.jobmanager.memory.process.size: 1024 mb
+flink.taskmanager.memory.process.size: 1024 mb
+flink.jobmanager.rpc.address: jobmanager
+flink.resourcemanager.address: jobmanager
+flink.resourcemanager.web.address: jobmanager
+flink.resourcemanager.web.port: 8081
+flink.resourcemanager.cluster-id: default
+flink.resourcemanager.checkpoint-storage: s3://flink-state/checkpoints
+flink.resourcemanager.checkpointing.interval: 10 s
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpointing.min-pause: 10 s
+flink.resourcemanager.checkpointing.max-concurrent-checkpoints: 1
+flink.resourcemanager.checkpoint

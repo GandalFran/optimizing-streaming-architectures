@@ -1,0 +1,96 @@
+ ```bash
+# Create Kafka topics
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic app-logs --partitions 3 --replication-factor 1
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic app-logs-parsed --partitions 3 --replication-factor 1
+```
+
+```yaml
+# Flink configuration (config.yaml)
+
+# Kafka source configuration
+kafka-source:
+  bootstrap-servers: kafka:9092
+  topics:
+    - app-logs
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  properties:
+    auto.offset.reset: latest
+    enable.auto.commit: false
+    fetch.max.bytes: 10485760 # 10 MB
+    fetch.min.bytes: 10485760 # 10 MB
+    fetch.max.wait.ms: 5000
+    max.partition.fetch.bytes: 10485760 # 10 MB
+    max.poll.interval.ms: 30000
+    max.poll.records: 100
+
+# Kafka sink configuration
+kafka-sink:
+  bootstrap-servers: kafka:9092
+  topics:
+    - app-logs-parsed
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  properties:
+    auto.offset.reset: latest
+    enable.auto.commit: true
+    fetch.max.bytes: 10485760 # 10 MB
+    fetch.min.bytes: 10485760 # 10 MB
+    fetch.max.wait.ms: 5000
+    max.partition.fetch.bytes: 10485760 # 10 MB
+    max.poll.interval.ms: 30000
+    max.poll.records: 100
+
+# Flink job configuration
+job:
+  execution:
+    checkpoint-interval: 10000 # 10 s
+    state.backend: s3://flink-state/checkpoints
+    state.checkpointing.enabled: true
+    state.checkpointing.mini-checkpoints.interval: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.timeout: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 10000 # 10 s
+    state.checkpointing.mini-checkpoints.max-delay-ms: 100

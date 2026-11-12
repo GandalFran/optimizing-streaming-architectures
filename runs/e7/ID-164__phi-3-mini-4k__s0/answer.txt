@@ -1,0 +1,166 @@
+ ```yaml
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+  namespace: default
+  labels:
+    app: flink-clickstream-reader
+    component: flink-clickstream-reader
+    env: production
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention.ms: 2592000000 # 30 days in milliseconds
+  config:
+    retention.bytes: 1572864000 # 5 MB in bytes
+    max.message.bytes: 512
+    max.partition.cleanup.threads: 1
+    min.cleanable.dirty.ratio: 0.9
+    segment.bytes: 104857600 # 100 MB in bytes
+    unclean.leader.election.enable: false
+    cleanup.policy: compact
+    compression.type: none
+    message.format.version: v1
+    message.format.name: json
+    value.serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+    key.serializer: org.apache.kafka.common.serialization.StringSerializer
+
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+  namespace: default
+  labels:
+    app: flink-clickstream-writer
+    component: flink-clickstream-writer
+    env: production
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention.ms: 2592000000 # 30 days in milliseconds
+  config:
+    retention.bytes: 1572864000 # 5 MB in bytes
+    max.message.bytes: 512
+    max.partition.cleanup.threads: 1
+    min.cleanable.dirty.ratio: 0.9
+    segment.bytes: 104857600 # 100 MB in bytes
+    unclean.leader.election.enable: false
+    cleanup.policy: compact
+    compression.type: none
+    message.format.version: v1
+    message.format.name: json
+    value.serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+    key.serializer: org.apache.kafka.common.serialization.StringSerializer
+```
+
+The KafkaTopic resources are configured with a replication factor of 3 to ensure durability and availability in the event of a broker failure. The retention policy is set to 30 days, and the maximum message size is set to 5 MB to match the input rate and event size requirements.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-clickstream-reader
+  namespace: default
+  labels:
+    app: flink-clickstream-reader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-clickstream-reader
+  template:
+    metadata:
+      labels:
+        app: flink-clickstream-reader
+    spec:
+      containers:
+      - name: flink-clickstream-reader
+        image: flink-sql-runner:1.20
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "4"
+            memory: "8Gi"
+          requests:
+            cpu: "2"
+            memory: "4Gi"
+        env:
+        - name: FLINK_KAFKA_BOOTSTRAP_SERVERS
+          value: my-cluster-kafka-bootstrap:9092
+        - name: FLINK_KAFKA_TOPIC_CLUSTER_ID
+          value: "my-cluster"
+        - name: FLINK_KAFKA_TOPIC_REPLICATION_FACTOR
+          value: "3"
+        - name: FLINK_KAFKA_TOPIC_PARTITIONS
+          value: "3"
+        - name: FLINK_KAFKA_TOPIC_RETENTION_MS
+          value: "2592000000"
+        - name: FLINK_KAFKA_TOPIC_MAX_MESSAGE_BYTES
+          value: "512"
+        - name: FLINK_KAFKA_TOPIC_KEY_SERIALIZER
+          value: "org.apache.kafka.common.serialization.StringSerializer"
+        - name: FLINK_KAFKA_TOPIC_VALUE_SERIALIZER
+          value: "org.apache.kafka.common.serialization.ByteArraySerializer"
+        - name: FLINK_KAFKA_TOPIC_CONFIG
+          value: "retention.bytes=1572864000,max.message.bytes=512,max.partition.cleanup.threads=1,min.cleanable.dirty.ratio=0.9,segment.bytes=104857600,unclean.leader.election.enable=false,cleanup.policy=compact,compression.type=none,message.format.version=v1,message.format.name=json"
+        ports:
+        - containerPort: 8081
+        livenessProbe:
+          httpGet:
+            path: /actors/flink-clickstream-reader/health
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actors/flink-clickstream-reader/health
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        volumeMounts:
+        - name: flink-state
+          mountPath: /flink-state
+      volumes:
+      - name: flink-state
+        persistentVolumeClaim:
+          claimName: flink-state
+```
+
+The FlinkDeployment resource is configured with a single replica to meet the requirement of at most 20,000 events/s per TaskManager pod. The resources are limited to 4 CPU and 8 GiB of memory per pod. The SQL job is packaged as `local:///opt/flink/usrlib/sql-runner.jar`.
+
+```sql
+CREATE TABLE clicks (
+  session_id STRING,
+  event_time TIMESTAMP(3),
+  event_type STRING,
+  event_data STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'flink-clickstream-reader',
+  'properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'properties.value.deserializer' = 'org.apache.kafka.common.serialization.ByteArrayDeserializer',
+  'scan.startup.mode' = 'latest-offset',
+  'format.schema' = 'json'
+);
+
+CREATE TABLE clicks_enriched (
+  session_id STRING,
+  event_time TIMESTAMP(3),
+  event_type STRING,
+  event_data STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks-enriched',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'flink-clickstream-writer',
+  'properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'properties.value.deserializer' = 'org.apache.kafka.common.serialization.ByteArrayDeserializer',
+  'scan.startup.mode' = 'latest-offset',
+  'format.schema' = 'json'
+);
+```
+
+The Flink SQL `CREATE TABLE` statements are used to define the Kafka source and sink tables for the clickstream data. The `format.schema` property is set to 'json' to enable JSON deserialization. The `scan.startup.mode` property is set to 'latest-offset' to ensure that the Flink job reads the latest offset from Kafka and

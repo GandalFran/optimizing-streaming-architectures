@@ -1,0 +1,145 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+spec:
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  flinkConfiguration:
+    jobmanager.heap.size: 2g
+    taskmanager.heap.size: 2g
+    taskmanager.numberOfTaskSlots: 1
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.checkpoints.min-pause: 10s
+    state.checkpoints.num-retained: 3
+    state.backend.rocksdb.wal-dir: s3://flink-state/wal
+    state.backend.rocksdb.block-cache-size: 1g
+    state.backend.rocksdb.block-cache-size-per-partition: 100m
+    state.backend.rocksdb.write-buffer-size: 100m
+    state.backend.rocksdb.level0-file-num-compaction-trigger: 10
+    state.backend.rocksdb.level0-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level0-max-compression-level: 1
+    state.backend.rocksdb.level0-min-block-size: 1m
+    state.backend.rocksdb.level0-max-block-size: 10m
+    state.backend.rocksdb.level1-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level1-max-compression-level: 1
+    state.backend.rocksdb.level1-min-block-size: 1m
+    state.backend.rocksdb.level1-max-block-size: 10m
+    state.backend.rocksdb.level2-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level2-max-compression-level: 1
+    state.backend.rocksdb.level2-min-block-size: 1m
+    state.backend.rocksdb.level2-max-block-size: 10m
+    state.backend.rocksdb.level3-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level3-max-compression-level: 1
+    state.backend.rocksdb.level3-min-block-size: 1m
+    state.backend.rocksdb.level3-max-block-size: 10m
+    state.backend.rocksdb.level4-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level4-max-compression-level: 1
+    state.backend.rocksdb.level4-min-block-size: 1m
+    state.backend.rocksdb.level4-max-block-size: 10m
+    state.backend.rocksdb.level5-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level5-max-compression-level: 1
+    state.backend.rocksdb.level5-min-block-size: 1m
+    state.backend.rocksdb.level5-max-block-size: 10m
+    state.backend.rocksdb.level6-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level6-max-compression-level: 1
+    state.backend.rocksdb.level6-min-block-size: 1m
+    state.backend.rocksdb.level6-max-block-size: 10m
+    state.backend.rocksdb.level7-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level7-max-compression-level: 1
+    state.backend.rocksdb.level7-min-block-size: 1m
+    state.backend.rocksdb.level7-max-block-size: 10m
+    state.backend.rocksdb.level8-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level8-max-compression-level: 1
+    state.backend.rocksdb.level8-min-block-size: 1m
+    state.backend.rocksdb.level8-max-block-size: 10m
+    state.backend.rocksdb.level9-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level9-max-compression-level: 1
+    state.backend.rocksdb.level9-min-block-size: 1m
+    state.backend.rocksdb.level9-max-block-size: 10m
+    state.backend.rocksdb.level10-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level10-max-compression-level: 1
+    state.backend.rocksdb.level10-min-block-size: 1m
+    state.backend.rocksdb.level10-max-block-size: 10m
+    state.backend.rocksdb.level11-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level11-max-compression-level: 1
+    state.backend.rocksdb.level11-min-block-size: 1m
+    state.backend.rocksdb.level11-max-block-size: 10m
+    state.backend.rocksdb.level12-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level12-max-compression-level: 1
+    state.backend.rocksdb.level12-min-block-size: 1m
+    state.backend.rocksdb.level12-max-block-size: 10m
+    state.backend.rocksdb.level13-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level13-max-compression-level: 1
+    state.backend.rocksdb.level13-min-block-size: 1m
+    state.backend.rocksdb.level13-max-block-size: 10m
+    state.backend.rocksdb.level14-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level14-max-compression-level: 1
+    state.backend.rocksdb.level14-min-block-size: 1m
+    state.backend.rocksdb.level14-max-block-size: 10m
+    state.backend.rocksdb.level15-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level15-max-compression-level: 1
+    state.backend.rocksdb.level15-min-block-size: 1m
+    state.backend.rocksdb.level15-max-block-size: 10m
+    state.backend.rocksdb.level16-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level16-max-compression-level: 1
+    state.backend.rocksdb.level16-min-block-size: 1m
+    state.backend.rocksdb.level16-max-block-size: 10m
+    state.backend.rocksdb.level17-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level17-max-compression-level: 1
+    state.backend.rocksdb.level17-min-block-size: 1m
+    state.backend.rocksdb.level17-max-block-size: 10m
+    state.backend.rocksdb.level18-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level18-max-compression-level: 1
+    state.backend.rocksdb.level18-min-block-size: 1m
+    state.backend.rocksdb.level18-max-block-size: 10m
+    state.backend.rocksdb.level19-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level19-max-compression-level: 1
+    state.backend.rocksdb.level19-min-block-size: 1m
+    state.backend.rocksdb.level19-max-block-size: 10m
+    state.backend.rocksdb.level20-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level20-max-compression-level: 1
+    state.backend.rocksdb.level20-min-block-size: 1m
+    state.backend.rocksdb.level20-max-block-size: 10m
+    state.backend.rocksdb.level21-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level21-max-compression-level: 1
+    state.backend.rocksdb.level21-min-block-size: 1m
+    state.backend.rocksdb.level21-max-block-size: 10m
+    state.backend.rocksdb.level22-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level22-max-compression-level: 1
+    state.backend.rocksdb.level22-min-block-size: 1m
+    state.backend.rocksdb.level22-max-block-size: 10m
+    state.backend.rocksdb.level23-target-file-num-multiplier: 2.0
+    state.backend.rocksdb.level23-max-compression-level: 1
+    state.backend.rocksdb.level23-min-block-size: 1

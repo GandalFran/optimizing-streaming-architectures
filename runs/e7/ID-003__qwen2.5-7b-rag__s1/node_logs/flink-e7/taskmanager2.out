@@ -1,0 +1,44 @@
+
+=== spawn 1794337448: numactl --physcpubind=46,47,48,49,158,159,160,161 --membind=1 -- /home/chamoso/tuning-revision/opt/flink/bin/taskmanager.sh start-foreground -Dtaskmanager.resource-id=tm2
+[ERROR] The execution result is empty.
+[ERROR] Could not get JVM parameters and dynamic configurations properly.
+[ERROR] Raw output from BashJavaUtils:
+INFO  [] - Using standard YAML parser to load flink configuration file from /tmp/chamoso-e7/8386/e7-1723486/conf/flink-e7/config.yaml.
+INFO  [] - Loading configuration property: jobmanager.network.memory.fraction, 0.8
+INFO  [] - Loading configuration property: state.checkpoints.num-retained, 3
+INFO  [] - Loading configuration property: taskmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: jobmanager.execution.failover-strategy, region
+INFO  [] - Loading configuration property: state.checkpoints.min-pause, 10s
+INFO  [] - Loading configuration property: jobmanager.rpc.address, 127.0.0.1
+INFO  [] - Loading configuration property: jobmanager.heap.mb, 8192
+INFO  [] - Loading configuration property: jobmanager.rpc.port, 12030
+INFO  [] - Loading configuration property: rest.bind-address, 127.0.0.1
+INFO  [] - Loading configuration property: rest.port, 12031
+INFO  [] - Loading configuration property: jobmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: taskmanager.network.memory.fraction, 0.8
+INFO  [] - Loading configuration property: io.tmp.dirs, /tmp/chamoso-e7/8386/e7-1723486/flink-io
+INFO  [] - Loading configuration property: taskmanager.host, 127.0.0.1
+INFO  [] - Loading configuration property: parallelism.default, 3
+INFO  [] - Loading configuration property: taskmanager.memory.fraction, 0.8
+INFO  [] - Loading configuration property: taskmanager.numberOfTaskSlots, 4
+INFO  [] - Loading configuration property: rest.address, 127.0.0.1
+INFO  [] - Loading configuration property: state.backend, rocksdb
+INFO  [] - Loading configuration property: env.java.opts.all, --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+INFO  [] - Loading configuration property: taskmanager.heap.mb, 8192
+INFO  [] - Loading configuration property: state.checkpoints.dir, file:///tmp/chamoso-e7/8386/e7-1723486/objstore/flink-state/checkpoints
+INFO  [] - Loading dynamic configuration property: taskmanager.resource-id, tm2
+INFO  [] - 'taskmanager.memory.flink.size' is not specified, use the configured deprecated task manager heap value (8.000gb (8589934592 bytes)) for it.
+WARN  [] - Config uses deprecated configuration key 'taskmanager.network.memory.fraction' instead of proper key 'taskmanager.memory.network.fraction'
+WARN  [] - Config uses deprecated configuration key 'taskmanager.network.memory.fraction' instead of proper key 'taskmanager.memory.network.fraction'
+Exception in thread "main" org.apache.flink.configuration.IllegalConfigurationException: TaskManager memory configuration failed: Sum of configured Framework Heap Memory (128.000mb (134217728 bytes)), Framework Off-Heap Memory (128.000mb (134217728 bytes)), Task Off-Heap Memory (0 bytes), Managed Memory (3.200gb (3435973888 bytes)) and Network Memory (6.400gb (6871947776 bytes)) exceed configured Total Flink Memory (8.000gb (8589934592 bytes)).
+	at org.apache.flink.runtime.clusterframework.TaskExecutorProcessUtils.processSpecFromConfig(TaskExecutorProcessUtils.java:166)
+	at org.apache.flink.runtime.util.bash.BashJavaUtils.getTmResourceParams(BashJavaUtils.java:88)
+	at org.apache.flink.runtime.util.bash.BashJavaUtils.runCommand(BashJavaUtils.java:66)
+	at org.apache.flink.runtime.util.bash.BashJavaUtils.main(BashJavaUtils.java:56)
+Caused by: org.apache.flink.configuration.IllegalConfigurationException: Sum of configured Framework Heap Memory (128.000mb (134217728 bytes)), Framework Off-Heap Memory (128.000mb (134217728 bytes)), Task Off-Heap Memory (0 bytes), Managed Memory (3.200gb (3435973888 bytes)) and Network Memory (6.400gb (6871947776 bytes)) exceed configured Total Flink Memory (8.000gb (8589934592 bytes)).
+	at org.apache.flink.runtime.util.config.memory.taskmanager.TaskExecutorFlinkMemoryUtils.deriveFromTotalFlinkMemory(TaskExecutorFlinkMemoryUtils.java:178)
+	at org.apache.flink.runtime.util.config.memory.taskmanager.TaskExecutorFlinkMemoryUtils.deriveFromTotalFlinkMemory(TaskExecutorFlinkMemoryUtils.java:42)
+	at org.apache.flink.runtime.util.config.memory.ProcessMemoryUtils.deriveProcessSpecWithTotalFlinkMemory(ProcessMemoryUtils.java:103)
+	at org.apache.flink.runtime.util.config.memory.ProcessMemoryUtils.memoryProcessSpecFromConfig(ProcessMemoryUtils.java:80)
+	at org.apache.flink.runtime.clusterframework.TaskExecutorProcessUtils.processSpecFromConfig(TaskExecutorProcessUtils.java:163)
+	... 3 more

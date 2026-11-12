@@ -1,0 +1,186 @@
+```yaml
+# Topic definitions
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+spec:
+  partitions: 1
+  replicationFactor: 3
+  topicNameFormat: banking-transactions
+  retentionMs: 604800000
+  configuration:
+    segment.bytes: 52428800
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+spec:
+  partitions: 1
+  replicationFactor: 3
+  topicNameFormat: banking-transactions-validated
+  retentionMs: 604800000
+  configuration:
+    segment.bytes: 52428800
+```
+
+```yaml
+# Flink deployment
+
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: flink-deployment
+spec:
+  flinkConfiguration: |
+    jobmanager.memory.process.size: 512m
+    taskmanager.memory.process.size: 512m
+    taskmanager.numberOfTaskSlots: 1
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.checkpoints.dir.delete: true
+    state.backend: rocksdb
+    state.backend.incremental: true
+    state.backend.rocksdb.memory.writebuffer: 10000000
+    state.backend.rocksdb.blocksize: 16384
+    state.backend.rocksdb.writebuffer-flush.maxbytes: 30000000
+    state.backend.rocksdb.writebuffer-flush.maxbytes-delay: 0
+    state.backend.rocksdb.metrics: ALL
+    state.backend.incremental.savepoint-trigger.enabled: true
+    state.backend.incremental.savepoint-interval: 1800000
+    state.backend.incremental.savepoint-retention: 1
+    state.backend.incremental.savepoint-retention-max-age: 86400000
+    state.backend.incremental.savepoint-retention-max-files: 5
+    execution.checkpointing.interval: 60000
+    execution.checkpointing.mode: EXACTLY_ONCE
+    execution.checkpointing.externalized-checkpoints.delete-older: 0
+    execution.checkpointing.externalized-checkpoints.delete-interval: 604800
+    parallelism.default: 1
+    blob.server.port: 6124
+    blob.server.client-timeout: 10000
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports: "10000"
+    blob.server.memory: 1024mb
+    blob.server.path: /tmp/flink
+    blob.server.client-timeout: 10000
+    blob.server.port: 6124
+    blob.server.ports

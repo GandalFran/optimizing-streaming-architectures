@@ -1,0 +1,58 @@
+
+=== spawn 1794380915: numactl --physcpubind=42,43,44,45,154,155,156,157 --membind=1 -- /home/chamoso/tuning-revision/opt/flink/bin/taskmanager.sh start-foreground -Dtaskmanager.resource-id=tm1
+[ERROR] The execution result is empty.
+[ERROR] Could not get JVM parameters and dynamic configurations properly.
+[ERROR] Raw output from BashJavaUtils:
+INFO  [] - Using standard YAML parser to load flink configuration file from /tmp/chamoso-e7/8460/e7-2578303/conf/flink-e7/config.yaml.
+INFO  [] - Loading configuration property: jobmanager.checkpoints.stale-checkpoints.delete, false
+INFO  [] - Loading configuration property: jobmanager.execution.failover-strategy, region
+INFO  [] - Loading configuration property: jobmanager.rpc.address, 127.0.0.1
+INFO  [] - Loading configuration property: jobmanager.checkpoints.min-pause, 0s
+INFO  [] - Loading configuration property: jobmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: io.tmp.dirs, /tmp/chamoso-e7/8460/e7-2578303/flink-io
+INFO  [] - Loading configuration property: taskmanager.host, 127.0.0.1
+INFO  [] - Loading configuration property: parallelism.default, 1
+INFO  [] - Loading configuration property: taskmanager.memory.fraction, 0.8
+INFO  [] - Loading configuration property: taskmanager.numberOfTaskSlots, 4
+INFO  [] - Loading configuration property: env.java.opts.all, --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+INFO  [] - Loading configuration property: taskmanager.memory.process.size, 8.0 GB
+INFO  [] - Loading configuration property: state.backend.checkpoints.dir, file:///tmp/chamoso-e7/8460/e7-2578303/objstore/flink-state/checkpoints
+INFO  [] - Loading configuration property: taskmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: state.backend.rocksdb.path, /tmp/chamoso-e7/8460/e7-2578303/localfs/tmp/flink_state
+INFO  [] - Loading configuration property: jobmanager.checkpoints.min-pause-reached, false
+INFO  [] - Loading configuration property: jobmanager.checkpoints.max-pause, 0s
+INFO  [] - Loading configuration property: jobmanager.memory.process.size, 1600m
+INFO  [] - Loading configuration property: jobmanager.rpc.port, 12030
+INFO  [] - Loading configuration property: rest.bind-address, 127.0.0.1
+INFO  [] - Loading configuration property: rest.port, 12031
+INFO  [] - Loading configuration property: state.backend.path, file:///tmp/chamoso-e7/8460/e7-2578303/objstore/flink-state
+INFO  [] - Loading configuration property: rest.address, 127.0.0.1
+INFO  [] - Loading configuration property: state.backend, s3
+INFO  [] - Loading configuration property: jobmanager.checkpoints.global-state-only, true
+INFO  [] - Loading dynamic configuration property: taskmanager.resource-id, tm1
+Exception in thread "main" org.apache.flink.configuration.IllegalConfigurationException: TaskManager memory configuration failed: Cannot read memory size from config option 'taskmanager.memory.process.size'.
+	at org.apache.flink.runtime.clusterframework.TaskExecutorProcessUtils.processSpecFromConfig(TaskExecutorProcessUtils.java:166)
+	at org.apache.flink.runtime.util.bash.BashJavaUtils.getTmResourceParams(BashJavaUtils.java:88)
+	at org.apache.flink.runtime.util.bash.BashJavaUtils.runCommand(BashJavaUtils.java:66)
+	at org.apache.flink.runtime.util.bash.BashJavaUtils.main(BashJavaUtils.java:56)
+Caused by: org.apache.flink.configuration.IllegalConfigurationException: Cannot read memory size from config option 'taskmanager.memory.process.size'.
+	at org.apache.flink.runtime.util.config.memory.ProcessMemoryUtils.getMemorySizeFromConfig(ProcessMemoryUtils.java:281)
+	at org.apache.flink.runtime.util.config.memory.ProcessMemoryUtils.deriveProcessSpecWithTotalProcessMemory(ProcessMemoryUtils.java:112)
+	at org.apache.flink.runtime.util.config.memory.ProcessMemoryUtils.memoryProcessSpecFromConfig(ProcessMemoryUtils.java:84)
+	at org.apache.flink.runtime.clusterframework.TaskExecutorProcessUtils.processSpecFromConfig(TaskExecutorProcessUtils.java:163)
+	... 3 more
+Caused by: java.lang.IllegalArgumentException: Could not parse value '8.0 GB' for key 'taskmanager.memory.process.size'.
+	at org.apache.flink.configuration.Configuration.getOptional(Configuration.java:827)
+	at org.apache.flink.configuration.Configuration.get(Configuration.java:795)
+	at org.apache.flink.runtime.util.config.memory.ProcessMemoryUtils.getMemorySizeFromConfig(ProcessMemoryUtils.java:278)
+	... 6 more
+Caused by: java.lang.IllegalArgumentException: Memory size unit '.0 gb' does not match any of the recognized units: (b | bytes) / (k | kb | kibibytes) / (m | mb | mebibytes) / (g | gb | gibibytes) / (t | tb | tebibytes)
+	at org.apache.flink.configuration.MemorySize.parseUnit(MemorySize.java:330)
+	at org.apache.flink.configuration.MemorySize.parseBytes(MemorySize.java:300)
+	at org.apache.flink.configuration.MemorySize.parse(MemorySize.java:239)
+	at org.apache.flink.configuration.ConfigurationUtils.convertToMemorySize(ConfigurationUtils.java:521)
+	at org.apache.flink.configuration.ConfigurationUtils.convertValue(ConfigurationUtils.java:397)
+	at org.apache.flink.configuration.Configuration.lambda$getOptional$4(Configuration.java:821)
+	at java.base/java.util.Optional.map(Optional.java:260)
+	at org.apache.flink.configuration.Configuration.getOptional(Configuration.java:821)
+	... 8 more

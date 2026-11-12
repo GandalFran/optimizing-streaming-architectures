@@ -1,0 +1,43 @@
+Nov 10, 2026 7:11:57 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE banking_transactions (
+>     account_id STRING,
+>     transaction_id STRING,
+>     amount DECIMAL(10, 2),
+>     timestamp TIMESTAMP(3),
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector.type' = 'kafka',
+>   'connector.version' = 'universal',
+>   'topic' = 'banking-transactions',
+>   'properties.bootstrap.servers' = '127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502',
+>   'properties.group.id' = 'banking-transactions-group',
+>   'scan.startup.mode' = 'latest-offset',
+>   'properties.sasl.mechanism' = 'PLAIN',
+>   'properties.security.protocol.map' = 'PLAIN:SSL',
+>   'properties.ssl.truststore.location' = '/path/to/truststore.jks',
+>   'properties.ssl.truststore.password' = 'truststore-password',
+>   'properties.ssl.keystore.location' = '/path/to/keystore.jks',
+>   'properties.ssl.keystore.password' = 'keystore-password',
+>   'properties.ssl.key.password' = 'key-password'
+> )[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.sql.parser.impl.ParseException: Encountered "timestamp" at line 5, column 5.
+Was expecting one of:
+    "CONSTRAINT" ...
+    "PRIMARY" ...
+    "UNIQUE" ...
+    "WATERMARK" ...
+    <BRACKET_QUOTED_IDENTIFIER> ...
+    <QUOTED_IDENTIFIER> ...
+    <BACK_QUOTED_IDENTIFIER> ...
+    <BIG_QUERY_BACK_QUOTED_IDENTIFIER> ...
+    <HYPHENATED_IDENTIFIER> ...
+    <IDENTIFIER> ...
+    <UNICODE_QUOTED_IDENTIFIER> ...[0m
+
+Shutting down the session...
+done.

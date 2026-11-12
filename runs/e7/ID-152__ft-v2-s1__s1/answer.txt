@@ -1,0 +1,100 @@
+```yaml
+# Topic definitions
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments
+  labels:
+    strimzi.io/name: payments
+spec:
+  partitions: 16
+  replicas: 3
+  retentionMs: 604800000
+  retentionBytes: 107374182400
+  segmentBytes: 107374182400
+  config:
+    - key: retention.ms
+      value: "604800000"
+    - key: retention.bytes
+      value: "107374182400"
+    - key: segment.bytes
+      value: "107374182400"
+
+---
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+  labels:
+    strimzi.io/name: payments-validated
+spec:
+  partitions: 16
+  replicas: 3
+  retentionMs: 604800000
+  retentionBytes: 107374182400
+  segmentBytes: 107374182400
+  config:
+    - key: retention.ms
+      value: "604800000"
+    - key: retention.bytes
+      value: "107374182400"
+    - key: segment.bytes
+      value: "107374182400"
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+spec:
+  flinkConfiguration: |
+    state.backend = rocksdb
+    state.backend.rocksdb.incremental-state-changelog.enabled = true
+    state.backend.rocksdb.incremental-state-changelog.max-file-size = 10485760
+    state.backend.rocksdb.incremental-state-changelog.max-files = 1
+    state.backend.incremental = true
+    state.backend.incremental.snapshot-interval = 3600000
+    state.backend.incremental.max-concurrent-checkpoints = 1
+    state.backend.incremental.checkpoint-on-remote-savepoint = true
+    state.backend.incremental.checkpoint-on-local-savepoint = true
+    state.backend.incremental.checkpoint-on-local-recovery = false
+    state.backend.incremental.mini-batch-mode.enabled = true
+    state.backend.incremental.mini-batch-mode.checkpoint-interval = 1000
+    state.backend.incremental.mini-batch-mode.mini-batch-size = 1000000
+    state.backend.incremental.mini-batch-mode.max-concurrent-mini-batches = 5
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval = 1000
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval = 1000
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini-batch-checkpoint-interval-override-enabled-checkpoint-interval-override-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled-enabled = true
+    state.backend.incremental.mini-batch-mode.mini

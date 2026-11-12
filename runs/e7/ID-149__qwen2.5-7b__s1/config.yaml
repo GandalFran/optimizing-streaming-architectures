@@ -1,0 +1,25 @@
+env.java.opts.all: --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+jobmanager.bind-host: 127.0.0.1
+jobmanager.rpc.address: 127.0.0.1
+jobmanager.rpc.port: 12030
+jobmanager.memory.process.size: 1600m
+jobmanager.execution.failover-strategy: region
+taskmanager.bind-host: 127.0.0.1
+taskmanager.host: 127.0.0.1
+taskmanager.numberOfTaskSlots: 1
+taskmanager.memory.process.size: 1728m
+parallelism.default: 1
+rest.address: 127.0.0.1
+flink-conf.yaml.taskmanager.memory.process.size: 8000m
+flink-conf.yaml.taskmanager.numberOfTaskSlots: 4
+flink-conf.yaml.checkpointing.mode: exactly-once
+flink-conf.yaml.checkpointing.interval: 10000
+flink-conf.yaml.state.backend: rocksdb
+flink-conf.yaml.state.backend.rocksdb.path: file:///tmp/chamoso-e7/8387/e7-1594953/objstore/flink-state/rocksdb
+flink-conf.yaml.state.backend.rocksdb.checkpoint.snapshots-to-keep: 3
+flink-conf.yaml.state.backend.rocksdb.memory-mapped: false
+flink-conf.yaml.state.checkpoints.dir: file:///tmp/chamoso-e7/8387/e7-1594953/objstore/flink-state/checkpoints
+flink-conf.yaml.parallelism.default: 3
+rest.bind-address: 127.0.0.1
+rest.port: 12031
+io.tmp.dirs: /tmp/chamoso-e7/8387/e7-1594953/flink-io

@@ -1,0 +1,1566 @@
+[2026-11-10 20:04:26,041] INFO Registered `kafka:type=kafka.Log4jController` MBean (kafka.utils.Log4jControllerRegistration$)
+[2026-11-10 20:04:26,294] INFO Registered signal handlers for TERM, INT, HUP (org.apache.kafka.common.utils.LoggingSignalHandler)
+[2026-11-10 20:04:26,295] INFO [ControllerServer id=1] Starting controller (kafka.server.ControllerServer)
+[2026-11-10 20:04:26,529] INFO Updated connection-accept-rate max connection creation rate to 2147483647 (kafka.network.ConnectionQuotas)
+[2026-11-10 20:04:26,553] INFO [SocketServer listenerType=CONTROLLER, nodeId=1] Created data-plane acceptor and processors for endpoint : ListenerName(CONTROLLER) (kafka.network.SocketServer)
+[2026-11-10 20:04:26,559] INFO authorizerStart completed for endpoint CONTROLLER. Endpoint is now READY. (org.apache.kafka.server.network.EndpointReadyFutures)
+[2026-11-10 20:04:26,560] INFO [SharedServer id=1] Starting SharedServer (kafka.server.SharedServer)
+[2026-11-10 20:04:26,600] INFO [LogLoader partition=__cluster_metadata-0, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:26,600] INFO [LogLoader partition=__cluster_metadata-0, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Reloading from producer snapshot and rebuilding producer state from offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:26,601] INFO [LogLoader partition=__cluster_metadata-0, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Producer state recovery took 0ms for snapshot load and 0ms for segment recovery from offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:26,618] INFO Initialized snapshots with IDs SortedSet() from /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/__cluster_metadata-0 (kafka.raft.KafkaMetadataLog$)
+[2026-11-10 20:04:26,630] INFO [raft-expiration-reaper]: Starting (org.apache.kafka.raft.TimingWheelExpirationService$ExpiredOperationReaper)
+[2026-11-10 20:04:26,638] INFO [RaftManager id=1] Reading KRaft snapshot and log as part of the initialization (org.apache.kafka.raft.KafkaRaftClient)
+[2026-11-10 20:04:26,639] INFO [RaftManager id=1] Starting voters are VoterSet(voters={1=VoterNode(voterKey=ReplicaKey(id=1, directoryId=<undefined>), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=/127.0.0.1:12010}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:0]), 2=VoterNode(voterKey=ReplicaKey(id=2, directoryId=<undefined>), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=/127.0.0.1:12011}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:0]), 3=VoterNode(voterKey=ReplicaKey(id=3, directoryId=<undefined>), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=/127.0.0.1:12012}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:0])}) (org.apache.kafka.raft.KafkaRaftClient)
+[2026-11-10 20:04:26,643] INFO [RaftManager id=1] Starting request manager with static voters: [127.0.0.1:12010 (id: 1 rack: null isFenced: false), 127.0.0.1:12011 (id: 2 rack: null isFenced: false), 127.0.0.1:12012 (id: 3 rack: null isFenced: false)] (org.apache.kafka.raft.KafkaRaftClient)
+[2026-11-10 20:04:26,646] INFO [RaftManager id=1] Attempting durable transition to UnattachedState(epoch=0, leaderId=OptionalInt.empty, votedKey=Optional.empty, voters=[1, 2, 3], electionTimeoutMs=1840, highWatermark=Optional.empty) from null (org.apache.kafka.raft.QuorumState)
+[2026-11-10 20:04:26,659] INFO [RaftManager id=1] Completed transition to UnattachedState(epoch=0, leaderId=OptionalInt.empty, votedKey=Optional.empty, voters=[1, 2, 3], electionTimeoutMs=1840, highWatermark=Optional.empty) from null (org.apache.kafka.raft.QuorumState)
+[2026-11-10 20:04:26,661] INFO [kafka-1-raft-outbound-request-thread]: Starting (org.apache.kafka.raft.KafkaNetworkChannel$SendThread)
+[2026-11-10 20:04:26,661] INFO [kafka-1-raft-io-thread]: Starting (org.apache.kafka.raft.KafkaRaftClientDriver)
+[2026-11-10 20:04:26,670] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:26,671] INFO [RaftManager id=1] Registered the listener org.apache.kafka.image.loader.MetadataLoader@1715048132 (org.apache.kafka.raft.KafkaRaftClient)
+[2026-11-10 20:04:26,671] INFO [ControllerServer id=1] Waiting for controller quorum voters future (kafka.server.ControllerServer)
+[2026-11-10 20:04:26,672] INFO [ControllerServer id=1] Finished waiting for controller quorum voters future (kafka.server.ControllerServer)
+[2026-11-10 20:04:26,674] INFO [RaftManager id=1] Node 3 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,674] WARN [RaftManager id=1] Connection to node 3 (/127.0.0.1:12012) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,676] INFO [RaftManager id=1] Node 1 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,677] WARN [RaftManager id=1] Connection to node 1 (/127.0.0.1:12010) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,677] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,677] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,692] INFO [RaftManager id=1] Registered the listener org.apache.kafka.controller.QuorumController$QuorumMetaLogListener@1239351225 (org.apache.kafka.raft.KafkaRaftClient)
+[2026-11-10 20:04:26,695] INFO [controller-1-ThrottledChannelReaper-Fetch]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:26,695] INFO [controller-1-ThrottledChannelReaper-Produce]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:26,695] INFO [controller-1-ThrottledChannelReaper-Request]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:26,696] INFO [controller-1-ThrottledChannelReaper-ControllerMutation]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:26,705] INFO [ExpirationReaper-1-AlterAcls]: Starting (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:26,715] INFO [ControllerServer id=1] Waiting for the controller metadata publishers to be installed (kafka.server.ControllerServer)
+[2026-11-10 20:04:26,715] INFO [ControllerServer id=1] Finished waiting for the controller metadata publishers to be installed (kafka.server.ControllerServer)
+[2026-11-10 20:04:26,715] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:26,715] INFO [SocketServer listenerType=CONTROLLER, nodeId=1] Enabling request processing. (kafka.network.SocketServer)
+[2026-11-10 20:04:26,716] INFO Awaiting socket connections on 127.0.0.1:12010. (kafka.network.DataPlaneAcceptor)
+[2026-11-10 20:04:26,722] INFO [controller-1-to-controller-registration-channel-manager]: Starting (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:26,722] INFO [ControllerRegistrationManager id=1 incarnation=VFWCiZgYQ26zE5LisvI9_w] initialized channel manager. (kafka.server.ControllerRegistrationManager)
+[2026-11-10 20:04:26,723] INFO [ControllerRegistrationManager id=1 incarnation=VFWCiZgYQ26zE5LisvI9_w] maybeSendControllerRegistration: cannot register yet because the metadata.version is not known yet. (kafka.server.ControllerRegistrationManager)
+[2026-11-10 20:04:26,723] INFO [ControllerServer id=1] Waiting for all of the authorizer futures to be completed (kafka.server.ControllerServer)
+[2026-11-10 20:04:26,723] INFO [ControllerServer id=1] Finished waiting for all of the authorizer futures to be completed (kafka.server.ControllerServer)
+[2026-11-10 20:04:26,723] INFO [ControllerServer id=1] Waiting for all of the SocketServer Acceptors to be started (kafka.server.ControllerServer)
+[2026-11-10 20:04:26,723] INFO [ControllerServer id=1] Finished waiting for all of the SocketServer Acceptors to be started (kafka.server.ControllerServer)
+[2026-11-10 20:04:26,724] INFO [BrokerServer id=1] Transition from SHUTDOWN to STARTING (kafka.server.BrokerServer)
+[2026-11-10 20:04:26,724] INFO [BrokerServer id=1] Starting broker (kafka.server.BrokerServer)
+[2026-11-10 20:04:26,727] INFO [broker-1-ThrottledChannelReaper-Fetch]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:26,728] INFO [broker-1-ThrottledChannelReaper-Produce]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:26,728] INFO [broker-1-ThrottledChannelReaper-Request]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:26,728] INFO [broker-1-ThrottledChannelReaper-ControllerMutation]: Starting (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:26,774] INFO [BrokerServer id=1] Waiting for controller quorum voters future (kafka.server.BrokerServer)
+[2026-11-10 20:04:26,775] INFO [BrokerServer id=1] Finished waiting for controller quorum voters future (kafka.server.BrokerServer)
+[2026-11-10 20:04:26,779] INFO [broker-1-to-controller-forwarding-channel-manager]: Starting (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:26,784] INFO [client-metrics-reaper]: Starting (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:26,792] INFO [RaftManager id=1] Node 3 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,792] WARN [RaftManager id=1] Connection to node 3 (/127.0.0.1:12012) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,800] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,800] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,814] INFO Updated connection-accept-rate max connection creation rate to 2147483647 (kafka.network.ConnectionQuotas)
+[2026-11-10 20:04:26,815] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:26,816] INFO [SocketServer listenerType=BROKER, nodeId=1] Created data-plane acceptor and processors for endpoint : ListenerName(PLAINTEXT) (kafka.network.SocketServer)
+[2026-11-10 20:04:26,822] INFO [broker-1-to-controller-alter-partition-channel-manager]: Starting (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:26,827] INFO [broker-1-to-controller-directory-assignments-channel-manager]: Starting (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:26,835] INFO [ExpirationReaper-1-Produce]: Starting (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:26,836] INFO [ExpirationReaper-1-Fetch]: Starting (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:26,836] INFO [ExpirationReaper-1-DeleteRecords]: Starting (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:26,837] INFO [ExpirationReaper-1-RemoteFetch]: Starting (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:26,837] INFO [ExpirationReaper-1-RemoteListOffsets]: Starting (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:26,838] INFO [ExpirationReaper-1-ShareFetch]: Starting (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:26,847] INFO [share-coordinator-reaper]: Starting (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:26,860] INFO [share-coordinator-event-processor-0]: Starting (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:26,864] INFO [persister-state-manager-reaper]: Starting (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:26,864] INFO [PersisterStateManager]: Starting (org.apache.kafka.server.share.persister.PersisterStateManager$SendThread)
+[2026-11-10 20:04:26,865] INFO [group-coordinator-reaper]: Starting (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:26,870] INFO [group-coordinator-event-processor-0]: Starting (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:26,870] INFO [group-coordinator-event-processor-2]: Starting (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:26,870] INFO [group-coordinator-event-processor-1]: Starting (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:26,870] INFO [group-coordinator-event-processor-3]: Starting (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:26,882] INFO Unable to read the broker epoch in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data. (kafka.log.LogManager)
+[2026-11-10 20:04:26,883] INFO [broker-1-to-controller-heartbeat-channel-manager]: Starting (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:26,885] INFO [BrokerLifecycleManager id=1] Incarnation k9JqKBDFT-iskLsDEDh2yw of broker 1 in cluster PDSM_Y_MRC6Q8q2CYxBfRg is now STARTING. (kafka.server.BrokerLifecycleManager)
+[2026-11-10 20:04:26,891] INFO [share-group-lock-timeout-reaper]: Starting (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:26,898] INFO [ExpirationReaper-1-AlterAcls]: Starting (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:26,908] INFO [BrokerServer id=1] Waiting for the broker metadata publishers to be installed (kafka.server.BrokerServer)
+[2026-11-10 20:04:26,908] INFO [BrokerServer id=1] Finished waiting for the broker metadata publishers to be installed (kafka.server.BrokerServer)
+[2026-11-10 20:04:26,908] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:26,908] INFO [BrokerServer id=1] Waiting for the controller to acknowledge that we are caught up (kafka.server.BrokerServer)
+[2026-11-10 20:04:26,910] INFO [RaftManager id=1] Node 3 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,910] WARN [RaftManager id=1] Connection to node 3 (/127.0.0.1:12012) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,931] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:26,931] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:27,009] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:27,109] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:27,151] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:27,152] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:27,169] INFO [RaftManager id=1] Node 3 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:27,169] WARN [RaftManager id=1] Connection to node 3 (/127.0.0.1:12012) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:27,209] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:27,310] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:27,410] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:27,510] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:27,545] INFO [RaftManager id=1] Node 3 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:27,546] WARN [RaftManager id=1] Connection to node 3 (/127.0.0.1:12012) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:27,564] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:27,565] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:27,611] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:27,711] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:27,811] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:27,911] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,012] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,022] INFO [RaftManager id=1] Node 3 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:28,022] WARN [RaftManager id=1] Connection to node 3 (/127.0.0.1:12012) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:28,112] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,212] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,312] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,413] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,488] INFO [RaftManager id=1] Completed transition to ProspectiveState(epoch=0, leaderId=OptionalInt.empty, votedKey=Optional.empty, epochElection=EpochElection(voterStates={1=VoterState(replicaKey=ReplicaKey(id=1, directoryId=<undefined>), state=GRANTED), 2=VoterState(replicaKey=ReplicaKey(id=2, directoryId=<undefined>), state=UNRECORDED), 3=VoterState(replicaKey=ReplicaKey(id=3, directoryId=<undefined>), state=UNRECORDED)}), electionTimeoutMs=1172, highWatermark=Optional.empty) from UnattachedState(epoch=0, leaderId=OptionalInt.empty, votedKey=Optional.empty, voters=[1, 2, 3], electionTimeoutMs=1840, highWatermark=Optional.empty) (org.apache.kafka.raft.QuorumState)
+[2026-11-10 20:04:28,494] INFO [RaftManager id=1] Attempting durable transition to CandidateState(localId=1, localDirectoryId=kASDTbjIwh3MYlM0iy7UOg, epoch=1, epochElection=EpochElection(voterStates={1=VoterState(replicaKey=ReplicaKey(id=1, directoryId=<undefined>), state=GRANTED), 2=VoterState(replicaKey=ReplicaKey(id=2, directoryId=<undefined>), state=UNRECORDED), 3=VoterState(replicaKey=ReplicaKey(id=3, directoryId=<undefined>), state=UNRECORDED)}), highWatermark=Optional.empty, electionTimeoutMs=1515) from ProspectiveState(epoch=0, leaderId=OptionalInt.empty, votedKey=Optional.empty, epochElection=EpochElection(voterStates={1=VoterState(replicaKey=ReplicaKey(id=1, directoryId=<undefined>), state=GRANTED), 2=VoterState(replicaKey=ReplicaKey(id=2, directoryId=<undefined>), state=GRANTED), 3=VoterState(replicaKey=ReplicaKey(id=3, directoryId=<undefined>), state=UNRECORDED)}), electionTimeoutMs=1172, highWatermark=Optional.empty) (org.apache.kafka.raft.QuorumState)
+[2026-11-10 20:04:28,496] INFO [RaftManager id=1] Completed transition to CandidateState(localId=1, localDirectoryId=kASDTbjIwh3MYlM0iy7UOg, epoch=1, epochElection=EpochElection(voterStates={1=VoterState(replicaKey=ReplicaKey(id=1, directoryId=<undefined>), state=GRANTED), 2=VoterState(replicaKey=ReplicaKey(id=2, directoryId=<undefined>), state=UNRECORDED), 3=VoterState(replicaKey=ReplicaKey(id=3, directoryId=<undefined>), state=UNRECORDED)}), highWatermark=Optional.empty, electionTimeoutMs=1515) from ProspectiveState(epoch=0, leaderId=OptionalInt.empty, votedKey=Optional.empty, epochElection=EpochElection(voterStates={1=VoterState(replicaKey=ReplicaKey(id=1, directoryId=<undefined>), state=GRANTED), 2=VoterState(replicaKey=ReplicaKey(id=2, directoryId=<undefined>), state=GRANTED), 3=VoterState(replicaKey=ReplicaKey(id=3, directoryId=<undefined>), state=UNRECORDED)}), electionTimeoutMs=1172, highWatermark=Optional.empty) (org.apache.kafka.raft.QuorumState)
+[2026-11-10 20:04:28,504] INFO [RaftManager id=1] Attempting durable transition to Leader(localVoterNode=VoterNode(voterKey=ReplicaKey(id=1, directoryId=kASDTbjIwh3MYlM0iy7UOg), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=127.0.0.1/<unresolved>:12010}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:1]), epoch=1, epochStartOffset=0, highWatermark=Optional.empty, voterStates={1=ReplicaState(replicaKey=ReplicaKey(id=1, directoryId=<undefined>), endOffset=Optional.empty, lastFetchTimestamp=-1, lastCaughtUpTimestamp=-1, hasAcknowledgedLeader=true), 2=ReplicaState(replicaKey=ReplicaKey(id=2, directoryId=<undefined>), endOffset=Optional.empty, lastFetchTimestamp=-1, lastCaughtUpTimestamp=-1, hasAcknowledgedLeader=false), 3=ReplicaState(replicaKey=ReplicaKey(id=3, directoryId=<undefined>), endOffset=Optional.empty, lastFetchTimestamp=-1, lastCaughtUpTimestamp=-1, hasAcknowledgedLeader=false)}) from CandidateState(localId=1, localDirectoryId=kASDTbjIwh3MYlM0iy7UOg, epoch=1, epochElection=EpochElection(voterStates={1=VoterState(replicaKey=ReplicaKey(id=1, directoryId=<undefined>), state=GRANTED), 2=VoterState(replicaKey=ReplicaKey(id=2, directoryId=<undefined>), state=GRANTED), 3=VoterState(replicaKey=ReplicaKey(id=3, directoryId=<undefined>), state=UNRECORDED)}), highWatermark=Optional.empty, electionTimeoutMs=1515) (org.apache.kafka.raft.QuorumState)
+[2026-11-10 20:04:28,505] INFO [RaftManager id=1] Completed transition to Leader(localVoterNode=VoterNode(voterKey=ReplicaKey(id=1, directoryId=kASDTbjIwh3MYlM0iy7UOg), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=127.0.0.1/<unresolved>:12010}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:1]), epoch=1, epochStartOffset=0, highWatermark=Optional.empty, voterStates={1=ReplicaState(replicaKey=ReplicaKey(id=1, directoryId=<undefined>), endOffset=Optional.empty, lastFetchTimestamp=-1, lastCaughtUpTimestamp=-1, hasAcknowledgedLeader=true), 2=ReplicaState(replicaKey=ReplicaKey(id=2, directoryId=<undefined>), endOffset=Optional.empty, lastFetchTimestamp=-1, lastCaughtUpTimestamp=-1, hasAcknowledgedLeader=false), 3=ReplicaState(replicaKey=ReplicaKey(id=3, directoryId=<undefined>), endOffset=Optional.empty, lastFetchTimestamp=-1, lastCaughtUpTimestamp=-1, hasAcknowledgedLeader=false)}) from CandidateState(localId=1, localDirectoryId=kASDTbjIwh3MYlM0iy7UOg, epoch=1, epochElection=EpochElection(voterStates={1=VoterState(replicaKey=ReplicaKey(id=1, directoryId=<undefined>), state=GRANTED), 2=VoterState(replicaKey=ReplicaKey(id=2, directoryId=<undefined>), state=GRANTED), 3=VoterState(replicaKey=ReplicaKey(id=3, directoryId=<undefined>), state=UNRECORDED)}), highWatermark=Optional.empty, electionTimeoutMs=1515) (org.apache.kafka.raft.QuorumState)
+[2026-11-10 20:04:28,513] INFO [MetadataLoader id=1] initializeNewPublishers: the loader is still catching up because we still don't know the high water mark yet. (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,523] INFO [RaftManager id=1] Node 3 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:28,523] WARN [RaftManager id=1] Connection to node 3 (/127.0.0.1:12012) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:28,527] INFO [broker-1-to-controller-alter-partition-channel-manager]: Recorded new KRaft controller, from now on will use node 127.0.0.1:12010 (id: 1 rack: null isFenced: false) (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:28,527] INFO [controller-1-to-controller-registration-channel-manager]: Recorded new KRaft controller, from now on will use node 127.0.0.1:12010 (id: 1 rack: null isFenced: false) (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:28,531] INFO [broker-1-to-controller-directory-assignments-channel-manager]: Recorded new KRaft controller, from now on will use node 127.0.0.1:12010 (id: 1 rack: null isFenced: false) (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:28,547] INFO [RaftManager id=1] High watermark set to LogOffsetMetadata(offset=1, metadata=Optional[(segmentBaseOffset=0,relativePositionInSegment=106)]) for the first time for epoch 1 based on indexOfHw 1 and voters [ReplicaState(replicaKey=ReplicaKey(id=1, directoryId=<undefined>), endOffset=Optional[LogOffsetMetadata(offset=1, metadata=Optional[(segmentBaseOffset=0,relativePositionInSegment=106)])], lastFetchTimestamp=-1, lastCaughtUpTimestamp=-1, hasAcknowledgedLeader=true), ReplicaState(replicaKey=ReplicaKey(id=2, directoryId=<undefined>), endOffset=Optional[LogOffsetMetadata(offset=1, metadata=Optional[(segmentBaseOffset=0,relativePositionInSegment=106)])], lastFetchTimestamp=1794337468540, lastCaughtUpTimestamp=1794337468540, hasAcknowledgedLeader=true), ReplicaState(replicaKey=ReplicaKey(id=3, directoryId=<undefined>), endOffset=Optional.empty, lastFetchTimestamp=-1, lastCaughtUpTimestamp=-1, hasAcknowledgedLeader=false)] (org.apache.kafka.raft.LeaderState)
+[2026-11-10 20:04:28,548] INFO [RaftManager id=1] Setting the next offset of org.apache.kafka.image.loader.MetadataLoader@1715048132 to 0 since there are no snapshots (org.apache.kafka.raft.KafkaRaftClient)
+[2026-11-10 20:04:28,549] INFO [RaftManager id=1] Setting the next offset of org.apache.kafka.controller.QuorumController$QuorumMetaLogListener@1239351225 to 0 since there are no snapshots (org.apache.kafka.raft.KafkaRaftClient)
+[2026-11-10 20:04:28,550] INFO [MetadataLoader id=1] maybePublishMetadata(LOG_DELTA): The loader is still catching up because we have not loaded a controller record as of offset 0 and high water mark is 1 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,583] INFO [broker-1-to-controller-forwarding-channel-manager]: Recorded new KRaft controller, from now on will use node 127.0.0.1:12010 (id: 1 rack: null isFenced: false) (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:28,587] INFO [broker-1-to-controller-heartbeat-channel-manager]: Recorded new KRaft controller, from now on will use node 127.0.0.1:12010 (id: 1 rack: null isFenced: false) (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:28,588] INFO [MetadataLoader id=1] maybePublishMetadata(LOG_DELTA): The loader finished catching up to the current high water mark of 9 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,590] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing SnapshotGenerator with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,590] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing KRaftMetadataCachePublisher with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,590] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing FeaturesPublisher with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,592] INFO [ControllerServer id=1] Loaded new metadata FinalizedFeatures[metadataVersion=4.1-IV1, finalizedFeatures={group.version=1, transaction.version=2, eligible.leader.replicas.version=1, metadata.version=27}, finalizedFeaturesEpoch=8]. (org.apache.kafka.metadata.publisher.FeaturesPublisher)
+[2026-11-10 20:04:28,592] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing ControllerRegistrationsPublisher with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,592] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing ControllerRegistrationManager with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,592] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing DynamicConfigPublisher controller id=1 with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,595] INFO [ControllerRegistrationManager id=1 incarnation=VFWCiZgYQ26zE5LisvI9_w] sendControllerRegistration: attempting to send ControllerRegistrationRequestData(controllerId=1, incarnationId=VFWCiZgYQ26zE5LisvI9_w, zkMigrationReady=false, listeners=[Listener(name='CONTROLLER', host='127.0.0.1', port=12010, securityProtocol=0)], features=[Feature(name='group.version', minSupportedVersion=0, maxSupportedVersion=1), Feature(name='transaction.version', minSupportedVersion=0, maxSupportedVersion=2), Feature(name='eligible.leader.replicas.version', minSupportedVersion=0, maxSupportedVersion=1), Feature(name='kraft.version', minSupportedVersion=0, maxSupportedVersion=1), Feature(name='metadata.version', minSupportedVersion=7, maxSupportedVersion=27), Feature(name='share.version', minSupportedVersion=0, maxSupportedVersion=1)]) (kafka.server.ControllerRegistrationManager)
+[2026-11-10 20:04:28,596] INFO [DynamicConfigPublisher controller id=1] Updating cluster configuration : min.insync.replicas -> 1 (kafka.server.metadata.DynamicConfigPublisher)
+[2026-11-10 20:04:28,599] INFO KafkaConfig values: 
+	add.partitions.to.txn.retry.backoff.max.ms = 100
+	add.partitions.to.txn.retry.backoff.ms = 20
+	advertised.listeners = PLAINTEXT://127.0.0.1:12000
+	alter.config.policy.class.name = null
+	alter.log.dirs.replication.quota.window.num = 11
+	alter.log.dirs.replication.quota.window.size.seconds = 1
+	authorizer.class.name = 
+	auto.create.topics.enable = true
+	auto.leader.rebalance.enable = true
+	background.threads = 10
+	broker.heartbeat.interval.ms = 2000
+	broker.id = 1
+	broker.rack = null
+	broker.session.timeout.ms = 9000
+	client.quota.callback.class = null
+	compression.gzip.level = -1
+	compression.lz4.level = 9
+	compression.type = producer
+	compression.zstd.level = 3
+	connection.failed.authentication.delay.ms = 100
+	connections.max.idle.ms = 600000
+	connections.max.reauth.ms = 0
+	controlled.shutdown.enable = true
+	controller.listener.names = CONTROLLER
+	controller.performance.always.log.threshold.ms = 2000
+	controller.performance.sample.period.ms = 60000
+	controller.quorum.append.linger.ms = 25
+	controller.quorum.bootstrap.servers = []
+	controller.quorum.election.backoff.max.ms = 1000
+	controller.quorum.election.timeout.ms = 1000
+	controller.quorum.fetch.timeout.ms = 2000
+	controller.quorum.request.timeout.ms = 2000
+	controller.quorum.retry.backoff.ms = 20
+	controller.quorum.voters = [1@127.0.0.1:12010, 2@127.0.0.1:12011, 3@127.0.0.1:12012]
+	controller.quota.window.num = 11
+	controller.quota.window.size.seconds = 1
+	controller.socket.timeout.ms = 30000
+	create.topic.policy.class.name = null
+	default.replication.factor = 1
+	delegation.token.expiry.check.interval.ms = 3600000
+	delegation.token.expiry.time.ms = 86400000
+	delegation.token.max.lifetime.ms = 604800000
+	delegation.token.secret.key = null
+	delete.records.purgatory.purge.interval.requests = 1
+	delete.topic.enable = true
+	early.start.listeners = null
+	fetch.max.bytes = 57671680
+	fetch.purgatory.purge.interval.requests = 1000
+	group.consumer.assignors = [uniform, range]
+	group.consumer.heartbeat.interval.ms = 5000
+	group.consumer.max.heartbeat.interval.ms = 15000
+	group.consumer.max.session.timeout.ms = 60000
+	group.consumer.max.size = 2147483647
+	group.consumer.migration.policy = bidirectional
+	group.consumer.min.heartbeat.interval.ms = 5000
+	group.consumer.min.session.timeout.ms = 45000
+	group.consumer.regex.refresh.interval.ms = 600000
+	group.consumer.session.timeout.ms = 45000
+	group.coordinator.append.linger.ms = 5
+	group.coordinator.rebalance.protocols = [classic, consumer, streams]
+	group.coordinator.threads = 4
+	group.initial.rebalance.delay.ms = 3000
+	group.max.session.timeout.ms = 1800000
+	group.max.size = 2147483647
+	group.min.session.timeout.ms = 6000
+	group.share.assignors = [simple]
+	group.share.delivery.count.limit = 5
+	group.share.enable = false
+	group.share.heartbeat.interval.ms = 5000
+	group.share.max.heartbeat.interval.ms = 15000
+	group.share.max.record.lock.duration.ms = 60000
+	group.share.max.session.timeout.ms = 60000
+	group.share.max.share.sessions = 2000
+	group.share.max.size = 200
+	group.share.min.heartbeat.interval.ms = 5000
+	group.share.min.record.lock.duration.ms = 15000
+	group.share.min.session.timeout.ms = 45000
+	group.share.partition.max.record.locks = 2000
+	group.share.persister.class.name = org.apache.kafka.server.share.persister.DefaultStatePersister
+	group.share.record.lock.duration.ms = 30000
+	group.share.session.timeout.ms = 45000
+	group.streams.heartbeat.interval.ms = 5000
+	group.streams.max.heartbeat.interval.ms = 15000
+	group.streams.max.session.timeout.ms = 60000
+	group.streams.max.size = 2147483647
+	group.streams.max.standby.replicas = 2
+	group.streams.min.heartbeat.interval.ms = 5000
+	group.streams.min.session.timeout.ms = 45000
+	group.streams.num.standby.replicas = 0
+	group.streams.session.timeout.ms = 45000
+	initial.broker.registration.timeout.ms = 60000
+	inter.broker.listener.name = null
+	internal.metadata.delete.delay.millis = 60000
+	internal.metadata.log.segment.bytes = null
+	internal.metadata.max.batch.size.in.bytes = 8388608
+	internal.metadata.max.fetch.size.in.bytes = 8388608
+	kafka.metrics.polling.interval.secs = 10
+	kafka.metrics.reporters = []
+	leader.imbalance.check.interval.seconds = 300
+	listener.security.protocol.map = PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+	listeners = PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010
+	log.cleaner.backoff.ms = 15000
+	log.cleaner.dedupe.buffer.size = 134217728
+	log.cleaner.delete.retention.ms = 86400000
+	log.cleaner.enable = true
+	log.cleaner.io.buffer.load.factor = 0.9
+	log.cleaner.io.buffer.size = 524288
+	log.cleaner.io.max.bytes.per.second = 1.7976931348623157E308
+	log.cleaner.max.compaction.lag.ms = 9223372036854775807
+	log.cleaner.min.cleanable.ratio = 0.5
+	log.cleaner.min.compaction.lag.ms = 0
+	log.cleaner.threads = 1
+	log.cleanup.policy = [delete]
+	log.dir = /tmp/kafka-logs
+	log.dir.failure.timeout.ms = 30000
+	log.dirs = /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data
+	log.flush.interval.messages = 9223372036854775807
+	log.flush.interval.ms = null
+	log.flush.offset.checkpoint.interval.ms = 60000
+	log.flush.scheduler.interval.ms = 9223372036854775807
+	log.flush.start.offset.checkpoint.interval.ms = 60000
+	log.index.interval.bytes = 4096
+	log.index.size.max.bytes = 10485760
+	log.initial.task.delay.ms = 30000
+	log.local.retention.bytes = -2
+	log.local.retention.ms = -2
+	log.message.timestamp.after.max.ms = 3600000
+	log.message.timestamp.before.max.ms = 9223372036854775807
+	log.message.timestamp.type = CreateTime
+	log.preallocate = false
+	log.retention.bytes = -1
+	log.retention.check.interval.ms = 300000
+	log.retention.hours = 168
+	log.retention.minutes = null
+	log.retention.ms = null
+	log.roll.hours = 168
+	log.roll.jitter.hours = 0
+	log.roll.jitter.ms = null
+	log.roll.ms = null
+	log.segment.bytes = 1073741824
+	log.segment.delete.delay.ms = 60000
+	max.connection.creation.rate = 2147483647
+	max.connections = 2147483647
+	max.connections.per.ip = 2147483647
+	max.connections.per.ip.overrides = 
+	max.incremental.fetch.session.cache.slots = 1000
+	max.request.partition.size.limit = 2000
+	message.max.bytes = 1048588
+	metadata.log.dir = null
+	metadata.log.max.record.bytes.between.snapshots = 20971520
+	metadata.log.max.snapshot.interval.ms = 3600000
+	metadata.log.segment.bytes = 1073741824
+	metadata.log.segment.ms = 604800000
+	metadata.max.idle.interval.ms = 500
+	metadata.max.retention.bytes = 104857600
+	metadata.max.retention.ms = 604800000
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	min.insync.replicas = 1
+	node.id = 1
+	num.io.threads = 8
+	num.network.threads = 3
+	num.partitions = 1
+	num.recovery.threads.per.data.dir = 2
+	num.replica.alter.log.dirs.threads = null
+	num.replica.fetchers = 1
+	offset.metadata.max.bytes = 4096
+	offsets.commit.timeout.ms = 5000
+	offsets.load.buffer.size = 5242880
+	offsets.retention.check.interval.ms = 600000
+	offsets.retention.minutes = 10080
+	offsets.topic.compression.codec = 0
+	offsets.topic.num.partitions = 50
+	offsets.topic.replication.factor = 3
+	offsets.topic.segment.bytes = 104857600
+	principal.builder.class = class org.apache.kafka.common.security.authenticator.DefaultKafkaPrincipalBuilder
+	process.roles = [broker, controller]
+	producer.id.expiration.check.interval.ms = 600000
+	producer.id.expiration.ms = 86400000
+	producer.purgatory.purge.interval.requests = 1000
+	queued.max.request.bytes = -1
+	queued.max.requests = 500
+	quota.window.num = 11
+	quota.window.size.seconds = 1
+	remote.fetch.max.wait.ms = 500
+	remote.list.offsets.request.timeout.ms = 30000
+	remote.log.index.file.cache.total.size.bytes = 1073741824
+	remote.log.manager.copier.thread.pool.size = 10
+	remote.log.manager.copy.max.bytes.per.second = 9223372036854775807
+	remote.log.manager.copy.quota.window.num = 11
+	remote.log.manager.copy.quota.window.size.seconds = 1
+	remote.log.manager.expiration.thread.pool.size = 10
+	remote.log.manager.fetch.max.bytes.per.second = 9223372036854775807
+	remote.log.manager.fetch.quota.window.num = 11
+	remote.log.manager.fetch.quota.window.size.seconds = 1
+	remote.log.manager.task.interval.ms = 30000
+	remote.log.manager.task.retry.backoff.max.ms = 30000
+	remote.log.manager.task.retry.backoff.ms = 500
+	remote.log.manager.task.retry.jitter = 0.2
+	remote.log.manager.thread.pool.size = 2
+	remote.log.metadata.custom.metadata.max.bytes = 128
+	remote.log.metadata.manager.class.name = org.apache.kafka.server.log.remote.metadata.storage.TopicBasedRemoteLogMetadataManager
+	remote.log.metadata.manager.class.path = null
+	remote.log.metadata.manager.impl.prefix = rlmm.config.
+	remote.log.metadata.manager.listener.name = null
+	remote.log.reader.max.pending.tasks = 100
+	remote.log.reader.threads = 10
+	remote.log.storage.manager.class.name = null
+	remote.log.storage.manager.class.path = null
+	remote.log.storage.manager.impl.prefix = rsm.config.
+	remote.log.storage.system.enable = false
+	replica.fetch.backoff.ms = 1000
+	replica.fetch.max.bytes = 1048576
+	replica.fetch.min.bytes = 1
+	replica.fetch.response.max.bytes = 10485760
+	replica.fetch.wait.max.ms = 500
+	replica.high.watermark.checkpoint.interval.ms = 5000
+	replica.lag.time.max.ms = 30000
+	replica.selector.class = null
+	replica.socket.receive.buffer.bytes = 65536
+	replica.socket.timeout.ms = 30000
+	replication.quota.window.num = 11
+	replication.quota.window.size.seconds = 1
+	request.timeout.ms = 30000
+	sasl.client.callback.handler.class = null
+	sasl.enabled.mechanisms = [GSSAPI]
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.principal.to.local.rules = [DEFAULT]
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism.controller.protocol = GSSAPI
+	sasl.mechanism.inter.broker.protocol = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	sasl.server.callback.handler.class = null
+	sasl.server.max.receive.size = 524288
+	security.inter.broker.protocol = PLAINTEXT
+	security.providers = null
+	server.max.startup.time.ms = 9223372036854775807
+	share.coordinator.append.linger.ms = 5
+	share.coordinator.cold.partition.snapshot.interval.ms = 300000
+	share.coordinator.load.buffer.size = 5242880
+	share.coordinator.snapshot.update.records.per.snapshot = 500
+	share.coordinator.state.topic.compression.codec = 0
+	share.coordinator.state.topic.min.isr = 2
+	share.coordinator.state.topic.num.partitions = 50
+	share.coordinator.state.topic.prune.interval.ms = 300000
+	share.coordinator.state.topic.replication.factor = 3
+	share.coordinator.state.topic.segment.bytes = 104857600
+	share.coordinator.threads = 1
+	share.coordinator.write.timeout.ms = 5000
+	share.fetch.purgatory.purge.interval.requests = 1000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	socket.listen.backlog.size = 50
+	socket.receive.buffer.bytes = 102400
+	socket.request.max.bytes = 104857600
+	socket.send.buffer.bytes = 102400
+	ssl.allow.dn.changes = false
+	ssl.allow.san.changes = false
+	ssl.cipher.suites = []
+	ssl.client.auth = none
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.principal.mapping.rules = DEFAULT
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	telemetry.max.bytes = 1048576
+	transaction.abort.timed.out.transaction.cleanup.interval.ms = 10000
+	transaction.max.timeout.ms = 900000
+	transaction.partition.verification.enable = true
+	transaction.remove.expired.transaction.cleanup.interval.ms = 3600000
+	transaction.state.log.load.buffer.size = 5242880
+	transaction.state.log.min.isr = 2
+	transaction.state.log.num.partitions = 50
+	transaction.state.log.replication.factor = 3
+	transaction.state.log.segment.bytes = 104857600
+	transaction.two.phase.commit.enable = false
+	transactional.id.expiration.ms = 604800000
+	unclean.leader.election.enable = false
+	unclean.leader.election.interval.ms = 300000
+	unstable.api.versions.enable = false
+	unstable.feature.versions.enable = false
+ (org.apache.kafka.common.config.AbstractConfig)
+[2026-11-10 20:04:28,609] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing DynamicClientQuotaPublisher controller id=1 with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,609] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing DynamicTopicClusterQuotaPublisher controller id=1 with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,610] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing ScramPublisher controller id=1 with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,610] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing DelegationTokenPublisher controller id=1 with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,611] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing ControllerMetadataMetricsPublisher with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,612] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing AclPublisher controller id=1 with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,612] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing MetadataVersionPublisher(id=1) with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,612] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing BrokerMetadataPublisher with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,614] INFO [BrokerMetadataPublisher id=1] Publishing initial metadata at offset OffsetAndEpoch[offset=8, epoch=1] with metadata.version Optional[4.1-IV1]. (kafka.server.metadata.BrokerMetadataPublisher)
+[2026-11-10 20:04:28,615] INFO Loading logs from log dirs ArrayBuffer(/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data) (kafka.log.LogManager)
+[2026-11-10 20:04:28,617] INFO No logs found to be loaded in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data (kafka.log.LogManager)
+[2026-11-10 20:04:28,621] INFO [BrokerLifecycleManager id=1] Successfully registered broker 1 with broker epoch 9 (kafka.server.BrokerLifecycleManager)
+[2026-11-10 20:04:28,624] INFO [ControllerRegistrationManager id=1 incarnation=VFWCiZgYQ26zE5LisvI9_w] RegistrationResponseHandler: controller acknowledged ControllerRegistrationRequest. (kafka.server.ControllerRegistrationManager)
+[2026-11-10 20:04:28,627] INFO Loaded 0 logs in 10ms (kafka.log.LogManager)
+[2026-11-10 20:04:28,627] INFO Starting log cleanup with a period of 300000 ms. (kafka.log.LogManager)
+[2026-11-10 20:04:28,628] INFO Starting log flusher with a default period of 9223372036854775807 ms. (kafka.log.LogManager)
+[2026-11-10 20:04:28,672] INFO [LogDirFailureHandler]: Starting (kafka.server.ReplicaManager$LogDirFailureHandler)
+[2026-11-10 20:04:28,672] INFO [AddPartitionsToTxnSenderThread-1]: Starting (org.apache.kafka.server.transaction.AddPartitionsToTxnManager)
+[2026-11-10 20:04:28,675] INFO [GroupCoordinator id=1] Starting up. (org.apache.kafka.coordinator.group.GroupCoordinatorService)
+[2026-11-10 20:04:28,675] INFO [GroupCoordinator id=1] Startup complete. (org.apache.kafka.coordinator.group.GroupCoordinatorService)
+[2026-11-10 20:04:28,676] INFO [TransactionCoordinator id=1] Starting up. (kafka.coordinator.transaction.TransactionCoordinator)
+[2026-11-10 20:04:28,677] INFO [TxnMarkerSenderThread-1]: Starting (kafka.coordinator.transaction.TransactionMarkerChannelManager)
+[2026-11-10 20:04:28,677] INFO [TransactionCoordinator id=1] Startup complete. (kafka.coordinator.transaction.TransactionCoordinator)
+[2026-11-10 20:04:28,677] INFO [ShareCoordinator id=1] Starting up. (org.apache.kafka.coordinator.share.ShareCoordinatorService)
+[2026-11-10 20:04:28,677] INFO [ShareCoordinator id=1] Startup complete. (org.apache.kafka.coordinator.share.ShareCoordinatorService)
+[2026-11-10 20:04:28,681] INFO [DynamicConfigPublisher broker id=1] Updating cluster configuration : min.insync.replicas -> 1 (kafka.server.metadata.DynamicConfigPublisher)
+[2026-11-10 20:04:28,682] INFO KafkaConfig values: 
+	add.partitions.to.txn.retry.backoff.max.ms = 100
+	add.partitions.to.txn.retry.backoff.ms = 20
+	advertised.listeners = PLAINTEXT://127.0.0.1:12000
+	alter.config.policy.class.name = null
+	alter.log.dirs.replication.quota.window.num = 11
+	alter.log.dirs.replication.quota.window.size.seconds = 1
+	authorizer.class.name = 
+	auto.create.topics.enable = true
+	auto.leader.rebalance.enable = true
+	background.threads = 10
+	broker.heartbeat.interval.ms = 2000
+	broker.id = 1
+	broker.rack = null
+	broker.session.timeout.ms = 9000
+	client.quota.callback.class = null
+	compression.gzip.level = -1
+	compression.lz4.level = 9
+	compression.type = producer
+	compression.zstd.level = 3
+	connection.failed.authentication.delay.ms = 100
+	connections.max.idle.ms = 600000
+	connections.max.reauth.ms = 0
+	controlled.shutdown.enable = true
+	controller.listener.names = CONTROLLER
+	controller.performance.always.log.threshold.ms = 2000
+	controller.performance.sample.period.ms = 60000
+	controller.quorum.append.linger.ms = 25
+	controller.quorum.bootstrap.servers = []
+	controller.quorum.election.backoff.max.ms = 1000
+	controller.quorum.election.timeout.ms = 1000
+	controller.quorum.fetch.timeout.ms = 2000
+	controller.quorum.request.timeout.ms = 2000
+	controller.quorum.retry.backoff.ms = 20
+	controller.quorum.voters = [1@127.0.0.1:12010, 2@127.0.0.1:12011, 3@127.0.0.1:12012]
+	controller.quota.window.num = 11
+	controller.quota.window.size.seconds = 1
+	controller.socket.timeout.ms = 30000
+	create.topic.policy.class.name = null
+	default.replication.factor = 1
+	delegation.token.expiry.check.interval.ms = 3600000
+	delegation.token.expiry.time.ms = 86400000
+	delegation.token.max.lifetime.ms = 604800000
+	delegation.token.secret.key = null
+	delete.records.purgatory.purge.interval.requests = 1
+	delete.topic.enable = true
+	early.start.listeners = null
+	fetch.max.bytes = 57671680
+	fetch.purgatory.purge.interval.requests = 1000
+	group.consumer.assignors = [uniform, range]
+	group.consumer.heartbeat.interval.ms = 5000
+	group.consumer.max.heartbeat.interval.ms = 15000
+	group.consumer.max.session.timeout.ms = 60000
+	group.consumer.max.size = 2147483647
+	group.consumer.migration.policy = bidirectional
+	group.consumer.min.heartbeat.interval.ms = 5000
+	group.consumer.min.session.timeout.ms = 45000
+	group.consumer.regex.refresh.interval.ms = 600000
+	group.consumer.session.timeout.ms = 45000
+	group.coordinator.append.linger.ms = 5
+	group.coordinator.rebalance.protocols = [classic, consumer, streams]
+	group.coordinator.threads = 4
+	group.initial.rebalance.delay.ms = 3000
+	group.max.session.timeout.ms = 1800000
+	group.max.size = 2147483647
+	group.min.session.timeout.ms = 6000
+	group.share.assignors = [simple]
+	group.share.delivery.count.limit = 5
+	group.share.enable = false
+	group.share.heartbeat.interval.ms = 5000
+	group.share.max.heartbeat.interval.ms = 15000
+	group.share.max.record.lock.duration.ms = 60000
+	group.share.max.session.timeout.ms = 60000
+	group.share.max.share.sessions = 2000
+	group.share.max.size = 200
+	group.share.min.heartbeat.interval.ms = 5000
+	group.share.min.record.lock.duration.ms = 15000
+	group.share.min.session.timeout.ms = 45000
+	group.share.partition.max.record.locks = 2000
+	group.share.persister.class.name = org.apache.kafka.server.share.persister.DefaultStatePersister
+	group.share.record.lock.duration.ms = 30000
+	group.share.session.timeout.ms = 45000
+	group.streams.heartbeat.interval.ms = 5000
+	group.streams.max.heartbeat.interval.ms = 15000
+	group.streams.max.session.timeout.ms = 60000
+	group.streams.max.size = 2147483647
+	group.streams.max.standby.replicas = 2
+	group.streams.min.heartbeat.interval.ms = 5000
+	group.streams.min.session.timeout.ms = 45000
+	group.streams.num.standby.replicas = 0
+	group.streams.session.timeout.ms = 45000
+	initial.broker.registration.timeout.ms = 60000
+	inter.broker.listener.name = null
+	internal.metadata.delete.delay.millis = 60000
+	internal.metadata.log.segment.bytes = null
+	internal.metadata.max.batch.size.in.bytes = 8388608
+	internal.metadata.max.fetch.size.in.bytes = 8388608
+	kafka.metrics.polling.interval.secs = 10
+	kafka.metrics.reporters = []
+	leader.imbalance.check.interval.seconds = 300
+	listener.security.protocol.map = PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+	listeners = PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010
+	log.cleaner.backoff.ms = 15000
+	log.cleaner.dedupe.buffer.size = 134217728
+	log.cleaner.delete.retention.ms = 86400000
+	log.cleaner.enable = true
+	log.cleaner.io.buffer.load.factor = 0.9
+	log.cleaner.io.buffer.size = 524288
+	log.cleaner.io.max.bytes.per.second = 1.7976931348623157E308
+	log.cleaner.max.compaction.lag.ms = 9223372036854775807
+	log.cleaner.min.cleanable.ratio = 0.5
+	log.cleaner.min.compaction.lag.ms = 0
+	log.cleaner.threads = 1
+	log.cleanup.policy = [delete]
+	log.dir = /tmp/kafka-logs
+	log.dir.failure.timeout.ms = 30000
+	log.dirs = /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data
+	log.flush.interval.messages = 9223372036854775807
+	log.flush.interval.ms = null
+	log.flush.offset.checkpoint.interval.ms = 60000
+	log.flush.scheduler.interval.ms = 9223372036854775807
+	log.flush.start.offset.checkpoint.interval.ms = 60000
+	log.index.interval.bytes = 4096
+	log.index.size.max.bytes = 10485760
+	log.initial.task.delay.ms = 30000
+	log.local.retention.bytes = -2
+	log.local.retention.ms = -2
+	log.message.timestamp.after.max.ms = 3600000
+	log.message.timestamp.before.max.ms = 9223372036854775807
+	log.message.timestamp.type = CreateTime
+	log.preallocate = false
+	log.retention.bytes = -1
+	log.retention.check.interval.ms = 300000
+	log.retention.hours = 168
+	log.retention.minutes = null
+	log.retention.ms = null
+	log.roll.hours = 168
+	log.roll.jitter.hours = 0
+	log.roll.jitter.ms = null
+	log.roll.ms = null
+	log.segment.bytes = 1073741824
+	log.segment.delete.delay.ms = 60000
+	max.connection.creation.rate = 2147483647
+	max.connections = 2147483647
+	max.connections.per.ip = 2147483647
+	max.connections.per.ip.overrides = 
+	max.incremental.fetch.session.cache.slots = 1000
+	max.request.partition.size.limit = 2000
+	message.max.bytes = 1048588
+	metadata.log.dir = null
+	metadata.log.max.record.bytes.between.snapshots = 20971520
+	metadata.log.max.snapshot.interval.ms = 3600000
+	metadata.log.segment.bytes = 1073741824
+	metadata.log.segment.ms = 604800000
+	metadata.max.idle.interval.ms = 500
+	metadata.max.retention.bytes = 104857600
+	metadata.max.retention.ms = 604800000
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	min.insync.replicas = 1
+	node.id = 1
+	num.io.threads = 8
+	num.network.threads = 3
+	num.partitions = 1
+	num.recovery.threads.per.data.dir = 2
+	num.replica.alter.log.dirs.threads = null
+	num.replica.fetchers = 1
+	offset.metadata.max.bytes = 4096
+	offsets.commit.timeout.ms = 5000
+	offsets.load.buffer.size = 5242880
+	offsets.retention.check.interval.ms = 600000
+	offsets.retention.minutes = 10080
+	offsets.topic.compression.codec = 0
+	offsets.topic.num.partitions = 50
+	offsets.topic.replication.factor = 3
+	offsets.topic.segment.bytes = 104857600
+	principal.builder.class = class org.apache.kafka.common.security.authenticator.DefaultKafkaPrincipalBuilder
+	process.roles = [broker, controller]
+	producer.id.expiration.check.interval.ms = 600000
+	producer.id.expiration.ms = 86400000
+	producer.purgatory.purge.interval.requests = 1000
+	queued.max.request.bytes = -1
+	queued.max.requests = 500
+	quota.window.num = 11
+	quota.window.size.seconds = 1
+	remote.fetch.max.wait.ms = 500
+	remote.list.offsets.request.timeout.ms = 30000
+	remote.log.index.file.cache.total.size.bytes = 1073741824
+	remote.log.manager.copier.thread.pool.size = 10
+	remote.log.manager.copy.max.bytes.per.second = 9223372036854775807
+	remote.log.manager.copy.quota.window.num = 11
+	remote.log.manager.copy.quota.window.size.seconds = 1
+	remote.log.manager.expiration.thread.pool.size = 10
+	remote.log.manager.fetch.max.bytes.per.second = 9223372036854775807
+	remote.log.manager.fetch.quota.window.num = 11
+	remote.log.manager.fetch.quota.window.size.seconds = 1
+	remote.log.manager.task.interval.ms = 30000
+	remote.log.manager.task.retry.backoff.max.ms = 30000
+	remote.log.manager.task.retry.backoff.ms = 500
+	remote.log.manager.task.retry.jitter = 0.2
+	remote.log.manager.thread.pool.size = 2
+	remote.log.metadata.custom.metadata.max.bytes = 128
+	remote.log.metadata.manager.class.name = org.apache.kafka.server.log.remote.metadata.storage.TopicBasedRemoteLogMetadataManager
+	remote.log.metadata.manager.class.path = null
+	remote.log.metadata.manager.impl.prefix = rlmm.config.
+	remote.log.metadata.manager.listener.name = null
+	remote.log.reader.max.pending.tasks = 100
+	remote.log.reader.threads = 10
+	remote.log.storage.manager.class.name = null
+	remote.log.storage.manager.class.path = null
+	remote.log.storage.manager.impl.prefix = rsm.config.
+	remote.log.storage.system.enable = false
+	replica.fetch.backoff.ms = 1000
+	replica.fetch.max.bytes = 1048576
+	replica.fetch.min.bytes = 1
+	replica.fetch.response.max.bytes = 10485760
+	replica.fetch.wait.max.ms = 500
+	replica.high.watermark.checkpoint.interval.ms = 5000
+	replica.lag.time.max.ms = 30000
+	replica.selector.class = null
+	replica.socket.receive.buffer.bytes = 65536
+	replica.socket.timeout.ms = 30000
+	replication.quota.window.num = 11
+	replication.quota.window.size.seconds = 1
+	request.timeout.ms = 30000
+	sasl.client.callback.handler.class = null
+	sasl.enabled.mechanisms = [GSSAPI]
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.principal.to.local.rules = [DEFAULT]
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism.controller.protocol = GSSAPI
+	sasl.mechanism.inter.broker.protocol = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	sasl.server.callback.handler.class = null
+	sasl.server.max.receive.size = 524288
+	security.inter.broker.protocol = PLAINTEXT
+	security.providers = null
+	server.max.startup.time.ms = 9223372036854775807
+	share.coordinator.append.linger.ms = 5
+	share.coordinator.cold.partition.snapshot.interval.ms = 300000
+	share.coordinator.load.buffer.size = 5242880
+	share.coordinator.snapshot.update.records.per.snapshot = 500
+	share.coordinator.state.topic.compression.codec = 0
+	share.coordinator.state.topic.min.isr = 2
+	share.coordinator.state.topic.num.partitions = 50
+	share.coordinator.state.topic.prune.interval.ms = 300000
+	share.coordinator.state.topic.replication.factor = 3
+	share.coordinator.state.topic.segment.bytes = 104857600
+	share.coordinator.threads = 1
+	share.coordinator.write.timeout.ms = 5000
+	share.fetch.purgatory.purge.interval.requests = 1000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	socket.listen.backlog.size = 50
+	socket.receive.buffer.bytes = 102400
+	socket.request.max.bytes = 104857600
+	socket.send.buffer.bytes = 102400
+	ssl.allow.dn.changes = false
+	ssl.allow.san.changes = false
+	ssl.cipher.suites = []
+	ssl.client.auth = none
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.principal.mapping.rules = DEFAULT
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	telemetry.max.bytes = 1048576
+	transaction.abort.timed.out.transaction.cleanup.interval.ms = 10000
+	transaction.max.timeout.ms = 900000
+	transaction.partition.verification.enable = true
+	transaction.remove.expired.transaction.cleanup.interval.ms = 3600000
+	transaction.state.log.load.buffer.size = 5242880
+	transaction.state.log.min.isr = 2
+	transaction.state.log.num.partitions = 50
+	transaction.state.log.replication.factor = 3
+	transaction.state.log.segment.bytes = 104857600
+	transaction.two.phase.commit.enable = false
+	transactional.id.expiration.ms = 604800000
+	unclean.leader.election.enable = false
+	unclean.leader.election.interval.ms = 300000
+	unstable.api.versions.enable = false
+	unstable.feature.versions.enable = false
+ (org.apache.kafka.common.config.AbstractConfig)
+[2026-11-10 20:04:28,689] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing BrokerRegistrationTracker(id=1) with a snapshot at offset 8 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-10 20:04:28,690] INFO [ControllerRegistrationManager id=1 incarnation=VFWCiZgYQ26zE5LisvI9_w] Our registration has been persisted to the metadata log. (kafka.server.ControllerRegistrationManager)
+[2026-11-10 20:04:28,693] INFO [BrokerLifecycleManager id=1] The broker has caught up. Transitioning from STARTING to RECOVERY. (kafka.server.BrokerLifecycleManager)
+[2026-11-10 20:04:28,693] INFO [BrokerServer id=1] Finished waiting for the controller to acknowledge that we are caught up (kafka.server.BrokerServer)
+[2026-11-10 20:04:28,693] INFO [BrokerServer id=1] Waiting for the initial broker metadata update to be published (kafka.server.BrokerServer)
+[2026-11-10 20:04:28,693] INFO [BrokerServer id=1] Finished waiting for the initial broker metadata update to be published (kafka.server.BrokerServer)
+[2026-11-10 20:04:28,694] INFO KafkaConfig values: 
+	add.partitions.to.txn.retry.backoff.max.ms = 100
+	add.partitions.to.txn.retry.backoff.ms = 20
+	advertised.listeners = PLAINTEXT://127.0.0.1:12000
+	alter.config.policy.class.name = null
+	alter.log.dirs.replication.quota.window.num = 11
+	alter.log.dirs.replication.quota.window.size.seconds = 1
+	authorizer.class.name = 
+	auto.create.topics.enable = true
+	auto.leader.rebalance.enable = true
+	background.threads = 10
+	broker.heartbeat.interval.ms = 2000
+	broker.id = 1
+	broker.rack = null
+	broker.session.timeout.ms = 9000
+	client.quota.callback.class = null
+	compression.gzip.level = -1
+	compression.lz4.level = 9
+	compression.type = producer
+	compression.zstd.level = 3
+	connection.failed.authentication.delay.ms = 100
+	connections.max.idle.ms = 600000
+	connections.max.reauth.ms = 0
+	controlled.shutdown.enable = true
+	controller.listener.names = CONTROLLER
+	controller.performance.always.log.threshold.ms = 2000
+	controller.performance.sample.period.ms = 60000
+	controller.quorum.append.linger.ms = 25
+	controller.quorum.bootstrap.servers = []
+	controller.quorum.election.backoff.max.ms = 1000
+	controller.quorum.election.timeout.ms = 1000
+	controller.quorum.fetch.timeout.ms = 2000
+	controller.quorum.request.timeout.ms = 2000
+	controller.quorum.retry.backoff.ms = 20
+	controller.quorum.voters = [1@127.0.0.1:12010, 2@127.0.0.1:12011, 3@127.0.0.1:12012]
+	controller.quota.window.num = 11
+	controller.quota.window.size.seconds = 1
+	controller.socket.timeout.ms = 30000
+	create.topic.policy.class.name = null
+	default.replication.factor = 1
+	delegation.token.expiry.check.interval.ms = 3600000
+	delegation.token.expiry.time.ms = 86400000
+	delegation.token.max.lifetime.ms = 604800000
+	delegation.token.secret.key = null
+	delete.records.purgatory.purge.interval.requests = 1
+	delete.topic.enable = true
+	early.start.listeners = null
+	fetch.max.bytes = 57671680
+	fetch.purgatory.purge.interval.requests = 1000
+	group.consumer.assignors = [uniform, range]
+	group.consumer.heartbeat.interval.ms = 5000
+	group.consumer.max.heartbeat.interval.ms = 15000
+	group.consumer.max.session.timeout.ms = 60000
+	group.consumer.max.size = 2147483647
+	group.consumer.migration.policy = bidirectional
+	group.consumer.min.heartbeat.interval.ms = 5000
+	group.consumer.min.session.timeout.ms = 45000
+	group.consumer.regex.refresh.interval.ms = 600000
+	group.consumer.session.timeout.ms = 45000
+	group.coordinator.append.linger.ms = 5
+	group.coordinator.rebalance.protocols = [classic, consumer, streams]
+	group.coordinator.threads = 4
+	group.initial.rebalance.delay.ms = 3000
+	group.max.session.timeout.ms = 1800000
+	group.max.size = 2147483647
+	group.min.session.timeout.ms = 6000
+	group.share.assignors = [simple]
+	group.share.delivery.count.limit = 5
+	group.share.enable = false
+	group.share.heartbeat.interval.ms = 5000
+	group.share.max.heartbeat.interval.ms = 15000
+	group.share.max.record.lock.duration.ms = 60000
+	group.share.max.session.timeout.ms = 60000
+	group.share.max.share.sessions = 2000
+	group.share.max.size = 200
+	group.share.min.heartbeat.interval.ms = 5000
+	group.share.min.record.lock.duration.ms = 15000
+	group.share.min.session.timeout.ms = 45000
+	group.share.partition.max.record.locks = 2000
+	group.share.persister.class.name = org.apache.kafka.server.share.persister.DefaultStatePersister
+	group.share.record.lock.duration.ms = 30000
+	group.share.session.timeout.ms = 45000
+	group.streams.heartbeat.interval.ms = 5000
+	group.streams.max.heartbeat.interval.ms = 15000
+	group.streams.max.session.timeout.ms = 60000
+	group.streams.max.size = 2147483647
+	group.streams.max.standby.replicas = 2
+	group.streams.min.heartbeat.interval.ms = 5000
+	group.streams.min.session.timeout.ms = 45000
+	group.streams.num.standby.replicas = 0
+	group.streams.session.timeout.ms = 45000
+	initial.broker.registration.timeout.ms = 60000
+	inter.broker.listener.name = null
+	internal.metadata.delete.delay.millis = 60000
+	internal.metadata.log.segment.bytes = null
+	internal.metadata.max.batch.size.in.bytes = 8388608
+	internal.metadata.max.fetch.size.in.bytes = 8388608
+	kafka.metrics.polling.interval.secs = 10
+	kafka.metrics.reporters = []
+	leader.imbalance.check.interval.seconds = 300
+	listener.security.protocol.map = PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+	listeners = PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010
+	log.cleaner.backoff.ms = 15000
+	log.cleaner.dedupe.buffer.size = 134217728
+	log.cleaner.delete.retention.ms = 86400000
+	log.cleaner.enable = true
+	log.cleaner.io.buffer.load.factor = 0.9
+	log.cleaner.io.buffer.size = 524288
+	log.cleaner.io.max.bytes.per.second = 1.7976931348623157E308
+	log.cleaner.max.compaction.lag.ms = 9223372036854775807
+	log.cleaner.min.cleanable.ratio = 0.5
+	log.cleaner.min.compaction.lag.ms = 0
+	log.cleaner.threads = 1
+	log.cleanup.policy = [delete]
+	log.dir = /tmp/kafka-logs
+	log.dir.failure.timeout.ms = 30000
+	log.dirs = /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data
+	log.flush.interval.messages = 9223372036854775807
+	log.flush.interval.ms = null
+	log.flush.offset.checkpoint.interval.ms = 60000
+	log.flush.scheduler.interval.ms = 9223372036854775807
+	log.flush.start.offset.checkpoint.interval.ms = 60000
+	log.index.interval.bytes = 4096
+	log.index.size.max.bytes = 10485760
+	log.initial.task.delay.ms = 30000
+	log.local.retention.bytes = -2
+	log.local.retention.ms = -2
+	log.message.timestamp.after.max.ms = 3600000
+	log.message.timestamp.before.max.ms = 9223372036854775807
+	log.message.timestamp.type = CreateTime
+	log.preallocate = false
+	log.retention.bytes = -1
+	log.retention.check.interval.ms = 300000
+	log.retention.hours = 168
+	log.retention.minutes = null
+	log.retention.ms = null
+	log.roll.hours = 168
+	log.roll.jitter.hours = 0
+	log.roll.jitter.ms = null
+	log.roll.ms = null
+	log.segment.bytes = 1073741824
+	log.segment.delete.delay.ms = 60000
+	max.connection.creation.rate = 2147483647
+	max.connections = 2147483647
+	max.connections.per.ip = 2147483647
+	max.connections.per.ip.overrides = 
+	max.incremental.fetch.session.cache.slots = 1000
+	max.request.partition.size.limit = 2000
+	message.max.bytes = 1048588
+	metadata.log.dir = null
+	metadata.log.max.record.bytes.between.snapshots = 20971520
+	metadata.log.max.snapshot.interval.ms = 3600000
+	metadata.log.segment.bytes = 1073741824
+	metadata.log.segment.ms = 604800000
+	metadata.max.idle.interval.ms = 500
+	metadata.max.retention.bytes = 104857600
+	metadata.max.retention.ms = 604800000
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	min.insync.replicas = 1
+	node.id = 1
+	num.io.threads = 8
+	num.network.threads = 3
+	num.partitions = 1
+	num.recovery.threads.per.data.dir = 2
+	num.replica.alter.log.dirs.threads = null
+	num.replica.fetchers = 1
+	offset.metadata.max.bytes = 4096
+	offsets.commit.timeout.ms = 5000
+	offsets.load.buffer.size = 5242880
+	offsets.retention.check.interval.ms = 600000
+	offsets.retention.minutes = 10080
+	offsets.topic.compression.codec = 0
+	offsets.topic.num.partitions = 50
+	offsets.topic.replication.factor = 3
+	offsets.topic.segment.bytes = 104857600
+	principal.builder.class = class org.apache.kafka.common.security.authenticator.DefaultKafkaPrincipalBuilder
+	process.roles = [broker, controller]
+	producer.id.expiration.check.interval.ms = 600000
+	producer.id.expiration.ms = 86400000
+	producer.purgatory.purge.interval.requests = 1000
+	queued.max.request.bytes = -1
+	queued.max.requests = 500
+	quota.window.num = 11
+	quota.window.size.seconds = 1
+	remote.fetch.max.wait.ms = 500
+	remote.list.offsets.request.timeout.ms = 30000
+	remote.log.index.file.cache.total.size.bytes = 1073741824
+	remote.log.manager.copier.thread.pool.size = 10
+	remote.log.manager.copy.max.bytes.per.second = 9223372036854775807
+	remote.log.manager.copy.quota.window.num = 11
+	remote.log.manager.copy.quota.window.size.seconds = 1
+	remote.log.manager.expiration.thread.pool.size = 10
+	remote.log.manager.fetch.max.bytes.per.second = 9223372036854775807
+	remote.log.manager.fetch.quota.window.num = 11
+	remote.log.manager.fetch.quota.window.size.seconds = 1
+	remote.log.manager.task.interval.ms = 30000
+	remote.log.manager.task.retry.backoff.max.ms = 30000
+	remote.log.manager.task.retry.backoff.ms = 500
+	remote.log.manager.task.retry.jitter = 0.2
+	remote.log.manager.thread.pool.size = 2
+	remote.log.metadata.custom.metadata.max.bytes = 128
+	remote.log.metadata.manager.class.name = org.apache.kafka.server.log.remote.metadata.storage.TopicBasedRemoteLogMetadataManager
+	remote.log.metadata.manager.class.path = null
+	remote.log.metadata.manager.impl.prefix = rlmm.config.
+	remote.log.metadata.manager.listener.name = null
+	remote.log.reader.max.pending.tasks = 100
+	remote.log.reader.threads = 10
+	remote.log.storage.manager.class.name = null
+	remote.log.storage.manager.class.path = null
+	remote.log.storage.manager.impl.prefix = rsm.config.
+	remote.log.storage.system.enable = false
+	replica.fetch.backoff.ms = 1000
+	replica.fetch.max.bytes = 1048576
+	replica.fetch.min.bytes = 1
+	replica.fetch.response.max.bytes = 10485760
+	replica.fetch.wait.max.ms = 500
+	replica.high.watermark.checkpoint.interval.ms = 5000
+	replica.lag.time.max.ms = 30000
+	replica.selector.class = null
+	replica.socket.receive.buffer.bytes = 65536
+	replica.socket.timeout.ms = 30000
+	replication.quota.window.num = 11
+	replication.quota.window.size.seconds = 1
+	request.timeout.ms = 30000
+	sasl.client.callback.handler.class = null
+	sasl.enabled.mechanisms = [GSSAPI]
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.principal.to.local.rules = [DEFAULT]
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism.controller.protocol = GSSAPI
+	sasl.mechanism.inter.broker.protocol = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	sasl.server.callback.handler.class = null
+	sasl.server.max.receive.size = 524288
+	security.inter.broker.protocol = PLAINTEXT
+	security.providers = null
+	server.max.startup.time.ms = 9223372036854775807
+	share.coordinator.append.linger.ms = 5
+	share.coordinator.cold.partition.snapshot.interval.ms = 300000
+	share.coordinator.load.buffer.size = 5242880
+	share.coordinator.snapshot.update.records.per.snapshot = 500
+	share.coordinator.state.topic.compression.codec = 0
+	share.coordinator.state.topic.min.isr = 2
+	share.coordinator.state.topic.num.partitions = 50
+	share.coordinator.state.topic.prune.interval.ms = 300000
+	share.coordinator.state.topic.replication.factor = 3
+	share.coordinator.state.topic.segment.bytes = 104857600
+	share.coordinator.threads = 1
+	share.coordinator.write.timeout.ms = 5000
+	share.fetch.purgatory.purge.interval.requests = 1000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	socket.listen.backlog.size = 50
+	socket.receive.buffer.bytes = 102400
+	socket.request.max.bytes = 104857600
+	socket.send.buffer.bytes = 102400
+	ssl.allow.dn.changes = false
+	ssl.allow.san.changes = false
+	ssl.cipher.suites = []
+	ssl.client.auth = none
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.principal.mapping.rules = DEFAULT
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	telemetry.max.bytes = 1048576
+	transaction.abort.timed.out.transaction.cleanup.interval.ms = 10000
+	transaction.max.timeout.ms = 900000
+	transaction.partition.verification.enable = true
+	transaction.remove.expired.transaction.cleanup.interval.ms = 3600000
+	transaction.state.log.load.buffer.size = 5242880
+	transaction.state.log.min.isr = 2
+	transaction.state.log.num.partitions = 50
+	transaction.state.log.replication.factor = 3
+	transaction.state.log.segment.bytes = 104857600
+	transaction.two.phase.commit.enable = false
+	transactional.id.expiration.ms = 604800000
+	unclean.leader.election.enable = false
+	unclean.leader.election.interval.ms = 300000
+	unstable.api.versions.enable = false
+	unstable.feature.versions.enable = false
+ (org.apache.kafka.common.config.AbstractConfig)
+[2026-11-10 20:04:28,697] INFO [BrokerServer id=1] Waiting for the broker to be unfenced (kafka.server.BrokerServer)
+[2026-11-10 20:04:28,729] INFO [BrokerLifecycleManager id=1] The broker has been unfenced. Transitioning from RECOVERY to RUNNING. (kafka.server.BrokerLifecycleManager)
+[2026-11-10 20:04:28,729] INFO [BrokerServer id=1] Finished waiting for the broker to be unfenced (kafka.server.BrokerServer)
+[2026-11-10 20:04:28,729] INFO authorizerStart completed for endpoint PLAINTEXT. Endpoint is now READY. (org.apache.kafka.server.network.EndpointReadyFutures)
+[2026-11-10 20:04:28,729] INFO [SocketServer listenerType=BROKER, nodeId=1] Enabling request processing. (kafka.network.SocketServer)
+[2026-11-10 20:04:28,730] INFO Awaiting socket connections on 127.0.0.1:12000. (kafka.network.DataPlaneAcceptor)
+[2026-11-10 20:04:28,730] INFO [BrokerServer id=1] Waiting for all of the authorizer futures to be completed (kafka.server.BrokerServer)
+[2026-11-10 20:04:28,730] INFO [BrokerServer id=1] Finished waiting for all of the authorizer futures to be completed (kafka.server.BrokerServer)
+[2026-11-10 20:04:28,730] INFO [BrokerServer id=1] Waiting for all of the SocketServer Acceptors to be started (kafka.server.BrokerServer)
+[2026-11-10 20:04:28,730] INFO [BrokerServer id=1] Finished waiting for all of the SocketServer Acceptors to be started (kafka.server.BrokerServer)
+[2026-11-10 20:04:28,730] INFO [BrokerServer id=1] Transition from STARTING to STARTED (kafka.server.BrokerServer)
+[2026-11-10 20:04:28,731] INFO Kafka version: 4.1.2 (org.apache.kafka.common.utils.AppInfoParser)
+[2026-11-10 20:04:28,731] INFO Kafka commitId: c82fd9b934b4c1e6 (org.apache.kafka.common.utils.AppInfoParser)
+[2026-11-10 20:04:28,731] INFO Kafka startTimeMs: 1794337468730 (org.apache.kafka.common.utils.AppInfoParser)
+[2026-11-10 20:04:28,732] INFO [KafkaRaftServer nodeId=1] Kafka Server started (kafka.server.KafkaRaftServer)
+[2026-11-10 20:04:30,586] INFO [RaftManager id=1] Updated in-memory voters from VoterSet(voters={1=VoterNode(voterKey=ReplicaKey(id=1, directoryId=kASDTbjIwh3MYlM0iy7UOg), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=127.0.0.1/<unresolved>:12010}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:1]), 2=VoterNode(voterKey=ReplicaKey(id=2, directoryId=<undefined>), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=/127.0.0.1:12011}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:0]), 3=VoterNode(voterKey=ReplicaKey(id=3, directoryId=<undefined>), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=/127.0.0.1:12012}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:0])}) to VoterSet(voters={1=VoterNode(voterKey=ReplicaKey(id=1, directoryId=kASDTbjIwh3MYlM0iy7UOg), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=127.0.0.1/<unresolved>:12010}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:1]), 2=VoterNode(voterKey=ReplicaKey(id=2, directoryId=CMUrVVKoI3WUInanCrniGA), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=127.0.0.1/<unresolved>:12011}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:1]), 3=VoterNode(voterKey=ReplicaKey(id=3, directoryId=<undefined>), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=/127.0.0.1:12012}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:0])}) (org.apache.kafka.raft.internals.UpdateVoterHandler)
+[2026-11-10 20:04:31,086] INFO [RaftManager id=1] Updated in-memory voters from VoterSet(voters={1=VoterNode(voterKey=ReplicaKey(id=1, directoryId=kASDTbjIwh3MYlM0iy7UOg), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=127.0.0.1/<unresolved>:12010}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:1]), 2=VoterNode(voterKey=ReplicaKey(id=2, directoryId=CMUrVVKoI3WUInanCrniGA), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=127.0.0.1/<unresolved>:12011}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:1]), 3=VoterNode(voterKey=ReplicaKey(id=3, directoryId=<undefined>), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=/127.0.0.1:12012}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:0])}) to VoterSet(voters={1=VoterNode(voterKey=ReplicaKey(id=1, directoryId=kASDTbjIwh3MYlM0iy7UOg), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=127.0.0.1/<unresolved>:12010}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:1]), 2=VoterNode(voterKey=ReplicaKey(id=2, directoryId=CMUrVVKoI3WUInanCrniGA), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=127.0.0.1/<unresolved>:12011}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:1]), 3=VoterNode(voterKey=ReplicaKey(id=3, directoryId=q25TMDUwSSpxQbJGfKyIEA), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=127.0.0.1/<unresolved>:12012}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:1])}) (org.apache.kafka.raft.internals.UpdateVoterHandler)
+[2026-11-10 20:04:31,506] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions Set(ad-impressions-7, ad-impressions-1, ad-impressions-4) (kafka.server.ReplicaFetcherManager)
+[2026-11-10 20:04:31,515] INFO [LogLoader partition=ad-impressions-7, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,517] INFO Created log for partition ad-impressions-7 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-7 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:31,518] INFO [Partition ad-impressions-7 broker=1] No checkpointed highwatermark is found for partition ad-impressions-7 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,519] INFO [Partition ad-impressions-7 broker=1] Log loaded for partition ad-impressions-7 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,526] INFO [LogLoader partition=ad-impressions-1, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,526] INFO Created log for partition ad-impressions-1 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-1 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:31,526] INFO [Partition ad-impressions-1 broker=1] No checkpointed highwatermark is found for partition ad-impressions-1 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,527] INFO [Partition ad-impressions-1 broker=1] Log loaded for partition ad-impressions-1 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,529] INFO [LogLoader partition=ad-impressions-4, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,529] INFO Created log for partition ad-impressions-4 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-4 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:31,530] INFO [Partition ad-impressions-4 broker=1] No checkpointed highwatermark is found for partition ad-impressions-4 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,530] INFO [Partition ad-impressions-4 broker=1] Log loaded for partition ad-impressions-4 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,533] INFO [LogLoader partition=ad-impressions-6, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,533] INFO Created log for partition ad-impressions-6 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-6 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:31,534] INFO [Partition ad-impressions-6 broker=1] No checkpointed highwatermark is found for partition ad-impressions-6 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,534] INFO [Partition ad-impressions-6 broker=1] Log loaded for partition ad-impressions-6 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,537] INFO [LogLoader partition=ad-impressions-0, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,537] INFO Created log for partition ad-impressions-0 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-0 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:31,537] INFO [Partition ad-impressions-0 broker=1] No checkpointed highwatermark is found for partition ad-impressions-0 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,537] INFO [Partition ad-impressions-0 broker=1] Log loaded for partition ad-impressions-0 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,539] INFO [LogLoader partition=ad-impressions-2, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,539] INFO Created log for partition ad-impressions-2 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-2 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:31,539] INFO [Partition ad-impressions-2 broker=1] No checkpointed highwatermark is found for partition ad-impressions-2 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,539] INFO [Partition ad-impressions-2 broker=1] Log loaded for partition ad-impressions-2 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,541] INFO [LogLoader partition=ad-impressions-3, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,541] INFO Created log for partition ad-impressions-3 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-3 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:31,541] INFO [Partition ad-impressions-3 broker=1] No checkpointed highwatermark is found for partition ad-impressions-3 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,541] INFO [Partition ad-impressions-3 broker=1] Log loaded for partition ad-impressions-3 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,543] INFO [LogLoader partition=ad-impressions-5, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,543] INFO Created log for partition ad-impressions-5 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-5 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:31,544] INFO [Partition ad-impressions-5 broker=1] No checkpointed highwatermark is found for partition ad-impressions-5 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,544] INFO [Partition ad-impressions-5 broker=1] Log loaded for partition ad-impressions-5 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:31,544] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions Set(ad-impressions-0, ad-impressions-6, ad-impressions-2, ad-impressions-3, ad-impressions-5) (kafka.server.ReplicaFetcherManager)
+[2026-11-10 20:04:31,554] INFO [ReplicaFetcherThread-0-2]: Starting (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:31,555] INFO [ReplicaFetcherManager on broker 1] Added fetcher to broker 2 for partitions HashMap(ad-impressions-2 -> InitialFetchState(Some(XKtEfKR2Sga1yIOnA-wGgw),BrokerEndPoint[id=2, host=127.0.0.1, port=12001],0,0), ad-impressions-5 -> InitialFetchState(Some(XKtEfKR2Sga1yIOnA-wGgw),BrokerEndPoint[id=2, host=127.0.0.1, port=12001],0,0)) (kafka.server.ReplicaFetcherManager)
+[2026-11-10 20:04:31,556] INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Truncating partition ad-impressions-2 with TruncationState(offset=0, completed=true) due to local high watermark 0 (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:31,557] INFO [ReplicaFetcherManager on broker 1] Added fetcher to broker 3 for partitions HashMap(ad-impressions-0 -> InitialFetchState(Some(XKtEfKR2Sga1yIOnA-wGgw),BrokerEndPoint[id=3, host=127.0.0.1, port=12002],0,0), ad-impressions-6 -> InitialFetchState(Some(XKtEfKR2Sga1yIOnA-wGgw),BrokerEndPoint[id=3, host=127.0.0.1, port=12002],0,0), ad-impressions-3 -> InitialFetchState(Some(XKtEfKR2Sga1yIOnA-wGgw),BrokerEndPoint[id=3, host=127.0.0.1, port=12002],0,0)) (kafka.server.ReplicaFetcherManager)
+[2026-11-10 20:04:31,557] INFO [UnifiedLog partition=ad-impressions-2, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Truncating to 0 has no effect as the largest offset in the log is -1 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,558] INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Truncating partition ad-impressions-5 with TruncationState(offset=0, completed=true) due to local high watermark 0 (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:31,558] INFO [UnifiedLog partition=ad-impressions-5, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Truncating to 0 has no effect as the largest offset in the log is -1 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,559] INFO [ReplicaFetcherThread-0-3]: Starting (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:31,559] INFO [ReplicaFetcher replicaId=1, leaderId=3, fetcherId=0] Truncating partition ad-impressions-0 with TruncationState(offset=0, completed=true) due to local high watermark 0 (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:31,559] INFO [UnifiedLog partition=ad-impressions-0, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Truncating to 0 has no effect as the largest offset in the log is -1 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,559] INFO [ReplicaFetcher replicaId=1, leaderId=3, fetcherId=0] Truncating partition ad-impressions-6 with TruncationState(offset=0, completed=true) due to local high watermark 0 (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:31,559] INFO [UnifiedLog partition=ad-impressions-6, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Truncating to 0 has no effect as the largest offset in the log is -1 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:31,559] INFO [ReplicaFetcher replicaId=1, leaderId=3, fetcherId=0] Truncating partition ad-impressions-3 with TruncationState(offset=0, completed=true) due to local high watermark 0 (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:31,559] INFO [UnifiedLog partition=ad-impressions-3, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Truncating to 0 has no effect as the largest offset in the log is -1 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:32,672] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions Set(ad-impressions-enriched-3, ad-impressions-enriched-2) (kafka.server.ReplicaFetcherManager)
+[2026-11-10 20:04:32,673] INFO [LogLoader partition=ad-impressions-enriched-3, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:32,674] INFO Created log for partition ad-impressions-enriched-3 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-enriched-3 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:32,674] INFO [Partition ad-impressions-enriched-3 broker=1] No checkpointed highwatermark is found for partition ad-impressions-enriched-3 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,674] INFO [Partition ad-impressions-enriched-3 broker=1] Log loaded for partition ad-impressions-enriched-3 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,676] INFO [LogLoader partition=ad-impressions-enriched-2, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:32,677] INFO Created log for partition ad-impressions-enriched-2 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-enriched-2 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:32,677] INFO [Partition ad-impressions-enriched-2 broker=1] No checkpointed highwatermark is found for partition ad-impressions-enriched-2 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,677] INFO [Partition ad-impressions-enriched-2 broker=1] Log loaded for partition ad-impressions-enriched-2 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,679] INFO [LogLoader partition=ad-impressions-enriched-4, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:32,679] INFO Created log for partition ad-impressions-enriched-4 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-enriched-4 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:32,679] INFO [Partition ad-impressions-enriched-4 broker=1] No checkpointed highwatermark is found for partition ad-impressions-enriched-4 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,679] INFO [Partition ad-impressions-enriched-4 broker=1] Log loaded for partition ad-impressions-enriched-4 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,681] INFO [LogLoader partition=ad-impressions-enriched-5, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:32,681] INFO Created log for partition ad-impressions-enriched-5 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-enriched-5 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:32,681] INFO [Partition ad-impressions-enriched-5 broker=1] No checkpointed highwatermark is found for partition ad-impressions-enriched-5 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,681] INFO [Partition ad-impressions-enriched-5 broker=1] Log loaded for partition ad-impressions-enriched-5 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,683] INFO [LogLoader partition=ad-impressions-enriched-6, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:32,683] INFO Created log for partition ad-impressions-enriched-6 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-enriched-6 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:32,683] INFO [Partition ad-impressions-enriched-6 broker=1] No checkpointed highwatermark is found for partition ad-impressions-enriched-6 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,683] INFO [Partition ad-impressions-enriched-6 broker=1] Log loaded for partition ad-impressions-enriched-6 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,684] INFO [LogLoader partition=ad-impressions-enriched-7, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:32,684] INFO Created log for partition ad-impressions-enriched-7 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-enriched-7 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:32,684] INFO [Partition ad-impressions-enriched-7 broker=1] No checkpointed highwatermark is found for partition ad-impressions-enriched-7 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,684] INFO [Partition ad-impressions-enriched-7 broker=1] Log loaded for partition ad-impressions-enriched-7 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,686] INFO [LogLoader partition=ad-impressions-enriched-0, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:32,686] INFO Created log for partition ad-impressions-enriched-0 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-enriched-0 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:32,686] INFO [Partition ad-impressions-enriched-0 broker=1] No checkpointed highwatermark is found for partition ad-impressions-enriched-0 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,686] INFO [Partition ad-impressions-enriched-0 broker=1] Log loaded for partition ad-impressions-enriched-0 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,687] INFO [LogLoader partition=ad-impressions-enriched-1, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:32,687] INFO Created log for partition ad-impressions-enriched-1 in /tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data/ad-impressions-enriched-1 with properties {} (kafka.log.LogManager)
+[2026-11-10 20:04:32,687] INFO [Partition ad-impressions-enriched-1 broker=1] No checkpointed highwatermark is found for partition ad-impressions-enriched-1 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,687] INFO [Partition ad-impressions-enriched-1 broker=1] Log loaded for partition ad-impressions-enriched-1 with initial high watermark 0 (kafka.cluster.Partition)
+[2026-11-10 20:04:32,688] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions Set(ad-impressions-enriched-4, ad-impressions-enriched-5, ad-impressions-enriched-6, ad-impressions-enriched-7, ad-impressions-enriched-0, ad-impressions-enriched-1) (kafka.server.ReplicaFetcherManager)
+[2026-11-10 20:04:32,689] INFO [ReplicaFetcherManager on broker 1] Added fetcher to broker 2 for partitions HashMap(ad-impressions-enriched-4 -> InitialFetchState(Some(Hqn6jCs0QfuoTzogWFuTdA),BrokerEndPoint[id=2, host=127.0.0.1, port=12001],0,0), ad-impressions-enriched-7 -> InitialFetchState(Some(Hqn6jCs0QfuoTzogWFuTdA),BrokerEndPoint[id=2, host=127.0.0.1, port=12001],0,0), ad-impressions-enriched-0 -> InitialFetchState(Some(Hqn6jCs0QfuoTzogWFuTdA),BrokerEndPoint[id=2, host=127.0.0.1, port=12001],0,0)) (kafka.server.ReplicaFetcherManager)
+[2026-11-10 20:04:32,689] INFO [ReplicaFetcherManager on broker 1] Added fetcher to broker 3 for partitions HashMap(ad-impressions-enriched-5 -> InitialFetchState(Some(Hqn6jCs0QfuoTzogWFuTdA),BrokerEndPoint[id=3, host=127.0.0.1, port=12002],0,0), ad-impressions-enriched-6 -> InitialFetchState(Some(Hqn6jCs0QfuoTzogWFuTdA),BrokerEndPoint[id=3, host=127.0.0.1, port=12002],0,0), ad-impressions-enriched-1 -> InitialFetchState(Some(Hqn6jCs0QfuoTzogWFuTdA),BrokerEndPoint[id=3, host=127.0.0.1, port=12002],0,0)) (kafka.server.ReplicaFetcherManager)
+[2026-11-10 20:04:33,095] INFO [ReplicaFetcher replicaId=1, leaderId=3, fetcherId=0] Truncating partition ad-impressions-enriched-5 with TruncationState(offset=0, completed=true) due to local high watermark 0 (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:33,095] INFO [UnifiedLog partition=ad-impressions-enriched-5, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Truncating to 0 has no effect as the largest offset in the log is -1 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:33,095] INFO [ReplicaFetcher replicaId=1, leaderId=3, fetcherId=0] Truncating partition ad-impressions-enriched-6 with TruncationState(offset=0, completed=true) due to local high watermark 0 (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:33,095] INFO [UnifiedLog partition=ad-impressions-enriched-6, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Truncating to 0 has no effect as the largest offset in the log is -1 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:33,095] INFO [ReplicaFetcher replicaId=1, leaderId=3, fetcherId=0] Truncating partition ad-impressions-enriched-1 with TruncationState(offset=0, completed=true) due to local high watermark 0 (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:33,095] INFO [UnifiedLog partition=ad-impressions-enriched-1, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Truncating to 0 has no effect as the largest offset in the log is -1 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:33,096] INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Truncating partition ad-impressions-enriched-4 with TruncationState(offset=0, completed=true) due to local high watermark 0 (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:33,096] INFO [UnifiedLog partition=ad-impressions-enriched-4, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Truncating to 0 has no effect as the largest offset in the log is -1 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:33,096] INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Truncating partition ad-impressions-enriched-7 with TruncationState(offset=0, completed=true) due to local high watermark 0 (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:33,096] INFO [UnifiedLog partition=ad-impressions-enriched-7, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Truncating to 0 has no effect as the largest offset in the log is -1 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:33,096] INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Truncating partition ad-impressions-enriched-0 with TruncationState(offset=0, completed=true) due to local high watermark 0 (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:33,096] INFO [UnifiedLog partition=ad-impressions-enriched-0, dir=/tmp/chamoso-e7/8388/e7-1736197/k1/kafka-data] Truncating to 0 has no effect as the largest offset in the log is -1 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-10 20:04:37,288] INFO Terminating process due to signal SIGTERM (org.apache.kafka.common.utils.LoggingSignalHandler)
+[2026-11-10 20:04:37,290] INFO [BrokerServer id=1] Transition from STARTED to SHUTTING_DOWN (kafka.server.BrokerServer)
+[2026-11-10 20:04:37,290] INFO [BrokerServer id=1] shutting down (kafka.server.BrokerServer)
+[2026-11-10 20:04:37,291] INFO [BrokerLifecycleManager id=1] Beginning controlled shutdown. (kafka.server.BrokerLifecycleManager)
+[2026-11-10 20:04:37,326] INFO [BrokerLifecycleManager id=1] The broker is in PENDING_CONTROLLED_SHUTDOWN state, still waiting for the active controller. (kafka.server.BrokerLifecycleManager)
+[2026-11-10 20:04:37,334] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions HashSet(ad-impressions-enriched-5, ad-impressions-7, ad-impressions-4, ad-impressions-enriched-6, ad-impressions-1, ad-impressions-enriched-3, ad-impressions-enriched-7, ad-impressions-0, ad-impressions-enriched-1, ad-impressions-enriched-2, ad-impressions-5, ad-impressions-enriched-4, ad-impressions-enriched-0, ad-impressions-3, ad-impressions-6, ad-impressions-2) (kafka.server.ReplicaFetcherManager)
+[2026-11-10 20:04:37,334] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions HashSet(ad-impressions-enriched-5, ad-impressions-7, ad-impressions-4, ad-impressions-enriched-6, ad-impressions-1, ad-impressions-enriched-3, ad-impressions-enriched-7, ad-impressions-0, ad-impressions-enriched-1, ad-impressions-enriched-2, ad-impressions-5, ad-impressions-enriched-4, ad-impressions-enriched-0, ad-impressions-3, ad-impressions-6, ad-impressions-2) (kafka.server.ReplicaAlterLogDirsManager)
+[2026-11-10 20:04:37,338] INFO [ReplicaFetcherThread-0-2]: Shutting down (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:37,338] INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Client requested connection close from node 2 (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:37,339] INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Cancelled in-flight FETCH request with correlation id 11 due to node 2 being disconnected (elapsed time since creation: 229ms, elapsed time since send: 229ms, throttle time: 0ms, request timeout: 30000ms) (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:37,339] INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=220452117, epoch=11) to node 2: (org.apache.kafka.clients.FetchSessionHandler)
+java.io.IOException: Client was shutdown before response was read
+	at org.apache.kafka.clients.NetworkClientUtils.sendAndReceive(NetworkClientUtils.java:120)
+	at kafka.server.BrokerBlockingSender.sendRequest(BrokerBlockingSender.scala:112)
+	at kafka.server.RemoteLeaderEndPoint.fetch(RemoteLeaderEndPoint.scala:77)
+	at kafka.server.AbstractFetcherThread.processFetchRequest(AbstractFetcherThread.scala:326)
+	at kafka.server.AbstractFetcherThread.$anonfun$maybeFetch$3(AbstractFetcherThread.scala:137)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at kafka.server.AbstractFetcherThread.maybeFetch(AbstractFetcherThread.scala:136)
+	at kafka.server.AbstractFetcherThread.doWork(AbstractFetcherThread.scala:117)
+	at kafka.server.ReplicaFetcherThread.doWork(ReplicaFetcherThread.scala:96)
+	at org.apache.kafka.server.util.ShutdownableThread.run(ShutdownableThread.java:136)
+[2026-11-10 20:04:37,340] INFO [ReplicaFetcherThread-0-2]: Stopped (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:37,340] INFO [ReplicaFetcherThread-0-2]: Shutdown completed (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:37,341] INFO [ReplicaFetcherThread-0-3]: Shutting down (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:37,341] INFO [ReplicaFetcher replicaId=1, leaderId=3, fetcherId=0] Client requested connection close from node 3 (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:37,341] INFO [ReplicaFetcher replicaId=1, leaderId=3, fetcherId=0] Cancelled in-flight FETCH request with correlation id 12 due to node 3 being disconnected (elapsed time since creation: 1ms, elapsed time since send: 1ms, throttle time: 0ms, request timeout: 30000ms) (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:37,341] INFO [ReplicaFetcher replicaId=1, leaderId=3, fetcherId=0] Error sending fetch request (sessionId=446134496, epoch=12) to node 3: (org.apache.kafka.clients.FetchSessionHandler)
+java.io.IOException: Client was shutdown before response was read
+	at org.apache.kafka.clients.NetworkClientUtils.sendAndReceive(NetworkClientUtils.java:120)
+	at kafka.server.BrokerBlockingSender.sendRequest(BrokerBlockingSender.scala:112)
+	at kafka.server.RemoteLeaderEndPoint.fetch(RemoteLeaderEndPoint.scala:77)
+	at kafka.server.AbstractFetcherThread.processFetchRequest(AbstractFetcherThread.scala:326)
+	at kafka.server.AbstractFetcherThread.$anonfun$maybeFetch$3(AbstractFetcherThread.scala:137)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at kafka.server.AbstractFetcherThread.maybeFetch(AbstractFetcherThread.scala:136)
+	at kafka.server.AbstractFetcherThread.doWork(AbstractFetcherThread.scala:117)
+	at kafka.server.ReplicaFetcherThread.doWork(ReplicaFetcherThread.scala:96)
+	at org.apache.kafka.server.util.ShutdownableThread.run(ShutdownableThread.java:136)
+[2026-11-10 20:04:37,341] INFO [ReplicaFetcherThread-0-3]: Stopped (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:37,341] INFO [ReplicaFetcherThread-0-3]: Shutdown completed (kafka.server.ReplicaFetcherThread)
+[2026-11-10 20:04:37,405] INFO [BrokerLifecycleManager id=1] The controller has asked us to exit controlled shutdown. (kafka.server.BrokerLifecycleManager)
+[2026-11-10 20:04:37,405] INFO [BrokerLifecycleManager id=1] beginShutdown: shutting down event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:37,405] INFO [BrokerLifecycleManager id=1] Transitioning from PENDING_CONTROLLED_SHUTDOWN to SHUTTING_DOWN. (kafka.server.BrokerLifecycleManager)
+[2026-11-10 20:04:37,405] INFO [broker-1-to-controller-heartbeat-channel-manager]: Shutting down (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,405] INFO [broker-1-to-controller-heartbeat-channel-manager]: Shutdown completed (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,405] INFO [broker-1-to-controller-heartbeat-channel-manager]: Stopped (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,405] INFO [SocketServer listenerType=BROKER, nodeId=1] Stopping socket server request processors (kafka.network.SocketServer)
+[2026-11-10 20:04:37,408] INFO Node to controller channel manager for heartbeat shutdown (kafka.server.NodeToControllerChannelManagerImpl)
+[2026-11-10 20:04:37,410] INFO [SocketServer listenerType=BROKER, nodeId=1] Stopped socket server request processors (kafka.network.SocketServer)
+[2026-11-10 20:04:37,410] INFO [data-plane Kafka Request Handler on Broker 1] shutting down (kafka.server.KafkaRequestHandlerPool)
+[2026-11-10 20:04:37,411] INFO [data-plane Kafka Request Handler on Broker 1] shut down completely (kafka.server.KafkaRequestHandlerPool)
+[2026-11-10 20:04:37,411] INFO [ExpirationReaper-1-AlterAcls]: Shutting down (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,411] INFO [ExpirationReaper-1-AlterAcls]: Stopped (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,412] INFO [ExpirationReaper-1-AlterAcls]: Shutdown completed (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,412] INFO [KafkaApi-1] Shutdown complete. (kafka.server.KafkaApis)
+[2026-11-10 20:04:37,413] INFO [TransactionCoordinator id=1] Shutting down. (kafka.coordinator.transaction.TransactionCoordinator)
+[2026-11-10 20:04:37,414] INFO [Transaction State Manager 1]: Shutdown complete (kafka.coordinator.transaction.TransactionStateManager)
+[2026-11-10 20:04:37,414] INFO [TxnMarkerSenderThread-1]: Shutting down (kafka.coordinator.transaction.TransactionMarkerChannelManager)
+[2026-11-10 20:04:37,414] INFO [TxnMarkerSenderThread-1]: Shutdown completed (kafka.coordinator.transaction.TransactionMarkerChannelManager)
+[2026-11-10 20:04:37,414] INFO [TxnMarkerSenderThread-1]: Stopped (kafka.coordinator.transaction.TransactionMarkerChannelManager)
+[2026-11-10 20:04:37,415] INFO [TransactionCoordinator id=1] Shutdown complete. (kafka.coordinator.transaction.TransactionCoordinator)
+[2026-11-10 20:04:37,415] INFO [GroupCoordinator id=1] Shutting down. (org.apache.kafka.coordinator.group.GroupCoordinatorService)
+[2026-11-10 20:04:37,415] INFO [GroupCoordinator id=1] Closing coordinator runtime. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-10 20:04:37,415] INFO [group-coordinator-reaper]: Shutting down (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,415] INFO [group-coordinator-reaper]: Shutdown completed (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,415] INFO [group-coordinator-reaper]: Stopped (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,415] INFO [GroupCoordinator id=1] Shutting down event processor. (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor)
+[2026-11-10 20:04:37,415] INFO [group-coordinator-event-processor-3]: Shutting down. Draining the remaining events. (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:37,415] INFO [group-coordinator-event-processor-2]: Shutting down. Draining the remaining events. (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:37,415] INFO [group-coordinator-event-processor-1]: Shutting down. Draining the remaining events. (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:37,415] INFO [group-coordinator-event-processor-3]: Shutdown completed (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:37,415] INFO [group-coordinator-event-processor-1]: Shutdown completed (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:37,415] INFO [group-coordinator-event-processor-0]: Shutting down. Draining the remaining events. (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:37,416] INFO [group-coordinator-event-processor-2]: Shutdown completed (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:37,416] INFO [group-coordinator-event-processor-0]: Shutdown completed (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:37,416] INFO [GroupCoordinator id=1] Event processor closed. (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor)
+[2026-11-10 20:04:37,417] INFO [GroupCoordinator id=1] Coordinator runtime closed. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-10 20:04:37,418] INFO [GroupCoordinator id=1] Shutdown complete. (org.apache.kafka.coordinator.group.GroupCoordinatorService)
+[2026-11-10 20:04:37,418] INFO [ShareCoordinator id=1] Shutting down. (org.apache.kafka.coordinator.share.ShareCoordinatorService)
+[2026-11-10 20:04:37,418] INFO [ShareCoordinator id=1] Closing coordinator runtime. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-10 20:04:37,418] INFO [share-coordinator-reaper]: Shutting down (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,418] INFO [share-coordinator-reaper]: Shutdown completed (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,418] INFO [share-coordinator-reaper]: Stopped (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,418] INFO [ShareCoordinator id=1] Shutting down event processor. (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor)
+[2026-11-10 20:04:37,418] INFO [share-coordinator-event-processor-0]: Shutting down. Draining the remaining events. (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:37,418] INFO [share-coordinator-event-processor-0]: Shutdown completed (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor$EventProcessorThread)
+[2026-11-10 20:04:37,418] INFO [ShareCoordinator id=1] Event processor closed. (org.apache.kafka.coordinator.common.runtime.MultiThreadedEventProcessor)
+[2026-11-10 20:04:37,418] INFO [ShareCoordinator id=1] Coordinator runtime closed. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-10 20:04:37,419] INFO [ShareCoordinator id=1] Shutdown complete. (org.apache.kafka.coordinator.share.ShareCoordinatorService)
+[2026-11-10 20:04:37,419] INFO [AssignmentsManager id=1]KafkaEventQueue#close: shutting down event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:37,419] INFO [AssignmentsManager id=1] shutting down. (org.apache.kafka.server.AssignmentsManager)
+[2026-11-10 20:04:37,419] INFO [broker-1-to-controller-directory-assignments-channel-manager]: Shutting down (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,419] INFO [broker-1-to-controller-directory-assignments-channel-manager]: Shutdown completed (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,419] INFO [broker-1-to-controller-directory-assignments-channel-manager]: Stopped (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,419] INFO Node to controller channel manager for directory-assignments shutdown (kafka.server.NodeToControllerChannelManagerImpl)
+[2026-11-10 20:04:37,419] INFO [AssignmentsManager id=1]closed event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:37,420] INFO [ReplicaManager broker=1] Shutting down (kafka.server.ReplicaManager)
+[2026-11-10 20:04:37,420] INFO [LogDirFailureHandler]: Shutting down (kafka.server.ReplicaManager$LogDirFailureHandler)
+[2026-11-10 20:04:37,420] INFO [LogDirFailureHandler]: Shutdown completed (kafka.server.ReplicaManager$LogDirFailureHandler)
+[2026-11-10 20:04:37,420] INFO [LogDirFailureHandler]: Stopped (kafka.server.ReplicaManager$LogDirFailureHandler)
+[2026-11-10 20:04:37,420] INFO [ReplicaFetcherManager on broker 1] shutting down (kafka.server.ReplicaFetcherManager)
+[2026-11-10 20:04:37,420] INFO [ReplicaFetcherManager on broker 1] shutdown completed (kafka.server.ReplicaFetcherManager)
+[2026-11-10 20:04:37,421] INFO [ReplicaAlterLogDirsManager on broker 1] shutting down (kafka.server.ReplicaAlterLogDirsManager)
+[2026-11-10 20:04:37,421] INFO [ReplicaAlterLogDirsManager on broker 1] shutdown completed (kafka.server.ReplicaAlterLogDirsManager)
+[2026-11-10 20:04:37,421] INFO [ExpirationReaper-1-Fetch]: Shutting down (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,421] INFO [ExpirationReaper-1-Fetch]: Shutdown completed (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,421] INFO [ExpirationReaper-1-Fetch]: Stopped (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,421] INFO [ExpirationReaper-1-RemoteFetch]: Shutting down (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,421] INFO [ExpirationReaper-1-RemoteFetch]: Stopped (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,421] INFO [ExpirationReaper-1-RemoteFetch]: Shutdown completed (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,421] INFO [ExpirationReaper-1-RemoteListOffsets]: Shutting down (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,421] INFO [ExpirationReaper-1-RemoteListOffsets]: Shutdown completed (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,421] INFO [ExpirationReaper-1-RemoteListOffsets]: Stopped (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,422] INFO [ExpirationReaper-1-Produce]: Shutting down (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,422] INFO [ExpirationReaper-1-Produce]: Stopped (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,422] INFO [ExpirationReaper-1-Produce]: Shutdown completed (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,422] INFO [ExpirationReaper-1-DeleteRecords]: Shutting down (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,422] INFO [ExpirationReaper-1-DeleteRecords]: Shutdown completed (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,422] INFO [ExpirationReaper-1-DeleteRecords]: Stopped (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,422] INFO [ExpirationReaper-1-ShareFetch]: Shutting down (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,422] INFO [ExpirationReaper-1-ShareFetch]: Stopped (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,422] INFO [ExpirationReaper-1-ShareFetch]: Shutdown completed (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:37,425] INFO [AddPartitionsToTxnSenderThread-1]: Shutting down (org.apache.kafka.server.transaction.AddPartitionsToTxnManager)
+[2026-11-10 20:04:37,425] INFO [AddPartitionsToTxnSenderThread-1]: Shutdown completed (org.apache.kafka.server.transaction.AddPartitionsToTxnManager)
+[2026-11-10 20:04:37,425] INFO [AddPartitionsToTxnSenderThread-1]: Stopped (org.apache.kafka.server.transaction.AddPartitionsToTxnManager)
+[2026-11-10 20:04:37,425] INFO [ReplicaManager broker=1] Shut down completely (kafka.server.ReplicaManager)
+[2026-11-10 20:04:37,425] INFO [broker-1-to-controller-alter-partition-channel-manager]: Shutting down (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,425] INFO [broker-1-to-controller-alter-partition-channel-manager]: Stopped (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,425] INFO [broker-1-to-controller-alter-partition-channel-manager]: Shutdown completed (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,426] INFO Node to controller channel manager for alter-partition shutdown (kafka.server.NodeToControllerChannelManagerImpl)
+[2026-11-10 20:04:37,426] INFO [broker-1-to-controller-forwarding-channel-manager]: Shutting down (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,426] INFO [broker-1-to-controller-forwarding-channel-manager]: Shutdown completed (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,426] INFO [broker-1-to-controller-forwarding-channel-manager]: Stopped (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:37,426] INFO Node to controller channel manager for forwarding shutdown (kafka.server.NodeToControllerChannelManagerImpl)
+[2026-11-10 20:04:37,426] INFO Shutting down. (kafka.log.LogManager)
+[2026-11-10 20:04:37,449] INFO Shutdown complete. (kafka.log.LogManager)
+[2026-11-10 20:04:37,449] INFO [broker-1-ThrottledChannelReaper-Fetch]: Shutting down (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [broker-1-ThrottledChannelReaper-Fetch]: Shutdown completed (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [broker-1-ThrottledChannelReaper-Fetch]: Stopped (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [broker-1-ThrottledChannelReaper-Produce]: Shutting down (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [broker-1-ThrottledChannelReaper-Produce]: Shutdown completed (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [broker-1-ThrottledChannelReaper-Produce]: Stopped (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [broker-1-ThrottledChannelReaper-Request]: Shutting down (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [broker-1-ThrottledChannelReaper-Request]: Stopped (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [broker-1-ThrottledChannelReaper-Request]: Shutdown completed (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [broker-1-ThrottledChannelReaper-ControllerMutation]: Shutting down (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [broker-1-ThrottledChannelReaper-ControllerMutation]: Shutdown completed (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [broker-1-ThrottledChannelReaper-ControllerMutation]: Stopped (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:37,450] INFO [SocketServer listenerType=BROKER, nodeId=1] Shutting down socket server (kafka.network.SocketServer)
+[2026-11-10 20:04:37,457] INFO [SocketServer listenerType=BROKER, nodeId=1] Shutdown completed (kafka.network.SocketServer)
+[2026-11-10 20:04:37,457] INFO Broker and topic stats closed (org.apache.kafka.storage.log.metrics.BrokerTopicStats)
+[2026-11-10 20:04:37,458] INFO [share-group-lock-timeout-reaper]: Shutting down (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,458] INFO [share-group-lock-timeout-reaper]: Shutdown completed (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,458] INFO [share-group-lock-timeout-reaper]: Stopped (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,458] INFO [PersisterStateManager]: Shutting down (org.apache.kafka.server.share.persister.PersisterStateManager$SendThread)
+[2026-11-10 20:04:37,458] INFO [PersisterStateManager]: Shutdown completed (org.apache.kafka.server.share.persister.PersisterStateManager$SendThread)
+[2026-11-10 20:04:37,458] INFO [PersisterStateManager]: Stopped (org.apache.kafka.server.share.persister.PersisterStateManager$SendThread)
+[2026-11-10 20:04:37,458] INFO [persister-state-manager-reaper]: Shutting down (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,458] INFO [persister-state-manager-reaper]: Stopped (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,459] INFO [persister-state-manager-reaper]: Shutdown completed (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,459] INFO [BrokerLifecycleManager id=1] closed event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:37,459] INFO [client-metrics-reaper]: Shutting down (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,459] INFO [client-metrics-reaper]: Stopped (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,459] INFO [client-metrics-reaper]: Shutdown completed (org.apache.kafka.server.util.timer.SystemTimerReaper$Reaper)
+[2026-11-10 20:04:37,460] INFO [BrokerServer id=1] shut down completed (kafka.server.BrokerServer)
+[2026-11-10 20:04:37,460] INFO [BrokerServer id=1] Transition from SHUTTING_DOWN to SHUTDOWN (kafka.server.BrokerServer)
+[2026-11-10 20:04:37,460] INFO [ControllerServer id=1] shutting down (kafka.server.ControllerServer)
+[2026-11-10 20:04:37,460] INFO [raft-expiration-reaper]: Shutting down (org.apache.kafka.raft.TimingWheelExpirationService$ExpiredOperationReaper)
+[2026-11-10 20:04:37,487] INFO [raft-expiration-reaper]: Shutdown completed (org.apache.kafka.raft.TimingWheelExpirationService$ExpiredOperationReaper)
+[2026-11-10 20:04:37,487] INFO [raft-expiration-reaper]: Stopped (org.apache.kafka.raft.TimingWheelExpirationService$ExpiredOperationReaper)
+[2026-11-10 20:04:37,488] INFO [kafka-1-raft-io-thread]: Shutting down (org.apache.kafka.raft.KafkaRaftClientDriver)
+[2026-11-10 20:04:37,488] INFO [RaftManager id=1] Beginning graceful shutdown (org.apache.kafka.raft.KafkaRaftClient)
+[2026-11-10 20:04:37,488] INFO [RaftManager id=1] Failed to handle fetch from ReplicaKey(id=3, directoryId=q25TMDUwSSpxQbJGfKyIEA) at 106 due to NOT_LEADER_OR_FOLLOWER (org.apache.kafka.raft.KafkaRaftClient)
+[2026-11-10 20:04:37,488] INFO [RaftManager id=1] Failed to handle fetch from ReplicaKey(id=2, directoryId=CMUrVVKoI3WUInanCrniGA) at 106 due to NOT_LEADER_OR_FOLLOWER (org.apache.kafka.raft.KafkaRaftClient)
+[2026-11-10 20:04:37,491] INFO [RaftManager id=1] Completed transition to ResignedState(localId=1, epoch=1, voters=[1, 2, 3], electionTimeoutMs=1443, unackedVoters=[2, 3], preferredSuccessors=[ReplicaKey(id=2, directoryId=<undefined>), ReplicaKey(id=3, directoryId=<undefined>)]) from Leader(localVoterNode=VoterNode(voterKey=ReplicaKey(id=1, directoryId=kASDTbjIwh3MYlM0iy7UOg), listeners=Endpoints(endpoints={ListenerName(CONTROLLER)=127.0.0.1/<unresolved>:12010}), supportedKRaftVersion=SupportedVersionRange[min_version:0, max_version:1]), epoch=1, epochStartOffset=0, highWatermark=Optional[LogOffsetMetadata(offset=106, metadata=Optional[(segmentBaseOffset=0,relativePositionInSegment=7953)])], voterStates={1=ReplicaState(replicaKey=ReplicaKey(id=1, directoryId=<undefined>), endOffset=Optional[LogOffsetMetadata(offset=106, metadata=Optional[(segmentBaseOffset=0,relativePositionInSegment=7953)])], lastFetchTimestamp=-1, lastCaughtUpTimestamp=-1, hasAcknowledgedLeader=true), 2=ReplicaState(replicaKey=ReplicaKey(id=2, directoryId=<undefined>), endOffset=Optional[LogOffsetMetadata(offset=106, metadata=Optional[(segmentBaseOffset=0,relativePositionInSegment=7953)])], lastFetchTimestamp=1794337477407, lastCaughtUpTimestamp=1794337477407, hasAcknowledgedLeader=true), 3=ReplicaState(replicaKey=ReplicaKey(id=3, directoryId=<undefined>), endOffset=Optional[LogOffsetMetadata(offset=106, metadata=Optional[(segmentBaseOffset=0,relativePositionInSegment=7953)])], lastFetchTimestamp=1794337477406, lastCaughtUpTimestamp=1794337477406, hasAcknowledgedLeader=true)}) (org.apache.kafka.raft.QuorumState)
+[2026-11-10 20:04:37,492] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:37,562] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:37,562] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:37,634] INFO [RaftManager id=1] Node 3 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:37,677] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:37,677] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:37,888] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:37,888] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:38,359] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:38,359] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:38,805] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:38,805] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:39,327] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:39,327] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:39,823] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:39,823] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:40,345] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:40,345] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:40,779] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:40,779] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:41,207] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:41,207] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:41,655] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:41,655] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:42,124] INFO [RaftManager id=1] Node 2 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:42,124] WARN [RaftManager id=1] Connection to node 2 (/127.0.0.1:12011) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:42,488] WARN [RaftManager id=1] Graceful shutdown timed out after 5000ms (org.apache.kafka.raft.KafkaRaftClient)
+[2026-11-10 20:04:42,489] ERROR [RaftManager id=1] Graceful shutdown of RaftClient failed (org.apache.kafka.raft.KafkaRaftClientDriver)
+java.util.concurrent.TimeoutException: Timeout expired before graceful shutdown completed
+	at org.apache.kafka.raft.KafkaRaftClient$GracefulShutdown.failWithTimeout(KafkaRaftClient.java:3781)
+	at org.apache.kafka.raft.KafkaRaftClient.maybeCompleteShutdown(KafkaRaftClient.java:3449)
+	at org.apache.kafka.raft.KafkaRaftClient.poll(KafkaRaftClient.java:3518)
+	at org.apache.kafka.raft.KafkaRaftClientDriver.doWork(KafkaRaftClientDriver.java:64)
+	at org.apache.kafka.server.util.ShutdownableThread.run(ShutdownableThread.java:136)
+[2026-11-10 20:04:42,489] INFO [kafka-1-raft-io-thread]: Stopped (org.apache.kafka.raft.KafkaRaftClientDriver)
+[2026-11-10 20:04:42,489] INFO [kafka-1-raft-io-thread]: Shutdown completed (org.apache.kafka.raft.KafkaRaftClientDriver)
+[2026-11-10 20:04:42,490] INFO [kafka-1-raft-outbound-request-thread]: Shutting down (org.apache.kafka.raft.KafkaNetworkChannel$SendThread)
+[2026-11-10 20:04:42,490] INFO [kafka-1-raft-outbound-request-thread]: Stopped (org.apache.kafka.raft.KafkaNetworkChannel$SendThread)
+[2026-11-10 20:04:42,490] INFO [kafka-1-raft-outbound-request-thread]: Shutdown completed (org.apache.kafka.raft.KafkaNetworkChannel$SendThread)
+[2026-11-10 20:04:42,492] INFO [ProducerStateManager partition=__cluster_metadata-0] Wrote producer snapshot at offset 106 with 0 producer ids in 1 ms. (org.apache.kafka.storage.internals.log.ProducerStateManager)
+[2026-11-10 20:04:42,493] INFO [ControllerRegistrationManager id=1 incarnation=VFWCiZgYQ26zE5LisvI9_w] beginShutdown: shutting down event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:42,493] INFO [ControllerRegistrationManager id=1 incarnation=VFWCiZgYQ26zE5LisvI9_w] shutting down. (kafka.server.ControllerRegistrationManager)
+[2026-11-10 20:04:42,493] INFO [controller-1-to-controller-registration-channel-manager]: Shutting down (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:42,493] INFO [controller-1-to-controller-registration-channel-manager]: Shutdown completed (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:42,493] INFO [controller-1-to-controller-registration-channel-manager]: Stopped (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:42,494] INFO Node to controller channel manager for registration shutdown (kafka.server.NodeToControllerChannelManagerImpl)
+[2026-11-10 20:04:42,494] INFO [ControllerRegistrationManager id=1 incarnation=VFWCiZgYQ26zE5LisvI9_w] closed event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:42,494] INFO [controller-1-to-controller-registration-channel-manager]: Shutdown completed (kafka.server.NodeToControllerRequestThread)
+[2026-11-10 20:04:42,494] WARN [NodeToControllerChannelManager id=1 name=registration] Attempting to close NetworkClient that has already been closed. (org.apache.kafka.clients.NetworkClient)
+[2026-11-10 20:04:42,494] INFO Node to controller channel manager for registration shutdown (kafka.server.NodeToControllerChannelManagerImpl)
+[2026-11-10 20:04:42,494] INFO [ControllerRegistrationManager id=1 incarnation=VFWCiZgYQ26zE5LisvI9_w] closed event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:42,495] INFO [SocketServer listenerType=CONTROLLER, nodeId=1] Stopping socket server request processors (kafka.network.SocketServer)
+[2026-11-10 20:04:42,497] INFO [SocketServer listenerType=CONTROLLER, nodeId=1] Stopped socket server request processors (kafka.network.SocketServer)
+[2026-11-10 20:04:42,497] INFO [QuorumController id=1] QuorumController#beginShutdown: shutting down event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:42,497] INFO [SocketServer listenerType=CONTROLLER, nodeId=1] Shutting down socket server (kafka.network.SocketServer)
+[2026-11-10 20:04:42,500] INFO [SocketServer listenerType=CONTROLLER, nodeId=1] Shutdown completed (kafka.network.SocketServer)
+[2026-11-10 20:04:42,500] INFO [data-plane Kafka Request Handler on Controller 1] shutting down (kafka.server.KafkaRequestHandlerPool)
+[2026-11-10 20:04:42,500] INFO [data-plane Kafka Request Handler on Controller 1] shut down completely (kafka.server.KafkaRequestHandlerPool)
+[2026-11-10 20:04:42,500] INFO [ExpirationReaper-1-AlterAcls]: Shutting down (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:42,501] INFO [ExpirationReaper-1-AlterAcls]: Shutdown completed (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:42,501] INFO [ExpirationReaper-1-AlterAcls]: Stopped (org.apache.kafka.server.purgatory.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-Fetch]: Shutting down (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-Fetch]: Stopped (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-Fetch]: Shutdown completed (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-Produce]: Shutting down (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-Produce]: Stopped (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-Produce]: Shutdown completed (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-Request]: Shutting down (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-Request]: Shutdown completed (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-Request]: Stopped (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-ControllerMutation]: Shutting down (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-ControllerMutation]: Stopped (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [controller-1-ThrottledChannelReaper-ControllerMutation]: Shutdown completed (kafka.server.ClientQuotaManager$ThrottledChannelReaper)
+[2026-11-10 20:04:42,501] INFO [QuorumController id=1] closed event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:42,502] INFO [SharedServer id=1] Stopping SharedServer (kafka.server.SharedServer)
+[2026-11-10 20:04:42,503] INFO [MetadataLoader id=1] beginShutdown: shutting down event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:42,503] INFO [SnapshotGenerator id=1] close: shutting down event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:42,503] INFO [SnapshotGenerator id=1] closed event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:42,503] INFO [MetadataLoader id=1] closed event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:42,503] INFO [SnapshotGenerator id=1] closed event queue. (org.apache.kafka.queue.KafkaEventQueue)
+[2026-11-10 20:04:42,504] INFO Metrics scheduler closed (org.apache.kafka.common.metrics.Metrics)
+[2026-11-10 20:04:42,504] INFO Closing reporter org.apache.kafka.common.metrics.JmxReporter (org.apache.kafka.common.metrics.Metrics)
+[2026-11-10 20:04:42,504] INFO Metrics reporters closed (org.apache.kafka.common.metrics.Metrics)
+[2026-11-10 20:04:42,504] INFO App info kafka.server for 1 unregistered (org.apache.kafka.common.utils.AppInfoParser)
+[2026-11-10 20:04:42,504] INFO App info kafka.server for 1 unregistered (org.apache.kafka.common.utils.AppInfoParser)

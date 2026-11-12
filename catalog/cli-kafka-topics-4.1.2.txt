@@ -1,0 +1,113 @@
+This tool helps to create, delete, describe, or change a topic.
+Option                                   Description                            
+------                                   -----------                            
+--alter                                  Alter the number of partitions and     
+                                           replica assignment. (To alter topic  
+                                           configurations, the kafka-configs    
+                                           tool can be used.)                   
+--at-min-isr-partitions                  If set when describing topics, only    
+                                           show partitions whose isr count is   
+                                           equal to the configured minimum.     
+--bootstrap-server <String: server to    REQUIRED: The Kafka server to connect  
+  connect to>                              to.                                  
+--command-config <String: command        Property file containing configs to be 
+  config property file>                    passed to Admin Client.              
+--config <String: name=value>            A topic configuration override for the 
+                                           topic being created. The following   
+                                           is a list of valid configurations:   
+                                         	cleanup.policy                        
+                                         	compression.gzip.level                
+                                         	compression.lz4.level                 
+                                         	compression.type                      
+                                         	compression.zstd.level                
+                                         	delete.retention.ms                   
+                                         	file.delete.delay.ms                  
+                                         	flush.messages                        
+                                         	flush.ms                              
+                                         	follower.replication.throttled.       
+                                           replicas                             
+                                         	index.interval.bytes                  
+                                         	leader.replication.throttled.replicas 
+                                         	local.retention.bytes                 
+                                         	local.retention.ms                    
+                                         	max.compaction.lag.ms                 
+                                         	max.message.bytes                     
+                                         	message.timestamp.after.max.ms        
+                                         	message.timestamp.before.max.ms       
+                                         	message.timestamp.type                
+                                         	min.cleanable.dirty.ratio             
+                                         	min.compaction.lag.ms                 
+                                         	min.insync.replicas                   
+                                         	preallocate                           
+                                         	remote.log.copy.disable               
+                                         	remote.log.delete.on.disable          
+                                         	remote.storage.enable                 
+                                         	retention.bytes                       
+                                         	retention.ms                          
+                                         	segment.bytes                         
+                                         	segment.index.bytes                   
+                                         	segment.jitter.ms                     
+                                         	segment.ms                            
+                                         	unclean.leader.election.enable        
+                                         See the Kafka documentation for full   
+                                           details on the topic configs. It is  
+                                           supported only in combination with --
+                                           create. (To alter topic              
+                                           configurations, the kafka-configs    
+                                           tool can be used.)                   
+--create                                 Create a new topic.                    
+--delete                                 Delete a topic.                        
+--delete-config <String: name>           This option is no longer supported and 
+                                           has been deprecated since 4.0        
+--describe                               List details for the given topics.     
+--exclude-internal                       Exclude internal topics when listing   
+                                           or describing topics. By default,    
+                                           the internal topics are included.    
+--help                                   Print usage information.               
+--if-exists                              If set when altering or deleting or    
+                                           describing topics, the action will   
+                                           only execute if the topic exists.    
+--if-not-exists                          If set when creating topics, the       
+                                           action will only execute if the      
+                                           topic does not already exist.        
+--list                                   List all available topics.             
+--partition-size-limit-per-response      The maximum partition size to be       
+  <Integer: maximum number of              included in one                      
+  partitions per response>                 DescribeTopicPartitions response.    
+--partitions <Integer: # of partitions>  The number of partitions for the topic 
+                                           being created or altered. If not     
+                                           supplied with --create, the topic    
+                                           uses the cluster default. (WARNING:  
+                                           If partitions are increased for a    
+                                           topic that has a key, the partition  
+                                           logic or ordering of the messages    
+                                           will be affected).                   
+--replica-assignment <String:            A list of manual partition-to-broker   
+  broker_id_for_part1_replica1 :           assignments for the topic being      
+  broker_id_for_part1_replica2 ,           created or altered.                  
+  broker_id_for_part2_replica1 :                                                
+  broker_id_for_part2_replica2 , ...>                                           
+--replication-factor <Integer:           The replication factor for each        
+  replication factor>                      partition in the topic being         
+                                           created. If not supplied, the topic  
+                                           uses the cluster default.            
+--topic <String: topic>                  The topic to create, alter, describe   
+                                           or delete. It also accepts a regular 
+                                           expression, except for --create      
+                                           option. Put topic name in double     
+                                           quotes and use the '\' prefix to     
+                                           escape regular expression symbols; e.
+                                           g. "test\.topic".                    
+--topic-id <String: topic-id>            The topic-id to describe.              
+--topics-with-overrides                  If set when describing topics, only    
+                                           show topics that have overridden     
+                                           configs.                             
+--unavailable-partitions                 If set when describing topics, only    
+                                           show partitions whose leader is not  
+                                           available.                           
+--under-min-isr-partitions               If set when describing topics, only    
+                                           show partitions whose isr count is   
+                                           less than the configured minimum.    
+--under-replicated-partitions            If set when describing topics, only    
+                                           show under-replicated partitions.    
+--version                                Display Kafka version.                 

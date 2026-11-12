@@ -1,0 +1,100 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 3
+  replicas: 3
+  cleanupPolicy: delete
+  config:
+    retention.ms: 604800000
+    segment.ms: 86400000
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 3
+  replicas: 3
+  cleanupPolicy: delete
+  config:
+    retention.ms: 604800000
+    segment.ms: 86400000
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-processing
+spec:
+  jobClassName: "com.example.ClickstreamProcessor"
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  flinkConfiguration:
+    taskmanager.memory.process.size: 7Gi
+    taskmanager.network.memory.fraction: 0.25
+    state.backend: rocksdb
+    state.backend.rocksdb.path: /tmp/rocksdb-state
+    state.backend.rocksdb.checkpoint.max保留换行
+```
+
+```sql
+CREATE TABLE clicks (
+  session_id STRING,
+  event JSON
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'earliest-offset',
+  'sink.partitioner' = 'default',
+  'sink.delivery.guarantee' = 'at-least-once',
+  'connector.table.name-mapping' = 'session_id:event'
+);
+
+CREATE TABLE clicks-enriched (
+  session_id STRING,
+  event JSON,
+  derived_field1 STRING,
+  derived_field2 INT
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks-enriched',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format' = 'json',
+  'sink.partitioner' = 'default',
+  'sink.delivery.guarantee' = 'at-least-once',
+  'connector.table.name-mapping' = 'session_id:event:derived_field1:derived_field2'
+);
+```
+
+### Justification of Values
+
+1. **KafkaTopic Resources:**
+   - **Partitions (3):** Given the input rate of 20,000 events/s and the assumption that one partition can handle up to 20,000 events/s, we set 3 partitions to provide some redundancy and ensure the system can handle the load.
+   - **Replicas (3):** We replicate the partitions across 3 brokers to ensure high availability and durability.
+   - **Retention.ms (604800000 ms):** Set to 7 days to retain data in the topics.
+   - **Segment.ms (86400000 ms):** Set to 1 day to ensure segments are not too large, which helps with efficient data management.
+
+2. **FlinkDeployment:**
+   - **TaskManager Resources:** Each TaskManager is configured with 4 CPU cores and 8 GiB of memory, with a limit to ensure efficient resource usage and avoid overloading the system.
+   - **TaskManager Memory:** Configured to use 7 GiB of memory for the process and 2 GiB for network buffers, with a network memory fraction of 0.25.
+   - **State Backend:** RocksDB is chosen for its performance and efficiency in state management.
+   - **Checkpoint Storage:** Durable checkpoint storage is set to an S3 bucket to ensure that checkpoints are saved in a reliable location.
+   - **Flink Configuration:** Additional configurations such as `taskmanager.memory.process.size` and `taskmanager.network.memory.fraction` are set to optimize memory usage and network buffer size.
+
+3. **Flink SQL CREATE TABLE Statements:**
+   - **Kafka Connector:** The Kafka connector is configured to read from and write to Kafka topics with the specified properties, including the bootstrap server, format, and partitioner.
+   - **Sink Delivery Guarantee:** At-least-once delivery guarantee is set to ensure no loss of data after failures.
+   - **Name Mapping:** The `connector.table.name-mapping` option is used to specify how the fields in the JSON event are mapped to the table columns.

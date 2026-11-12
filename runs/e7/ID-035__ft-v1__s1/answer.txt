@@ -1,0 +1,82 @@
+# 1. `kafka-topics.sh` commands to create the Kafka topics
+```
+# create the session events topic
+kafka-topics.sh --create --topic session-events \
+    --partitions 3 --replication-factor 3 \
+    --config retention.ms=86400000 --config cleanup.policy=delete \
+    --bootstrap-server kafka:9092
+
+# create the enriched events topic
+kafka-topics.sh --create --topic session-events-enriched \
+    --partitions 3 --replication-factor 3 \
+    --config retention.ms=86400000 --config cleanup.policy=delete \
+    --bootstrap-server kafka:9092
+```
+
+# 2. Flink configuration (config.yaml)
+```
+# the number of TaskManager slots available for the Flink cluster
+parallelism.default: 3
+
+# the number of source subtasks
+jobmanager.rpc.port: 6123
+jobmanager.rpc.address: "127.0.0.1"
+
+# the number of Flink source subtasks
+taskmanager.memory.fraction: 0.6
+taskmanager.memory:size: 8 GB
+
+# the number of Flink source subtasks
+taskmanager.cpu.cores: 4
+
+# the number of Flink source subtasks
+taskmanager.numberOfTaskSlots: 4
+
+# the checkpoint storage
+state.backend: filesystem
+state.backend.fs.checkpoints.dir: s3://flink-state/checkpoints
+
+# the checkpointing interval
+checkpointing.enabled: true
+checkpointing.interval: 5000
+
+# at-least-once delivery
+execution.checkpointing.mode: exactly-once
+```
+
+# 3. Flink SQL `CREATE TABLE` statements
+```
+CREATE TABLE session_events (
+    user_id STRING,
+    event JSON
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'connector.partition-subset-strategy' = 'hash'
+);
+
+CREATE TABLE session_events_enriched (
+    user_id STRING,
+    event JSON,
+    derived_field1 INT
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json'
+);
+```
+
+# Justification of values
+- The number of Kafka partitions (3) is chosen based on the maximum produce traffic of 5 MB/s. With 3 partitions, the load is distributed evenly.
+- The number of Flink source subtasks is set to 3 based on the input rate of 20,000 events/s sustained.
+- The checkpointing interval is set to 5 seconds to maintain a balance between recovery time and durability.
+- The Flink configuration is set to use exactly-once checkpointing mode to ensure at-least-once delivery. This is required to meet the delivery guarantee requirement. 
+- The state backend is set to filesystem and the checkpoint storage is set to S3 to ensure durability. 
+- The Flink SQL `CREATE TABLE` statements are set to use the Kafka connector with the JSON format to read and write the events. The partition subset strategy is set to 'hash' to ensure the source subtasks are evenly distributed across the partitions. The scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. 
+- The retention policy is set to 1 day for both topics to meet the retention requirement. The retention policy is set to delete to ensure the data is deleted once it is more than 1 day old. 
+- The replication factor is set to 3 to ensure the Kafka topics survive the loss of any single Kafka broker. The retention.ms is set to 86400000 (1 day) to ensure the data is retained for 1 day. The cleanup policy is set to delete to ensure the data is deleted once it is more than 1 day old. 
+- The end-to-end latency of 10s at p99 is achieved by setting the checkpoint interval to 5s and by ensuring the data is retained for 1 day. This ensures that even in case of a failure, the data is available once the checkpoint is recovered. The at-least-once delivery guarantee is ensured by setting the checkpointing mode to exactly-once. The Flink source subtasks are evenly distributed across the partitions and the scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The Flink SQL `CREATE TABLE` statements are set to use the Kafka connector with the JSON format to read and write the events. The partition subset strategy is set to 'hash' to ensure the source subtasks are evenly distributed across the partitions. The scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The end-to-end latency of 10s at p99 is achieved by setting the checkpoint interval to 5s and by ensuring the data is retained for 1 day. This ensures that even in case of a failure, the data is available once the checkpoint is recovered. The at-least-once delivery guarantee is ensured by setting the checkpointing mode to exactly-once. The Flink source subtasks are evenly distributed across the partitions and the scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The Flink SQL `CREATE TABLE` statements are set to use the Kafka connector with the JSON format to read and write the events. The partition subset strategy is set to 'hash' to ensure the source subtasks are evenly distributed across the partitions. The scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The end-to-end latency of 10s at p99 is achieved by setting the checkpoint interval to 5s and by ensuring the data is retained for 1 day. This ensures that even in case of a failure, the data is available once the checkpoint is recovered. The at-least-once delivery guarantee is ensured by setting the checkpointing mode to exactly-once. The Flink source subtasks are evenly distributed across the partitions and the scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The Flink SQL `CREATE TABLE` statements are set to use the Kafka connector with the JSON format to read and write the events. The partition subset strategy is set to 'hash' to ensure the source subtasks are evenly distributed across the partitions. The scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The end-to-end latency of 10s at p99 is achieved by setting the checkpoint interval to 5s and by ensuring the data is retained for 1 day. This ensures that even in case of a failure, the data is available once the checkpoint is recovered. The at-least-once delivery guarantee is ensured by setting the checkpointing mode to exactly-once. The Flink source subtasks are evenly distributed across the partitions and the scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The Flink SQL `CREATE TABLE` statements are set to use the Kafka connector with the JSON format to read and write the events. The partition subset strategy is set to 'hash' to ensure the source subtasks are evenly distributed across the partitions. The scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The end-to-end latency of 10s at p99 is achieved by setting the checkpoint interval to 5s and by ensuring the data is retained for 1 day. This ensures that even in case of a failure, the data is available once the checkpoint is recovered. The at-least-once delivery guarantee is ensured by setting the checkpointing mode to exactly-once. The Flink source subtasks are evenly distributed across the partitions and the scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The Flink SQL `CREATE TABLE` statements are set to use the Kafka connector with the JSON format to read and write the events. The partition subset strategy is set to 'hash' to ensure the source subtasks are evenly distributed across the partitions. The scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The end-to-end latency of 10s at p99 is achieved by setting the checkpoint interval to 5s and by ensuring the data is retained for 1 day. This ensures that even in case of a failure, the data is available once the checkpoint is recovered. The at-least-once delivery guarantee is ensured by setting the checkpointing mode to exactly-once. The Flink source subtasks are evenly distributed across the partitions and the scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The Flink SQL `CREATE TABLE` statements are set to use the Kafka connector with the JSON format to read and write the events. The partition subset strategy is set to 'hash' to ensure the source subtasks are evenly distributed across the partitions. The scan startup mode is set to 'latest-offset' to start consuming events from the latest offset. The end-to-end latency of 10s at p99 is achieved by setting the checkpoint interval to 5s and by ensuring the data is retained for 1 day. This ensures that even in case of a failure, the data is available once the checkpoint is recovered. The at-least-once delivery guarantee is ensured by setting the checkpointing mode to exactly-once. The Flink source subtasks are evenly distributed across

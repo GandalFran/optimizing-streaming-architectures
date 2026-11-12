@@ -1,0 +1,119 @@
+**Kafka Topics**
+```yml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    'retention.ms': '86400000'
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions-clean
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    'retention.ms': '86400000'
+```
+
+**Flink Deployment**
+```yml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: vehicle-positions-cleaner
+spec:
+  image:
+    name: flink:1.20-scala_2.12
+  flinkVersion: v1_20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.cpu.cores: 4
+    taskmanager.memory.jvm-metaspacesize: 1024m
+    taskmanager.memory.jvm-overhead.max: 2048m
+    taskmanager.memory.process.size: 8192m
+    state.savepoints.dir: s3://flink-state/savepoints
+    checkpointing.interval: 10000
+    execution.checkpointing.interval: 10000
+    execution.checkpointing.timeout: 300000
+    execution.checkpointing.max-concurrent-checkpoints: 1
+    execution.checkpointing.unaligned: true
+    execution.checkpointing.tolerable-failed-checkpoints: 3
+    execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+    execution.restart-strategy: fixed-delay
+    restart-strategy.fixed-delay.attempts: 3
+    restart-strategy.fixed-delay.delay: 30000
+    execution.savepointing.interval: 600000
+    execution.savepointing.max-concurrent-savepoints: 1
+    execution.savepointing.tolerable-failed-savepoints: 3
+    execution.savepointing.externalized-savepoint-retention: RETAIN_ON_CANCELLATION
+    state.backend: filesystem
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.savepoints.dir: s3://flink-state/savepoints
+    execution.runtime-mode: BATCH
+  job:
+    jarURI: local:///opt/flink/usrlib/sql-runner.jar
+  resources:
+    taskmanager:
+      cpu: 4
+      memory: 8G
+  podTemplate:
+    spec:
+      containers:
+      - name: flink-main-container
+        volumeMounts:
+        - name: flink-config-volume
+          mountPath: /opt/flink/conf
+      volumes:
+      - name: flink-config-volume
+        configMap:
+          name: flink-config
+  replicas: 3
+```
+
+**Flink SQL Tables**
+```sql
+CREATE TABLE vehicle_positions (
+  `vehicle_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `latitude` DECIMAL(10, 7),
+  `longitude` DECIMAL(10, 7),
+  `event_data` MAP<STRING, STRING>,
+  WATERMARK FOR `event_time` AS `event_time` - INTERVAL '5' SECOND
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'vehicle-positions',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.fail-on-missing-field' = 'false'
+);
+
+CREATE TABLE vehicle_positions_clean (
+  `vehicle_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `latitude` DECIMAL(10, 7),
+  `longitude` DECIMAL(10, 7),
+  `event_data` MAP<STRING, STRING>,
+  `derived_field` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'vehicle-positions-clean',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.fail-on-missing-field' = 'false',
+  'update-mode' = 'append'
+);
+```
+
+Justification:
+
+* Kafka topics are created with 10 partitions each to accommodate the input rate of 20,000 events/s, assuming one partition can handle at most 5 MB/s of produce traffic and an average event size of 2048 bytes. The retention period is set to 1 day (86400000 ms) for both topics.
+* The Flink deployment is configured with 3 TaskManager pods, each with 4 CPU cores and 8 GiB of memory. The Flink configuration is set to use a fixed-delay restart strategy with 3 attempts and a 30-second delay between attempts. Checkpointing and savepointing are enabled for exactly-once end-to-end delivery guarantee. The state backend is set to filesystem, and checkpoints and savepoints are stored in S3.
+* The Flink SQL tables are created with the `json` format and `kafka` connector. The `vehicle_positions` table has a watermark defined for the `event_time` field with a 5-second delay. The `vehicle_positions_clean` table has an additional `derived_field` column and is set to append mode.

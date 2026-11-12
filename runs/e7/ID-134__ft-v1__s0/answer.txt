@@ -1,0 +1,156 @@
+1. ```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+  namespace: strimzi
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    "max.message.bytes": "10485760"
+    "retention.ms": "86400000"
+  topicNameFormat: "${topic.name}-${cluster.name}"
+  partitionAssignmentStrategy: round-robin
+  storage:
+    class: "kafka"
+    size: "10Gi"
+  kafkaVersion: "4.1.0"
+  cleanupPolicy: "delete"
+  compactLogSegmentDuration: "1h"
+  retentionBytes: "10737418240"
+  retentionMinutes: "60"
+  topicFilters:
+    - name: "vehicle-positions"
+      filter:
+        type: "include"
+        pattern: ".*"
+    - name: "vehicle-positions-clean"
+      filter:
+        type: "include"
+        pattern: ".*"
+  kafkaConnect:
+    enabled: false
+  kafkaConnectS2I:
+    enabled: false
+  kafkaBridge:
+    enabled: false
+  kafkaRest:
+    enabled: false
+  schemaRegistry:
+    enabled: false
+  zookeeper:
+    enabled: false
+  zookeeperClient:
+    enabled: false
+  zookeeperExternal:
+    enabled: false
+  zookeeperStatefulset:
+    enabled: false
+  zookeeperStatefulsetClient:
+    enabled: false
+  zookeeperStatefulsetExternal:
+    enabled: false
+  zookeeperStatefulsetExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternal:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeper:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperClient:
+    enabled: false
+  zookeeperStatefulsetExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeperExternalZookeeper

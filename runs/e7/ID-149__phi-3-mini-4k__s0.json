@@ -1,0 +1,299 @@
+{
+  "id": "ID-149",
+  "model": "phi-3-mini-4k",
+  "seed": 0,
+  "track": "native",
+  "family": "grid",
+  "spec": {
+    "delivery": "at-least-once",
+    "durability": "standard",
+    "event_bytes": 2048,
+    "latency_slo_ms": 1000,
+    "retention_days": 30,
+    "sink": "ad-impressions-enriched",
+    "src": "ad-impressions",
+    "throughput_eps": 50000
+  },
+  "finish_reason": "length",
+  "host": "cn001",
+  "slurm_job": "8382",
+  "started": "2026-11-10T19:12:01+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions --partitions 3 --replication-factor 3 --config retention.ms=2592000000",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions --partitions 3 --replication-factor 3 --config retention.ms=2592000000",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions-enriched --partitions 3 --replication-factor 3 --config retention.ms=2592000000",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions-enriched --partitions 3 --replication-factor 3 --config retention.ms=2592000000",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    }
+  ],
+  "translations": [],
+  "augmentations": [],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions --partitions 3 --replication-factor 3 --config retention.ms=2592000000",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002 --create --topic ad-impressions --partitions 3 --replication-factor 3 --config retention.ms=2592000000",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic ad-impressions.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --bootstrap-server kafka:9092 --create --topic ad-impressions-enriched --partitions 3 --replication-factor 3 --config retention.ms=2592000000",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002 --create --topic ad-impressions-enriched --partitions 3 --replication-factor 3 --config retention.ms=2592000000",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic ad-impressions-enriched.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "the answer has no CREATE TABLE statement",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 1000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C1_deploy": "the answer has no CREATE TABLE statement",
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794334330.398,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.4,
+      "bootstrap": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "t": 1794334333.896,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "ad-impressions",
+        "ad-impressions-enriched"
+      ],
+      "ok": true
+    }
+  ],
+  "notes": [
+    "duplicate YAML keys ['taskmanager.heap.offheap.min.used.percent', 'taskmanager.heap.offheap.initial.used.percent', 'taskmanager.heap.offheap.max.used.percent', 'taskmanager.heap.offheap.min.free.percent', 'taskmanager.heap.offheap.initial.free.percent', 'taskmanager.heap.offheap.max.free.percent', 'taskmanager.heap.offheap.min.used.percent', 'taskmanager.heap.offheap.initial.used.percent', 'taskmanager.heap.offheap.max.used.percent', 'taskmanager.heap.offheap.min.free.percent', 'taskmanager.heap.offheap.initial.free.percent', 'taskmanager.heap.offheap.max.free.percent', 'taskmanager.heap.offheap.min.used.percent', 'taskmanager.heap.offheap.initial.used.percent', 'taskmanager.heap.offheap.max.used.percent', 'taskmanager.heap.offheap.min.free.percent', 'taskmanager.heap.offheap.initial.free.percent', 'taskmanager.heap.offheap.max.free.percent', 'taskmanager.heap.offheap.min.used.percent', 'taskmanager.heap.offheap.initial.used.percent', 'taskmanager.heap.offheap.max.used.percent', 'taskmanager.heap.offheap.min.free.percent', 'taskmanager.heap.offheap.initial.free.percent', 'taskmanager.heap.offheap.max.free.percent', 'taskmanager.heap.offheap.min.used.percent', 'taskmanager.heap.offheap.initial.used.percent', 'taskmanager.heap.offheap.max.used.percent', 'taskmanager.heap.offheap.min.free.percent', 'taskmanager.heap.offheap.initial.free.percent', 'taskmanager.heap.offheap.max.free.percent', 'taskmanager.heap.offheap.min.used.percent', 'taskmanager.heap.offheap.initial.used.percent', 'taskmanager.heap.offheap.max.used.percent', 'taskmanager.heap.offheap.min.free.percent', 'taskmanager.heap.offheap.initial.free.percent', 'taskmanager.heap.offheap.max.free.percent', 'taskmanager.heap.offheap.min.used.percent', 'taskmanager.heap.offheap.initial.used.percent', 'taskmanager.heap.offheap.max.used.percent', 'taskmanager.heap.offheap.min.free.percent', 'taskmanager.heap.offheap.initial.free.percent', 'taskmanager.heap.offheap.max.free.percent', 'taskmanager.heap.offheap.min.used.percent', 'taskmanager.heap.offheap.initial.used.percent', 'taskmanager.heap.offheap.max.used.percent', 'taskmanager.heap.offheap.min.free.percent', 'taskmanager.heap.offheap.initial.free.percent', 'taskmanager.heap.offheap.max.free.percent', 'taskmanager.heap.offheap.min.used.percent', 'taskmanager.heap.offheap.initial.used.percent', 'taskmanager.heap.offheap.max.used.percent', 'taskmanager.heap.offheap.min.free.percent', 'taskmanager.heap.offheap.initial.free.percent', 'taskmanager.heap.offheap.max.free.percent', 'taskmanager.heap.offheap.min.used.percent', 'taskmanager.heap.offheap.initial.used.percent', 'taskmanager.heap.offheap.max.used.percent', 'taskmanager.heap.offheap.min.free.percent', 'taskmanager.heap.offheap.initial.free.percent']: the last value is used (as the validator does)"
+  ],
+  "driver_args": {
+    "id": "ID-149",
+    "answer_file": null,
+    "answers": "runs/main/phi-3-mini-4k.greedy.jsonl",
+    "model": "phi-3-mini-4k",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-149__phi-3-mini-4k__s0.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8382",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 94,
+    "findings_L1_L3": [
+      "L1:truncated:generation stopped at the token limit",
+      "L2:unknown-key:kafka.consumer.properties.bootstrap.servers is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.consumer.properties.group.id is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.consumer.properties.auto.offset.reset is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.consumer.properties.key.deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.consumer.properties.value.deserializer is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.consumer.properties.max.partition.fetch.bytes is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.consumer.properties.session.timeout.ms is not a Flink 1.20 configuration option",
+      "L2:unknown-key:kafka.consumer.properties.max.poll.interval.ms is not a Flink 1.20 configuration option",
+      "L2:unknown-key:job.name is not a Flink 1.20 configuration option",
+      "L2:unknown-key:job.checkpoint.dir is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.file.upload.dir is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.heap.per.slot.mb is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.heap.min.mb is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.heap.initial.mb is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.heap.offheap.size.gb is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.heap.offheap.enabled is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.network.send-buffer-bytes is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.network.receive-buffer-bytes is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.network.max-send-buffer-bytes is not a Flink 1.20 configuration option"
+    ]
+  },
+  "topology": {
+    "port_base": 12000,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        1,
+        2
+      ]
+    },
+    "nodes": {
+      "k1": "44,45,156,157",
+      "k2": "46,47,158,159",
+      "k3": "48,49,160,161",
+      "f1": "50,51,52,53,162,163,164,165",
+      "f2": "74,75,76,77,186,187,188,189",
+      "f3": "78,79,80,81,190,191,192,193",
+      "j1": "54,166",
+      "ctl": "82,83,194,195",
+      "m1": "55,167"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12010,2@127.0.0.1:12011,3@127.0.0.1:12012",
+    "listeners=PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8382/e7-1247707/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "ad-impressions-enriched": {
+      "partitions": 3,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    },
+    "ad-impressions": {
+      "partitions": 3,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "failure_stage": "answer",
+  "topics_after_run": {
+    "ad-impressions-enriched": {
+      "partitions": 3,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    },
+    "ad-impressions": {
+      "partitions": 3,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T19:12:20+0100"
+}

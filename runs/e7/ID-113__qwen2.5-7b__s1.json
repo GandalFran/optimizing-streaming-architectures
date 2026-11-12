@@ -1,0 +1,286 @@
+{
+  "id": "ID-113",
+  "model": "qwen2.5-7b",
+  "seed": 1,
+  "track": "native",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 2048,
+    "latency_slo_ms": 1000,
+    "retention_days": 30,
+    "sink": "clicks-enriched",
+    "src": "clicks",
+    "throughput_eps": 5000
+  },
+  "finish_reason": "stop",
+  "host": "cn001",
+  "slurm_job": "8388",
+  "started": "2026-11-10T20:00:52+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks --partitions 16 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server kafka:9092",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks --partitions 16 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server kafka:9092",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks-enriched --partitions 16 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server kafka:9092",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic clicks-enriched --partitions 16 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server kafka:9092",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    }
+  ],
+  "translations": [],
+  "augmentations": [],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics.sh --create --topic clicks --partitions 16 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server kafka:9092",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic clicks --partitions 16 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server 127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic clicks.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --create --topic clicks-enriched --partitions 16 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server kafka:9092",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic clicks-enriched --partitions 16 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server 127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic clicks-enriched.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "no CREATE TABLE writes topic 'clicks-enriched'; no job can be built",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 1000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C1_deploy": "no CREATE TABLE writes topic 'clicks-enriched'; no job can be built",
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794337261.019,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.8,
+      "bootstrap": "127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502"
+    },
+    {
+      "t": 1794337264.554,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "clicks",
+        "clicks-enriched"
+      ],
+      "ok": true
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-113",
+    "answer_file": null,
+    "answers": "runs/main/qwen2.5-7b.sample.jsonl",
+    "model": "qwen2.5-7b",
+    "seed": 1,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-113__qwen2.5-7b__s1.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8388",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": [
+      "CREATE TABLE clicks-enriched (\n    session_id STRING,\n    event_time TIMESTAMP(3),\n    event STRING,\n    derived_field1 STRING,\n    derived_field2 INT,\n    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND\n) WITH (\n    'connector' = 'kafka',\n    'topic' = 'clicks-enriched',\n    'properties.bootstrap.servers' = 'kafka:9092',\n    'format' = 'json',\n    'sink.partitioner.class' = 'org.apache.flink.connector.kafka.sink.KafkaPartitioner',\n    'sink.partition-commit.policy.type' = 'all-to-same'\n)"
+    ]
+  },
+  "static_validator": {
+    "n_findings": 11,
+    "findings_L1_L3": [
+      "L2:unknown-key:state.backend.fs.checkpointdir.mode is not a Flink 1.20 configuration option",
+      "L2:unknown-key:checkpointing.mode is not a Flink 1.20 configuration option",
+      "L2:unknown-key:checkpointing.interval is not a Flink 1.20 configuration option",
+      "L2:unknown-key:taskmanager.memory.task.heap-size is not a Flink 1.20 configuration option",
+      "L2:unknown-key:jobmanager.memory.task.heap-size is not a Flink 1.20 configuration option",
+      "L2:unknown-key:'sink.partitioner.class' is not an option of connector kafka",
+      "L2:unknown-key:'sink.partition-commit.policy.type' is not an option of connector kafka"
+    ]
+  },
+  "topology": {
+    "port_base": 12500,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        2,
+        3
+      ]
+    },
+    "nodes": {
+      "k1": "94,95,206,207",
+      "k2": "96,97,208,209",
+      "k3": "98,99,210,211",
+      "f1": "100,101,102,103,212,213,214,215",
+      "f2": "75,76,77,78,187,188,189,190",
+      "f3": "79,80,81,82,191,192,193,194",
+      "j1": "83,195",
+      "ctl": "25,26,137,138",
+      "m1": "27,139"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12510,2@127.0.0.1:12511,3@127.0.0.1:12512",
+    "listeners=PLAINTEXT://127.0.0.1:12500,CONTROLLER://127.0.0.1:12510",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12500",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8388/e7-1606033/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "clicks-enriched": {
+      "partitions": 16,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    },
+    "clicks": {
+      "partitions": 16,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "failure_stage": "answer",
+  "topics_after_run": {
+    "clicks-enriched": {
+      "partitions": 16,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    },
+    "clicks": {
+      "partitions": 16,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "retention.ms": "2592000000"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T20:01:11+0100"
+}

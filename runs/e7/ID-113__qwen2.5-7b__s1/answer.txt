@@ -1,0 +1,68 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic clicks --partitions 16 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic clicks-enriched --partitions 16 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+taskmanager.numberOfTaskSlots: 12
+jobmanager.rpc.address: jobmanager
+jobmanager.web.port: 8081
+state.backend: filesystem
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.backend.fs.checkpointdir: s3://flink-state/checkpoints
+state.backend.fs.checkpointdir.mode: COPY_ON_WRITE
+checkpointing.mode: EXACTLY_ONCE
+checkpointing.interval: 3000
+taskmanager.memory.task.heap-size: 2048m
+jobmanager.memory.task.heap-size: 2048m
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements
+CREATE TABLE clicks (
+    session_id STRING,
+    event_time TIMESTAMP(3),
+    event STRING,
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'sink.partitioner.class' = 'org.apache.flink.connector.kafka.sink.KafkaPartitioner',
+    'sink.partition-commit.policy.type' = 'all-to-same'
+);
+
+CREATE TABLE clicks-enriched (
+    session_id STRING,
+    event_time TIMESTAMP(3),
+    event STRING,
+    derived_field1 STRING,
+    derived_field2 INT,
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner.class' = 'org.apache.flink.connector.kafka.sink.KafkaPartitioner',
+    'sink.partition-commit.policy.type' = 'all-to-same'
+);
+```
+
+### Justification of Main Values:
+1. **Kafka Topics Configuration:**
+   - **Partitions and Replication Factor:** 16 partitions and replication factor of 3 provide a balance between throughput and fault tolerance, given the input rate of 5,000 events/s.
+   - **Retention Time:** 30 days retention period ensures that data is available for analysis for a sufficient period.
+   
+2. **Flink Configuration:**
+   - **TaskManager Resources:** 12 task slots distributed across 3 TaskManagers, each with 4 CPU cores and 8 GB of memory, to handle the throughput efficiently.
+   - **Checkpointing:** Exactly-once semantics are ensured with `EXACTLY_ONCE` checkpointing mode and `COPY_ON_WRITE` mode for durability.
+   - **Watermarks:** Watermarks are set to 5 seconds to handle event timestamps and ensure timely processing.
+
+3. **Flink SQL Table Statements:**
+   - **Watermark Handling:** Watermarks are set to 5 seconds to handle late events and maintain the order of events.
+   - **Sink Partitioning:** Using `all-to-same` ensures consistent partitioning for reliable exactly-once semantics.

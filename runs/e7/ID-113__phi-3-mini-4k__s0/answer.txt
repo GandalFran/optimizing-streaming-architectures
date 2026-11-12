@@ -1,0 +1,102 @@
+ ```bash
+# Create Kafka topics
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic clicks --partitions 3 --replication-factor 3
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic clicks-enriched --partitions 3 --replication-factor 3
+```
+
+```yaml
+# Flink configuration (config.yaml)
+
+# Kafka consumer configuration
+kafka.consumer.properties:
+  bootstrap.servers: kafka:9092
+  group.id: flink-clickstream-group
+  auto.offset.reset: latest
+  key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+# Kafka producer configuration
+kafka.producer.properties:
+  bootstrap.servers: kafka:9092
+  key.serializer: org.apache.kafka.common.serialization.StringSerializer
+  value.serializer: org.apache.kafka.common.serialization.StringSerializer
+
+# Flink job configuration
+jobmanager.rpc.address: jobmanager
+jobmanager.heap.size: 1024m
+taskmanager.heap.size: 8192m
+taskmanager.numberOfTaskSlots: 3
+state.backend: s3://flink-state/checkpoints
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.savepoints.dir: s3://flink-state/checkpoints
+state.checkpoints.compression.type: zip
+state.savepoints.compression.type: zip
+state.savepoint.timeout: 30s
+state.checkpoint.timeout: 30s
+state.cleanup.checkpoints: true
+state.cleanup.checkpoints.retain: 30d
+state.cleanup.checkpoints.retention.ms: 0
+state.cleanup.checkpoints.retention.period: 30d
+state.cleanup.checkpoints.retention.period.unit: days
+state.checkpoints.retention.ms: 0
+state.checkpoints.retention.period: 30d
+state.checkpoints.retention.period.unit: days
+state.checkpoints.retention.bytes: 0
+state.checkpoints.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.period: 30d
+state.checkpoints.retention.cleanup.policy.delete.retention.period.unit: days
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes: 0
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy.delete.retention.period: 30d
+state.checkpoints.retention.cleanup.policy.delete.retention.period.unit: days
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes: 0
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy.delete.retention.period: 30d
+state.checkpoints.retention.cleanup.policy.delete.retention.period.unit: days
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes: 0
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy.delete.retention.period: 30d
+state.checkpoints.retention.cleanup.policy.delete.retention.period.unit: days
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes: 0
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy.delete.retention.period: 30d
+state.checkpoints.retention.cleanup.policy.delete.retention.period.unit: days
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes: 0
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy.delete.retention.period: 30d
+state.checkpoints.retention.cleanup.policy.delete.retention.period.unit: days
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes: 0
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy.delete.retention.period: 30d
+state.checkpoints.retention.cleanup.policy.delete.retention.period.unit: days
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes: 0
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy.delete.retention.period: 30d
+state.checkpoints.retention.cleanup.policy.delete.retention.period.unit: days
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes: 0
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy.delete.retention.period: 30d
+state.checkpoints.retention.cleanup.policy.delete.retention.period.unit: days
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes: 0
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy.delete.retention.period: 30d
+state.checkpoints.retention.cleanup.policy.delete.retention.period.unit: days
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes: 0
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy.delete.retention.period: 30d
+state.checkpoints.retention.cleanup.policy.delete.retention.period.unit: days
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes: 0
+state.checkpoints.retention.cleanup.policy.delete.retention.bytes.unit: bytes
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy: delete
+state.checkpoints.retention.cleanup.policy.delete.retention.cleanup.policy.delete.retention.

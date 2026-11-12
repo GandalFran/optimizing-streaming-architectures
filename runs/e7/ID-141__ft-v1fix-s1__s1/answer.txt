@@ -1,0 +1,58 @@
+# 1. `kafka-topics.sh` commands to create all topics
+```bash
+# create topic 'app-logs'
+./bin/kafka-topics.sh --create --topic app-logs --partitions 4 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092
+
+# create topic 'app-logs-parsed'
+./bin/kafka-topics.sh --create --topic app-logs-parsed --partitions 4 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092
+```
+# 2. Flink configuration (`config.yaml` keys)
+```yaml
+# the number of TaskManager slots available per TaskManager
+jobmanager.numberOfTaskManagers: 3
+
+# the number of operator parallelism
+parallelism.default: 4
+
+# the maximum parallelism of each Flink source subtask
+source.parallelism: 1
+
+# the maximum parallelism of each Flink sink subtask
+sink.parallelism: 1
+
+# the maximum parallelism of each Flink checkpoint subtask
+checkpointing.parallelism: 1
+
+# the size of the checkpoint store
+state.checkpoints.dir: s3://flink-state/checkpoints
+```
+# 3. Flink SQL `CREATE TABLE` statements for every Kafka source and sink table
+```sql
+-- source table: app-logs
+CREATE TABLE app_logs (
+    service STRING,
+    log STRUCT<timestamp: TIMESTAMP, message: STRING>
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'app-logs',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset'
+);
+
+-- sink table: app-logs-parsed
+CREATE TABLE app_logs_parsed (
+    service STRING,
+    log STRUCT<timestamp: TIMESTAMP, message: STRING, parsed_message: STRUCT<user: STRING, action: STRING, status: INT>>
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'app-logs-parsed',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partition-commit.trigger' = 'retained-after',
+    'sink.partition-commit.retained-after' = '1d',
+    'sink.partitioner' = 'round-robin',
+    'sink.parallelism' = '1'
+);
+```
+The main values are: the Kafka topic replication factor is 3 to ensure high availability and durability, the Flink parallelism is set to 4 to fully utilize the available resources, and the source and sink parallelism is set to 1 to ensure exactly-once processing. The checkpointing parallelism is set to 1 to ensure consistent state. The checkpoint store is configured to store checkpoints in S3 to ensure durability.

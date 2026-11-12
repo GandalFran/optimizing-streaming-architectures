@@ -1,0 +1,1176 @@
+
+=== spawn 1794393373: numactl --physcpubind=34,35,36,37,146,147,148,149 --membind=1 -- /home/chamoso/tuning-revision/opt/flink/bin/taskmanager.sh start-foreground -Dtaskmanager.resource-id=tm0
+Starting taskexecutor as a console application on host cn001.
+2026-11-11 11:36:13,990 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - --------------------------------------------------------------------------------
+2026-11-11 11:36:13,992 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Preconfiguration: 
+2026-11-11 11:36:13,992 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - 
+
+
+RESOURCE_PARAMS extraction logs:
+jvm_params: -Xmx3597035049 -Xms3597035049 -XX:MaxDirectMemorySize=880468305 -XX:MaxMetaspaceSize=268435456
+dynamic_configs: -D taskmanager.memory.network.min=746250577b -D taskmanager.cpu.cores=4.0 -D taskmanager.memory.task.off-heap.size=0b -D taskmanager.memory.jvm-metaspace.size=268435456b -D external-resources=none -D taskmanager.memory.jvm-overhead.min=858993472b -D taskmanager.memory.framework.off-heap.size=134217728b -D taskmanager.memory.network.max=746250577b -D taskmanager.memory.framework.heap.size=134217728b -D taskmanager.memory.managed.size=2985002310b -D taskmanager.memory.task.heap.size=3462817321b -D taskmanager.numberOfTaskSlots=4 -D taskmanager.memory.jvm-overhead.max=858993472b
+logs: INFO  [] - Using standard YAML parser to load flink configuration file from /tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7/config.yaml.
+INFO  [] - Loading configuration property: execution.checkpointing.mode, AT_LEAST_ONCE
+INFO  [] - Loading configuration property: taskmanager.memory.process.size, 8192m
+INFO  [] - Loading configuration property: taskmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: jobmanager.execution.failover-strategy, region
+INFO  [] - Loading configuration property: jobmanager.rpc.address, 127.0.0.1
+INFO  [] - Loading configuration property: jobmanager.memory.process.size, 2048m
+INFO  [] - Loading configuration property: jobmanager.rpc.port, 12030
+INFO  [] - Loading configuration property: rest.bind-address, 127.0.0.1
+INFO  [] - Loading configuration property: execution.checkpointing.interval, 10 s
+INFO  [] - Loading configuration property: rest.port, 12031
+INFO  [] - Loading configuration property: jobmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: io.tmp.dirs, /tmp/chamoso-e7/8529/e7-2785032/flink-io
+INFO  [] - Loading configuration property: execution.checkpointing.savepoint-dir, file:///tmp/chamoso-e7/8529/e7-2785032/objstore/flink-state/savepoints
+INFO  [] - Loading configuration property: taskmanager.host, 127.0.0.1
+INFO  [] - Loading configuration property: parallelism.default, 1
+INFO  [] - Loading configuration property: taskmanager.numberOfTaskSlots, 4
+INFO  [] - Loading configuration property: rest.address, 127.0.0.1
+INFO  [] - Loading configuration property: execution.checkpointing.dir, file:///tmp/chamoso-e7/8529/e7-2785032/objstore/flink-state/checkpoints
+INFO  [] - Loading configuration property: env.java.opts.all, --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+INFO  [] - Loading dynamic configuration property: taskmanager.resource-id, tm0
+INFO  [] - Final TaskExecutor Memory configuration:
+INFO  [] -   Total Process Memory:          8.000gb (8589934592 bytes)
+INFO  [] -     Total Flink Memory:          6.950gb (7462505664 bytes)
+INFO  [] -       Total JVM Heap Memory:     3.350gb (3597035049 bytes)
+INFO  [] -         Framework:               128.000mb (134217728 bytes)
+INFO  [] -         Task:                    3.225gb (3462817321 bytes)
+INFO  [] -       Total Off-heap Memory:     3.600gb (3865470615 bytes)
+INFO  [] -         Managed:                 2.780gb (2985002310 bytes)
+INFO  [] -         Total JVM Direct Memory: 839.680mb (880468305 bytes)
+INFO  [] -           Framework:             128.000mb (134217728 bytes)
+INFO  [] -           Task:                  0 bytes
+INFO  [] -           Network:               711.680mb (746250577 bytes)
+INFO  [] -     JVM Metaspace:               256.000mb (268435456 bytes)
+INFO  [] -     JVM Overhead:                819.200mb (858993472 bytes)
+
+2026-11-11 11:36:13,992 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - --------------------------------------------------------------------------------
+2026-11-11 11:36:13,992 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Starting TaskManager (Version: 1.20.5, Scala: 2.12, Rev:0980485, Date:2026-06-08T09:21:06+02:00)
+2026-11-11 11:36:13,992 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  OS current user: chamoso
+2026-11-11 11:36:13,992 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Current Hadoop/Kerberos user: <no hadoop dependency found>
+2026-11-11 11:36:13,992 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  JVM: OpenJDK 64-Bit Server VM - Eclipse Adoptium - 17/17.0.20.1+1
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Arch: amd64
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Maximum heap size: 3432 MiBytes
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  JAVA_HOME: /home/chamoso/tuning-revision/opt/jdk17
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  No Hadoop Dependency available
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  JVM Options:
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Xmx3597035049
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Xms3597035049
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -XX:MaxDirectMemorySize=880468305
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -XX:MaxMetaspaceSize=268435456
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -XX:+IgnoreUnrecognizedVMOptions
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=java.base/sun.net.util=ALL-UNNAMED
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+2026-11-11 11:36:13,993 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.lang=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.net=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.io=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.nio=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.text=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.time=ALL-UNNAMED
+2026-11-11 11:36:13,994 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util=ALL-UNNAMED
+2026-11-11 11:36:13,995 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+2026-11-11 11:36:13,995 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED
+2026-11-11 11:36:13,995 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+2026-11-11 11:36:13,995 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlog.file=/tmp/chamoso-e7/8529/e7-2785032/logs/flink-e7/flink-chamoso-taskexecutor-0-cn001.log
+2026-11-11 11:36:13,995 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlog4j.configuration=file:/tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7/log4j-console.properties
+2026-11-11 11:36:13,995 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlog4j.configurationFile=file:/tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7/log4j-console.properties
+2026-11-11 11:36:13,995 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlogback.configurationFile=file:/tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7/logback-console.xml
+2026-11-11 11:36:13,995 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Program Arguments:
+2026-11-11 11:36:13,996 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --configDir
+2026-11-11 11:36:13,996 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     /tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7
+2026-11-11 11:36:13,996 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,996 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.network.min=746250577b
+2026-11-11 11:36:13,996 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,996 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.cpu.cores=4.0
+2026-11-11 11:36:13,996 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,996 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.task.off-heap.size=0b
+2026-11-11 11:36:13,996 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,996 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.jvm-metaspace.size=268435456b
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     external-resources=none
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.jvm-overhead.min=858993472b
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.framework.off-heap.size=134217728b
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.network.max=746250577b
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.framework.heap.size=134217728b
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.managed.size=2985002310b
+2026-11-11 11:36:13,997 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,998 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.task.heap.size=3462817321b
+2026-11-11 11:36:13,998 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,998 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.numberOfTaskSlots=4
+2026-11-11 11:36:13,998 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:36:13,998 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.jvm-overhead.max=858993472b
+2026-11-11 11:36:13,998 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dtaskmanager.resource-id=tm0
+2026-11-11 11:36:13,998 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Classpath: /lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-cep-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-connector-files-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-csv-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-json-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-scala_2.12-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-sql-connector-kafka.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-api-java-uber-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-planner-loader-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-runtime-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-1.2-api-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-api-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-core-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-slf4j-impl-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/lz4-java.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/snappy-java.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/zstd-jni.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-dist-1.20.5.jar::::
+2026-11-11 11:36:13,998 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - --------------------------------------------------------------------------------
+2026-11-11 11:36:13,999 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Registered UNIX signal handlers for [TERM, HUP, INT]
+2026-11-11 11:36:14,006 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Maximum number of open file descriptors is 131072.
+2026-11-11 11:36:14,010 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Using standard YAML parser to load flink configuration file from /tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7/config.yaml.
+2026-11-11 11:36:14,032 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.mode, AT_LEAST_ONCE
+2026-11-11 11:36:14,032 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.memory.process.size, 8192m
+2026-11-11 11:36:14,032 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.bind-host, 127.0.0.1
+2026-11-11 11:36:14,032 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.execution.failover-strategy, region
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.rpc.address, 127.0.0.1
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.memory.process.size, 2048m
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.rpc.port, 12030
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.bind-address, 127.0.0.1
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.interval, 10 s
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.port, 12031
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.bind-host, 127.0.0.1
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: io.tmp.dirs, /tmp/chamoso-e7/8529/e7-2785032/flink-io
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.savepoint-dir, file:///tmp/chamoso-e7/8529/e7-2785032/objstore/flink-state/savepoints
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.host, 127.0.0.1
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: parallelism.default, 1
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.numberOfTaskSlots, 4
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.address, 127.0.0.1
+2026-11-11 11:36:14,033 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.dir, file:///tmp/chamoso-e7/8529/e7-2785032/objstore/flink-state/checkpoints
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: env.java.opts.all, --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.resource-id, tm0
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.network.min, 746250577b
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.jvm-metaspace.size, 268435456b
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.task.off-heap.size, 0b
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.cpu.cores, 4.0
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: external-resources, none
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.jvm-overhead.min, 858993472b
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.framework.off-heap.size, 134217728b
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.network.max, 746250577b
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.framework.heap.size, 134217728b
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.managed.size, 2985002310b
+2026-11-11 11:36:14,034 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.task.heap.size, 3462817321b
+2026-11-11 11:36:14,035 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.numberOfTaskSlots, 4
+2026-11-11 11:36:14,035 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.jvm-overhead.max, 858993472b
+2026-11-11 11:36:14,053 INFO  org.apache.flink.core.fs.FileSystem                          [] - Hadoop is not in the classpath/dependencies. The extended set of supported File Systems via Hadoop is not available.
+2026-11-11 11:36:14,062 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-datadog
+2026-11-11 11:36:14,065 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-graphite
+2026-11-11 11:36:14,065 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-jmx
+2026-11-11 11:36:14,065 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-slf4j
+2026-11-11 11:36:14,065 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-statsd
+2026-11-11 11:36:14,065 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-prometheus
+2026-11-11 11:36:14,066 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: external-resource-gpu
+2026-11-11 11:36:14,066 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-influx
+2026-11-11 11:36:14,074 INFO  org.apache.flink.runtime.state.changelog.StateChangelogStorageLoader [] - StateChangelogStorageLoader initialized with shortcut names {memory,filesystem}.
+2026-11-11 11:36:14,074 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-datadog
+2026-11-11 11:36:14,074 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-graphite
+2026-11-11 11:36:14,074 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-jmx
+2026-11-11 11:36:14,075 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-slf4j
+2026-11-11 11:36:14,075 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-statsd
+2026-11-11 11:36:14,075 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-prometheus
+2026-11-11 11:36:14,075 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: external-resource-gpu
+2026-11-11 11:36:14,075 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-influx
+2026-11-11 11:36:14,076 INFO  org.apache.flink.runtime.state.changelog.StateChangelogStorageLoader [] - StateChangelogStorageLoader initialized with shortcut names {memory,filesystem}.
+2026-11-11 11:36:14,082 INFO  org.apache.flink.runtime.security.modules.HadoopModuleFactory [] - Cannot create Hadoop Security Module because Hadoop cannot be found in the Classpath.
+2026-11-11 11:36:14,091 INFO  org.apache.flink.runtime.security.modules.JaasModule         [] - Jaas file will be created as /tmp/chamoso-e7/8529/e7-2785032/flink-io/jaas-10159885563320857264.conf.
+2026-11-11 11:36:14,095 INFO  org.apache.flink.runtime.security.contexts.HadoopSecurityContextFactory [] - Cannot install HadoopSecurityContext because Hadoop cannot be found in the Classpath.
+2026-11-11 11:36:14,231 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Using configured hostname/address for TaskManager: 127.0.0.1.
+2026-11-11 11:36:14,253 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Trying to start actor system, external address 127.0.0.1:0, bind address 127.0.0.1:0.
+2026-11-11 11:36:14,536 INFO  org.apache.pekko.event.slf4j.Slf4jLogger                     [] - Slf4jLogger started
+2026-11-11 11:36:14,547 INFO  org.apache.pekko.remote.RemoteActorRefProvider               [] - Pekko Cluster not in use - enabling unsafe features anyway because `pekko.remote.use-unsafe-remote-features-outside-cluster` has been enabled.
+2026-11-11 11:36:14,548 INFO  org.apache.pekko.remote.Remoting                             [] - Starting remoting
+2026-11-11 11:36:14,652 INFO  org.apache.pekko.remote.Remoting                             [] - Remoting started; listening on addresses :[pekko.tcp://flink@127.0.0.1:41937]
+2026-11-11 11:36:14,698 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Actor system started at pekko.tcp://flink@127.0.0.1:41937
+2026-11-11 11:36:14,704 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Using working directory: WorkingDirectory(/tmp/chamoso-e7/8529/e7-2785032/flink-io/tm_tm0)
+2026-11-11 11:36:14,708 INFO  org.apache.flink.runtime.metrics.MetricRegistryImpl          [] - No metrics reporter configured, no metrics will be exposed/reported.
+2026-11-11 11:36:14,708 INFO  org.apache.flink.runtime.metrics.MetricRegistryImpl          [] - No trace reporter configured, no metrics will be exposed/reported.
+2026-11-11 11:36:14,710 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Trying to start actor system, external address 127.0.0.1:0, bind address 127.0.0.1:0.
+2026-11-11 11:36:14,717 INFO  org.apache.pekko.event.slf4j.Slf4jLogger                     [] - Slf4jLogger started
+2026-11-11 11:36:14,719 INFO  org.apache.pekko.remote.RemoteActorRefProvider               [] - Pekko Cluster not in use - enabling unsafe features anyway because `pekko.remote.use-unsafe-remote-features-outside-cluster` has been enabled.
+2026-11-11 11:36:14,719 INFO  org.apache.pekko.remote.Remoting                             [] - Starting remoting
+2026-11-11 11:36:14,722 INFO  org.apache.pekko.remote.Remoting                             [] - Remoting started; listening on addresses :[pekko.tcp://flink-metrics@127.0.0.1:34775]
+2026-11-11 11:36:14,726 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Actor system started at pekko.tcp://flink-metrics@127.0.0.1:34775
+2026-11-11 11:36:14,732 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcService           [] - Starting RPC endpoint for org.apache.flink.runtime.metrics.dump.MetricQueryService at pekko://flink-metrics/user/rpc/MetricQueryService_tm0 .
+2026-11-11 11:36:14,739 INFO  org.apache.flink.runtime.blob.PermanentBlobCache             [] - Created BLOB cache storage directory /tmp/chamoso-e7/8529/e7-2785032/flink-io/tm_tm0/blobStorage
+2026-11-11 11:36:14,741 INFO  org.apache.flink.runtime.blob.TransientBlobCache             [] - Created BLOB cache storage directory /tmp/chamoso-e7/8529/e7-2785032/flink-io/tm_tm0/blobStorage
+2026-11-11 11:36:14,743 INFO  org.apache.flink.runtime.externalresource.ExternalResourceUtils [] - Enabled external resources: []
+2026-11-11 11:36:14,743 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Loading delegation token receivers
+2026-11-11 11:36:14,745 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receiver hadoopfs loaded and initialized
+2026-11-11 11:36:14,745 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receiver hbase loaded and initialized
+2026-11-11 11:36:14,745 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-datadog
+2026-11-11 11:36:14,745 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-graphite
+2026-11-11 11:36:14,745 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-jmx
+2026-11-11 11:36:14,745 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-slf4j
+2026-11-11 11:36:14,746 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-statsd
+2026-11-11 11:36:14,746 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-prometheus
+2026-11-11 11:36:14,746 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: external-resource-gpu
+2026-11-11 11:36:14,746 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-influx
+2026-11-11 11:36:14,746 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receivers loaded successfully
+2026-11-11 11:36:14,746 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Starting TaskManager with ResourceID: tm0
+2026-11-11 11:36:14,791 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerServices    [] - Temporary file directory '/tmp/chamoso-e7/8529/e7-2785032/flink-io': total 95379 GB, usable 94711 GB (99.30% usable)
+2026-11-11 11:36:14,792 INFO  org.apache.flink.runtime.io.disk.iomanager.IOManager         [] - Created a new FileChannelManager for spilling of task related data to disk (joins, sorting, ...). Used directories:
+	/tmp/chamoso-e7/8529/e7-2785032/flink-io/flink-io-e97dd96c-3ab4-4f63-bf9c-0fe6fc31595e
+2026-11-11 11:36:14,796 INFO  org.apache.flink.runtime.io.network.netty.NettyConfig        [] - NettyConfig [server address: /127.0.0.1, server port range: 0, ssl enabled: false, memory segment size (bytes): 32768, transport type: AUTO, number of server threads: 4 (manual), number of client threads: 4 (manual), server connect backlog: 0 (use Netty's default), client connect timeout (sec): 120, send/receive buffer size (bytes): 0 (use Netty's default)]
+2026-11-11 11:36:14,801 INFO  org.apache.flink.runtime.io.network.NettyShuffleServiceFactory [] - Created a new FileChannelManager for storing result partitions of BLOCKING shuffles. Used directories:
+	/tmp/chamoso-e7/8529/e7-2785032/flink-io/flink-netty-shuffle-69fa5f9e-0bcd-4269-8f20-d32baef03585
+2026-11-11 11:36:15,066 INFO  org.apache.flink.runtime.io.network.buffer.NetworkBufferPool [] - Allocated 711 MB for network buffer pool (number of memory segments: 22773, bytes per segment: 32768).
+2026-11-11 11:36:15,072 INFO  org.apache.flink.runtime.io.network.NettyShuffleEnvironment  [] - Starting the network environment and its components.
+2026-11-11 11:36:15,083 INFO  org.apache.flink.runtime.io.network.netty.NettyClient        [] - Transport type 'auto': using EPOLL.
+2026-11-11 11:36:15,084 INFO  org.apache.flink.runtime.io.network.netty.NettyClient        [] - Successful initialization (took 11 ms).
+2026-11-11 11:36:15,085 INFO  org.apache.flink.runtime.io.network.netty.NettyServer        [] - Transport type 'auto': using EPOLL.
+2026-11-11 11:36:15,087 INFO  org.apache.flink.runtime.io.network.netty.NettyServer        [] - Successful initialization (took 3 ms). Listening on SocketAddress /127.0.0.1:38117.
+2026-11-11 11:36:15,088 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerServices    [] - TaskManager data connection initialized successfully; listening internally on port: 38117
+2026-11-11 11:36:15,088 INFO  org.apache.flink.runtime.taskexecutor.KvStateService         [] - Starting the kvState service and its components.
+2026-11-11 11:36:15,107 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcService           [] - Starting RPC endpoint for org.apache.flink.runtime.taskexecutor.TaskExecutor at pekko://flink/user/rpc/taskmanager_0 .
+2026-11-11 11:36:15,116 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Start job leader service.
+2026-11-11 11:36:15,117 INFO  org.apache.flink.runtime.filecache.FileCache                 [] - User file cache uses directory /tmp/chamoso-e7/8529/e7-2785032/flink-io/flink-dist-cache-b32bd293-a61f-4db8-afbe-48571f4edd65
+2026-11-11 11:36:15,118 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Connecting to ResourceManager pekko.tcp://flink@127.0.0.1:12030/user/rpc/resourcemanager_*(00000000000000000000000000000000).
+2026-11-11 11:36:15,236 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Resolved ResourceManager address, beginning registration
+2026-11-11 11:36:15,290 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Successful registration at resource manager pekko.tcp://flink@127.0.0.1:12030/user/rpc/resourcemanager_* under registration id f14d54b3d1091792cb73c56b345d5e16.
+2026-11-11 11:36:19,616 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Receive slot request abe3d487f7eee6a0b603564131bff6b0 for job 1c07fd60e771a41aa234aa771bd7bc47 from resource manager with leader id 00000000000000000000000000000000.
+2026-11-11 11:36:19,617 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Allocated slot for abe3d487f7eee6a0b603564131bff6b0 with resources ResourceProfile{cpuCores=1, taskHeapMemory=825.600mb (865704330 bytes), taskOffHeapMemory=0 bytes, managedMemory=711.680mb (746250577 bytes), networkMemory=177.920mb (186562644 bytes)}.
+2026-11-11 11:36:19,620 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Add job 1c07fd60e771a41aa234aa771bd7bc47 for job leader monitoring.
+2026-11-11 11:36:19,621 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Try to register at job manager pekko.tcp://flink@127.0.0.1:12030/user/rpc/jobmanager_2 with leader id 00000000-0000-0000-0000-000000000000.
+2026-11-11 11:36:19,632 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Resolved JobManager address, beginning registration
+2026-11-11 11:36:19,649 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Successful registration at job manager pekko.tcp://flink@127.0.0.1:12030/user/rpc/jobmanager_2 for job 1c07fd60e771a41aa234aa771bd7bc47.
+2026-11-11 11:36:19,650 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Establish JobManager connection for job 1c07fd60e771a41aa234aa771bd7bc47.
+2026-11-11 11:36:19,651 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Offer reserved slots to the leader of job 1c07fd60e771a41aa234aa771bd7bc47.
+2026-11-11 11:36:19,667 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Activate slot abe3d487f7eee6a0b603564131bff6b0.
+2026-11-11 11:36:19,676 INFO  org.apache.flink.runtime.state.changelog.StateChangelogStorageLoader [] - Creating a changelog storage with name 'memory'.
+2026-11-11 11:36:19,680 INFO  org.apache.flink.runtime.state.TaskExecutorChannelStateExecutorFactoryManager [] - Creating the channel state executor factory for job id 1c07fd60e771a41aa234aa771bd7bc47
+2026-11-11 11:36:19,682 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Received task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#0 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_0), deploy into slot with allocation id abe3d487f7eee6a0b603564131bff6b0.
+2026-11-11 11:36:19,683 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#0 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_0) switched from CREATED to DEPLOYING.
+2026-11-11 11:36:19,684 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Activate slot abe3d487f7eee6a0b603564131bff6b0.
+2026-11-11 11:36:19,685 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Loading JAR files for task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#0 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_0) [DEPLOYING].
+2026-11-11 11:36:19,686 INFO  org.apache.flink.runtime.blob.BlobClient                     [] - Downloading 1c07fd60e771a41aa234aa771bd7bc47/p-f8fed0ea25da44b83a1867026cee75601ae2ce56-94619ba54192d59bb6894c770e0227bb from /127.0.0.1:33805
+2026-11-11 11:36:19,713 INFO  org.apache.flink.streaming.runtime.tasks.StreamTask          [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@30c95bfb
+2026-11-11 11:36:19,713 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend loader loads the state backend as HashMapStateBackend
+2026-11-11 11:36:19,716 INFO  org.apache.flink.streaming.runtime.tasks.StreamTask          [] - Using job/cluster config to configure application-defined checkpoint storage: org.apache.flink.runtime.state.storage.FileSystemCheckpointStorage@14df688c
+2026-11-11 11:36:19,721 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#0 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_0) switched from DEPLOYING to INITIALIZING.
+2026-11-11 11:36:19,910 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@38dcd0d5
+2026-11-11 11:36:19,922 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@7d67f42d
+2026-11-11 11:36:19,933 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.ProducerConfig [] - ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-1
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	interceptor.classes = []
+	key.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 3600000
+	transactional.id = null
+	value.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+
+2026-11-11 11:36:19,941 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-1] Instantiated an idempotent producer.
+2026-11-11 11:36:19,957 WARN  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Error while loading kafka-version.properties: inStream parameter is null
+2026-11-11 11:36:19,957 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 11:36:19,957 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 11:36:19,957 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794393379957
+2026-11-11 11:36:19,961 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@6606a6f
+2026-11-11 11:36:19,962 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@4a94d1dc
+2026-11-11 11:36:19,965 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#0 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_0) switched from INITIALIZING to RUNNING.
+2026-11-11 11:36:19,975 INFO  org.apache.flink.connector.base.source.reader.SourceReaderBase [] - Adding split(s) to reader: [[Partition: clicks-2, StartingOffset: -3, StoppingOffset: -9223372036854775808], [Partition: clicks-1, StartingOffset: -3, StoppingOffset: -9223372036854775808], [Partition: clicks-0, StartingOffset: -3, StoppingOffset: -9223372036854775808]]
+2026-11-11 11:36:19,979 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.ConsumerConfig [] - ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = clicks-enriched-job-0
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = clicks-enriched-job
+	group.instance.id = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArrayDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArrayDeserializer
+
+2026-11-11 11:36:19,994 WARN  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.ConsumerConfig [] - These configurations '[client.id.prefix, partition.discovery.interval.ms]' were supplied but are not used yet.
+2026-11-11 11:36:19,994 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 11:36:19,994 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 11:36:19,994 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794393379994
+2026-11-11 11:36:19,997 INFO  org.apache.flink.connector.base.source.reader.fetcher.SplitFetcher [] - Starting split fetcher 0
+2026-11-11 11:36:19,999 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Assigned to partition(s): clicks-2, clicks-1, clicks-0
+2026-11-11 11:36:20,074 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Resetting the last seen epoch of partition clicks-1 to 0 since the associated topicId changed from null to 6BEwsR1YRZ-gAqd9bxykdw
+2026-11-11 11:36:20,074 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Resetting the last seen epoch of partition clicks-2 to 0 since the associated topicId changed from null to 6BEwsR1YRZ-gAqd9bxykdw
+2026-11-11 11:36:20,074 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Resetting the last seen epoch of partition clicks-0 to 0 since the associated topicId changed from null to 6BEwsR1YRZ-gAqd9bxykdw
+2026-11-11 11:36:20,074 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Cluster ID: jjndI1o4QXiSX_yO3gTfow
+2026-11-11 11:36:20,075 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Cluster ID: jjndI1o4QXiSX_yO3gTfow
+2026-11-11 11:36:20,075 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Discovered group coordinator 127.0.0.1:12001 (id: 2147483645 rack: null)
+2026-11-11 11:36:20,082 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Found no committed offset for partition clicks-2
+2026-11-11 11:36:20,082 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Found no committed offset for partition clicks-1
+2026-11-11 11:36:20,082 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Found no committed offset for partition clicks-0
+2026-11-11 11:36:20,091 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.SubscriptionState [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Resetting offset for partition clicks-1 to position FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[127.0.0.1:12001 (id: 2 rack: null)], epoch=0}}.
+2026-11-11 11:36:20,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.SubscriptionState [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Resetting offset for partition clicks-0 to position FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[127.0.0.1:12000 (id: 1 rack: null)], epoch=0}}.
+2026-11-11 11:36:20,093 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.SubscriptionState [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Resetting offset for partition clicks-2 to position FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[127.0.0.1:12002 (id: 3 rack: null)], epoch=0}}.
+2026-11-11 11:36:20,281 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.internals.TransactionManager [] - [Producer clientId=producer-1] ProducerId set to 1000 with epoch 0
+2026-11-11 11:36:26,656 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:36:29,863 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.ProducerConfig [] - ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-2
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	interceptor.classes = []
+	key.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 3600000
+	transactional.id = null
+	value.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+
+2026-11-11 11:36:29,864 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-2] Instantiated an idempotent producer.
+2026-11-11 11:36:29,866 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 11:36:29,866 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 11:36:29,866 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794393389865
+2026-11-11 11:36:29,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.internals.TransactionManager [] - [Producer clientId=producer-2] ProducerId set to 1002 with epoch 0
+2026-11-11 11:36:29,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition clicks-enriched-2 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:36:29,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition clicks-enriched-1 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:36:29,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition clicks-enriched-0 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:36:29,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Cluster ID: jjndI1o4QXiSX_yO3gTfow
+2026-11-11 11:36:29,869 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-2] Closing the Kafka producer with timeoutMillis = 9223372036854775807 ms.
+2026-11-11 11:36:29,871 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 11:36:29,871 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 11:36:29,871 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 11:36:29,871 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.producer for producer-2 unregistered
+2026-11-11 11:36:29,873 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition clicks-enriched-2 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:36:29,873 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition clicks-enriched-1 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:36:29,873 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition clicks-enriched-0 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:36:36,635 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:36:46,635 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:36:56,635 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:37:06,635 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:37:16,635 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:37:26,635 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:37:36,635 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:37:46,634 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:37:56,634 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+
+=== spawn 1794393495: numactl --physcpubind=34,35,36,37,146,147,148,149 --membind=1 -- /home/chamoso/tuning-revision/opt/flink/bin/taskmanager.sh start-foreground -Dtaskmanager.resource-id=tm0-r
+Starting taskexecutor as a console application on host cn001.
+2026-11-11 11:38:16,072 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - --------------------------------------------------------------------------------
+2026-11-11 11:38:16,073 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Preconfiguration: 
+2026-11-11 11:38:16,073 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - 
+
+
+RESOURCE_PARAMS extraction logs:
+jvm_params: -Xmx3597035049 -Xms3597035049 -XX:MaxDirectMemorySize=880468305 -XX:MaxMetaspaceSize=268435456
+dynamic_configs: -D taskmanager.memory.network.min=746250577b -D taskmanager.cpu.cores=4.0 -D taskmanager.memory.task.off-heap.size=0b -D taskmanager.memory.jvm-metaspace.size=268435456b -D external-resources=none -D taskmanager.memory.jvm-overhead.min=858993472b -D taskmanager.memory.framework.off-heap.size=134217728b -D taskmanager.memory.network.max=746250577b -D taskmanager.memory.framework.heap.size=134217728b -D taskmanager.memory.managed.size=2985002310b -D taskmanager.memory.task.heap.size=3462817321b -D taskmanager.numberOfTaskSlots=4 -D taskmanager.memory.jvm-overhead.max=858993472b
+logs: INFO  [] - Using standard YAML parser to load flink configuration file from /tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7/config.yaml.
+INFO  [] - Loading configuration property: execution.checkpointing.mode, AT_LEAST_ONCE
+INFO  [] - Loading configuration property: taskmanager.memory.process.size, 8192m
+INFO  [] - Loading configuration property: taskmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: jobmanager.execution.failover-strategy, region
+INFO  [] - Loading configuration property: jobmanager.rpc.address, 127.0.0.1
+INFO  [] - Loading configuration property: jobmanager.memory.process.size, 2048m
+INFO  [] - Loading configuration property: jobmanager.rpc.port, 12030
+INFO  [] - Loading configuration property: rest.bind-address, 127.0.0.1
+INFO  [] - Loading configuration property: execution.checkpointing.interval, 10 s
+INFO  [] - Loading configuration property: rest.port, 12031
+INFO  [] - Loading configuration property: jobmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: io.tmp.dirs, /tmp/chamoso-e7/8529/e7-2785032/flink-io
+INFO  [] - Loading configuration property: execution.checkpointing.savepoint-dir, file:///tmp/chamoso-e7/8529/e7-2785032/objstore/flink-state/savepoints
+INFO  [] - Loading configuration property: taskmanager.host, 127.0.0.1
+INFO  [] - Loading configuration property: parallelism.default, 1
+INFO  [] - Loading configuration property: taskmanager.numberOfTaskSlots, 4
+INFO  [] - Loading configuration property: rest.address, 127.0.0.1
+INFO  [] - Loading configuration property: execution.checkpointing.dir, file:///tmp/chamoso-e7/8529/e7-2785032/objstore/flink-state/checkpoints
+INFO  [] - Loading configuration property: env.java.opts.all, --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+INFO  [] - Loading dynamic configuration property: taskmanager.resource-id, tm0-r
+INFO  [] - Final TaskExecutor Memory configuration:
+INFO  [] -   Total Process Memory:          8.000gb (8589934592 bytes)
+INFO  [] -     Total Flink Memory:          6.950gb (7462505664 bytes)
+INFO  [] -       Total JVM Heap Memory:     3.350gb (3597035049 bytes)
+INFO  [] -         Framework:               128.000mb (134217728 bytes)
+INFO  [] -         Task:                    3.225gb (3462817321 bytes)
+INFO  [] -       Total Off-heap Memory:     3.600gb (3865470615 bytes)
+INFO  [] -         Managed:                 2.780gb (2985002310 bytes)
+INFO  [] -         Total JVM Direct Memory: 839.680mb (880468305 bytes)
+INFO  [] -           Framework:             128.000mb (134217728 bytes)
+INFO  [] -           Task:                  0 bytes
+INFO  [] -           Network:               711.680mb (746250577 bytes)
+INFO  [] -     JVM Metaspace:               256.000mb (268435456 bytes)
+INFO  [] -     JVM Overhead:                819.200mb (858993472 bytes)
+
+2026-11-11 11:38:16,073 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - --------------------------------------------------------------------------------
+2026-11-11 11:38:16,073 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Starting TaskManager (Version: 1.20.5, Scala: 2.12, Rev:0980485, Date:2026-06-08T09:21:06+02:00)
+2026-11-11 11:38:16,073 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  OS current user: chamoso
+2026-11-11 11:38:16,073 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Current Hadoop/Kerberos user: <no hadoop dependency found>
+2026-11-11 11:38:16,073 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  JVM: OpenJDK 64-Bit Server VM - Eclipse Adoptium - 17/17.0.20.1+1
+2026-11-11 11:38:16,073 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Arch: amd64
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Maximum heap size: 3432 MiBytes
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  JAVA_HOME: /home/chamoso/tuning-revision/opt/jdk17
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  No Hadoop Dependency available
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  JVM Options:
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Xmx3597035049
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Xms3597035049
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -XX:MaxDirectMemorySize=880468305
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -XX:MaxMetaspaceSize=268435456
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -XX:+IgnoreUnrecognizedVMOptions
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=java.base/sun.net.util=ALL-UNNAMED
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED
+2026-11-11 11:38:16,074 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.lang=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.net=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.io=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.nio=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.text=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.time=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED
+2026-11-11 11:38:16,075 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+2026-11-11 11:38:16,076 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlog.file=/tmp/chamoso-e7/8529/e7-2785032/logs/flink-e7/flink-chamoso-taskexecutor-0-cn001.log
+2026-11-11 11:38:16,076 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlog4j.configuration=file:/tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7/log4j-console.properties
+2026-11-11 11:38:16,076 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlog4j.configurationFile=file:/tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7/log4j-console.properties
+2026-11-11 11:38:16,076 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlogback.configurationFile=file:/tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7/logback-console.xml
+2026-11-11 11:38:16,076 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Program Arguments:
+2026-11-11 11:38:16,076 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --configDir
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     /tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.network.min=746250577b
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.cpu.cores=4.0
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.task.off-heap.size=0b
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.jvm-metaspace.size=268435456b
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     external-resources=none
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.jvm-overhead.min=858993472b
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.framework.off-heap.size=134217728b
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.network.max=746250577b
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,077 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.framework.heap.size=134217728b
+2026-11-11 11:38:16,078 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,078 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.managed.size=2985002310b
+2026-11-11 11:38:16,078 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,078 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.task.heap.size=3462817321b
+2026-11-11 11:38:16,078 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,078 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.numberOfTaskSlots=4
+2026-11-11 11:38:16,078 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 11:38:16,078 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.jvm-overhead.max=858993472b
+2026-11-11 11:38:16,078 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dtaskmanager.resource-id=tm0-r
+2026-11-11 11:38:16,078 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Classpath: /lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-cep-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-connector-files-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-csv-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-json-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-scala_2.12-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-sql-connector-kafka.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-api-java-uber-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-planner-loader-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-runtime-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-1.2-api-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-api-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-core-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-slf4j-impl-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/lz4-java.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/snappy-java.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/zstd-jni.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-dist-1.20.5.jar::::
+2026-11-11 11:38:16,078 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - --------------------------------------------------------------------------------
+2026-11-11 11:38:16,079 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Registered UNIX signal handlers for [TERM, HUP, INT]
+2026-11-11 11:38:16,084 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Maximum number of open file descriptors is 131072.
+2026-11-11 11:38:16,087 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Using standard YAML parser to load flink configuration file from /tmp/chamoso-e7/8529/e7-2785032/conf/flink-e7/config.yaml.
+2026-11-11 11:38:16,105 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.mode, AT_LEAST_ONCE
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.memory.process.size, 8192m
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.bind-host, 127.0.0.1
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.execution.failover-strategy, region
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.rpc.address, 127.0.0.1
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.memory.process.size, 2048m
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.rpc.port, 12030
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.bind-address, 127.0.0.1
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.interval, 10 s
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.port, 12031
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.bind-host, 127.0.0.1
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: io.tmp.dirs, /tmp/chamoso-e7/8529/e7-2785032/flink-io
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.savepoint-dir, file:///tmp/chamoso-e7/8529/e7-2785032/objstore/flink-state/savepoints
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.host, 127.0.0.1
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: parallelism.default, 1
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.numberOfTaskSlots, 4
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.address, 127.0.0.1
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.dir, file:///tmp/chamoso-e7/8529/e7-2785032/objstore/flink-state/checkpoints
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: env.java.opts.all, --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+2026-11-11 11:38:16,106 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.resource-id, tm0-r
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.network.min, 746250577b
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.jvm-metaspace.size, 268435456b
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.task.off-heap.size, 0b
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.cpu.cores, 4.0
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: external-resources, none
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.jvm-overhead.min, 858993472b
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.framework.off-heap.size, 134217728b
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.network.max, 746250577b
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.framework.heap.size, 134217728b
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.managed.size, 2985002310b
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.task.heap.size, 3462817321b
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.numberOfTaskSlots, 4
+2026-11-11 11:38:16,107 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.jvm-overhead.max, 858993472b
+2026-11-11 11:38:16,123 INFO  org.apache.flink.core.fs.FileSystem                          [] - Hadoop is not in the classpath/dependencies. The extended set of supported File Systems via Hadoop is not available.
+2026-11-11 11:38:16,131 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-datadog
+2026-11-11 11:38:16,133 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-graphite
+2026-11-11 11:38:16,133 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-jmx
+2026-11-11 11:38:16,133 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-slf4j
+2026-11-11 11:38:16,133 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-statsd
+2026-11-11 11:38:16,133 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-prometheus
+2026-11-11 11:38:16,133 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: external-resource-gpu
+2026-11-11 11:38:16,134 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-influx
+2026-11-11 11:38:16,141 INFO  org.apache.flink.runtime.state.changelog.StateChangelogStorageLoader [] - StateChangelogStorageLoader initialized with shortcut names {memory,filesystem}.
+2026-11-11 11:38:16,141 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-datadog
+2026-11-11 11:38:16,141 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-graphite
+2026-11-11 11:38:16,141 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-jmx
+2026-11-11 11:38:16,141 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-slf4j
+2026-11-11 11:38:16,142 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-statsd
+2026-11-11 11:38:16,142 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-prometheus
+2026-11-11 11:38:16,142 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: external-resource-gpu
+2026-11-11 11:38:16,142 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-influx
+2026-11-11 11:38:16,142 INFO  org.apache.flink.runtime.state.changelog.StateChangelogStorageLoader [] - StateChangelogStorageLoader initialized with shortcut names {memory,filesystem}.
+2026-11-11 11:38:16,148 INFO  org.apache.flink.runtime.security.modules.HadoopModuleFactory [] - Cannot create Hadoop Security Module because Hadoop cannot be found in the Classpath.
+2026-11-11 11:38:16,156 INFO  org.apache.flink.runtime.security.modules.JaasModule         [] - Jaas file will be created as /tmp/chamoso-e7/8529/e7-2785032/flink-io/jaas-11252391735603114592.conf.
+2026-11-11 11:38:16,158 INFO  org.apache.flink.runtime.security.contexts.HadoopSecurityContextFactory [] - Cannot install HadoopSecurityContext because Hadoop cannot be found in the Classpath.
+2026-11-11 11:38:16,289 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Using configured hostname/address for TaskManager: 127.0.0.1.
+2026-11-11 11:38:16,308 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Trying to start actor system, external address 127.0.0.1:0, bind address 127.0.0.1:0.
+2026-11-11 11:38:16,560 INFO  org.apache.pekko.event.slf4j.Slf4jLogger                     [] - Slf4jLogger started
+2026-11-11 11:38:16,571 INFO  org.apache.pekko.remote.RemoteActorRefProvider               [] - Pekko Cluster not in use - enabling unsafe features anyway because `pekko.remote.use-unsafe-remote-features-outside-cluster` has been enabled.
+2026-11-11 11:38:16,572 INFO  org.apache.pekko.remote.Remoting                             [] - Starting remoting
+2026-11-11 11:38:16,666 INFO  org.apache.pekko.remote.Remoting                             [] - Remoting started; listening on addresses :[pekko.tcp://flink@127.0.0.1:40479]
+2026-11-11 11:38:16,717 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Actor system started at pekko.tcp://flink@127.0.0.1:40479
+2026-11-11 11:38:16,724 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Using working directory: WorkingDirectory(/tmp/chamoso-e7/8529/e7-2785032/flink-io/tm_tm0-r)
+2026-11-11 11:38:16,729 INFO  org.apache.flink.runtime.metrics.MetricRegistryImpl          [] - No metrics reporter configured, no metrics will be exposed/reported.
+2026-11-11 11:38:16,729 INFO  org.apache.flink.runtime.metrics.MetricRegistryImpl          [] - No trace reporter configured, no metrics will be exposed/reported.
+2026-11-11 11:38:16,730 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Trying to start actor system, external address 127.0.0.1:0, bind address 127.0.0.1:0.
+2026-11-11 11:38:16,741 INFO  org.apache.pekko.event.slf4j.Slf4jLogger                     [] - Slf4jLogger started
+2026-11-11 11:38:16,743 INFO  org.apache.pekko.remote.RemoteActorRefProvider               [] - Pekko Cluster not in use - enabling unsafe features anyway because `pekko.remote.use-unsafe-remote-features-outside-cluster` has been enabled.
+2026-11-11 11:38:16,743 INFO  org.apache.pekko.remote.Remoting                             [] - Starting remoting
+2026-11-11 11:38:16,746 INFO  org.apache.pekko.remote.Remoting                             [] - Remoting started; listening on addresses :[pekko.tcp://flink-metrics@127.0.0.1:33865]
+2026-11-11 11:38:16,751 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Actor system started at pekko.tcp://flink-metrics@127.0.0.1:33865
+2026-11-11 11:38:16,757 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcService           [] - Starting RPC endpoint for org.apache.flink.runtime.metrics.dump.MetricQueryService at pekko://flink-metrics/user/rpc/MetricQueryService_tm0-r .
+2026-11-11 11:38:16,764 INFO  org.apache.flink.runtime.blob.PermanentBlobCache             [] - Created BLOB cache storage directory /tmp/chamoso-e7/8529/e7-2785032/flink-io/tm_tm0-r/blobStorage
+2026-11-11 11:38:16,766 INFO  org.apache.flink.runtime.blob.TransientBlobCache             [] - Created BLOB cache storage directory /tmp/chamoso-e7/8529/e7-2785032/flink-io/tm_tm0-r/blobStorage
+2026-11-11 11:38:16,768 INFO  org.apache.flink.runtime.externalresource.ExternalResourceUtils [] - Enabled external resources: []
+2026-11-11 11:38:16,768 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Loading delegation token receivers
+2026-11-11 11:38:16,770 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receiver hadoopfs loaded and initialized
+2026-11-11 11:38:16,770 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receiver hbase loaded and initialized
+2026-11-11 11:38:16,770 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-datadog
+2026-11-11 11:38:16,770 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-graphite
+2026-11-11 11:38:16,770 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-jmx
+2026-11-11 11:38:16,770 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-slf4j
+2026-11-11 11:38:16,770 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-statsd
+2026-11-11 11:38:16,770 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-prometheus
+2026-11-11 11:38:16,770 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: external-resource-gpu
+2026-11-11 11:38:16,770 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-influx
+2026-11-11 11:38:16,771 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receivers loaded successfully
+2026-11-11 11:38:16,771 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Starting TaskManager with ResourceID: tm0-r
+2026-11-11 11:38:16,814 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerServices    [] - Temporary file directory '/tmp/chamoso-e7/8529/e7-2785032/flink-io': total 95379 GB, usable 94702 GB (99.29% usable)
+2026-11-11 11:38:16,815 INFO  org.apache.flink.runtime.io.disk.iomanager.IOManager         [] - Created a new FileChannelManager for spilling of task related data to disk (joins, sorting, ...). Used directories:
+	/tmp/chamoso-e7/8529/e7-2785032/flink-io/flink-io-226747b8-b749-4f3a-9472-6b61464aaff6
+2026-11-11 11:38:16,820 INFO  org.apache.flink.runtime.io.network.netty.NettyConfig        [] - NettyConfig [server address: /127.0.0.1, server port range: 0, ssl enabled: false, memory segment size (bytes): 32768, transport type: AUTO, number of server threads: 4 (manual), number of client threads: 4 (manual), server connect backlog: 0 (use Netty's default), client connect timeout (sec): 120, send/receive buffer size (bytes): 0 (use Netty's default)]
+2026-11-11 11:38:16,824 INFO  org.apache.flink.runtime.io.network.NettyShuffleServiceFactory [] - Created a new FileChannelManager for storing result partitions of BLOCKING shuffles. Used directories:
+	/tmp/chamoso-e7/8529/e7-2785032/flink-io/flink-netty-shuffle-16d44b2c-9e26-4968-9ea2-da3aa3e9ca8c
+2026-11-11 11:38:17,082 INFO  org.apache.flink.runtime.io.network.buffer.NetworkBufferPool [] - Allocated 711 MB for network buffer pool (number of memory segments: 22773, bytes per segment: 32768).
+2026-11-11 11:38:17,088 INFO  org.apache.flink.runtime.io.network.NettyShuffleEnvironment  [] - Starting the network environment and its components.
+2026-11-11 11:38:17,099 INFO  org.apache.flink.runtime.io.network.netty.NettyClient        [] - Transport type 'auto': using EPOLL.
+2026-11-11 11:38:17,099 INFO  org.apache.flink.runtime.io.network.netty.NettyClient        [] - Successful initialization (took 10 ms).
+2026-11-11 11:38:17,100 INFO  org.apache.flink.runtime.io.network.netty.NettyServer        [] - Transport type 'auto': using EPOLL.
+2026-11-11 11:38:17,103 INFO  org.apache.flink.runtime.io.network.netty.NettyServer        [] - Successful initialization (took 3 ms). Listening on SocketAddress /127.0.0.1:46041.
+2026-11-11 11:38:17,103 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerServices    [] - TaskManager data connection initialized successfully; listening internally on port: 46041
+2026-11-11 11:38:17,103 INFO  org.apache.flink.runtime.taskexecutor.KvStateService         [] - Starting the kvState service and its components.
+2026-11-11 11:38:17,123 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcService           [] - Starting RPC endpoint for org.apache.flink.runtime.taskexecutor.TaskExecutor at pekko://flink/user/rpc/taskmanager_0 .
+2026-11-11 11:38:17,131 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Start job leader service.
+2026-11-11 11:38:17,132 INFO  org.apache.flink.runtime.filecache.FileCache                 [] - User file cache uses directory /tmp/chamoso-e7/8529/e7-2785032/flink-io/flink-dist-cache-80586190-5f33-4e4c-b8b6-5ec0d440c6fb
+2026-11-11 11:38:17,133 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Connecting to ResourceManager pekko.tcp://flink@127.0.0.1:12030/user/rpc/resourcemanager_*(00000000000000000000000000000000).
+2026-11-11 11:38:17,229 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Resolved ResourceManager address, beginning registration
+2026-11-11 11:38:17,251 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Successful registration at resource manager pekko.tcp://flink@127.0.0.1:12030/user/rpc/resourcemanager_* under registration id e55bad7d7a4ca863298487e08cf05017.
+2026-11-11 11:38:17,326 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Receive slot request 30806ff39c7d154fcf3c9e3d0d4ea6d8 for job 1c07fd60e771a41aa234aa771bd7bc47 from resource manager with leader id 00000000000000000000000000000000.
+2026-11-11 11:38:17,327 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Allocated slot for 30806ff39c7d154fcf3c9e3d0d4ea6d8 with resources ResourceProfile{cpuCores=1, taskHeapMemory=825.600mb (865704330 bytes), taskOffHeapMemory=0 bytes, managedMemory=711.680mb (746250577 bytes), networkMemory=177.920mb (186562644 bytes)}.
+2026-11-11 11:38:17,329 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Add job 1c07fd60e771a41aa234aa771bd7bc47 for job leader monitoring.
+2026-11-11 11:38:17,330 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Try to register at job manager pekko.tcp://flink@127.0.0.1:12030/user/rpc/jobmanager_2 with leader id 00000000-0000-0000-0000-000000000000.
+2026-11-11 11:38:17,337 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Resolved JobManager address, beginning registration
+2026-11-11 11:38:17,346 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Successful registration at job manager pekko.tcp://flink@127.0.0.1:12030/user/rpc/jobmanager_2 for job 1c07fd60e771a41aa234aa771bd7bc47.
+2026-11-11 11:38:17,346 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Establish JobManager connection for job 1c07fd60e771a41aa234aa771bd7bc47.
+2026-11-11 11:38:17,347 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Offer reserved slots to the leader of job 1c07fd60e771a41aa234aa771bd7bc47.
+2026-11-11 11:38:17,355 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Activate slot 30806ff39c7d154fcf3c9e3d0d4ea6d8.
+2026-11-11 11:38:17,366 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Activate slot 30806ff39c7d154fcf3c9e3d0d4ea6d8.
+2026-11-11 11:38:17,373 INFO  org.apache.flink.runtime.state.changelog.StateChangelogStorageLoader [] - Creating a changelog storage with name 'memory'.
+2026-11-11 11:38:17,376 INFO  org.apache.flink.runtime.state.TaskExecutorChannelStateExecutorFactoryManager [] - Creating the channel state executor factory for job id 1c07fd60e771a41aa234aa771bd7bc47
+2026-11-11 11:38:17,379 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Received task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#1 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_1), deploy into slot with allocation id 30806ff39c7d154fcf3c9e3d0d4ea6d8.
+2026-11-11 11:38:17,380 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#1 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from CREATED to DEPLOYING.
+2026-11-11 11:38:17,381 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Loading JAR files for task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#1 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_1) [DEPLOYING].
+2026-11-11 11:38:17,383 INFO  org.apache.flink.runtime.blob.BlobClient                     [] - Downloading 1c07fd60e771a41aa234aa771bd7bc47/p-f8fed0ea25da44b83a1867026cee75601ae2ce56-94619ba54192d59bb6894c770e0227bb from /127.0.0.1:33805
+2026-11-11 11:38:17,412 INFO  org.apache.flink.streaming.runtime.tasks.StreamTask          [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@7ae62441
+2026-11-11 11:38:17,412 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend loader loads the state backend as HashMapStateBackend
+2026-11-11 11:38:17,415 INFO  org.apache.flink.streaming.runtime.tasks.StreamTask          [] - Using job/cluster config to configure application-defined checkpoint storage: org.apache.flink.runtime.state.storage.FileSystemCheckpointStorage@14df688c
+2026-11-11 11:38:17,419 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#1 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from DEPLOYING to INITIALIZING.
+2026-11-11 11:38:17,606 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@3a18fc1e
+2026-11-11 11:38:17,621 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0-r, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:38:17,622 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@3aa1abcd
+2026-11-11 11:38:17,633 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.ProducerConfig [] - ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-1
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	interceptor.classes = []
+	key.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 3600000
+	transactional.id = null
+	value.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+
+2026-11-11 11:38:17,641 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-1] Instantiated an idempotent producer.
+2026-11-11 11:38:17,657 WARN  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Error while loading kafka-version.properties: inStream parameter is null
+2026-11-11 11:38:17,657 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 11:38:17,657 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 11:38:17,657 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794393497657
+2026-11-11 11:38:17,660 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@3993bc2b
+2026-11-11 11:38:17,661 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@33b84da9
+2026-11-11 11:38:17,662 INFO  org.apache.flink.streaming.api.operators.AbstractStreamOperator [] - Restoring state for 3 split(s) to reader.
+2026-11-11 11:38:17,662 INFO  org.apache.flink.connector.base.source.reader.SourceReaderBase [] - Adding split(s) to reader: [[Partition: clicks-2, StartingOffset: 585799, StoppingOffset: -9223372036854775808], [Partition: clicks-1, StartingOffset: 563203, StoppingOffset: -9223372036854775808], [Partition: clicks-0, StartingOffset: 587020, StoppingOffset: -9223372036854775808]]
+2026-11-11 11:38:17,666 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.ConsumerConfig [] - ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = clicks-enriched-job-0
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = clicks-enriched-job
+	group.instance.id = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArrayDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArrayDeserializer
+
+2026-11-11 11:38:17,681 WARN  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.ConsumerConfig [] - These configurations '[client.id.prefix, partition.discovery.interval.ms]' were supplied but are not used yet.
+2026-11-11 11:38:17,681 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 11:38:17,681 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 11:38:17,681 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794393497681
+2026-11-11 11:38:17,684 INFO  org.apache.flink.connector.base.source.reader.fetcher.SplitFetcher [] - Starting split fetcher 0
+2026-11-11 11:38:17,686 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#1 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from INITIALIZING to RUNNING.
+2026-11-11 11:38:17,687 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Assigned to partition(s): clicks-2, clicks-1, clicks-0
+2026-11-11 11:38:17,689 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Seeking to offset 585799 for partition clicks-2
+2026-11-11 11:38:17,689 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Seeking to offset 563203 for partition clicks-1
+2026-11-11 11:38:17,689 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Seeking to offset 587020 for partition clicks-0
+2026-11-11 11:38:17,762 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Cluster ID: jjndI1o4QXiSX_yO3gTfow
+2026-11-11 11:38:17,762 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Resetting the last seen epoch of partition clicks-1 to 0 since the associated topicId changed from null to 6BEwsR1YRZ-gAqd9bxykdw
+2026-11-11 11:38:17,762 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Resetting the last seen epoch of partition clicks-2 to 0 since the associated topicId changed from null to 6BEwsR1YRZ-gAqd9bxykdw
+2026-11-11 11:38:17,763 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Resetting the last seen epoch of partition clicks-0 to 0 since the associated topicId changed from null to 6BEwsR1YRZ-gAqd9bxykdw
+2026-11-11 11:38:17,763 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.internals.TransactionManager [] - [Producer clientId=producer-1] ProducerId set to 1003 with epoch 0
+2026-11-11 11:38:17,763 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Cluster ID: jjndI1o4QXiSX_yO3gTfow
+2026-11-11 11:38:17,796 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.ProducerConfig [] - ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-2
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	interceptor.classes = []
+	key.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 3600000
+	transactional.id = null
+	value.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+
+2026-11-11 11:38:17,796 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-2] Instantiated an idempotent producer.
+2026-11-11 11:38:17,799 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 11:38:17,799 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 11:38:17,799 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794393497799
+2026-11-11 11:38:17,801 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition clicks-enriched-2 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:38:17,801 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition clicks-enriched-1 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:38:17,801 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition clicks-enriched-0 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:38:17,801 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Cluster ID: jjndI1o4QXiSX_yO3gTfow
+2026-11-11 11:38:17,802 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.internals.TransactionManager [] - [Producer clientId=producer-2] ProducerId set to 0 with epoch 0
+2026-11-11 11:38:17,802 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-2] Closing the Kafka producer with timeoutMillis = 9223372036854775807 ms.
+2026-11-11 11:38:17,804 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 11:38:17,804 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 11:38:17,804 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 11:38:17,804 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.producer for producer-2 unregistered
+2026-11-11 11:38:17,806 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition clicks-enriched-2 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:38:17,806 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition clicks-enriched-1 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:38:17,806 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition clicks-enriched-0 to 0 since the associated topicId changed from null to 55PYMhWjSSyNpe8Fh9M_Bw
+2026-11-11 11:38:24,358 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0-r, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:38:24,382 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=clicks-enriched-job-0, groupId=clicks-enriched-job] Discovered group coordinator 127.0.0.1:12001 (id: 2147483645 rack: null)
+2026-11-11 11:38:34,351 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0-r, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:38:44,352 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0-r, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:38:54,355 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0-r, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:39:04,351 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0-r, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:39:14,352 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0-r, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:39:24,351 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0-r, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:39:34,351 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm0-r, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 11:39:34,669 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Attempting to cancel task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#1 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_1).
+2026-11-11 11:39:34,670 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - RECEIVED SIGNAL 15: SIGTERM. Shutting down as requested.
+2026-11-11 11:39:34,670 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#1 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from RUNNING to CANCELING.
+2026-11-11 11:39:34,670 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Triggering cancellation of task code Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/1)#1 (550b8f3fb2288ad16a89f38f66bd18c9_cbc357ccb763df2852fee8c4fc7d55f2_0_1).
+2026-11-11 11:39:34,670 INFO  org.apache.flink.runtime.state.TaskExecutorLocalStateStoresManager [] - Shutting down TaskExecutorLocalStateStoresManager.
+2026-11-11 11:39:34,670 INFO  org.apache.flink.runtime.blob.PermanentBlobCache             [] - Shutting down BLOB cache
+2026-11-11 11:39:34,671 INFO  org.apache.flink.runtime.blob.TransientBlobCache             [] - Shutting down BLOB cache
+2026-11-11 11:39:34,671 INFO  org.apache.flink.runtime.state.TaskExecutorFileMergingManager [] - Shutting down TaskExecutorFileMergingManager.
+2026-11-11 11:39:34,671 INFO  org.apache.flink.runtime.state.TaskExecutorStateChangelogStoragesManager [] - Shutting down TaskExecutorStateChangelogStoragesManager.
+2026-11-11 11:39:34,671 INFO  org.apache.flink.runtime.io.disk.FileChannelManagerImpl      [] - FileChannelManager removed spill file directory /tmp/chamoso-e7/8529/e7-2785032/flink-io/flink-io-226747b8-b749-4f3a-9472-6b61464aaff6
+2026-11-11 11:39:34,672 INFO  org.apache.flink.runtime.io.disk.FileChannelManagerImpl      [] - FileChannelManager removed spill file directory /tmp/chamoso-e7/8529/e7-2785032/flink-io/flink-netty-shuffle-16d44b2c-9e26-4968-9ea2-da3aa3e9ca8c
+2026-11-11 11:39:34,672 INFO  org.apache.flink.runtime.filecache.FileCache                 [] - removed file cache directory /tmp/chamoso-e7/8529/e7-2785032/flink-io/flink-dist-cache-80586190-5f33-4e4c-b8b6-5ec0d440c6fb
+2026-11-11 11:39:34,709 INFO  org.apache.pekko.actor.CoordinatedShutdown                   [] - Running CoordinatedShutdown with reason [ActorSystemTerminateReason]
+2026-11-11 11:39:34,711 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Shutting down remote daemon.
+2026-11-11 11:39:34,712 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Shutting down remote daemon.
+2026-11-11 11:39:34,712 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remote daemon shut down; proceeding with flushing remote transports.
+2026-11-11 11:39:34,712 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remote daemon shut down; proceeding with flushing remote transports.
+2026-11-11 11:39:34,724 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remoting shut down.
+2026-11-11 11:39:34,724 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remoting shut down.

@@ -1,0 +1,144 @@
+### 1. Strimzi KafkaTopic resources
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+spec:
+  kafka:
+    bootstrap:
+      service:
+        name: my-cluster-kafka-bootstrap
+        port: 9092
+    replicas: 3
+  partitions: 16
+  replicationFactor: 3
+  config:
+    retention.ms: 2592000000
+    segment.ms: 604800000
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+spec:
+  kafka:
+    bootstrap:
+      service:
+        name: my-cluster-kafka-bootstrap
+        port: 9092
+    replicas: 3
+    partitions: 16
+    replicationFactor: 3
+  config:
+    retention.ms: 2592000000
+    segment.ms: 604800000
+```
+
+### 2. FlinkDeployment resource
+
+```yaml
+apiVersion: flink.k8s.io/v1
+kind: FlinkDeployment
+metadata:
+  name: card-transaction-pipeline
+spec:
+  configuration:
+    type: jobmanager
+    parallelism:
+      taskmanager.numberOfTaskSlots: 4
+      parallelism.default: 16
+    checkpointing:
+      checkpointingMode: EXACTLY_ONCE
+      checkpointingInterval: 10s
+    state.backend: fs
+    state.checkpointUpdateInterval: 10000
+    state.checkpointing.type: filesystem
+    state.checkpointing.checkpoints.number: 100
+    state.checkpointing.timeout: 10000
+    state.checkpointing.externalizedCheckpointConfig.checkpointStorage: s3://flink-state/checkpoints
+    state.checkpointing.externalizedCheckpointConfig.checkpointStorage.checkpointTimeout: 10000
+    taskmanager.cpu: 4
+    taskmanager.memory: 8g
+    taskmanager.memory.jvm-options:
+      - "-XX:MaxDirectMemorySize=4g"
+    taskmanager.numberOfTaskSlots: 4
+    taskmanager.heap.size: 4g
+    parallelism.default: 16
+  resources:
+    requests:
+      cpu: 1
+      memory: 2g
+    limits:
+      cpu: 4
+      memory: 8g
+  replicas: 3
+```
+
+### 3. Flink SQL table definitions
+
+```sql
+CREATE TABLE transactions (
+  card_id STRING,
+  event_time TIMESTAMP,
+  amount DECIMAL(10, 2),
+  ...
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'card-transactions',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'card-transaction-pipeline',
+  'scan.startup.mode' = 'earliest-offset',
+  'value.deserialization.failure.handler' = 'throw'
+);
+
+CREATE TABLE enriched_transactions (
+  card_id STRING,
+  event_time TIMESTAMP,
+  amount DECIMAL(10, 2),
+  derived_field1 STRING,
+  derived_field2 STRING,
+  ...
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'card-transactions-enriched',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'card-transaction-pipeline',
+  'write.mode' = 'append',
+  'format' = 'json'
+);
+
+INSERT INTO enriched_transactions
+SELECT 
+  card_id,
+  event_time,
+  amount,
+  CASE WHEN amount > 100 THEN 'high'
+       WHEN amount < 10  THEN 'low'
+       ELSE 'medium' END AS derived_field1,
+  CASE WHEN amount > 500 THEN 'premium'
+       WHEN amount < 50  THEN 'basic'
+       ELSE 'standard' END AS derived_field2
+FROM transactions;
+```
+
+### Justification of main values
+
+- **Kafka topic configuration:**
+  - `partitions` is set to 16 to ensure that the input rate of 5,000 events/s can be handled without overloading any single partition.
+  - `replicationFactor` is set to 3 for durability and high availability.
+  - `retention.ms` is set to 30 days to meet the retention requirement.
+
+- **Flink configuration:**
+  - `parallelism.default` is set to 16 to ensure that the input rate of 5,000 events/s can be handled without overloading any single task slot.
+  - `taskmanager.numberOfTaskSlots` is set to 4 to ensure that each TaskManager pod uses at most 4 CPU and 8 GiB of memory.
+  - `checkpointingMode` is set to `EXACTLY_ONCE` to meet the delivery guarantee requirement.
+  - `checkpointingInterval` is set to 10 seconds to balance between checkpointing frequency and overhead.
+  - `taskmanager.heap.size` is set to 4g to meet the durable storage requirement for checkpoints.
+
+- **Flink SQL table definitions:**
+  - The `transactions` table is created with the `kafka` connector to read from the `card-transactions` topic.
+  - The `enriched_transactions` table is created with the `kafka` connector to write to the `card-transactions-enriched` topic.
+  - The `INSERT INTO` statement is used to transform the data from the `transactions` table to the `enriched_transactions` table.

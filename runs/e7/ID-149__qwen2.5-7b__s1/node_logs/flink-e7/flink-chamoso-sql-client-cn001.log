@@ -1,0 +1,582 @@
+2026-11-10 20:00:58,472 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Using standard YAML parser to load flink configuration file from /tmp/chamoso-e7/8387/e7-1594953/conf/flink-e7/config.yaml.
+2026-11-10 20:00:58,497 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: flink-conf.yaml.state.checkpoints.dir, file:///tmp/chamoso-e7/8387/e7-1594953/objstore/flink-state/checkpoints
+2026-11-10 20:00:58,497 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.execution.failover-strategy, region
+2026-11-10 20:00:58,497 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.rpc.address, 127.0.0.1
+2026-11-10 20:00:58,497 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: flink-conf.yaml.state.backend.rocksdb.path, file:///tmp/chamoso-e7/8387/e7-1594953/objstore/flink-state/rocksdb
+2026-11-10 20:00:58,497 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: flink-conf.yaml.parallelism.default, 3
+2026-11-10 20:00:58,497 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.bind-host, 127.0.0.1
+2026-11-10 20:00:58,497 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: io.tmp.dirs, /tmp/chamoso-e7/8387/e7-1594953/flink-io
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.host, 127.0.0.1
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: flink-conf.yaml.state.backend.rocksdb.checkpoint.snapshots-to-keep, 3
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: parallelism.default, 1
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: flink-conf.yaml.taskmanager.memory.process.size, 8000m
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.numberOfTaskSlots, 1
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: env.java.opts.all, --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: flink-conf.yaml.checkpointing.mode, exactly-once
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.memory.process.size, 1728m
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.bind-host, 127.0.0.1
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: flink-conf.yaml.state.backend.rocksdb.memory-mapped, false
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.memory.process.size, 1600m
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.rpc.port, 12030
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.bind-address, 127.0.0.1
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: flink-conf.yaml.state.backend, rocksdb
+2026-11-10 20:00:58,498 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.port, 12031
+2026-11-10 20:00:58,499 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: flink-conf.yaml.checkpointing.interval, 10000
+2026-11-10 20:00:58,499 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.address, 127.0.0.1
+2026-11-10 20:00:58,499 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: flink-conf.yaml.taskmanager.numberOfTaskSlots, 4
+2026-11-10 20:00:58,513 INFO  org.apache.flink.client.cli.CliFrontend                      [] - Loading FallbackYarnSessionCli
+2026-11-10 20:00:58,524 INFO  org.apache.flink.core.fs.FileSystem                          [] - Hadoop is not in the classpath/dependencies. The extended set of supported File Systems via Hadoop is not available.
+2026-11-10 20:00:58,534 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-datadog
+2026-11-10 20:00:58,537 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-graphite
+2026-11-10 20:00:58,537 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-jmx
+2026-11-10 20:00:58,537 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-slf4j
+2026-11-10 20:00:58,537 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-statsd
+2026-11-10 20:00:58,537 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-prometheus
+2026-11-10 20:00:58,537 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: external-resource-gpu
+2026-11-10 20:00:58,537 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-influx
+2026-11-10 20:00:58,551 INFO  org.apache.flink.table.gateway.service.context.DefaultContext [] - Execution config: {execution.state-recovery.claim-mode=NO_CLAIM, execution.attached=true, execution.shutdown-on-attached-exit=false, pipeline.jars=[file:/lustre/home/chamoso/tuning-revision/opt/flink/opt/flink-sql-client-1.20.5.jar], pipeline.classpaths=[], execution.target=remote, execution.state-recovery.ignore-unclaimed-state=false}
+2026-11-10 20:00:58,811 INFO  org.apache.flink.configuration.Configuration                 [] - Config uses fallback configuration key 'rest.port' instead of key 'rest.bind-port'
+2026-11-10 20:00:58,826 INFO  org.apache.flink.table.gateway.rest.SqlGatewayRestEndpoint   [] - Starting rest endpoint.
+2026-11-10 20:00:58,990 INFO  org.apache.flink.table.gateway.rest.SqlGatewayRestEndpoint   [] - Rest endpoint listening at 127.0.0.1:43473
+2026-11-10 20:00:59,012 INFO  org.apache.flink.table.shaded.org.quartz.impl.StdSchedulerFactory [] - Using default implementation for ThreadExecutor
+2026-11-10 20:00:59,013 INFO  org.apache.flink.table.shaded.org.quartz.simpl.SimpleThreadPool [] - Job execution threads will use class loader of thread: main
+2026-11-10 20:00:59,020 INFO  org.apache.flink.table.shaded.org.quartz.core.SchedulerSignalerImpl [] - Initialized Scheduler Signaller of type: class org.apache.flink.table.shaded.org.quartz.core.SchedulerSignalerImpl
+2026-11-10 20:00:59,020 INFO  org.apache.flink.table.shaded.org.quartz.core.QuartzScheduler [] - Quartz Scheduler v.2.3.2 created.
+2026-11-10 20:00:59,021 INFO  org.apache.flink.table.shaded.org.quartz.simpl.RAMJobStore   [] - RAMJobStore initialized.
+2026-11-10 20:00:59,021 INFO  org.apache.flink.table.shaded.org.quartz.core.QuartzScheduler [] - Scheduler meta-data: Quartz Scheduler (v2.3.2) 'FlinkQuartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.apache.flink.table.shaded.org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.apache.flink.table.shaded.org.quartz.simpl.SimpleThreadPool' - with 1 threads.
+  Using job-store 'org.apache.flink.table.shaded.org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2026-11-10 20:00:59,021 INFO  org.apache.flink.table.shaded.org.quartz.impl.StdSchedulerFactory [] - Quartz scheduler 'FlinkQuartzScheduler' initialized from an externally provided properties instance.
+2026-11-10 20:00:59,021 INFO  org.apache.flink.table.shaded.org.quartz.impl.StdSchedulerFactory [] - Quartz scheduler version: 2.3.2
+2026-11-10 20:00:59,021 INFO  org.apache.flink.table.shaded.org.quartz.core.QuartzScheduler [] - Scheduler FlinkQuartzScheduler_$_NON_CLUSTERED started.
+2026-11-10 20:00:59,021 INFO  org.apache.flink.table.gateway.workflow.scheduler.EmbeddedQuartzScheduler [] - Start quartz scheduler successfully.
+2026-11-10 20:00:59,021 INFO  org.apache.flink.table.client.SqlClient                      [] - Start embedded gateway on port 43473
+2026-11-10 20:00:59,140 INFO  org.apache.flink.table.client.gateway.ExecutorImpl           [] - Open session to http://localhost:43473 with connection version: V3.
+2026-11-10 20:00:59,204 WARN  org.apache.flink.table.factories.WorkflowSchedulerFactoryUtil [] - Workflow scheduler options do not contain an option key 'workflow-scheduler.type' for discovering an workflow scheduler.
+2026-11-10 20:00:59,287 INFO  org.apache.flink.table.client.cli.CliClient                  [] - Command history file path: /home/chamoso/.flink-sql-history
+2026-11-10 20:00:59,950 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlCreateCatalog does not contain a setter for field catalogName
+2026-11-10 20:00:59,950 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlCreateCatalog cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,951 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterCatalogOptions does not contain a setter for field propertyList
+2026-11-10 20:00:59,951 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlAlterCatalogOptions cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,951 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterCatalogReset does not contain a getter for field propertyKeyList
+2026-11-10 20:00:59,951 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterCatalogReset does not contain a setter for field propertyKeyList
+2026-11-10 20:00:59,952 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlAlterCatalogReset cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,952 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterCatalogComment does not contain a setter for field comment
+2026-11-10 20:00:59,952 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlAlterCatalogComment cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,953 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlCreateView does not contain a setter for field viewName
+2026-11-10 20:00:59,953 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlCreateView cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,953 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterViewRename does not contain a getter for field newViewIdentifier
+2026-11-10 20:00:59,953 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterViewRename does not contain a setter for field newViewIdentifier
+2026-11-10 20:00:59,953 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlAlterViewRename cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,954 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterViewProperties does not contain a setter for field propertyList
+2026-11-10 20:00:59,954 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlAlterViewProperties cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,954 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterViewAs does not contain a setter for field newQuery
+2026-11-10 20:00:59,954 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlAlterViewAs cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,955 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAddPartitions does not contain a setter for field ifPartitionNotExists
+2026-11-10 20:00:59,955 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlAddPartitions cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,955 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlDropPartitions does not contain a setter for field ifExists
+2026-11-10 20:00:59,955 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlDropPartitions cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,956 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlShowPartitions does not contain a getter for field tableIdentifier
+2026-11-10 20:00:59,956 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlShowPartitions does not contain a setter for field tableIdentifier
+2026-11-10 20:00:59,956 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.dql.SqlShowPartitions cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,956 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dml.SqlTruncateTable does not contain a getter for field tableNameIdentifier
+2026-11-10 20:00:59,956 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dml.SqlTruncateTable does not contain a setter for field tableNameIdentifier
+2026-11-10 20:00:59,956 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.dml.SqlTruncateTable cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,956 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlShowFunctions does not contain a setter for field requireUser
+2026-11-10 20:00:59,956 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.dql.SqlShowFunctions cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,957 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlShowProcedures does not contain a getter for field databaseName
+2026-11-10 20:00:59,957 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlShowProcedures does not contain a setter for field databaseName
+2026-11-10 20:00:59,957 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.dql.SqlShowProcedures cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,957 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlReplaceTableAs does not contain a setter for field tableName
+2026-11-10 20:00:59,957 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlReplaceTableAs cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,958 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlShowDatabases does not contain a setter for field preposition
+2026-11-10 20:00:59,958 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.dql.SqlShowDatabases cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,958 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlShowCreateCatalog does not contain a getter for field sqlIdentifier
+2026-11-10 20:00:59,958 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlShowCreateCatalog does not contain a setter for field sqlIdentifier
+2026-11-10 20:00:59,959 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.dql.SqlShowCreateCatalog cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,959 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlDescribeCatalog does not contain a getter for field catalogName
+2026-11-10 20:00:59,959 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlDescribeCatalog does not contain a setter for field catalogName
+2026-11-10 20:00:59,959 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.dql.SqlDescribeCatalog cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,959 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlDescribeJob does not contain a getter for field jobId
+2026-11-10 20:00:59,959 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.dql.SqlDescribeJob does not contain a setter for field jobId
+2026-11-10 20:00:59,959 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.dql.SqlDescribeJob cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,960 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlCreateMaterializedTable does not contain a setter for field tableName
+2026-11-10 20:00:59,960 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlCreateMaterializedTable cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,960 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterMaterializedTableRefresh does not contain a setter for field partitionSpec
+2026-11-10 20:00:59,960 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlAlterMaterializedTableRefresh cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,960 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterMaterializedTableSuspend does not contain a getter for field tableIdentifier
+2026-11-10 20:00:59,960 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterMaterializedTableSuspend does not contain a setter for field tableIdentifier
+2026-11-10 20:00:59,960 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlAlterMaterializedTableSuspend cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,961 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlAlterMaterializedTableResume does not contain a setter for field propertyList
+2026-11-10 20:00:59,961 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlAlterMaterializedTableResume cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:00:59,961 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlDropMaterializedTable does not contain a getter for field tableIdentifier
+2026-11-10 20:00:59,961 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - class org.apache.flink.sql.parser.ddl.SqlDropMaterializedTable does not contain a setter for field tableIdentifier
+2026-11-10 20:00:59,961 INFO  org.apache.flink.api.java.typeutils.TypeExtractor            [] - Class class org.apache.flink.sql.parser.ddl.SqlDropMaterializedTable cannot be used as a POJO type because not all fields are valid POJO fields, and must be processed as GenericType. Please read the Flink documentation on "Data Types & Serialization" for details of the effect on performance and schema evolution.
+2026-11-10 20:01:00,285 ERROR org.apache.flink.table.gateway.service.operation.OperationManager [] - Failed to execute the operation 9e5f8a1c-497a-4960-b629-fc93b97f98b9.
+org.apache.flink.table.api.ValidationException: Unable to create a source for reading table 'default_catalog.default_database.ad_impressions'.
+
+Table options are:
+
+'connector'='kafka'
+'format'='json'
+'key.fields'='campaign_id'
+'properties.bootstrap-server'='kafka:9092'
+'scan.startup.mode'='earliest-offset'
+'topic'='ad-impressions'
+'update-mode'='incrementing'
+'value.format.derive-missing-values'='true'
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:235) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:260) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.createDynamicTableSource(CatalogSourceTable.java:175) ~[?:?]
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.toRel(CatalogSourceTable.java:115) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.toRel(SqlToRelConverter.java:4034) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertIdentifier(SqlToRelConverter.java:2904) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2464) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2378) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2323) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelectImpl(SqlToRelConverter.java:730) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelect(SqlToRelConverter.java:716) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQueryRecursive(SqlToRelConverter.java:3880) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQuery(SqlToRelConverter.java:620) ~[?:?]
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.org$apache$flink$table$planner$calcite$FlinkPlannerImpl$$rel(FlinkPlannerImpl.scala:233) ~[?:?]
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.rel(FlinkPlannerImpl.scala:208) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeConvertContext.toRelRoot(SqlNodeConvertContext.java:77) ~[?:?]
+	at org.apache.flink.table.planner.operations.converters.SqlQueryConverter.convertSqlNode(SqlQueryConverter.java:48) ~[?:?]
+	at org.apache.flink.table.planner.operations.converters.SqlNodeConverters.convertSqlNode(SqlNodeConverters.java:85) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:271) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNodeOrFail(SqlNodeToOperationConversion.java:387) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertSqlInsert(SqlNodeToOperationConversion.java:774) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:350) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convert(SqlNodeToOperationConversion.java:261) ~[?:?]
+	at org.apache.flink.table.planner.delegation.ParserImpl.parse(ParserImpl.java:106) ~[?:?]
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:219) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:199) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.SqlGatewayServiceImpl.lambda$executeStatement$1(SqlGatewayServiceImpl.java:214) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager.lambda$submitOperation$1(OperationManager.java:119) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.lambda$run$0(OperationManager.java:258) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) [?:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) [?:?]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) [?:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) [?:?]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: org.apache.flink.table.api.ValidationException: One or more required options are missing.
+
+Missing required options are:
+
+properties.bootstrap.servers
+	at org.apache.flink.table.factories.FactoryUtil.validateFactoryOptions(FactoryUtil.java:690) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil.validateFactoryOptions(FactoryUtil.java:660) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil$FactoryHelper.validate(FactoryUtil.java:1008) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil$FactoryHelper.validateExcept(FactoryUtil.java:1034) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.streaming.connectors.kafka.table.KafkaDynamicTableFactory.createDynamicTableSource(KafkaDynamicTableFactory.java:185) ~[flink-sql-connector-kafka.jar:3.3.0-1.20]
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:232) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	... 35 more
+2026-11-10 20:01:00,314 ERROR org.apache.flink.table.gateway.service.SqlGatewayServiceImpl [] - Failed to fetchResults.
+org.apache.flink.table.gateway.service.utils.SqlExecutionException: Failed to execute the operation 9e5f8a1c-497a-4960-b629-fc93b97f98b9.
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.processThrowable(OperationManager.java:414) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.lambda$run$0(OperationManager.java:267) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) ~[?:?]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: org.apache.flink.table.api.ValidationException: Unable to create a source for reading table 'default_catalog.default_database.ad_impressions'.
+
+Table options are:
+
+'connector'='kafka'
+'format'='json'
+'key.fields'='campaign_id'
+'properties.bootstrap-server'='kafka:9092'
+'scan.startup.mode'='earliest-offset'
+'topic'='ad-impressions'
+'update-mode'='incrementing'
+'value.format.derive-missing-values'='true'
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:235) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:260) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.createDynamicTableSource(CatalogSourceTable.java:175) ~[?:?]
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.toRel(CatalogSourceTable.java:115) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.toRel(SqlToRelConverter.java:4034) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertIdentifier(SqlToRelConverter.java:2904) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2464) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2378) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2323) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelectImpl(SqlToRelConverter.java:730) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelect(SqlToRelConverter.java:716) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQueryRecursive(SqlToRelConverter.java:3880) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQuery(SqlToRelConverter.java:620) ~[?:?]
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.org$apache$flink$table$planner$calcite$FlinkPlannerImpl$$rel(FlinkPlannerImpl.scala:233) ~[?:?]
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.rel(FlinkPlannerImpl.scala:208) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeConvertContext.toRelRoot(SqlNodeConvertContext.java:77) ~[?:?]
+	at org.apache.flink.table.planner.operations.converters.SqlQueryConverter.convertSqlNode(SqlQueryConverter.java:48) ~[?:?]
+	at org.apache.flink.table.planner.operations.converters.SqlNodeConverters.convertSqlNode(SqlNodeConverters.java:85) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:271) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNodeOrFail(SqlNodeToOperationConversion.java:387) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertSqlInsert(SqlNodeToOperationConversion.java:774) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:350) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convert(SqlNodeToOperationConversion.java:261) ~[?:?]
+	at org.apache.flink.table.planner.delegation.ParserImpl.parse(ParserImpl.java:106) ~[?:?]
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:219) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:199) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.SqlGatewayServiceImpl.lambda$executeStatement$1(SqlGatewayServiceImpl.java:214) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager.lambda$submitOperation$1(OperationManager.java:119) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.lambda$run$0(OperationManager.java:258) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	... 7 more
+Caused by: org.apache.flink.table.api.ValidationException: One or more required options are missing.
+
+Missing required options are:
+
+properties.bootstrap.servers
+	at org.apache.flink.table.factories.FactoryUtil.validateFactoryOptions(FactoryUtil.java:690) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil.validateFactoryOptions(FactoryUtil.java:660) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil$FactoryHelper.validate(FactoryUtil.java:1008) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil$FactoryHelper.validateExcept(FactoryUtil.java:1034) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.streaming.connectors.kafka.table.KafkaDynamicTableFactory.createDynamicTableSource(KafkaDynamicTableFactory.java:185) ~[flink-sql-connector-kafka.jar:3.3.0-1.20]
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:232) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:260) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.createDynamicTableSource(CatalogSourceTable.java:175) ~[?:?]
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.toRel(CatalogSourceTable.java:115) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.toRel(SqlToRelConverter.java:4034) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertIdentifier(SqlToRelConverter.java:2904) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2464) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2378) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2323) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelectImpl(SqlToRelConverter.java:730) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelect(SqlToRelConverter.java:716) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQueryRecursive(SqlToRelConverter.java:3880) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQuery(SqlToRelConverter.java:620) ~[?:?]
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.org$apache$flink$table$planner$calcite$FlinkPlannerImpl$$rel(FlinkPlannerImpl.scala:233) ~[?:?]
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.rel(FlinkPlannerImpl.scala:208) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeConvertContext.toRelRoot(SqlNodeConvertContext.java:77) ~[?:?]
+	at org.apache.flink.table.planner.operations.converters.SqlQueryConverter.convertSqlNode(SqlQueryConverter.java:48) ~[?:?]
+	at org.apache.flink.table.planner.operations.converters.SqlNodeConverters.convertSqlNode(SqlNodeConverters.java:85) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:271) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNodeOrFail(SqlNodeToOperationConversion.java:387) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertSqlInsert(SqlNodeToOperationConversion.java:774) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:350) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convert(SqlNodeToOperationConversion.java:261) ~[?:?]
+	at org.apache.flink.table.planner.delegation.ParserImpl.parse(ParserImpl.java:106) ~[?:?]
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:219) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:199) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.SqlGatewayServiceImpl.lambda$executeStatement$1(SqlGatewayServiceImpl.java:214) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager.lambda$submitOperation$1(OperationManager.java:119) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.lambda$run$0(OperationManager.java:258) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	... 7 more
+2026-11-10 20:01:00,317 ERROR org.apache.flink.table.gateway.rest.handler.statement.FetchResultsHandler [] - Unhandled exception.
+org.apache.flink.table.gateway.api.utils.SqlGatewayException: org.apache.flink.table.gateway.api.utils.SqlGatewayException: Failed to fetchResults.
+	at org.apache.flink.table.gateway.rest.handler.statement.FetchResultsHandler.handleRequest(FetchResultsHandler.java:91) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.rest.handler.AbstractSqlGatewayRestHandler.respondToRequest(AbstractSqlGatewayRestHandler.java:84) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.rest.handler.AbstractSqlGatewayRestHandler.respondToRequest(AbstractSqlGatewayRestHandler.java:52) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.rest.handler.AbstractHandler.respondAsLeader(AbstractHandler.java:196) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.rest.handler.LeaderRetrievalHandler.lambda$channelRead0$0(LeaderRetrievalHandler.java:88) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.Optional.ifPresent(Optional.java:178) [?:?]
+	at org.apache.flink.util.OptionalConsumer.ifPresent(OptionalConsumer.java:45) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.rest.handler.LeaderRetrievalHandler.channelRead0(LeaderRetrievalHandler.java:85) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.rest.handler.LeaderRetrievalHandler.channelRead0(LeaderRetrievalHandler.java:50) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:99) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.rest.handler.router.RouterHandler.routed(RouterHandler.java:115) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.rest.handler.router.RouterHandler.channelRead0(RouterHandler.java:94) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.rest.handler.router.RouterHandler.channelRead0(RouterHandler.java:55) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:99) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:103) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.rest.FileUploadHandler.channelRead0(FileUploadHandler.java:233) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.rest.FileUploadHandler.channelRead0(FileUploadHandler.java:70) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:99) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) [flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.shaded.netty4.io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) [flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: org.apache.flink.table.gateway.api.utils.SqlGatewayException: Failed to fetchResults.
+	at org.apache.flink.table.gateway.service.SqlGatewayServiceImpl.fetchResults(SqlGatewayServiceImpl.java:231) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.rest.handler.statement.FetchResultsHandler.handleRequest(FetchResultsHandler.java:89) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	... 48 more
+Caused by: org.apache.flink.table.gateway.service.utils.SqlExecutionException: Failed to execute the operation 9e5f8a1c-497a-4960-b629-fc93b97f98b9.
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.processThrowable(OperationManager.java:414) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.lambda$run$0(OperationManager.java:267) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) ~[?:?]
+	... 1 more
+Caused by: org.apache.flink.table.api.ValidationException: Unable to create a source for reading table 'default_catalog.default_database.ad_impressions'.
+
+Table options are:
+
+'connector'='kafka'
+'format'='json'
+'key.fields'='campaign_id'
+'properties.bootstrap-server'='kafka:9092'
+'scan.startup.mode'='earliest-offset'
+'topic'='ad-impressions'
+'update-mode'='incrementing'
+'value.format.derive-missing-values'='true'
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:235) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:260) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.createDynamicTableSource(CatalogSourceTable.java:175) ~[?:?]
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.toRel(CatalogSourceTable.java:115) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.toRel(SqlToRelConverter.java:4034) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertIdentifier(SqlToRelConverter.java:2904) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2464) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2378) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2323) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelectImpl(SqlToRelConverter.java:730) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelect(SqlToRelConverter.java:716) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQueryRecursive(SqlToRelConverter.java:3880) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQuery(SqlToRelConverter.java:620) ~[?:?]
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.org$apache$flink$table$planner$calcite$FlinkPlannerImpl$$rel(FlinkPlannerImpl.scala:233) ~[?:?]
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.rel(FlinkPlannerImpl.scala:208) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeConvertContext.toRelRoot(SqlNodeConvertContext.java:77) ~[?:?]
+	at org.apache.flink.table.planner.operations.converters.SqlQueryConverter.convertSqlNode(SqlQueryConverter.java:48) ~[?:?]
+	at org.apache.flink.table.planner.operations.converters.SqlNodeConverters.convertSqlNode(SqlNodeConverters.java:85) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:271) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNodeOrFail(SqlNodeToOperationConversion.java:387) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertSqlInsert(SqlNodeToOperationConversion.java:774) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:350) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convert(SqlNodeToOperationConversion.java:261) ~[?:?]
+	at org.apache.flink.table.planner.delegation.ParserImpl.parse(ParserImpl.java:106) ~[?:?]
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:219) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:199) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.SqlGatewayServiceImpl.lambda$executeStatement$1(SqlGatewayServiceImpl.java:214) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager.lambda$submitOperation$1(OperationManager.java:119) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.lambda$run$0(OperationManager.java:258) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) ~[?:?]
+	... 1 more
+Caused by: org.apache.flink.table.api.ValidationException: One or more required options are missing.
+
+Missing required options are:
+
+properties.bootstrap.servers
+	at org.apache.flink.table.factories.FactoryUtil.validateFactoryOptions(FactoryUtil.java:690) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil.validateFactoryOptions(FactoryUtil.java:660) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil$FactoryHelper.validate(FactoryUtil.java:1008) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil$FactoryHelper.validateExcept(FactoryUtil.java:1034) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.streaming.connectors.kafka.table.KafkaDynamicTableFactory.createDynamicTableSource(KafkaDynamicTableFactory.java:185) ~[flink-sql-connector-kafka.jar:3.3.0-1.20]
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:232) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:260) ~[flink-table-api-java-uber-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.createDynamicTableSource(CatalogSourceTable.java:175) ~[?:?]
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.toRel(CatalogSourceTable.java:115) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.toRel(SqlToRelConverter.java:4034) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertIdentifier(SqlToRelConverter.java:2904) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2464) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2378) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2323) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelectImpl(SqlToRelConverter.java:730) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelect(SqlToRelConverter.java:716) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQueryRecursive(SqlToRelConverter.java:3880) ~[?:?]
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQuery(SqlToRelConverter.java:620) ~[?:?]
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.org$apache$flink$table$planner$calcite$FlinkPlannerImpl$$rel(FlinkPlannerImpl.scala:233) ~[?:?]
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.rel(FlinkPlannerImpl.scala:208) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeConvertContext.toRelRoot(SqlNodeConvertContext.java:77) ~[?:?]
+	at org.apache.flink.table.planner.operations.converters.SqlQueryConverter.convertSqlNode(SqlQueryConverter.java:48) ~[?:?]
+	at org.apache.flink.table.planner.operations.converters.SqlNodeConverters.convertSqlNode(SqlNodeConverters.java:85) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:271) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNodeOrFail(SqlNodeToOperationConversion.java:387) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertSqlInsert(SqlNodeToOperationConversion.java:774) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:350) ~[?:?]
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convert(SqlNodeToOperationConversion.java:261) ~[?:?]
+	at org.apache.flink.table.planner.delegation.ParserImpl.parse(ParserImpl.java:106) ~[?:?]
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:219) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:199) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.SqlGatewayServiceImpl.lambda$executeStatement$1(SqlGatewayServiceImpl.java:214) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager.lambda$submitOperation$1(OperationManager.java:119) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.lambda$run$0(OperationManager.java:258) ~[flink-sql-gateway-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) ~[?:?]
+	... 1 more
+2026-11-10 20:01:00,324 WARN  org.apache.flink.table.client.cli.CliClient                  [] - Could not execute SQL statement.
+org.apache.flink.table.client.gateway.SqlExecutionException: Failed to get response for the operation 9e5f8a1c-497a-4960-b629-fc93b97f98b9.
+	at org.apache.flink.table.client.gateway.ExecutorImpl.getFetchResultResponse(ExecutorImpl.java:489) ~[flink-sql-client-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.client.gateway.ExecutorImpl.fetchUtilResultsReady(ExecutorImpl.java:449) ~[flink-sql-client-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.client.gateway.ExecutorImpl.executeStatement(ExecutorImpl.java:310) ~[flink-sql-client-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.client.cli.parser.SqlMultiLineParser.parse(SqlMultiLineParser.java:114) ~[flink-sql-client-1.20.5.jar:1.20.5]
+	at org.jline.reader.impl.LineReaderImpl.acceptLine(LineReaderImpl.java:2964) ~[flink-sql-client-1.20.5.jar:1.20.5]
+	at org.jline.reader.impl.LineReaderImpl$1.apply(LineReaderImpl.java:3778) ~[flink-sql-client-1.20.5.jar:1.20.5]
+	at org.jline.reader.impl.LineReaderImpl.readLine(LineReaderImpl.java:679) ~[flink-sql-client-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.client.cli.CliClient.getAndExecuteStatements(CliClient.java:194) [flink-sql-client-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.client.cli.CliClient.executeFile(CliClient.java:243) [flink-sql-client-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.client.cli.CliClient.executeInNonInteractiveMode(CliClient.java:131) [flink-sql-client-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.client.SqlClient.openCli(SqlClient.java:171) [flink-sql-client-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.client.SqlClient.start(SqlClient.java:118) [flink-sql-client-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.client.SqlClient.startClient(SqlClient.java:228) [flink-sql-client-1.20.5.jar:1.20.5]
+	at org.apache.flink.table.client.SqlClient.main(SqlClient.java:179) [flink-sql-client-1.20.5.jar:1.20.5]
+Caused by: org.apache.flink.runtime.rest.util.RestClientException: [Internal server error., <Exception on server side:
+org.apache.flink.table.gateway.api.utils.SqlGatewayException: org.apache.flink.table.gateway.api.utils.SqlGatewayException: Failed to fetchResults.
+	at org.apache.flink.table.gateway.rest.handler.statement.FetchResultsHandler.handleRequest(FetchResultsHandler.java:91)
+	at org.apache.flink.table.gateway.rest.handler.AbstractSqlGatewayRestHandler.respondToRequest(AbstractSqlGatewayRestHandler.java:84)
+	at org.apache.flink.table.gateway.rest.handler.AbstractSqlGatewayRestHandler.respondToRequest(AbstractSqlGatewayRestHandler.java:52)
+	at org.apache.flink.runtime.rest.handler.AbstractHandler.respondAsLeader(AbstractHandler.java:196)
+	at org.apache.flink.runtime.rest.handler.LeaderRetrievalHandler.lambda$channelRead0$0(LeaderRetrievalHandler.java:88)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at org.apache.flink.util.OptionalConsumer.ifPresent(OptionalConsumer.java:45)
+	at org.apache.flink.runtime.rest.handler.LeaderRetrievalHandler.channelRead0(LeaderRetrievalHandler.java:85)
+	at org.apache.flink.runtime.rest.handler.LeaderRetrievalHandler.channelRead0(LeaderRetrievalHandler.java:50)
+	at org.apache.flink.shaded.netty4.io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:99)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at org.apache.flink.runtime.rest.handler.router.RouterHandler.routed(RouterHandler.java:115)
+	at org.apache.flink.runtime.rest.handler.router.RouterHandler.channelRead0(RouterHandler.java:94)
+	at org.apache.flink.runtime.rest.handler.router.RouterHandler.channelRead0(RouterHandler.java:55)
+	at org.apache.flink.shaded.netty4.io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:99)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at org.apache.flink.shaded.netty4.io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:103)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at org.apache.flink.runtime.rest.FileUploadHandler.channelRead0(FileUploadHandler.java:233)
+	at org.apache.flink.runtime.rest.FileUploadHandler.channelRead0(FileUploadHandler.java:70)
+	at org.apache.flink.shaded.netty4.io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:99)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at org.apache.flink.shaded.netty4.io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436)
+	at org.apache.flink.shaded.netty4.io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346)
+	at org.apache.flink.shaded.netty4.io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318)
+	at org.apache.flink.shaded.netty4.io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at org.apache.flink.shaded.netty4.io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at org.apache.flink.shaded.netty4.io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at org.apache.flink.shaded.netty4.io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at org.apache.flink.shaded.netty4.io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at org.apache.flink.shaded.netty4.io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788)
+	at org.apache.flink.shaded.netty4.io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at org.apache.flink.shaded.netty4.io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at org.apache.flink.shaded.netty4.io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at org.apache.flink.shaded.netty4.io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at org.apache.flink.shaded.netty4.io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: org.apache.flink.table.gateway.api.utils.SqlGatewayException: Failed to fetchResults.
+	at org.apache.flink.table.gateway.service.SqlGatewayServiceImpl.fetchResults(SqlGatewayServiceImpl.java:231)
+	at org.apache.flink.table.gateway.rest.handler.statement.FetchResultsHandler.handleRequest(FetchResultsHandler.java:89)
+	... 48 more
+Caused by: org.apache.flink.table.gateway.service.utils.SqlExecutionException: Failed to execute the operation 9e5f8a1c-497a-4960-b629-fc93b97f98b9.
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.processThrowable(OperationManager.java:414)
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.lambda$run$0(OperationManager.java:267)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	... 1 more
+Caused by: org.apache.flink.table.api.ValidationException: Unable to create a source for reading table 'default_catalog.default_database.ad_impressions'.
+
+Table options are:
+
+'connector'='kafka'
+'format'='json'
+'key.fields'='campaign_id'
+'properties.bootstrap-server'='kafka:9092'
+'scan.startup.mode'='earliest-offset'
+'topic'='ad-impressions'
+'update-mode'='incrementing'
+'value.format.derive-missing-values'='true'
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:235)
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:260)
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.createDynamicTableSource(CatalogSourceTable.java:175)
+	at org.apache.flink.table.planner.plan.schema.CatalogSourceTable.toRel(CatalogSourceTable.java:115)
+	at org.apache.calcite.sql2rel.SqlToRelConverter.toRel(SqlToRelConverter.java:4034)
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertIdentifier(SqlToRelConverter.java:2904)
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2464)
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2378)
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2323)
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelectImpl(SqlToRelConverter.java:730)
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertSelect(SqlToRelConverter.java:716)
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQueryRecursive(SqlToRelConverter.java:3880)
+	at org.apache.calcite.sql2rel.SqlToRelConverter.convertQuery(SqlToRelConverter.java:620)
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.org$apache$flink$table$planner$calcite$FlinkPlannerImpl$$rel(FlinkPlannerImpl.scala:233)
+	at org.apache.flink.table.planner.calcite.FlinkPlannerImpl.rel(FlinkPlannerImpl.scala:208)
+	at org.apache.flink.table.planner.operations.SqlNodeConvertContext.toRelRoot(SqlNodeConvertContext.java:77)
+	at org.apache.flink.table.planner.operations.converters.SqlQueryConverter.convertSqlNode(SqlQueryConverter.java:48)
+	at org.apache.flink.table.planner.operations.converters.SqlNodeConverters.convertSqlNode(SqlNodeConverters.java:85)
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:271)
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNodeOrFail(SqlNodeToOperationConversion.java:387)
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertSqlInsert(SqlNodeToOperationConversion.java:774)
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convertValidatedSqlNode(SqlNodeToOperationConversion.java:350)
+	at org.apache.flink.table.planner.operations.SqlNodeToOperationConversion.convert(SqlNodeToOperationConversion.java:261)
+	at org.apache.flink.table.planner.delegation.ParserImpl.parse(ParserImpl.java:106)
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:219)
+	at org.apache.flink.table.gateway.service.operation.OperationExecutor.executeStatement(OperationExecutor.java:199)
+	at org.apache.flink.table.gateway.service.SqlGatewayServiceImpl.lambda$executeStatement$1(SqlGatewayServiceImpl.java:214)
+	at org.apache.flink.table.gateway.service.operation.OperationManager.lambda$submitOperation$1(OperationManager.java:119)
+	at org.apache.flink.table.gateway.service.operation.OperationManager$Operation.lambda$run$0(OperationManager.java:258)
+	... 7 more
+Caused by: org.apache.flink.table.api.ValidationException: One or more required options are missing.
+
+Missing required options are:
+
+properties.bootstrap.servers
+	at org.apache.flink.table.factories.FactoryUtil.validateFactoryOptions(FactoryUtil.java:690)
+	at org.apache.flink.table.factories.FactoryUtil.validateFactoryOptions(FactoryUtil.java:660)
+	at org.apache.flink.table.factories.FactoryUtil$FactoryHelper.validate(FactoryUtil.java:1008)
+	at org.apache.flink.table.factories.FactoryUtil$FactoryHelper.validateExcept(FactoryUtil.java:1034)
+	at org.apache.flink.streaming.connectors.kafka.table.KafkaDynamicTableFactory.createDynamicTableSource(KafkaDynamicTableFactory.java:185)
+	at org.apache.flink.table.factories.FactoryUtil.createDynamicTableSource(FactoryUtil.java:232)
+	... 35 more
+
+End of exception on server side>]
+	at org.apache.flink.runtime.rest.RestClient.parseResponse(RestClient.java:644) ~[flink-dist-1.20.5.jar:1.20.5]
+	at org.apache.flink.runtime.rest.RestClient.lambda$submitRequest$6(RestClient.java:628) ~[flink-dist-1.20.5.jar:1.20.5]
+	at java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1150) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) ~[?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) ~[?:?]
+	at java.base/java.lang.Thread.run(Thread.java:840) ~[?:?]
+2026-11-10 20:01:00,332 INFO  org.apache.flink.table.gateway.rest.SqlGatewayRestEndpoint   [] - Shutting down rest endpoint.
+2026-11-10 20:01:00,336 INFO  org.apache.flink.table.gateway.rest.SqlGatewayRestEndpoint   [] - Shut down complete.
+2026-11-10 20:01:00,336 INFO  org.apache.flink.table.shaded.org.quartz.core.QuartzScheduler [] - Scheduler FlinkQuartzScheduler_$_NON_CLUSTERED shutting down.
+2026-11-10 20:01:00,336 INFO  org.apache.flink.table.shaded.org.quartz.core.QuartzScheduler [] - Scheduler FlinkQuartzScheduler_$_NON_CLUSTERED paused.
+2026-11-10 20:01:00,336 INFO  org.apache.flink.table.shaded.org.quartz.core.QuartzScheduler [] - Scheduler FlinkQuartzScheduler_$_NON_CLUSTERED shutdown complete.
+2026-11-10 20:01:01,334 INFO  org.apache.flink.table.gateway.rest.SqlGatewayRestEndpoint   [] - Shutting down rest endpoint.

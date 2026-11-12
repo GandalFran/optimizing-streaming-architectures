@@ -1,0 +1,149 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+    cleanup.policy: delete
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 2592000000 # 30 days in milliseconds
+    cleanup.policy: delete
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-pipeline
+spec:
+  taskManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  flinkConfiguration:
+    jobmanager.heap.size: 1024m
+    taskmanager.heap.size: 2048m
+    taskmanager.numberOfTaskSlots: 2
+    taskmanager.network.memory.fraction: 0.8
+    taskmanager.memory.process.fraction: 0.8
+    taskmanager.memory.managed.fraction: 0.8
+    taskmanager.memory.network.fraction: 0.1
+    taskmanager.memory.task.fraction: 0.8
+    taskmanager.memory.jvm-metaspace.fraction: 0.1
+    taskmanager.memory.jvm-overhead.fraction: 0.1
+    taskmanager.memory.jvm-heap.fraction: 0.8
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m
+    taskmanager.memory.jvm-heap.min: 1024m
+    taskmanager.memory.jvm-heap.max: 2048m
+    taskmanager.memory.jvm-heap.init: 1024m

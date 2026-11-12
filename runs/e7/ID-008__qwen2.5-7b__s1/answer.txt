@@ -1,0 +1,121 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.bytes: 4194304000 # 4 GB
+    cleanup.policy: delete
+    segment.bytes: 10485760 # 10 MB
+
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.bytes: 4194304000 # 4 GB
+    cleanup.policy: delete
+    segment.bytes: 10485760 # 10 MB
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: ad-impression-enricher
+spec:
+  job:
+    image: flink:1.20-scala_2.12-java11
+    entryPoint:
+      - /opt/flink/bin/flink-run.sh
+    mainClass: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    flinkConfiguration:
+      flink:
+        parallelism.default: 10
+        checkpointing:
+          mode: EXACTLY_ONCE
+          interval: 5000
+          min-pause: 1000
+          max-pause: 10000
+        state:
+          backend: rocksdb
+          backend.rocksdb.path: /tmp/flink-state
+          backend.rocksdb.config:
+            - "create_if_missing=true"
+            - "parquet.max_block_size=1048576"
+            - "parquet.max_row_group_size=1048576"
+        jobmanager:
+          taskmanager:
+            memory: 8192m
+            cpu: 4
+            slots: 1
+            network:
+              io: 1000000
+          slot: 1
+          web:
+            port: 8081
+      kafka:
+        bootstrap.servers: "my-cluster-kafka-bootstrap:9092"
+        topic:
+          ad-impressions:
+            partitions: 10
+            replicas: 3
+          ad-impressions-enriched:
+            partitions: 10
+            replicas: 3
+```
+
+```sql
+CREATE TABLE ad_impressions (
+  campaign_id STRING,
+  event_time TIMESTAMP(3),
+  event_value DECIMAL(18, 2),
+  -- other fields as necessary
+  -- Note: Ensure all fields match the JSON structure
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.topic' = 'ad-impressions',
+  'connector.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'connector.group.id' = 'ad-impression-enricher-group',
+  'format.type' = 'json'
+);
+
+CREATE TABLE ad_impressions_enriched (
+  campaign_id STRING,
+  event_time TIMESTAMP(3),
+  event_value DECIMAL(18, 2),
+  enriched_field1 STRING,
+  enriched_field2 STRING,
+  -- other fields as necessary
+  -- Note: Ensure all fields match the JSON structure
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.topic' = 'ad-impressions-enriched',
+  'connector.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'connector.partitioner' = 'round-robin',
+  'format.type' = 'json'
+);
+```
+
+### Justification of Main Values:
+1. **Kafka Topic Configurations:**
+   - **Partitions and Replicas:** Set to 10 partitions and 3 replicas to ensure high throughput and reliability. Given the input rate and event size, 10 partitions should be sufficient to handle the load.
+   - **Retention and Segment Bytes:** Configured to retain data for 1 day with a segment size of 10 MB to balance storage and performance.
+
+2. **Flink Configuration:**
+   - **Parallelism:** Set to 10 to match the number of partitions in Kafka topics, ensuring load balancing.
+   - **Checkpointing:** Configured for exactly-once processing with a 5-second interval to ensure data consistency.
+   - **Memory and CPU:** Limited to 4 CPUs and 8 GiB to ensure efficient resource usage.
+   - **State Backend:** RocksDB is used for state persistence with specific configurations to optimize performance.
+
+3. **Kafka Connectors:**
+   - **Partitioning:** Using 'round-robin' partitioner ensures balanced load across partitions.
+   - **Format:** JSON format is used to match the input and output formats of the events.

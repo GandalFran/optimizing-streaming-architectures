@@ -1,0 +1,203 @@
+### 1. Strimzi KafkaTopic resources
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments
+spec:
+  kafka:
+    bootstrap:
+      service:
+        name: my-cluster-kafka-bootstrap
+        port: 9092
+    topic:
+      partitions: 16
+      replicationFactor: 3
+      numPartitions: 16
+      config:
+        retention.ms: 604800000
+        segment.ms: 604800000
+        cleanup.policy: compact
+        flush.ms: 10000
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+spec:
+  kafka:
+    bootstrap:
+      service:
+        name: my-cluster-kafka-bootstrap
+        port: 9092
+    topic:
+      partitions: 16
+      replicationFactor: 3
+      numPartitions: 16
+      config:
+        retention.ms: 604800000
+        segment.ms: 604800000
+        cleanup.policy: compact
+        flush.ms: 10000
+```
+
+### 2. FlinkDeployment resource
+
+```yaml
+apiVersion: v1
+kind: FlinkDeployment
+metadata:
+  name: payments-processing
+spec:
+  type: batch
+  parallelism:
+    taskmanager:
+      cpu: 4
+      memory: 8Gi
+      instances: 3
+  resources:
+    requests:
+      cpu: 4
+      memory: 8Gi
+  flinkConfiguration:
+    config:
+    - name: pipeline.execution.checkpointing.checkpointing-mode
+      value: "EXACTLATE"
+    - name: pipeline.execution.checkpointing.interval
+      value: "100ms"
+    - name: pipeline.execution.checkpointing.max-concurrent-checkpoints
+      value: "1"
+    - name: pipeline.execution.checkpointing.min-pause-between-checkpoints
+      value: "100ms"
+    - name: pipeline.execution.checkpointing.tolerable-failed-checkpoints
+      value: "5"
+    - name: pipeline.checkpoint.storage.s3.bucket
+      value: "flink-state"
+    - name: pipeline.checkpoint.storage.s3.endpoint
+      value: "s3.amazonaws.com"
+    - name: pipeline.checkpoint.storage.s3.bucket-access-key
+      value: "YOUR_ACCESS_KEY"
+    - name: pipeline.checkpoint.storage.s3.bucket-secret-key
+      value: "YOUR_SECRET_KEY"
+    - name: pipeline.checkpoint.storage.s3.bucket-region
+      value: "YOUR_REGION"
+    - name: pipeline.checkpoint.storage.s3.bucket-bucket-name
+      value: "flink-state"
+    - name: pipeline.checkpoint.storage.s3.bucket-path
+      value: "checkpoints"
+    - name: pipeline.checkpoint.storage.s3.max-retries
+      value: "3"
+    - name: pipeline.checkpoint.storage.s3.backoff.initial-delay
+      value: "10s"
+    - name: pipeline.checkpoint.storage.s3.backoff.max-delay
+      value: "30s"
+    - name: pipeline.checkpoint.storage.s3.backoff.multiplier
+      value: "2"
+    - name: pipeline.checkpoint.storage.s3.backoff.randomization.factor
+      value: "0.2"
+    - name: pipeline.checkpoint.storage.s3.max-size-per-checkpoint
+      value: "1024m"
+    - name: pipeline.checkpoint.storage.s3.max-objects
+      value: "100"
+    - name: pipeline.checkpoint.storage.s3.max-size
+      value: "1024m"
+    - name: pipeline.checkpoint.storage.s3.path-separator
+      value: "/"
+    - name: pipeline.checkpoint.storage.s3.object-key-separator
+      value: "-"
+    - name: pipeline.checkpoint.storage.s3.object-key-prefix
+      value: "flink-checkpoints-"
+    - name: pipeline.checkpoint.storage.s3.object-key-suffix
+      value: ".txt"
+    - name: pipeline.checkpoint.storage.s3.object-key-format
+      value: "{timestamp}-{id}-{checkpoint}"
+    - name: pipeline.checkpoint.storage.s3.object-key-timestamp-format
+      value: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    - name: pipeline.checkpoint.storage.s3.object-key-id-format
+      value: "{id}"
+    - name: pipeline.checkpoint.storage.s3.object-key-checkpoint-format
+      value: "{checkpoint}"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-format
+      value: "{timestamp}"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-timestamp-format
+      value: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-id-format
+      value: "{id}"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-checkpoint-format
+      value: "{checkpoint}"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout
+      value: "5m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count
+      value: "10"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold
+      value: "10"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count
+      value: "10"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold
+      value: "10"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold
+      value: "10"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold
+      value: "10"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-threshold
+      value: "10"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-threshold-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-threshold-threshold
+      value: "10"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-threshold-threshold-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-threshold-threshold-threshold
+      value: "10"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-threshold-threshold-threshold-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-threshold-threshold-threshold-threshold
+      value: "10"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-threshold-threshold-threshold-threshold-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-threshold-threshold-threshold-threshold-threshold
+      value: "10"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-threshold-threshold-threshold-threshold-threshold-interval
+      value: "10m"
+    - name: pipeline.checkpoint.storage.s3.object-key-timeout-count-threshold-count-threshold-threshold-threshold-threshold-threshold-threshold-threshold-threshold-threshold
+      value: "10"
+  jobManager:
+    resources:
+      requests:
+        cpu: 4
+        memory: 8Gi
+```
+
+### 3. Flink SQL `CREATE TABLE` statements
+
+```sql
+CREATE TABLE payments (
+  'connector' = 'kafka',
+  'topic' = 'payments',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'value.format' = 'json',
+  'value.json.fail-on-missing-field' = 'true',
+  'value.json.ignore-parse-errors' = 'true',
+  'scan.startup.mode' = 'earliest-offset'
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'payments',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'value.format' = 'json',
+  'value.json.fail-on-missing-field' = 'true',
+  'value

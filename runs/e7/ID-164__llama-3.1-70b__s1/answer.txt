@@ -1,0 +1,95 @@
+**Kafka Topics**
+```yml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    'retention.ms': '2592000000' # 30 days
+    'segment.ms': '604800000' # 7 days
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    'retention.ms': '2592000000' # 30 days
+    'segment.ms': '604800000' # 7 days
+```
+
+**Flink Deployment**
+```yml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-processor
+spec:
+  image:
+    name: flink:1.20
+  flinkVersion: v1_20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.memory.process.size: 7680m
+    taskmanager.cpu.cores: 4
+    state.savepoints.dir: s3://flink-state/checkpoints
+    execution.checkpointing.interval: 10s
+    execution.checkpointing.unaligned: true
+    execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+  job:
+    jarURI: local:///opt/flink/usrlib/sql-runner.jar
+  resources:
+    taskmanager:
+      cpu: 4
+      memory: 8Gi
+  replicas: 3
+  serviceAccountName: flink
+```
+
+**Flink SQL Tables**
+```sql
+CREATE TABLE clicks (
+  session_id VARCHAR,
+  event_time TIMESTAMP,
+  -- other fields...
+  WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'clicks',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'update-mode' = 'append'
+);
+
+CREATE TABLE clicks_enriched (
+  session_id VARCHAR,
+  event_time TIMESTAMP,
+  -- other fields...
+  -- derived fields...
+  WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'clicks-enriched',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'update-mode' = 'append'
+);
+```
+
+Justification:
+
+* The number of partitions for both Kafka topics is set to 10, which should be able to handle the input rate of 50,000 events/s with an average event size of 512 bytes, resulting in a produce traffic of approximately 25 MB/s. This is below the assumed maximum of 5 MB/s per partition, allowing for some headroom.
+* The replication factor for both Kafka topics is set to 3, ensuring that data is not lost in case of a single broker failure.
+* The retention period for both Kafka topics is set to 30 days, as required.
+* The Flink configuration uses 3 TaskManager pods with 4 CPU cores and 8 GiB of memory each, which should be able to handle the input rate of 50,000 events/s. The checkpoint interval is set to 10 seconds to achieve the required end-to-end latency of below 1 second at p99.
+* The `unaligned` checkpointing mode is enabled to allow for more flexible checkpointing intervals.
+* The `externalized-checkpoint-retention` mode is set to `RETAIN_ON_CANCELLATION` to ensure that checkpoints are retained even after the job is cancelled.
+* The Flink SQL tables use the `kafka` connector with the `universal` version and the `json` format. The watermark is set to 5 seconds to allow for some event time skew.

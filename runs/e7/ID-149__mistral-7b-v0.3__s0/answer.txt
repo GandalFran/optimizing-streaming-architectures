@@ -1,0 +1,106 @@
+ 1. Kafka Topic Creation (`bash`):
+
+```bash
+# Create ad-impressions topic with 10 partitions, replication factor 3, and 5 MB/s per partition
+kafka-topics.sh --create --topic ad-impressions --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server kafka:9092
+
+# Create ad-impressions-enriched topic with 10 partitions, replication factor 3, and 5 MB/s per partition
+kafka-topics.sh --create --topic ad-impressions-enriched --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --bootstrap-server kafka:9092
+```
+
+The topic configurations are set to meet the required retention (30 days) and throughput (5 MB/s per partition).
+
+2. Flink Configuration (`config.yaml`):
+
+```yaml
+jobmanager.rpc.address: localhost
+taskmanager.numberOfTaskSlots: 4
+parallelism.default: 4
+jobmanager.rpc.timeout: 10000
+jobmanager.rotated-log-dirs: s3://flink-state/log
+checkpointing.checkpoint-interval: 5000
+checkpointing.min-pause-between-checkpoints: 1000
+checkpointing.max-concurrency: 3
+state.backend: filesystem
+state.checkpoints.dir: s3://flink-state/checkpoints
+rest-endpoint: localhost:8081
+rest-web-ui-port: 8088
+```
+
+The configuration is set to meet the required parallelism, checkpointing, and state storage requirements. The job manager and task manager settings are adjusted to match the environment.
+
+3. Flink SQL `CREATE TABLE` statements:
+
+```sql
+-- Create Kafka source table for ad-impressions
+CREATE TABLE ad_impressions (
+    campaign_id BIGINT,
+    event_data STRING
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'ad-impressions',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'flink-ad-impressions-source',
+    'format' = 'json',
+    'json.ignore-parse-errors' = 'true'
+);
+
+-- Create a derived table for filtering and enriching ad impressions
+CREATE TABLE filtered_enriched_ad_impressions AS
+SELECT
+    campaign_id,
+    JSON_EXTRACT(event_data, '$.impression_id') AS impression_id,
+    JSON_EXTRACT(event_data, '$.timestamp') AS timestamp,
+    JSON_EXTRACT(event_data, '$.ad_id') AS ad_id,
+    JSON_EXTRACT(event_data, '$.user_id') AS user_id,
+    JSON_EXTRACT(event_data, '$.ip_address') AS ip_address,
+    JSON_EXTRACT(event_data, '$.device_type') AS device_type,
+    JSON_EXTRACT(event_data, '$.location') AS location,
+    JSON_EXTRACT(event_data, '$.impression_type') AS impression_type,
+    JSON_EXTRACT(event_data, '$.ad_creative') AS ad_creative,
+    JSON_EXTRACT(event_data, '$.impression_url') AS impression_url,
+    JSON_EXTRACT(event_data, '$.impression_category') AS impression_category,
+    JSON_EXTRACT(event_data, '$.impression_duration') AS impression_duration,
+    JSON_EXTRACT(event_data, '$.click_url') AS click_url,
+    JSON_EXTRACT(event_data, '$.click_timestamp') AS click_timestamp,
+    JSON_EXTRACT(event_data, '$.click_id') AS click_id,
+    JSON_EXTRACT(event_data, '$.click_type') AS click_type,
+    JSON_EXTRACT(event_data, '$.conversion_url') AS conversion_url,
+    JSON_EXTRACT(event_data, '$.conversion_timestamp') AS conversion_timestamp,
+    JSON_EXTRACT(event_data, '$.conversion_id') AS conversion_id,
+    JSON_EXTRACT(event_data, '$.conversion_type') AS conversion_type
+FROM ad_impressions
+WHERE is_valid_event = true;
+
+-- Create Kafka sink table for ad-impressions-enriched
+CREATE TABLE ad_impressions_enriched (
+    campaign_id BIGINT,
+    impression_id STRING,
+    timestamp BIGINT,
+    ad_id STRING,
+    user_id STRING,
+    ip_address STRING,
+    device_type STRING,
+    location STRING,
+    impression_type STRING,
+    ad_creative STRING,
+    impression_url STRING,
+    impression_category STRING,
+    impression_duration BIGINT,
+    click_url STRING,
+    click_timestamp BIGINT,
+    click_id STRING,
+    click_type STRING,
+    conversion_url STRING,
+    conversion_timestamp BIGINT,
+    conversion_id STRING,
+    conversion_type STRING
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'ad-impressions-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json'
+);
+```
+
+The Flink SQL statements create the source table for reading ad impressions from Kafka, a derived table for filtering and enriching the events, and a sink table for writing the enriched events to Kafka. The JSON functions are used to extract the required fields from the JSON event data. The `is_valid_event` column is assumed to be present in the input events and is used to filter out malformed events.

@@ -1,0 +1,208 @@
+### Kafka Topic Configuration
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 86400000
+    segment.ms: 604800000
+    cleanup.policy: compact
+    flush.ms: 10000
+    min.insync.replicas: 2
+    acks: all
+    max.in.flight.requests.per.connection: 5
+    max.request.size: 1048576
+    message.max.bytes: 1048576
+    replication.factor: 3
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 86400000
+    segment.ms: 604800000
+    cleanup.policy: compact
+    flush.ms: 10000
+    min.insync.replicas: 2
+    acks: all
+    max.in.flight.requests.per.connection: 5
+    max.request.size: 1048576
+    message.max.bytes: 1048576
+    replication.factor: 3
+```
+
+### Flink Configuration
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-sql-job
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-sql-job
+  template:
+    metadata:
+      labels:
+        app: flink-sql-job
+    spec:
+      containers:
+      - name: flink
+        image: flink:1.20.0
+        ports:
+        - containerPort: 6123
+        volumeMounts:
+        - name: flink-conf
+          mountPath: /etc/flink/conf
+        - name: usrlib
+          mountPath: /opt/flink/usrlib
+        - name: s3-checkpoints
+          mountPath: /opt/flink/conf/checkpoints
+      volumes:
+      - name: flink-conf
+        configMap:
+          name: flink-conf
+      - name: usrlib
+        emptyDir: {}
+      - name: s3-checkpoints
+        persistentVolumeClaim:
+          claimName: flink-checkpoints
+      - name: s3-checkpoints
+        persistentVolumeClaim:
+          claimName: flink-checkpoints
+      tolerations:
+      - key: "node.kubernetes.io/not-terminated"
+        operator: "Equal"
+        value: "true"
+      - key: "node.kubernetes.io/exclude-from-termination"
+        operator: "Equal"
+        value: "true"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - key: "node.kubernetes.io/instance-type"
+            operator: "In"
+            values:
+            - "n1-standard-4"
+            - "n1-standard-8"
+            - "n1-standard-16"
+spec:
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "4"
+    taskmanager.memory.process.size: "8g"
+    parallelism.default: "4"
+    parallelism.preferred: "4"
+    parallelism.min: "4"
+    parallelism.max: "12"
+    state.backend: "filesystem"
+    state.checkpoints.dir: "s3://flink-state/checkpoints"
+    state.checkpoints.interval: "10s"
+    state.checkpoints.num-retained: "24"
+    state.checkpoints.timeout: "1m"
+    state.checkpoints.enable: "true"
+    restart-strategy: "failover"
+    restart-strategy.failure-count: "3"
+    restart-strategy.delay: "10s"
+    restart-strategy.interval: "10s"
+```
+
+### Flink SQL Configuration
+
+```sql
+CREATE TABLE ad_impressions (
+  `campaign_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `event_data` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'ad-impressions',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'connector.properties.group.id' = 'ad-impressions-group',
+  'connector.properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'connector.properties.value.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'connector.startup.mode' = 'earliest-offset',
+  'scan.startup.mode' = 'latest-offset',
+  'connector.properties.max.poll.records' = '1000',
+  'connector.properties.fetch.min.bytes' = '1000',
+  'connector.properties.fetch.max.wait.ms' = '1000',
+  'connector.properties.heartbeat.interval.ms' = '3000',
+  'connector.properties.session.timeout.ms' = '30000',
+  'connector.properties.request.timeout.ms' = '30000'
+);
+
+CREATE TABLE ad_impressions_enriched (
+  `campaign_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `event_data` STRING,
+  `derived_field1` STRING,
+  `derived_field2` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'ad-impressions-enriched',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'connector.properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'connector.properties.value.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'connector.startup.mode' = 'earliest-offset',
+  'scan.startup.mode' = 'latest-offset',
+  'connector.properties.max.poll.records' = '1000',
+  'connector.properties.fetch.min.bytes' = '1000',
+  'connector.properties.fetch.max.wait.ms' = '1000',
+  'connector.properties.heartbeat.interval.ms' = '3000',
+  'connector.properties.session.timeout.ms' = '30000',
+  'connector.properties.request.timeout.ms' = '30000'
+);
+
+INSERT INTO ad_impressions_enriched
+SELECT
+  campaign_id,
+  event_time,
+  event_data,
+  derived_field1,
+  derived_field2
+FROM ad_impressions
+WHERE event_data IS NOT NULL AND campaign_id IS NOT NULL;
+```
+
+### Justification
+
+- **Kafka Topic Configuration:**
+  - We create two Kafka topics, `ad-impressions` and `ad-impressions-enriched`, each with 16 partitions and 3 replicas. This configuration ensures that the topics can handle the input rate of 5,000 events/s and provide high availability.
+  - We set the retention policy to compact, which removes the oldest log segment when the available space is low. We also set the segment.ms to 604800000 (7 days) to ensure that data is retained for at least 1 day.
+  - We set the flush.ms to 10000 to ensure that data is flushed to disk regularly.
+  - We set the min.insync.replicas to 2 and acks to all to ensure that data is written to at least two replicas before considering it written.
+  - We set the max.in.flight.requests.per.connection to 5 to prevent overwhelming the brokers with too many requests.
+  - We set the max.request.size to 1048576 to prevent large requests from overwhelming the brokers.
+  - We set the message.max.bytes to 1048576 to prevent large messages from overwhelming the brokers.
+  - We set the replication.factor to 3 to ensure that data is replicated to at least three brokers.
+
+- **Flink Configuration:**
+  - We create a Flink deployment with one TaskManager pod, which can use at most 4 CPU and 8 GiB of memory.
+  - We set the taskmanager.numberOfTaskSlots to 4, which means each TaskManager can run up to 4 tasks concurrently.
+  - We set the taskmanager.memory.process.size to 8g, which means each TaskManager can use up to 8 GiB of memory.
+  - We set the parallelism.default to 4, which means each task will be executed in parallel with 4 tasks.
+  - We set the state.backend to filesystem, which means Flink will store the state in the file system.
+  - We set the state.checkpoints.dir to s3://flink-state/checkpoints, which means Flink will store the checkpoints in S3.
+  - We set the state.checkpoints.interval to 10s, which means Flink will checkpoint every 10 seconds.
+  - We set the state.checkpoints.num-retained to 24, which means Flink will retain 24 checkpoints.
+  - We set the state.checkpoints.timeout to 1m, which means Flink will timeout after 1 minute if a checkpoint is not completed.
+  - We set the restart-strategy to failover, which means Flink will restart the task if it fails.
+  - We set the restart-strategy.failure-count to 3, which means Flink will restart the task after 3 failures.
+  - We set the restart-strategy.delay to 10s, which means Flink will wait 10 seconds before restarting the task.
+  - We set the restart-strategy.interval to 10s, which means Flink will restart the task every 10 seconds.
+
+- **Flink SQL Configuration:**
+  - We create two tables, `ad_impressions` and `ad_impressions_enriched`, which are connected to the Kafka topics `ad-impressions` and `ad-impressions-enriched` respectively.
+  - We set the connector.type to

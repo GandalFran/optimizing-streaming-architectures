@@ -1,0 +1,1512 @@
+2026-11-11 10:53:29,635 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - --------------------------------------------------------------------------------
+2026-11-11 10:53:29,636 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Preconfiguration: 
+2026-11-11 10:53:29,636 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - 
+
+
+RESOURCE_PARAMS extraction logs:
+jvm_params: -Xmx3597035049 -Xms3597035049 -XX:MaxDirectMemorySize=880468305 -XX:MaxMetaspaceSize=268435456
+dynamic_configs: -D taskmanager.memory.network.min=746250577b -D taskmanager.cpu.cores=4.0 -D taskmanager.memory.task.off-heap.size=0b -D taskmanager.memory.jvm-metaspace.size=268435456b -D external-resources=none -D taskmanager.memory.jvm-overhead.min=858993472b -D taskmanager.memory.framework.off-heap.size=134217728b -D taskmanager.memory.network.max=746250577b -D taskmanager.memory.framework.heap.size=134217728b -D taskmanager.memory.managed.size=2985002310b -D taskmanager.memory.task.heap.size=3462817321b -D taskmanager.numberOfTaskSlots=4 -D taskmanager.memory.jvm-overhead.max=858993472b
+logs: INFO  [] - Using standard YAML parser to load flink configuration file from /tmp/chamoso-e7/8525/e7-2688338/conf/flink-e7/config.yaml.
+INFO  [] - Loading configuration property: execution.checkpointing.mode, AT_LEAST_ONCE
+INFO  [] - Loading configuration property: taskmanager.memory.process.size, 8g
+INFO  [] - Loading configuration property: taskmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: jobmanager.execution.failover-strategy, region
+INFO  [] - Loading configuration property: jobmanager.rpc.address, 127.0.0.1
+INFO  [] - Loading configuration property: jobmanager.memory.process.size, 1600m
+INFO  [] - Loading configuration property: jobmanager.rpc.port, 12030
+INFO  [] - Loading configuration property: rest.bind-address, 127.0.0.1
+INFO  [] - Loading configuration property: execution.checkpointing.interval, 10 s
+INFO  [] - Loading configuration property: rest.port, 12031
+INFO  [] - Loading configuration property: jobmanager.bind-host, 127.0.0.1
+INFO  [] - Loading configuration property: io.tmp.dirs, /tmp/chamoso-e7/8525/e7-2688338/flink-io
+INFO  [] - Loading configuration property: taskmanager.host, 127.0.0.1
+INFO  [] - Loading configuration property: parallelism.default, 3
+INFO  [] - Loading configuration property: taskmanager.numberOfTaskSlots, 4
+INFO  [] - Loading configuration property: rest.address, 127.0.0.1
+INFO  [] - Loading configuration property: execution.checkpointing.dir, file:///tmp/chamoso-e7/8525/e7-2688338/objstore/flink-state/checkpoints
+INFO  [] - Loading configuration property: env.java.opts.all, --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+INFO  [] - Loading dynamic configuration property: taskmanager.resource-id, tm1
+INFO  [] - Final TaskExecutor Memory configuration:
+INFO  [] -   Total Process Memory:          8.000gb (8589934592 bytes)
+INFO  [] -     Total Flink Memory:          6.950gb (7462505664 bytes)
+INFO  [] -       Total JVM Heap Memory:     3.350gb (3597035049 bytes)
+INFO  [] -         Framework:               128.000mb (134217728 bytes)
+INFO  [] -         Task:                    3.225gb (3462817321 bytes)
+INFO  [] -       Total Off-heap Memory:     3.600gb (3865470615 bytes)
+INFO  [] -         Managed:                 2.780gb (2985002310 bytes)
+INFO  [] -         Total JVM Direct Memory: 839.680mb (880468305 bytes)
+INFO  [] -           Framework:             128.000mb (134217728 bytes)
+INFO  [] -           Task:                  0 bytes
+INFO  [] -           Network:               711.680mb (746250577 bytes)
+INFO  [] -     JVM Metaspace:               256.000mb (268435456 bytes)
+INFO  [] -     JVM Overhead:                819.200mb (858993472 bytes)
+
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - --------------------------------------------------------------------------------
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Starting TaskManager (Version: 1.20.5, Scala: 2.12, Rev:0980485, Date:2026-06-08T09:21:06+02:00)
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  OS current user: chamoso
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Current Hadoop/Kerberos user: <no hadoop dependency found>
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  JVM: OpenJDK 64-Bit Server VM - Eclipse Adoptium - 17/17.0.20.1+1
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Arch: amd64
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Maximum heap size: 3432 MiBytes
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  JAVA_HOME: /home/chamoso/tuning-revision/opt/jdk17
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  No Hadoop Dependency available
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  JVM Options:
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Xmx3597035049
+2026-11-11 10:53:29,637 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Xms3597035049
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -XX:MaxDirectMemorySize=880468305
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -XX:MaxMetaspaceSize=268435456
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -XX:+IgnoreUnrecognizedVMOptions
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=java.base/sun.net.util=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.lang=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.net=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.io=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.nio=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+2026-11-11 10:53:29,638 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+2026-11-11 10:53:29,639 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.text=ALL-UNNAMED
+2026-11-11 10:53:29,639 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.time=ALL-UNNAMED
+2026-11-11 10:53:29,639 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util=ALL-UNNAMED
+2026-11-11 10:53:29,639 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+2026-11-11 10:53:29,639 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED
+2026-11-11 10:53:29,639 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+2026-11-11 10:53:29,639 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlog.file=/tmp/chamoso-e7/8525/e7-2688338/logs/flink-e7/flink-chamoso-taskexecutor-2-cn001.log
+2026-11-11 10:53:29,639 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlog4j.configuration=file:/tmp/chamoso-e7/8525/e7-2688338/conf/flink-e7/log4j-console.properties
+2026-11-11 10:53:29,639 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlog4j.configurationFile=file:/tmp/chamoso-e7/8525/e7-2688338/conf/flink-e7/log4j-console.properties
+2026-11-11 10:53:29,639 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dlogback.configurationFile=file:/tmp/chamoso-e7/8525/e7-2688338/conf/flink-e7/logback-console.xml
+2026-11-11 10:53:29,639 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Program Arguments:
+2026-11-11 10:53:29,640 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     --configDir
+2026-11-11 10:53:29,640 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     /tmp/chamoso-e7/8525/e7-2688338/conf/flink-e7
+2026-11-11 10:53:29,640 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,640 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.network.min=746250577b
+2026-11-11 10:53:29,640 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,640 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.cpu.cores=4.0
+2026-11-11 10:53:29,640 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,640 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.task.off-heap.size=0b
+2026-11-11 10:53:29,640 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.jvm-metaspace.size=268435456b
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     external-resources=none
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.jvm-overhead.min=858993472b
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.framework.off-heap.size=134217728b
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.network.max=746250577b
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.framework.heap.size=134217728b
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.managed.size=2985002310b
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.task.heap.size=3462817321b
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.numberOfTaskSlots=4
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -D
+2026-11-11 10:53:29,641 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     taskmanager.memory.jvm-overhead.max=858993472b
+2026-11-11 10:53:29,642 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -     -Dtaskmanager.resource-id=tm1
+2026-11-11 10:53:29,642 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] -  Classpath: /lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-cep-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-connector-files-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-csv-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-json-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-scala_2.12-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-sql-connector-kafka.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-api-java-uber-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-planner-loader-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-table-runtime-1.20.5.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-1.2-api-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-api-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-core-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/log4j-slf4j-impl-2.24.3.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/lz4-java.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/snappy-java.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/zstd-jni.jar:/lustre/home/chamoso/tuning-revision/opt/flink/lib/flink-dist-1.20.5.jar::::
+2026-11-11 10:53:29,642 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - --------------------------------------------------------------------------------
+2026-11-11 10:53:29,642 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Registered UNIX signal handlers for [TERM, HUP, INT]
+2026-11-11 10:53:29,648 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Maximum number of open file descriptors is 131072.
+2026-11-11 10:53:29,652 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Using standard YAML parser to load flink configuration file from /tmp/chamoso-e7/8525/e7-2688338/conf/flink-e7/config.yaml.
+2026-11-11 10:53:29,670 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.mode, AT_LEAST_ONCE
+2026-11-11 10:53:29,670 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.memory.process.size, 8g
+2026-11-11 10:53:29,670 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.bind-host, 127.0.0.1
+2026-11-11 10:53:29,670 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.execution.failover-strategy, region
+2026-11-11 10:53:29,670 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.rpc.address, 127.0.0.1
+2026-11-11 10:53:29,670 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.memory.process.size, 1600m
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.rpc.port, 12030
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.bind-address, 127.0.0.1
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.interval, 10 s
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.port, 12031
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: jobmanager.bind-host, 127.0.0.1
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: io.tmp.dirs, /tmp/chamoso-e7/8525/e7-2688338/flink-io
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.host, 127.0.0.1
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: parallelism.default, 3
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: taskmanager.numberOfTaskSlots, 4
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: rest.address, 127.0.0.1
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: execution.checkpointing.dir, file:///tmp/chamoso-e7/8525/e7-2688338/objstore/flink-state/checkpoints
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading configuration property: env.java.opts.all, --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.resource-id, tm1
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.network.min, 746250577b
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.jvm-metaspace.size, 268435456b
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.task.off-heap.size, 0b
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.cpu.cores, 4.0
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: external-resources, none
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.jvm-overhead.min, 858993472b
+2026-11-11 10:53:29,671 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.framework.off-heap.size, 134217728b
+2026-11-11 10:53:29,672 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.network.max, 746250577b
+2026-11-11 10:53:29,672 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.framework.heap.size, 134217728b
+2026-11-11 10:53:29,672 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.managed.size, 2985002310b
+2026-11-11 10:53:29,672 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.task.heap.size, 3462817321b
+2026-11-11 10:53:29,672 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.numberOfTaskSlots, 4
+2026-11-11 10:53:29,672 INFO  org.apache.flink.configuration.GlobalConfiguration           [] - Loading dynamic configuration property: taskmanager.memory.jvm-overhead.max, 858993472b
+2026-11-11 10:53:29,688 INFO  org.apache.flink.core.fs.FileSystem                          [] - Hadoop is not in the classpath/dependencies. The extended set of supported File Systems via Hadoop is not available.
+2026-11-11 10:53:29,696 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-datadog
+2026-11-11 10:53:29,698 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-graphite
+2026-11-11 10:53:29,698 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-jmx
+2026-11-11 10:53:29,698 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-slf4j
+2026-11-11 10:53:29,698 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-statsd
+2026-11-11 10:53:29,698 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-prometheus
+2026-11-11 10:53:29,699 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: external-resource-gpu
+2026-11-11 10:53:29,699 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID not found, creating it: metrics-influx
+2026-11-11 10:53:29,706 INFO  org.apache.flink.runtime.state.changelog.StateChangelogStorageLoader [] - StateChangelogStorageLoader initialized with shortcut names {memory,filesystem}.
+2026-11-11 10:53:29,706 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-datadog
+2026-11-11 10:53:29,706 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-graphite
+2026-11-11 10:53:29,706 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-jmx
+2026-11-11 10:53:29,706 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-slf4j
+2026-11-11 10:53:29,706 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-statsd
+2026-11-11 10:53:29,706 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-prometheus
+2026-11-11 10:53:29,706 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: external-resource-gpu
+2026-11-11 10:53:29,706 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-influx
+2026-11-11 10:53:29,707 INFO  org.apache.flink.runtime.state.changelog.StateChangelogStorageLoader [] - StateChangelogStorageLoader initialized with shortcut names {memory,filesystem}.
+2026-11-11 10:53:29,712 INFO  org.apache.flink.runtime.security.modules.HadoopModuleFactory [] - Cannot create Hadoop Security Module because Hadoop cannot be found in the Classpath.
+2026-11-11 10:53:29,720 INFO  org.apache.flink.runtime.security.modules.JaasModule         [] - Jaas file will be created as /tmp/chamoso-e7/8525/e7-2688338/flink-io/jaas-4661952855264706483.conf.
+2026-11-11 10:53:29,722 INFO  org.apache.flink.runtime.security.contexts.HadoopSecurityContextFactory [] - Cannot install HadoopSecurityContext because Hadoop cannot be found in the Classpath.
+2026-11-11 10:53:29,852 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Using configured hostname/address for TaskManager: 127.0.0.1.
+2026-11-11 10:53:29,870 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Trying to start actor system, external address 127.0.0.1:0, bind address 127.0.0.1:0.
+2026-11-11 10:53:30,130 INFO  org.apache.pekko.event.slf4j.Slf4jLogger                     [] - Slf4jLogger started
+2026-11-11 10:53:30,143 INFO  org.apache.pekko.remote.RemoteActorRefProvider               [] - Pekko Cluster not in use - enabling unsafe features anyway because `pekko.remote.use-unsafe-remote-features-outside-cluster` has been enabled.
+2026-11-11 10:53:30,144 INFO  org.apache.pekko.remote.Remoting                             [] - Starting remoting
+2026-11-11 10:53:30,250 INFO  org.apache.pekko.remote.Remoting                             [] - Remoting started; listening on addresses :[pekko.tcp://flink@127.0.0.1:41255]
+2026-11-11 10:53:30,301 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Actor system started at pekko.tcp://flink@127.0.0.1:41255
+2026-11-11 10:53:30,310 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Using working directory: WorkingDirectory(/tmp/chamoso-e7/8525/e7-2688338/flink-io/tm_tm1)
+2026-11-11 10:53:30,317 INFO  org.apache.flink.runtime.metrics.MetricRegistryImpl          [] - No metrics reporter configured, no metrics will be exposed/reported.
+2026-11-11 10:53:30,317 INFO  org.apache.flink.runtime.metrics.MetricRegistryImpl          [] - No trace reporter configured, no metrics will be exposed/reported.
+2026-11-11 10:53:30,319 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Trying to start actor system, external address 127.0.0.1:0, bind address 127.0.0.1:0.
+2026-11-11 10:53:30,331 INFO  org.apache.pekko.event.slf4j.Slf4jLogger                     [] - Slf4jLogger started
+2026-11-11 10:53:30,333 INFO  org.apache.pekko.remote.RemoteActorRefProvider               [] - Pekko Cluster not in use - enabling unsafe features anyway because `pekko.remote.use-unsafe-remote-features-outside-cluster` has been enabled.
+2026-11-11 10:53:30,333 INFO  org.apache.pekko.remote.Remoting                             [] - Starting remoting
+2026-11-11 10:53:30,337 INFO  org.apache.pekko.remote.Remoting                             [] - Remoting started; listening on addresses :[pekko.tcp://flink-metrics@127.0.0.1:46603]
+2026-11-11 10:53:30,342 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcServiceUtils      [] - Actor system started at pekko.tcp://flink-metrics@127.0.0.1:46603
+2026-11-11 10:53:30,350 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcService           [] - Starting RPC endpoint for org.apache.flink.runtime.metrics.dump.MetricQueryService at pekko://flink-metrics/user/rpc/MetricQueryService_tm1 .
+2026-11-11 10:53:30,357 INFO  org.apache.flink.runtime.blob.PermanentBlobCache             [] - Created BLOB cache storage directory /tmp/chamoso-e7/8525/e7-2688338/flink-io/tm_tm1/blobStorage
+2026-11-11 10:53:30,359 INFO  org.apache.flink.runtime.blob.TransientBlobCache             [] - Created BLOB cache storage directory /tmp/chamoso-e7/8525/e7-2688338/flink-io/tm_tm1/blobStorage
+2026-11-11 10:53:30,361 INFO  org.apache.flink.runtime.externalresource.ExternalResourceUtils [] - Enabled external resources: []
+2026-11-11 10:53:30,361 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Loading delegation token receivers
+2026-11-11 10:53:30,363 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receiver hadoopfs loaded and initialized
+2026-11-11 10:53:30,364 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receiver hbase loaded and initialized
+2026-11-11 10:53:30,364 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-datadog
+2026-11-11 10:53:30,364 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-graphite
+2026-11-11 10:53:30,364 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-jmx
+2026-11-11 10:53:30,364 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-slf4j
+2026-11-11 10:53:30,364 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-statsd
+2026-11-11 10:53:30,364 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-prometheus
+2026-11-11 10:53:30,364 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: external-resource-gpu
+2026-11-11 10:53:30,364 INFO  org.apache.flink.core.plugin.DefaultPluginManager            [] - Plugin loader with ID found, reusing it: metrics-influx
+2026-11-11 10:53:30,364 INFO  org.apache.flink.runtime.security.token.DelegationTokenReceiverRepository [] - Delegation token receivers loaded successfully
+2026-11-11 10:53:30,364 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - Starting TaskManager with ResourceID: tm1
+2026-11-11 10:53:30,402 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerServices    [] - Temporary file directory '/tmp/chamoso-e7/8525/e7-2688338/flink-io': total 95379 GB, usable 94711 GB (99.30% usable)
+2026-11-11 10:53:30,404 INFO  org.apache.flink.runtime.io.disk.iomanager.IOManager         [] - Created a new FileChannelManager for spilling of task related data to disk (joins, sorting, ...). Used directories:
+	/tmp/chamoso-e7/8525/e7-2688338/flink-io/flink-io-4db11f71-e457-43c6-ab46-30e843a9e08a
+2026-11-11 10:53:30,408 INFO  org.apache.flink.runtime.io.network.netty.NettyConfig        [] - NettyConfig [server address: /127.0.0.1, server port range: 0, ssl enabled: false, memory segment size (bytes): 32768, transport type: AUTO, number of server threads: 4 (manual), number of client threads: 4 (manual), server connect backlog: 0 (use Netty's default), client connect timeout (sec): 120, send/receive buffer size (bytes): 0 (use Netty's default)]
+2026-11-11 10:53:30,412 INFO  org.apache.flink.runtime.io.network.NettyShuffleServiceFactory [] - Created a new FileChannelManager for storing result partitions of BLOCKING shuffles. Used directories:
+	/tmp/chamoso-e7/8525/e7-2688338/flink-io/flink-netty-shuffle-f3171e01-78ca-485e-9a4c-04d7e46a6069
+2026-11-11 10:53:30,684 INFO  org.apache.flink.runtime.io.network.buffer.NetworkBufferPool [] - Allocated 711 MB for network buffer pool (number of memory segments: 22773, bytes per segment: 32768).
+2026-11-11 10:53:30,691 INFO  org.apache.flink.runtime.io.network.NettyShuffleEnvironment  [] - Starting the network environment and its components.
+2026-11-11 10:53:30,702 INFO  org.apache.flink.runtime.io.network.netty.NettyClient        [] - Transport type 'auto': using EPOLL.
+2026-11-11 10:53:30,703 INFO  org.apache.flink.runtime.io.network.netty.NettyClient        [] - Successful initialization (took 11 ms).
+2026-11-11 10:53:30,704 INFO  org.apache.flink.runtime.io.network.netty.NettyServer        [] - Transport type 'auto': using EPOLL.
+2026-11-11 10:53:30,706 INFO  org.apache.flink.runtime.io.network.netty.NettyServer        [] - Successful initialization (took 3 ms). Listening on SocketAddress /127.0.0.1:33321.
+2026-11-11 10:53:30,706 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerServices    [] - TaskManager data connection initialized successfully; listening internally on port: 33321
+2026-11-11 10:53:30,707 INFO  org.apache.flink.runtime.taskexecutor.KvStateService         [] - Starting the kvState service and its components.
+2026-11-11 10:53:30,725 INFO  org.apache.flink.runtime.rpc.pekko.PekkoRpcService           [] - Starting RPC endpoint for org.apache.flink.runtime.taskexecutor.TaskExecutor at pekko://flink/user/rpc/taskmanager_0 .
+2026-11-11 10:53:30,735 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Start job leader service.
+2026-11-11 10:53:30,735 INFO  org.apache.flink.runtime.filecache.FileCache                 [] - User file cache uses directory /tmp/chamoso-e7/8525/e7-2688338/flink-io/flink-dist-cache-9da361cd-1f53-49e6-9b23-e33561751ca3
+2026-11-11 10:53:30,736 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Connecting to ResourceManager pekko.tcp://flink@127.0.0.1:12030/user/rpc/resourcemanager_*(00000000000000000000000000000000).
+2026-11-11 10:53:30,825 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Resolved ResourceManager address, beginning registration
+2026-11-11 10:53:30,891 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Successful registration at resource manager pekko.tcp://flink@127.0.0.1:12030/user/rpc/resourcemanager_* under registration id 1f67479692cc34988eb7d6af0b7dc789.
+2026-11-11 10:55:29,518 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Receive slot request b473e79497642cc411f5b1146f09b13b for job 6f1b2c35597898a1e2ab50fbfae46745 from resource manager with leader id 00000000000000000000000000000000.
+2026-11-11 10:55:29,520 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Allocated slot for b473e79497642cc411f5b1146f09b13b with resources ResourceProfile{cpuCores=1, taskHeapMemory=825.600mb (865704330 bytes), taskOffHeapMemory=0 bytes, managedMemory=711.680mb (746250577 bytes), networkMemory=177.920mb (186562644 bytes)}.
+2026-11-11 10:55:29,523 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Add job 6f1b2c35597898a1e2ab50fbfae46745 for job leader monitoring.
+2026-11-11 10:55:29,523 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Try to register at job manager pekko.tcp://flink@127.0.0.1:12030/user/rpc/jobmanager_2 with leader id 00000000-0000-0000-0000-000000000000.
+2026-11-11 10:55:29,525 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Receive slot request ec69f9dda77cb9d19c7b17d47a2b44f5 for job 6f1b2c35597898a1e2ab50fbfae46745 from resource manager with leader id 00000000000000000000000000000000.
+2026-11-11 10:55:29,525 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Allocated slot for ec69f9dda77cb9d19c7b17d47a2b44f5 with resources ResourceProfile{cpuCores=1, taskHeapMemory=825.600mb (865704330 bytes), taskOffHeapMemory=0 bytes, managedMemory=711.680mb (746250577 bytes), networkMemory=177.920mb (186562644 bytes)}.
+2026-11-11 10:55:29,526 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Receive slot request 0abbb5a548dfe9382110ddb7277286e5 for job 6f1b2c35597898a1e2ab50fbfae46745 from resource manager with leader id 00000000000000000000000000000000.
+2026-11-11 10:55:29,526 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Allocated slot for 0abbb5a548dfe9382110ddb7277286e5 with resources ResourceProfile{cpuCores=1, taskHeapMemory=825.600mb (865704330 bytes), taskOffHeapMemory=0 bytes, managedMemory=711.680mb (746250577 bytes), networkMemory=177.920mb (186562644 bytes)}.
+2026-11-11 10:55:29,533 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Resolved JobManager address, beginning registration
+2026-11-11 10:55:29,543 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Successful registration at job manager pekko.tcp://flink@127.0.0.1:12030/user/rpc/jobmanager_2 for job 6f1b2c35597898a1e2ab50fbfae46745.
+2026-11-11 10:55:29,544 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Establish JobManager connection for job 6f1b2c35597898a1e2ab50fbfae46745.
+2026-11-11 10:55:29,544 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Offer reserved slots to the leader of job 6f1b2c35597898a1e2ab50fbfae46745.
+2026-11-11 10:55:29,562 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Activate slot ec69f9dda77cb9d19c7b17d47a2b44f5.
+2026-11-11 10:55:29,570 INFO  org.apache.flink.runtime.state.changelog.StateChangelogStorageLoader [] - Creating a changelog storage with name 'memory'.
+2026-11-11 10:55:29,574 INFO  org.apache.flink.runtime.state.TaskExecutorChannelStateExecutorFactoryManager [] - Creating the channel state executor factory for job id 6f1b2c35597898a1e2ab50fbfae46745
+2026-11-11 10:55:29,576 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Received task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (2/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_1_1), deploy into slot with allocation id ec69f9dda77cb9d19c7b17d47a2b44f5.
+2026-11-11 10:55:29,577 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (2/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_1_1) switched from CREATED to DEPLOYING.
+2026-11-11 10:55:29,578 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Activate slot ec69f9dda77cb9d19c7b17d47a2b44f5.
+2026-11-11 10:55:29,578 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Activate slot b473e79497642cc411f5b1146f09b13b.
+2026-11-11 10:55:29,578 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Activate slot 0abbb5a548dfe9382110ddb7277286e5.
+2026-11-11 10:55:29,578 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Activate slot b473e79497642cc411f5b1146f09b13b.
+2026-11-11 10:55:29,579 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Loading JAR files for task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (2/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_1_1) [DEPLOYING].
+2026-11-11 10:55:29,579 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Received task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (3/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_2_1), deploy into slot with allocation id b473e79497642cc411f5b1146f09b13b.
+2026-11-11 10:55:29,580 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Activate slot 0abbb5a548dfe9382110ddb7277286e5.
+2026-11-11 10:55:29,580 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (3/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_2_1) switched from CREATED to DEPLOYING.
+2026-11-11 10:55:29,580 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Loading JAR files for task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (3/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_2_1) [DEPLOYING].
+2026-11-11 10:55:29,581 INFO  org.apache.flink.runtime.blob.BlobClient                     [] - Downloading 6f1b2c35597898a1e2ab50fbfae46745/p-f8fed0ea25da44b83a1867026cee75601ae2ce56-fd34f4db21798ae87d1601e06297cc9c from /127.0.0.1:41977
+2026-11-11 10:55:29,581 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Received task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_0_1), deploy into slot with allocation id 0abbb5a548dfe9382110ddb7277286e5.
+2026-11-11 10:55:29,581 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from CREATED to DEPLOYING.
+2026-11-11 10:55:29,582 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Loading JAR files for task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_0_1) [DEPLOYING].
+2026-11-11 10:55:29,615 INFO  org.apache.flink.streaming.runtime.tasks.StreamTask          [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@370e0603
+2026-11-11 10:55:29,615 INFO  org.apache.flink.streaming.runtime.tasks.StreamTask          [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@a77dc32
+2026-11-11 10:55:29,615 INFO  org.apache.flink.streaming.runtime.tasks.StreamTask          [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@11d25991
+2026-11-11 10:55:29,615 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend loader loads the state backend as HashMapStateBackend
+2026-11-11 10:55:29,615 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend loader loads the state backend as HashMapStateBackend
+2026-11-11 10:55:29,615 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend loader loads the state backend as HashMapStateBackend
+2026-11-11 10:55:29,618 INFO  org.apache.flink.streaming.runtime.tasks.StreamTask          [] - Using job/cluster config to configure application-defined checkpoint storage: org.apache.flink.runtime.state.storage.FileSystemCheckpointStorage@fc9b5957
+2026-11-11 10:55:29,618 INFO  org.apache.flink.streaming.runtime.tasks.StreamTask          [] - Using job/cluster config to configure application-defined checkpoint storage: org.apache.flink.runtime.state.storage.FileSystemCheckpointStorage@fc9b5957
+2026-11-11 10:55:29,618 INFO  org.apache.flink.streaming.runtime.tasks.StreamTask          [] - Using job/cluster config to configure application-defined checkpoint storage: org.apache.flink.runtime.state.storage.FileSystemCheckpointStorage@fc9b5957
+2026-11-11 10:55:29,623 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from DEPLOYING to INITIALIZING.
+2026-11-11 10:55:29,623 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (2/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_1_1) switched from DEPLOYING to INITIALIZING.
+2026-11-11 10:55:29,623 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (3/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_2_1) switched from DEPLOYING to INITIALIZING.
+2026-11-11 10:55:29,829 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@a86cc2f
+2026-11-11 10:55:29,829 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@1928a02c
+2026-11-11 10:55:29,829 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@7e61528e
+2026-11-11 10:55:29,846 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 1]
+2026-11-11 10:55:29,846 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 10:55:29,846 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 2]
+2026-11-11 10:55:29,847 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@7d176405
+2026-11-11 10:55:29,847 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@1e679d3e
+2026-11-11 10:55:29,847 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@1c9db550
+2026-11-11 10:55:29,861 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.ProducerConfig [] - ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-2
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	interceptor.classes = []
+	key.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 3600000
+	transactional.id = null
+	value.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+
+2026-11-11 10:55:29,861 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.ProducerConfig [] - ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-3
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	interceptor.classes = []
+	key.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 3600000
+	transactional.id = null
+	value.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+
+2026-11-11 10:55:29,861 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.ProducerConfig [] - ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-1
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	interceptor.classes = []
+	key.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 3600000
+	transactional.id = null
+	value.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+
+2026-11-11 10:55:29,872 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-1] Instantiated an idempotent producer.
+2026-11-11 10:55:29,872 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-3] Instantiated an idempotent producer.
+2026-11-11 10:55:29,872 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-2] Instantiated an idempotent producer.
+2026-11-11 10:55:29,894 WARN  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Error while loading kafka-version.properties: inStream parameter is null
+2026-11-11 10:55:29,894 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 10:55:29,894 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 10:55:29,894 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794390929894
+2026-11-11 10:55:29,895 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 10:55:29,895 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 10:55:29,895 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794390929894
+2026-11-11 10:55:29,896 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 10:55:29,896 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 10:55:29,896 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794390929894
+2026-11-11 10:55:29,898 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@5725b4f7
+2026-11-11 10:55:29,899 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@5a96b8eb
+2026-11-11 10:55:29,899 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@4da914d8
+2026-11-11 10:55:29,899 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@77bd6a39
+2026-11-11 10:55:29,899 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@1691b550
+2026-11-11 10:55:29,899 INFO  org.apache.flink.runtime.state.StateBackendLoader            [] - State backend is set to heap memory org.apache.flink.runtime.state.hashmap.HashMapStateBackend@106d4e92
+2026-11-11 10:55:29,901 INFO  org.apache.flink.streaming.api.operators.AbstractStreamOperator [] - Restoring state for 7 split(s) to reader.
+2026-11-11 10:55:29,901 INFO  org.apache.flink.streaming.api.operators.AbstractStreamOperator [] - Restoring state for 7 split(s) to reader.
+2026-11-11 10:55:29,901 INFO  org.apache.flink.streaming.api.operators.AbstractStreamOperator [] - Restoring state for 7 split(s) to reader.
+2026-11-11 10:55:29,901 INFO  org.apache.flink.connector.base.source.reader.SourceReaderBase [] - Adding split(s) to reader: [[Partition: ad-impressions-7, StartingOffset: 202787, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-19, StartingOffset: 198645, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-16, StartingOffset: 207799, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-10, StartingOffset: 199164, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-13, StartingOffset: 191792, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-4, StartingOffset: 211064, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-1, StartingOffset: 192015, StoppingOffset: -9223372036854775808]]
+2026-11-11 10:55:29,901 INFO  org.apache.flink.connector.base.source.reader.SourceReaderBase [] - Adding split(s) to reader: [[Partition: ad-impressions-8, StartingOffset: 191177, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-5, StartingOffset: 200430, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-14, StartingOffset: 205808, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-17, StartingOffset: 204674, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-11, StartingOffset: 182995, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-2, StartingOffset: 206575, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-20, StartingOffset: 205909, StoppingOffset: -9223372036854775808]]
+2026-11-11 10:55:29,901 INFO  org.apache.flink.connector.base.source.reader.SourceReaderBase [] - Adding split(s) to reader: [[Partition: ad-impressions-18, StartingOffset: 184780, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-6, StartingOffset: 196232, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-15, StartingOffset: 193214, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-9, StartingOffset: 196317, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-0, StartingOffset: 199392, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-12, StartingOffset: 182055, StoppingOffset: -9223372036854775808], [Partition: ad-impressions-3, StartingOffset: 198633, StoppingOffset: -9223372036854775808]]
+2026-11-11 10:55:29,906 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.ConsumerConfig [] - ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = ad-impressions-enriched-job-2
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = ad-impressions-enriched-job
+	group.instance.id = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArrayDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArrayDeserializer
+
+2026-11-11 10:55:29,906 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.ConsumerConfig [] - ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = ad-impressions-enriched-job-1
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = ad-impressions-enriched-job
+	group.instance.id = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArrayDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArrayDeserializer
+
+2026-11-11 10:55:29,906 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.ConsumerConfig [] - ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = ad-impressions-enriched-job-0
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = ad-impressions-enriched-job
+	group.instance.id = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArrayDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArrayDeserializer
+
+2026-11-11 10:55:29,927 WARN  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.ConsumerConfig [] - These configurations '[client.id.prefix, partition.discovery.interval.ms]' were supplied but are not used yet.
+2026-11-11 10:55:29,927 WARN  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.ConsumerConfig [] - These configurations '[client.id.prefix, partition.discovery.interval.ms]' were supplied but are not used yet.
+2026-11-11 10:55:29,927 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 10:55:29,927 WARN  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.ConsumerConfig [] - These configurations '[client.id.prefix, partition.discovery.interval.ms]' were supplied but are not used yet.
+2026-11-11 10:55:29,927 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 10:55:29,928 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794390929927
+2026-11-11 10:55:29,928 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 10:55:29,928 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 10:55:29,928 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794390929928
+2026-11-11 10:55:29,928 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 10:55:29,928 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 10:55:29,928 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794390929927
+2026-11-11 10:55:29,930 INFO  org.apache.flink.connector.base.source.reader.fetcher.SplitFetcher [] - Starting split fetcher 0
+2026-11-11 10:55:29,932 INFO  org.apache.flink.connector.base.source.reader.fetcher.SplitFetcher [] - Starting split fetcher 0
+2026-11-11 10:55:29,931 INFO  org.apache.flink.connector.base.source.reader.fetcher.SplitFetcher [] - Starting split fetcher 0
+2026-11-11 10:55:29,934 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Assigned to partition(s): ad-impressions-8, ad-impressions-5, ad-impressions-14, ad-impressions-17, ad-impressions-11, ad-impressions-2, ad-impressions-20
+2026-11-11 10:55:29,934 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Assigned to partition(s): ad-impressions-7, ad-impressions-19, ad-impressions-16, ad-impressions-10, ad-impressions-13, ad-impressions-4, ad-impressions-1
+2026-11-11 10:55:29,934 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Assigned to partition(s): ad-impressions-18, ad-impressions-6, ad-impressions-15, ad-impressions-9, ad-impressions-0, ad-impressions-12, ad-impressions-3
+2026-11-11 10:55:29,936 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Seeking to offset 207799 for partition ad-impressions-16
+2026-11-11 10:55:29,936 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (2/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_1_1) switched from INITIALIZING to RUNNING.
+2026-11-11 10:55:29,936 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (3/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_2_1) switched from INITIALIZING to RUNNING.
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Seeking to offset 205808 for partition ad-impressions-14
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Seeking to offset 192015 for partition ad-impressions-1
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Seeking to offset 204674 for partition ad-impressions-17
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Seeking to offset 199164 for partition ad-impressions-10
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Seeking to offset 182995 for partition ad-impressions-11
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Seeking to offset 191177 for partition ad-impressions-8
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Seeking to offset 206575 for partition ad-impressions-2
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Seeking to offset 191792 for partition ad-impressions-13
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Seeking to offset 205909 for partition ad-impressions-20
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Seeking to offset 202787 for partition ad-impressions-7
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Seeking to offset 200430 for partition ad-impressions-5
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Seeking to offset 198645 for partition ad-impressions-19
+2026-11-11 10:55:29,937 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Seeking to offset 211064 for partition ad-impressions-4
+2026-11-11 10:55:29,937 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from INITIALIZING to RUNNING.
+2026-11-11 10:55:29,955 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Seeking to offset 193214 for partition ad-impressions-15
+2026-11-11 10:55:29,955 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Seeking to offset 199392 for partition ad-impressions-0
+2026-11-11 10:55:29,955 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Seeking to offset 182055 for partition ad-impressions-12
+2026-11-11 10:55:29,955 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Seeking to offset 196232 for partition ad-impressions-6
+2026-11-11 10:55:29,955 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Seeking to offset 196317 for partition ad-impressions-9
+2026-11-11 10:55:29,955 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Seeking to offset 184780 for partition ad-impressions-18
+2026-11-11 10:55:29,955 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.KafkaConsumer [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Seeking to offset 198633 for partition ad-impressions-3
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-3 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Cluster ID: ZpfCbgJFTrCsOHLzZpYxvw
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Cluster ID: ZpfCbgJFTrCsOHLzZpYxvw
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-2 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-0 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-3 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-2 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-0 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-18 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-19 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-9 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-6 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-18 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-3 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.internals.TransactionManager [] - [Producer clientId=producer-1] ProducerId set to 3 with epoch 0
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.internals.TransactionManager [] - [Producer clientId=producer-3] ProducerId set to 2001 with epoch 0
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-15 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-19 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-2 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-9 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-20 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-6 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-14 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-15 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-12 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-20 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-4 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-14 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-17 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-12 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-1 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-4 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-7 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-17 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-11 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-1 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-10 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-7 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-16 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-11 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-0 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-10 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-5 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-18 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-16 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-19 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-13 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,025 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-5 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-9 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-8 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-13 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-6 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-8 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-15 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-20 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-14 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-12 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,024 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Cluster ID: ZpfCbgJFTrCsOHLzZpYxvw
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-4 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-17 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-1 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-7 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-11 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.internals.TransactionManager [] - [Producer clientId=producer-2] ProducerId set to 2002 with epoch 0
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-10 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-16 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-5 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-13 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,026 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting the last seen epoch of partition ad-impressions-8 to 0 since the associated topicId changed from null to IZBOHD5cRAq5hO824FvPuQ
+2026-11-11 10:55:30,027 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Cluster ID: ZpfCbgJFTrCsOHLzZpYxvw
+2026-11-11 10:55:30,027 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Cluster ID: ZpfCbgJFTrCsOHLzZpYxvw
+2026-11-11 10:55:30,027 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Cluster ID: ZpfCbgJFTrCsOHLzZpYxvw
+2026-11-11 10:55:30,080 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.ProducerConfig [] - ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-4
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	interceptor.classes = []
+	key.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 3600000
+	transactional.id = null
+	value.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+
+2026-11-11 10:55:30,080 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.ProducerConfig [] - ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-5
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	interceptor.classes = []
+	key.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 3600000
+	transactional.id = null
+	value.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+
+2026-11-11 10:55:30,080 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.ProducerConfig [] - ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [127.0.0.1:12000, 127.0.0.1:12001, 127.0.0.1:12002]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-6
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	interceptor.classes = []
+	key.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 3600000
+	transactional.id = null
+	value.serializer = class org.apache.flink.kafka.shaded.org.apache.kafka.common.serialization.ByteArraySerializer
+
+2026-11-11 10:55:30,080 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-5] Instantiated an idempotent producer.
+2026-11-11 10:55:30,080 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-4] Instantiated an idempotent producer.
+2026-11-11 10:55:30,080 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-6] Instantiated an idempotent producer.
+2026-11-11 10:55:30,083 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 10:55:30,083 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 10:55:30,083 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794390930083
+2026-11-11 10:55:30,083 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 10:55:30,083 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 10:55:30,084 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794390930083
+2026-11-11 10:55:30,084 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka version: unknown
+2026-11-11 10:55:30,084 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka commitId: unknown
+2026-11-11 10:55:30,084 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - Kafka startTimeMs: 1794390930084
+2026-11-11 10:55:30,086 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-3 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,086 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-3 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,086 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-3 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-6 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-6 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-6 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-9 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-9 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-9 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-18 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-18 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-18 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-19 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-19 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-11 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-11 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-19 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-17 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-17 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-11 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-10 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-10 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-17 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-2 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-2 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-10 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-15 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-15 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-2 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-12 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-12 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-15 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-1 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-1 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-12 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-4 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-4 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-1 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-14 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-14 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-4 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-20 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-20 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-14 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-7 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-7 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-20 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-16 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,087 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-16 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-7 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-5 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-5 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-16 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-8 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-8 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-13 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-5 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-8 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-13 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Resetting the last seen epoch of partition ad-impressions-enriched-0 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-13 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Resetting the last seen epoch of partition ad-impressions-enriched-0 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Resetting the last seen epoch of partition ad-impressions-enriched-0 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-6] Cluster ID: ZpfCbgJFTrCsOHLzZpYxvw
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-4] Cluster ID: ZpfCbgJFTrCsOHLzZpYxvw
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-5] Cluster ID: ZpfCbgJFTrCsOHLzZpYxvw
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.internals.TransactionManager [] - [Producer clientId=producer-6] ProducerId set to 1004 with epoch 0
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.internals.TransactionManager [] - [Producer clientId=producer-4] ProducerId set to 4 with epoch 0
+2026-11-11 10:55:30,088 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.internals.TransactionManager [] - [Producer clientId=producer-5] ProducerId set to 1005 with epoch 0
+2026-11-11 10:55:30,089 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-4] Closing the Kafka producer with timeoutMillis = 9223372036854775807 ms.
+2026-11-11 10:55:30,089 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-6] Closing the Kafka producer with timeoutMillis = 9223372036854775807 ms.
+2026-11-11 10:55:30,089 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-5] Closing the Kafka producer with timeoutMillis = 9223372036854775807 ms.
+2026-11-11 10:55:30,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 10:55:30,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 10:55:30,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 10:55:30,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.producer for producer-5 unregistered
+2026-11-11 10:55:30,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 10:55:30,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 10:55:30,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 10:55:30,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.producer for producer-6 unregistered
+2026-11-11 10:55:30,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 10:55:30,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 10:55:30,092 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 10:55:30,093 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.producer for producer-4 unregistered
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-3 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-6 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-9 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-18 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-19 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-11 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-17 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-10 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-2 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-15 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-12 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-1 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-4 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-3 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-14 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-20 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-6 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-7 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-16 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-9 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-5 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-8 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-18 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-13 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-19 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-2] Resetting the last seen epoch of partition ad-impressions-enriched-0 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-11 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-3 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-17 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-6 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-10 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-9 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-2 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-18 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,094 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-15 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-19 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-12 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-11 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-1 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-17 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-4 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-10 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-2 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-14 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-15 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-20 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-12 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-7 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-1 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-4 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-16 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-14 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-5 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-20 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-8 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-7 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-13 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-16 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-3] Resetting the last seen epoch of partition ad-impressions-enriched-0 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-5 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-8 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-13 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:30,095 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.Metadata [] - [Producer clientId=producer-1] Resetting the last seen epoch of partition ad-impressions-enriched-0 to 0 since the associated topicId changed from null to EEGsIQlJTA2US2aIlabNbQ
+2026-11-11 10:55:32,929 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 1]
+2026-11-11 10:55:32,929 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 2]
+2026-11-11 10:55:32,931 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 10:55:32,960 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Discovered group coordinator 127.0.0.1:12002 (id: 2147483644 rack: null)
+2026-11-11 10:55:32,961 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Discovered group coordinator 127.0.0.1:12002 (id: 2147483644 rack: null)
+2026-11-11 10:55:32,974 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Discovered group coordinator 127.0.0.1:12002 (id: 2147483644 rack: null)
+2026-11-11 10:55:42,723 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 2]
+2026-11-11 10:55:42,723 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 1]
+2026-11-11 10:55:42,723 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 10:55:52,723 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 10:55:52,724 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 2]
+2026-11-11 10:55:52,725 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 1]
+2026-11-11 10:56:02,722 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 1]
+2026-11-11 10:56:02,723 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 10:56:02,724 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 2]
+2026-11-11 10:56:12,721 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 10:56:12,721 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 2]
+2026-11-11 10:56:12,721 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 1]
+2026-11-11 10:56:22,723 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 1]
+2026-11-11 10:56:22,723 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 10:56:22,723 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 2]
+2026-11-11 10:56:32,722 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 1]
+2026-11-11 10:56:32,722 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 2]
+2026-11-11 10:56:32,723 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 10:56:42,722 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 1]
+2026-11-11 10:56:42,722 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 10:56:42,723 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 2]
+2026-11-11 10:56:52,722 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 10:56:52,722 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 1]
+2026-11-11 10:56:52,722 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 2]
+2026-11-11 10:57:02,722 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 0]
+2026-11-11 10:57:02,722 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 1]
+2026-11-11 10:57:02,722 WARN  org.apache.flink.metrics.MetricGroup                         [] - Name collision: Group already contains a Metric with the name 'pendingCommittables'. Metric will not be reported.[127.0.0.1, taskmanager, tm1, insert-into_default_catalog.default_database.snk, snk[3]: Committer, 2]
+2026-11-11 10:57:04,861 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Attempting to cancel task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_0_1).
+2026-11-11 10:57:04,862 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from RUNNING to CANCELING.
+2026-11-11 10:57:04,862 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Triggering cancellation of task code Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_0_1).
+2026-11-11 10:57:04,863 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Attempting to cancel task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (2/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_1_1).
+2026-11-11 10:57:04,863 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (2/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_1_1) switched from RUNNING to CANCELING.
+2026-11-11 10:57:04,863 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Triggering cancellation of task code Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (2/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_1_1).
+2026-11-11 10:57:04,864 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Attempting to cancel task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (3/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_2_1).
+2026-11-11 10:57:04,864 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (3/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_2_1) switched from RUNNING to CANCELING.
+2026-11-11 10:57:04,864 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Triggering cancellation of task code Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (3/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_2_1).
+2026-11-11 10:57:04,864 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-1] Closing the Kafka producer with timeoutMillis = 3600000 ms.
+2026-11-11 10:57:04,864 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-3] Closing the Kafka producer with timeoutMillis = 3600000 ms.
+2026-11-11 10:57:04,864 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.producer.KafkaProducer [] - [Producer clientId=producer-2] Closing the Kafka producer with timeoutMillis = 3600000 ms.
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.producer for producer-3 unregistered
+2026-11-11 10:57:04,867 INFO  org.apache.flink.connector.base.source.reader.SourceReaderBase [] - Closing Source Reader.
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 10:57:04,867 INFO  org.apache.flink.connector.base.source.reader.fetcher.SplitFetcher [] - Shutting down split fetcher 0
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.producer for producer-2 unregistered
+2026-11-11 10:57:04,867 INFO  org.apache.flink.connector.base.source.reader.SourceReaderBase [] - Closing Source Reader.
+2026-11-11 10:57:04,867 INFO  org.apache.flink.connector.base.source.reader.fetcher.SplitFetcher [] - Shutting down split fetcher 0
+2026-11-11 10:57:04,867 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.producer for producer-1 unregistered
+2026-11-11 10:57:04,867 INFO  org.apache.flink.connector.base.source.reader.SourceReaderBase [] - Closing Source Reader.
+2026-11-11 10:57:04,867 INFO  org.apache.flink.connector.base.source.reader.fetcher.SplitFetcher [] - Shutting down split fetcher 0
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Resetting generation and member id due to: consumer pro-actively leaving the group
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Resetting generation and member id due to: consumer pro-actively leaving the group
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Resetting generation and member id due to: consumer pro-actively leaving the group
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=ad-impressions-enriched-job-0, groupId=ad-impressions-enriched-job] Request joining group due to: consumer pro-actively leaving the group
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=ad-impressions-enriched-job-1, groupId=ad-impressions-enriched-job] Request joining group due to: consumer pro-actively leaving the group
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.clients.consumer.internals.ConsumerCoordinator [] - [Consumer clientId=ad-impressions-enriched-job-2, groupId=ad-impressions-enriched-job] Request joining group due to: consumer pro-actively leaving the group
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics scheduler closed
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Closing reporter org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.JmxReporter
+2026-11-11 10:57:04,868 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.metrics.Metrics [] - Metrics reporters closed
+2026-11-11 10:57:04,870 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.consumer for ad-impressions-enriched-job-2 unregistered
+2026-11-11 10:57:04,870 INFO  org.apache.flink.connector.base.source.reader.fetcher.SplitFetcher [] - Split fetcher 0 exited.
+2026-11-11 10:57:04,870 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.consumer for ad-impressions-enriched-job-1 unregistered
+2026-11-11 10:57:04,870 INFO  org.apache.flink.connector.base.source.reader.fetcher.SplitFetcher [] - Split fetcher 0 exited.
+2026-11-11 10:57:04,870 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (3/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_2_1) switched from CANCELING to CANCELED.
+2026-11-11 10:57:04,870 INFO  org.apache.flink.kafka.shaded.org.apache.kafka.common.utils.AppInfoParser [] - App info kafka.consumer for ad-impressions-enriched-job-0 unregistered
+2026-11-11 10:57:04,870 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (2/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_1_1) switched from CANCELING to CANCELED.
+2026-11-11 10:57:04,870 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Freeing task resources for Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (3/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_2_1).
+2026-11-11 10:57:04,870 INFO  org.apache.flink.connector.base.source.reader.fetcher.SplitFetcher [] - Split fetcher 0 exited.
+2026-11-11 10:57:04,870 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Freeing task resources for Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (2/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_1_1).
+2026-11-11 10:57:04,871 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_0_1) switched from CANCELING to CANCELED.
+2026-11-11 10:57:04,871 INFO  org.apache.flink.runtime.taskmanager.Task                    [] - Freeing task resources for Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/3)#1 (80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_0_1).
+2026-11-11 10:57:04,871 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Un-registering task and sending final execution state CANCELED to JobManager for task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (3/3)#1 80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_2_1.
+2026-11-11 10:57:04,872 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Un-registering task and sending final execution state CANCELED to JobManager for task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (2/3)#1 80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_1_1.
+2026-11-11 10:57:04,873 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Un-registering task and sending final execution state CANCELED to JobManager for task Source: src[1] -> Calc[2] -> snk[3]: Writer -> snk[3]: Committer (1/3)#1 80a6194d3f0eb03169a8917abf398a2a_cbc357ccb763df2852fee8c4fc7d55f2_0_1.
+2026-11-11 10:57:04,905 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Free slot TaskSlot(index:4, state:ACTIVE, resource profile: ResourceProfile{cpuCores=1, taskHeapMemory=825.600mb (865704330 bytes), taskOffHeapMemory=0 bytes, managedMemory=711.680mb (746250577 bytes), networkMemory=177.920mb (186562644 bytes)}, allocationId: b473e79497642cc411f5b1146f09b13b, jobId: 6f1b2c35597898a1e2ab50fbfae46745).
+2026-11-11 10:57:04,906 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Free slot TaskSlot(index:5, state:ACTIVE, resource profile: ResourceProfile{cpuCores=1, taskHeapMemory=825.600mb (865704330 bytes), taskOffHeapMemory=0 bytes, managedMemory=711.680mb (746250577 bytes), networkMemory=177.920mb (186562644 bytes)}, allocationId: ec69f9dda77cb9d19c7b17d47a2b44f5, jobId: 6f1b2c35597898a1e2ab50fbfae46745).
+2026-11-11 10:57:04,907 INFO  org.apache.flink.runtime.taskexecutor.slot.TaskSlotTableImpl [] - Free slot TaskSlot(index:6, state:ACTIVE, resource profile: ResourceProfile{cpuCores=1, taskHeapMemory=825.600mb (865704330 bytes), taskOffHeapMemory=0 bytes, managedMemory=711.680mb (746250577 bytes), networkMemory=177.920mb (186562644 bytes)}, allocationId: 0abbb5a548dfe9382110ddb7277286e5, jobId: 6f1b2c35597898a1e2ab50fbfae46745).
+2026-11-11 10:57:04,907 INFO  org.apache.flink.runtime.taskexecutor.DefaultJobLeaderService [] - Remove job 6f1b2c35597898a1e2ab50fbfae46745 from job leader monitoring.
+2026-11-11 10:57:04,907 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Close JobManager connection for job 6f1b2c35597898a1e2ab50fbfae46745.
+2026-11-11 10:57:05,024 INFO  org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - RECEIVED SIGNAL 15: SIGTERM. Shutting down as requested.
+2026-11-11 10:57:05,024 INFO  org.apache.flink.runtime.blob.PermanentBlobCache             [] - Shutting down BLOB cache
+2026-11-11 10:57:05,024 INFO  org.apache.flink.runtime.state.TaskExecutorFileMergingManager [] - Shutting down TaskExecutorFileMergingManager.
+2026-11-11 10:57:05,025 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Stopping TaskExecutor pekko.tcp://flink@127.0.0.1:41255/user/rpc/taskmanager_0.
+2026-11-11 10:57:05,025 INFO  org.apache.flink.runtime.state.TaskExecutorLocalStateStoresManager [] - Shutting down TaskExecutorLocalStateStoresManager.
+2026-11-11 10:57:05,025 INFO  org.apache.flink.runtime.taskexecutor.TaskExecutor           [] - Close ResourceManager connection 838c8e906c614c98789270a1c60efe62.
+2026-11-11 10:57:05,025 INFO  org.apache.flink.runtime.io.disk.FileChannelManagerImpl      [] - FileChannelManager removed spill file directory /tmp/chamoso-e7/8525/e7-2688338/flink-io/flink-io-4db11f71-e457-43c6-ab46-30e843a9e08a
+2026-11-11 10:57:05,025 INFO  org.apache.flink.runtime.io.disk.FileChannelManagerImpl      [] - FileChannelManager removed spill file directory /tmp/chamoso-e7/8525/e7-2688338/flink-io/flink-netty-shuffle-f3171e01-78ca-485e-9a4c-04d7e46a6069
+2026-11-11 10:57:05,025 INFO  org.apache.flink.runtime.filecache.FileCache                 [] - removed file cache directory /tmp/chamoso-e7/8525/e7-2688338/flink-io/flink-dist-cache-9da361cd-1f53-49e6-9b23-e33561751ca3
+2026-11-11 10:57:05,025 INFO  org.apache.flink.runtime.state.TaskExecutorStateChangelogStoragesManager [] - Shutting down TaskExecutorStateChangelogStoragesManager.
+2026-11-11 10:57:05,026 INFO  org.apache.flink.runtime.state.TaskExecutorChannelStateExecutorFactoryManager [] - Shutting down TaskExecutorChannelStateExecutorFactoryManager.
+2026-11-11 10:57:05,025 INFO  org.apache.flink.runtime.blob.TransientBlobCache             [] - Shutting down BLOB cache
+2026-11-11 10:57:05,056 INFO  org.apache.pekko.actor.CoordinatedShutdown                   [] - Running CoordinatedShutdown with reason [ActorSystemTerminateReason]
+2026-11-11 10:57:05,060 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Shutting down remote daemon.
+2026-11-11 10:57:05,060 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Shutting down remote daemon.
+2026-11-11 10:57:05,061 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remote daemon shut down; proceeding with flushing remote transports.
+2026-11-11 10:57:05,061 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remote daemon shut down; proceeding with flushing remote transports.
+2026-11-11 10:57:05,074 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remoting shut down.
+2026-11-11 10:57:05,075 INFO  org.apache.pekko.remote.RemoteActorRefProvider$RemotingTerminator [] - Remoting shut down.

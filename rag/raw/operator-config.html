@@ -1,0 +1,1872 @@
+
+<!DOCTYPE html>
+<html lang="en" dir=>
+
+<head>
+  <meta name="generator" content="Hugo 0.104.0" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Configuration # Specifying Operator Configuration # The operator allows users to specify default configuration that will be shared by the Flink operator itself and the Flink deployments.
+These configuration files are mounted externally via ConfigMaps. The Configuration files with default values are shipped in the Helm chart. It is recommended to review and adjust them if needed in the values.yaml file before deploying the Operator in production environments.
+To append to the default configuration, define the flink-conf.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="Configuration" />
+<meta property="og:description" content="Configuration # Specifying Operator Configuration # The operator allows users to specify default configuration that will be shared by the Flink operator itself and the Flink deployments.
+These configuration files are mounted externally via ConfigMaps. The Configuration files with default values are shipped in the Helm chart. It is recommended to review and adjust them if needed in the values.yaml file before deploying the Operator in production environments.
+To append to the default configuration, define the flink-conf." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/configuration/" /><meta property="article:section" content="docs" />
+
+
+
+<title>Configuration | Apache Flink Kubernetes Operator</title>
+<link rel="manifest" href="/flink/flink-kubernetes-operator-docs-release-1.13/manifest.json">
+<link rel="icon" href="/flink/flink-kubernetes-operator-docs-release-1.13/favicon.png" type="image/x-icon">
+<link rel="alternate" hreflang="zh" href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/zh/docs/operations/configuration/" title="Configuration">
+
+<link rel="stylesheet" href="/flink/flink-kubernetes-operator-docs-release-1.13/book.min.b952fefba7a2e6dac79b3035a33b021d21a5f84843c9890ad9ab605f3bfe0eac.css" integrity="sha256-uVL&#43;&#43;6ei5trHmzA1ozsCHSGl&#43;EhDyYkK2atgXzv&#43;Dqw=">
+<script defer src="/flink/flink-kubernetes-operator-docs-release-1.13/en.search.min.0b1b62ffa8c98cc3db9dc15e4b506ad3b38c189abdfbac02bcf6c0d9ecd45dfb.js" integrity="sha256-Cxti/6jJjMPbncFeS1Bq07OMGJq9&#43;6wCvPbA2ezUXfs="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+
+<link rel="stylesheet" type="text/css" href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/font-awesome/css/font-awesome.min.css">
+<script src="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/js/anchor.min.js"></script>
+<script src="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/js/flink.js"></script>
+
+
+  
+  <script>
+    var _paq = window._paq = window._paq || [];
+     
+     
+    _paq.push(['disableCookies']);
+     
+    _paq.push(["setDomains", ["*.flink.apache.org","*.nightlies.apache.org/flink"]]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="//analytics.apache.org/";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', '1']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  
+</head>
+
+<body dir=>
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      
+  
+
+<nav>
+
+
+<a id="logo" href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13">
+    <img width="70%" src="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/navbar-brand-logo.jpg">
+</a>
+<p style="text-align:right">v1.13.0</p>
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-4dd9cb641a390ed95bcf39ced08717dd" class="toggle"  />
+    <label for="section-4dd9cb641a390ed95bcf39ced08717dd" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Try the Flink Kubernetes Operator</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/try-flink-kubernetes-operator/quick-start/" class="">Quick Start</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-6c07f7e07850a28420f21d62041fba0d" class="toggle"  />
+    <label for="section-6c07f7e07850a28420f21d62041fba0d" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Concepts</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/concepts/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/concepts/architecture/" class="">Architecture</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/concepts/controller-flow/" class="">Controller Flow</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-79db1868389f630f6e8d85ef48f3be40" class="toggle"  />
+    <label for="section-79db1868389f630f6e8d85ef48f3be40" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-code title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Custom Resource</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/job-management/" class="">Job Management</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/pod-template/" class="">Pod Template</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/snapshots/" class="">Snapshots</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/autoscaler/" class="">Autoscaler</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/autotuning/" class="">Autotuning</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/custom-resource/reference/" class="">Reference</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-edeb15b4bac51ae5b725de958354b931" class="toggle" checked />
+    <label for="section-edeb15b4bac51ae5b725de958354b931" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-cogs title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Operations</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/helm/" class="">Helm</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/configuration/" class=" active">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/rbac/" class="">RBAC model</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/ingress/" class="">Ingress</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/health/" class="">Operator Health Monitoring</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/compatibility/" class="">Compatibility Guarantees</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/metrics-logging/" class="">Metrics and Logging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/upgrade/" class="">Operator Upgrades</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/plugins/" class="">Custom Operator Plugins</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-75a1b849ec817b105e0397971f02e977" class="toggle"  />
+    <label for="section-75a1b849ec817b105e0397971f02e977" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-book title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Development</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/development/guide/" class="">Guide</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/development/roadmap/" class="">Roadmap</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/>
+<hr class="menu-break">
+
+<a href="//flink.apache.org" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> Project Homepage</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/api/java/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> JavaDocs</a>
+<br/>
+
+<hr class="menu-break">
+<li style="list-style-type: none">
+  <br>
+  <input type="checkbox" id="section-version-picker" class="toggle">
+  <label for="section-version-picker" class="flex justify-between">
+     <div style="font-weight:450;margin-bottom:0.5em">Pick Docs Version</div>
+     <span>▾</span>
+  </label>
+  <ul>
+    <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13">
+      1.13 (✓)
+    </a>
+    <hr class="menu-break">
+    
+      <li>
+        <a href="https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.12">
+          v1.12
+        </a>
+      </li>
+    
+      <li>
+        <a href="https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.11">
+          v1.11
+        </a>
+      </li>
+    
+    <hr class="menu-break">
+    <li>
+      <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/versions">
+          All Versions
+      </a>
+    </li>
+  </ul>
+</li>
+
+
+
+
+  
+
+  
+
+
+  
+
+
+
+
+
+
+<a  href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/zh/docs/operations/configuration/" class="flex align-center">
+  <i class="fa fa-globe" aria-hidden="true"></i>&nbsp;&nbsp;
+  中文版
+</a>
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/flink/flink-kubernetes-operator-docs-release-1.13/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Configuration</strong>
+
+  <label for="toc-control">
+    
+    <img src="/flink/flink-kubernetes-operator-docs-release-1.13/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#specifying-operator-configuration">Specifying Operator Configuration</a>
+      <ul>
+        <li><a href="#flink-version-and-namespace-specific-defaults">Flink Version and Namespace specific defaults</a></li>
+      </ul>
+    </li>
+    <li><a href="#dynamic-operator-configuration">Dynamic Operator Configuration</a></li>
+    <li><a href="#leader-election-and-high-availability">Leader Election and High Availability</a></li>
+    <li><a href="#environment-variables">Environment variables</a></li>
+    <li><a href="#operator-configuration-reference">Operator Configuration Reference</a>
+      <ul>
+        <li><a href="#system-configuration">System Configuration</a></li>
+        <li><a href="#resourceuser-configuration">Resource/User Configuration</a></li>
+        <li><a href="#autoscaler-configuration">Autoscaler Configuration</a></li>
+        <li><a href="#autoscaler-standalone-configuration">Autoscaler Standalone Configuration</a></li>
+        <li><a href="#system-metrics-configuration">System Metrics Configuration</a></li>
+        <li><a href="#advanced-system-configuration">Advanced System Configuration</a></li>
+        <li><a href="#ipv6-configuration">IPV6 Configuration</a></li>
+      </ul>
+    </li>
+    <li><a href="#java-options-for-java-17-based-jobtask-manager-images">Java options for Java 17 based Job/Task Manager images</a>
+      <ul>
+        <li><a href="#summary">Summary</a></li>
+        <li><a href="#details">Details</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+
+
+
+
+
+      
+  <article class="markdown"><!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<h1 id="configuration">
+  Configuration
+  <a class="anchor" href="#configuration">#</a>
+</h1>
+<h2 id="specifying-operator-configuration">
+  Specifying Operator Configuration
+  <a class="anchor" href="#specifying-operator-configuration">#</a>
+</h2>
+<p>The operator allows users to specify default configuration that will be shared by the Flink operator itself and the Flink deployments.</p>
+<p>These configuration files are mounted externally via ConfigMaps. The <a href="https://github.com/apache/flink-kubernetes-operator/tree/main/helm/flink-kubernetes-operator/conf">Configuration files</a> with default values are shipped in the Helm chart. It is recommended to review and adjust them if needed in the <code>values.yaml</code> file before deploying the Operator in production environments.</p>
+<p>To append to the default configuration, define the <code>flink-conf.yaml</code> key in the <code>defaultConfiguration</code> section of the Helm <code>values.yaml</code> file:</p>
+<pre tabindex="0"><code>defaultConfiguration:
+  create: true
+  # Set append to false to replace configuration files
+  append: true
+  flink-conf.yaml: |+
+    # Flink Config Overrides
+    kubernetes.operator.metrics.reporter.slf4j.factory.class: org.apache.flink.metrics.slf4j.Slf4jReporterFactory
+    kubernetes.operator.metrics.reporter.slf4j.interval: 5 MINUTE
+
+    kubernetes.operator.reconcile.interval: 15 s
+    kubernetes.operator.observer.progress-check.interval: 5 s
+</code></pre><p>To learn more about metrics and logging configuration please refer to the dedicated <a href="//nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.13/docs/operations/metrics-logging/">docs page</a>.</p>
+<h3 id="flink-version-and-namespace-specific-defaults">
+  Flink Version and Namespace specific defaults
+  <a class="anchor" href="#flink-version-and-namespace-specific-defaults">#</a>
+</h3>
+<p>The operator also supports default configuration overrides for selected Flink versions and namespaces. This can be important if some behaviour changed across Flink versions, or we want to treat certain namespaces differently (such as reconcile it more or less frequently etc.):</p>
+<pre tabindex="0"><code># Namespace specific defaults
+kubernetes.operator.default-configuration.namespace.ns1.k1: v1
+kubernetes.operator.default-configuration.namespace.ns1.k2: v2
+kubernetes.operator.default-configuration.namespace.ns2.k1: v1
+</code></pre><p>Flink version specific defaults have a higher precedence, so namespace defaults will be overridden by version defaults with the same key.</p>
+<p>Flink version defaults can also be suffixed by a <code>+</code> character after the version string. This indicates that the default applies to this Flink version and any higher version.</p>
+<p>For example, taking the configuration below:</p>
+<pre tabindex="0"><code># Flink Version specific defaults 
+kubernetes.operator.default-configuration.flink-version.v1_16+.k4: v4
+kubernetes.operator.default-configuration.flink-version.v1_16+.k5: v5
+kubernetes.operator.default-configuration.flink-version.v1_17.k1: v1
+kubernetes.operator.default-configuration.flink-version.v1_17.k2: v2
+kubernetes.operator.default-configuration.flink-version.v1_17.k3: v3
+kubernetes.operator.default-configuration.flink-version.v1_17.k5: v5.1
+</code></pre><p>This would result in the defaults for Flink 1.17 being:</p>
+<pre tabindex="0"><code>k1: v1
+k2: v2
+k3: v3
+k4: v4
+k5: v5.1
+</code></pre><p><strong>Note</strong>: The configuration above sets <code>k5: v5</code> for all versions &gt;= 1.16.
+However, this is overridden for Flink 1.17 to <code>v5.1</code>.
+But if you ran a Flink 1.18 deployment with this configuration, then the value of <code>k5</code> would be <code>v5</code> not <code>v5.1</code>. The <code>k5</code> override only applies to Flink 1.17.
+Adding a <code>+</code> to the Flink 1.17 <code>k5</code> default would apply the new value to all future versions.</p>
+<h2 id="dynamic-operator-configuration">
+  Dynamic Operator Configuration
+  <a class="anchor" href="#dynamic-operator-configuration">#</a>
+</h2>
+<p>The Kubernetes operator supports dynamic config changes through the operator ConfigMaps. Dynamic operator configuration is enabled by default, and can be disabled by setting <code>kubernetes.operator.dynamic.config.enabled</code> to false. Time interval for checking dynamic config changes is specified by <code>kubernetes.operator.dynamic.config.check.interval</code> of which default value is 5 minutes.</p>
+<p>Verify whether dynamic operator configuration updates is enabled via the <code>deploy/flink-kubernetes-operator</code> log has:</p>
+<pre tabindex="0"><code>2022-05-28 13:08:29,222 o.a.f.k.o.c.FlinkConfigManager [INFO ] Enabled dynamic config updates, checking config changes every PT5M
+</code></pre><p>To change config values dynamically the ConfigMap can be directly edited via <code>kubectl patch</code> or <code>kubectl edit</code> command. For example to change the reschedule interval you can override <code>kubernetes.operator.reconcile.interval</code>.</p>
+<p>Verify whether the config value of <code>kubernetes.operator.reconcile.interval</code> is updated to 30 seconds via the <code>deploy/flink-kubernetes-operator</code> log has:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">2022-05-28 13:08:30,115 o.a.f.k.o.c.FlinkConfigManager [INFO ] Updating default configuration to {kubernetes.operator.reconcile.interval=PT30S}
+</span></span></code></pre></div><h2 id="leader-election-and-high-availability">
+  Leader Election and High Availability
+  <a class="anchor" href="#leader-election-and-high-availability">#</a>
+</h2>
+<p>The operator supports high availability through leader election and standby operator instances. To enable leader election you need to add the following two mandatory operator configuration parameters.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">kubernetes.operator.leader-election.enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kubernetes.operator.leader-election.lease-name</span><span class="p">:</span><span class="w"> </span><span class="l">flink-operator-lease</span><span class="w">
+</span></span></span></code></pre></div><p>Lease name must be unique in the current lease namespace. For other more advanced config parameters please refer to the configuration reference.</p>
+<p>Once you enabled leader election you can increase the <code>replicas</code> for the operator Deployment using the Helm chart to enable high availability.</p>
+<p>If <code>replicas</code> value is greater than 1, you can define <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/">topologySpreadConstraints</a>
+via <code>operatorPod.topologySpreadConstraints</code>.</p>
+<h2 id="environment-variables">
+  Environment variables
+  <a class="anchor" href="#environment-variables">#</a>
+</h2>
+<p>The operator exposes several environment variables which can be used for custom plugins.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>FieldRef</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HOST_IP</td>
+<td>The host which the pod is deployed on</td>
+<td>status.hostIP</td>
+</tr>
+<tr>
+<td>POD_IP</td>
+<td>Pod IP</td>
+<td>status.podIP</td>
+</tr>
+<tr>
+<td>POD_NAME</td>
+<td>Pod Name</td>
+<td>metadata.name</td>
+</tr>
+</tbody>
+</table>
+<h2 id="operator-configuration-reference">
+  Operator Configuration Reference
+  <a class="anchor" href="#operator-configuration-reference">#</a>
+</h2>
+<h3 id="system-configuration">
+  System Configuration
+  <a class="anchor" href="#system-configuration">#</a>
+</h3>
+<p>General operator system configuration. Cannot be overridden on a per-resource basis.</p>
+<table class="configuration table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 20%">Key</th>
+            <th class="text-left" style="width: 15%">Default</th>
+            <th class="text-left" style="width: 10%">Type</th>
+            <th class="text-left" style="width: 55%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><h5>kubernetes.operator.dynamic.namespaces.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Enables the operator to dynamically update the list of namespaces it watches. Requires dynamic.config.enabled to be set to true.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.exception.field.max.length</h5></td>
+            <td style="word-wrap: break-word;">2048</td>
+            <td>Integer</td>
+            <td>Maximum length of each exception field including stack trace to be included in CR status error field.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.exception.stacktrace.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Enable exception stacktrace to be included in CR status error field.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.exception.stacktrace.max.length</h5></td>
+            <td style="word-wrap: break-word;">2048</td>
+            <td>Integer</td>
+            <td>Maximum length of stacktrace to be included in CR status error field.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.exception.throwable.list.max.count</h5></td>
+            <td style="word-wrap: break-word;">2</td>
+            <td>Integer</td>
+            <td>Maximum number of throwable to be included in CR status error field.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.flink.client.cancel.timeout</h5></td>
+            <td style="word-wrap: break-word;">1 min</td>
+            <td>Duration</td>
+            <td>The timeout for the reconciler to wait for flink to cancel job.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.flink.client.timeout</h5></td>
+            <td style="word-wrap: break-word;">10 s</td>
+            <td>Duration</td>
+            <td>The timeout for the observer to wait the flink rest client to return.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.leader-election.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Enable leader election for the operator to allow running standby instances.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.leader-election.lease-duration</h5></td>
+            <td style="word-wrap: break-word;">15 s</td>
+            <td>Duration</td>
+            <td>Leader election lease duration.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.leader-election.lease-name</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>String</td>
+            <td>Leader election lease name, must be unique for leases in the same namespace.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.leader-election.renew-deadline</h5></td>
+            <td style="word-wrap: break-word;">10 s</td>
+            <td>Duration</td>
+            <td>Leader election renew deadline.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.leader-election.retry-period</h5></td>
+            <td style="word-wrap: break-word;">2 s</td>
+            <td>Duration</td>
+            <td>Leader election retry period.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.rate-limiter.limit</h5></td>
+            <td style="word-wrap: break-word;">5</td>
+            <td>Integer</td>
+            <td>Max number of reconcile loops triggered within the rate limiter refresh period for each resource. Setting the limit &lt;= 0 disables the limiter.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.rate-limiter.refresh-period</h5></td>
+            <td style="word-wrap: break-word;">15 s</td>
+            <td>Duration</td>
+            <td>Operator rate limiter refresh period for each resource.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.reconcile.interval</h5></td>
+            <td style="word-wrap: break-word;">1 min</td>
+            <td>Duration</td>
+            <td>The interval for the controller to reschedule the reconcile process.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.reconcile.parallelism</h5></td>
+            <td style="word-wrap: break-word;">50</td>
+            <td>Integer</td>
+            <td>The maximum number of threads running the reconciliation loop. Use -1 for infinite.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.resource.cleanup.timeout</h5></td>
+            <td style="word-wrap: break-word;">5 min</td>
+            <td>Duration</td>
+            <td>The timeout for the resource clean up to wait for flink to shutdown cluster.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.retry.initial.interval</h5></td>
+            <td style="word-wrap: break-word;">5 s</td>
+            <td>Duration</td>
+            <td>Initial interval of retries on unhandled controller errors.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.retry.interval.multiplier</h5></td>
+            <td style="word-wrap: break-word;">1.5</td>
+            <td>Double</td>
+            <td>Interval multiplier of retries on unhandled controller errors.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.retry.max.attempts</h5></td>
+            <td style="word-wrap: break-word;">15</td>
+            <td>Integer</td>
+            <td>Max attempts of retries on unhandled controller errors.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.retry.max.interval</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>Duration</td>
+            <td>Max interval of retries on unhandled controller errors.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.user.artifacts.base.dir</h5></td>
+            <td style="word-wrap: break-word;">"/opt/flink/artifacts"</td>
+            <td>String</td>
+            <td>The base dir to put the session job artifacts.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.watched.namespaces</h5></td>
+            <td style="word-wrap: break-word;">"JOSDK_ALL_NAMESPACES"</td>
+            <td>String</td>
+            <td>Comma separated list of namespaces the operator monitors for custom resources.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="resourceuser-configuration">
+  Resource/User Configuration
+  <a class="anchor" href="#resourceuser-configuration">#</a>
+</h3>
+<p>These options can be configured on both an operator and a per-resource level. When set under <code>spec.flinkConfiguration</code> for the Flink resources it will override the default value provided in the operator default configuration (<code>flink-conf.yaml</code>).</p>
+<table class="configuration table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 20%">Key</th>
+            <th class="text-left" style="width: 15%">Default</th>
+            <th class="text-left" style="width: 10%">Type</th>
+            <th class="text-left" style="width: 55%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><h5>kubernetes.operator.checkpoint.trigger.grace-period</h5></td>
+            <td style="word-wrap: break-word;">1 min</td>
+            <td>Duration</td>
+            <td>The interval before a checkpoint trigger attempt is marked as unsuccessful.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.checkpoint.type</h5></td>
+            <td style="word-wrap: break-word;">FULL</td>
+            <td><p>Enum</p></td>
+            <td>Type of checkpoint.<br /><br />Possible values:<ul><li>"FULL": A comprehensive snapshot, saving the complete state of a data stream.</li><li>"INCREMENTAL": A more efficient, reduced snapshot, saving only the differences in state data since the last checkpoint.</li><li>"UNKNOWN": Only for internal purposes.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.cluster.health-check.checkpoint-progress.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Whether to enable checkpoint progress health check for clusters.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.cluster.health-check.checkpoint-progress.window</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>Duration</td>
+            <td>If no checkpoints are completed within the defined time window, the job is considered unhealthy. The minimum window size is `max(checkpointingInterval, checkpointTimeout) * (tolerableCheckpointFailures + 2)`, which also serves as the default value when checkpointing is enabled. For example with checkpoint interval 10 minutes and 0 tolerable failures, the default progress check window will be 20 minutes.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.cluster.health-check.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Whether to enable health check for clusters.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.cluster.health-check.restarts.threshold</h5></td>
+            <td style="word-wrap: break-word;">64</td>
+            <td>Integer</td>
+            <td>The threshold which is checked against job restart count within a configured window. If the restart count is reaching the threshold then full cluster restart is initiated.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.cluster.health-check.restarts.window</h5></td>
+            <td style="word-wrap: break-word;">2 min</td>
+            <td>Duration</td>
+            <td>The duration of the time window where job restart count measured.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.deployment.readiness.timeout</h5></td>
+            <td style="word-wrap: break-word;">5 min</td>
+            <td>Duration</td>
+            <td>The timeout for deployments to become ready/stable before being rolled back if rollback is enabled.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.deployment.rollback.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Whether to enable rolling back failed deployment upgrades.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.exception.label.mapper</h5></td>
+            <td style="word-wrap: break-word;"></td>
+            <td>Map</td>
+            <td>Key-Value pair where key is the REGEX to filter through the exception messages and value is the string to be included in CR status error label field if the REGEX matches. Expected format: headerKey1:headerValue1,headerKey2:headerValue2.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.jm-deployment-recovery.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Whether to enable recovery of missing/deleted jobmanager deployments.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.jm-deployment.shutdown-ttl</h5></td>
+            <td style="word-wrap: break-word;">1 d</td>
+            <td>Duration</td>
+            <td>Time after which jobmanager pods of terminal application deployments are shut down.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.jm-deployment.startup.probe.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Enable job manager startup probe to allow detecting when the jobmanager could not submit the job.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.job.drain-on-savepoint-deletion</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Indicate whether the job should be drained when stopping with savepoint.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.job.restart.failed</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Whether to restart failed jobs.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.job.savepoint-on-deletion</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Indicate whether a savepoint must be taken when deleting a FlinkDeployment or FlinkSessionJob.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.job.upgrade.ignore-pending-savepoint</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Whether to ignore pending savepoint during job upgrade.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.job.upgrade.inplace-scaling.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Whether to enable inplace scaling for Flink 1.18+ using the resource requirements API. On failure or earlier Flink versions it falls back to regular full redeployment.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.job.upgrade.last-state-fallback.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Enables last-state fallback for savepoint upgrade mode. When the job is not running thus savepoint cannot be triggered but HA metadata is available for last state restore the operator can initiate the upgrade process when the flag is enabled.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.job.upgrade.last-state.job-cancel.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Cancel jobs during last-state upgrade. This config is ignored for session jobs where cancel is the only mechanism to perform this type of upgrade.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.job.upgrade.last-state.max.allowed.checkpoint.age</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>Duration</td>
+            <td>Max allowed checkpoint age for initiating last-state upgrades on running jobs. If a checkpoint is not available within the desired age (and nothing in progress) a savepoint will be triggered.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.periodic.checkpoint.interval</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>String</td>
+            <td>Option to enable automatic checkpoint triggering. Can be specified either as a Duration type (i.e. '10m') or as a cron expression in Quartz format (6 or 7 positions, see http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html).The triggering schedule is not guaranteed, checkpoints will be triggered as part of the regular reconcile loop. NOTE: checkpoints are generally managed by Flink. This setting isn't meant to replace Flink's checkpoint settings, but to complement them in special cases. For instance, a full checkpoint might need to be occasionally triggered to break the chain of incremental checkpoints and consolidate the partial incremental files. WARNING: not intended to be used together with the cron-based periodic checkpoint triggering</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.periodic.savepoint.interval</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>String</td>
+            <td>Option to enable automatic savepoint triggering. Can be specified either as a Duration type (i.e. '10m') or as a cron expression in Quartz format (6 or 7 positions, see http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html).The triggering schedule is not guaranteed, savepoints will be triggered as part of the regular reconcile loop. WARNING: not intended to be used together with the cron-based periodic savepoint triggering</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.plugins.listeners.&lt;listener-name&gt;.class</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>String</td>
+            <td>Custom plugins listener class, 'listener-name' is the name of the plugin listener, and its value is a fully qualified class name.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.pod-template.merge-arrays-by-name</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Configure the array merge behaviour during pod merging. Arrays can be either merged by position or name matching.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.savepoint.cleanup.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Whether to enable clean up of savepoint FlinkStateSnapshot resources. Savepoint state will be disposed of as well if the snapshot CR spec is configured as such. For automatic savepoints this can be configured via the kubernetes.operator.savepoint.dispose-on-delete config option.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.savepoint.dispose-on-delete</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Savepoint data for FlinkStateSnapshot resources created by the operator during upgrades and periodic savepoints will be disposed of automatically when the generated Kubernetes resource is deleted.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.savepoint.format.type</h5></td>
+            <td style="word-wrap: break-word;">CANONICAL</td>
+            <td><p>Enum</p></td>
+            <td>Type of the binary format in which a savepoint should be taken.<br /><br />Possible values:<ul><li>"CANONICAL": A canonical, common for all state backends format. It lets you switch state backends.</li><li>"NATIVE": A format specific for the chosen state backend, in its native binary format. Might be faster to take and restore from than the canonical one.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.savepoint.history.max.age</h5></td>
+            <td style="word-wrap: break-word;">1 d</td>
+            <td>Duration</td>
+            <td>Maximum age for savepoint FlinkStateSnapshot resources to retain. Due to lazy clean-up, the most recent savepoint may live longer than the max age.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.savepoint.history.max.count</h5></td>
+            <td style="word-wrap: break-word;">10</td>
+            <td>Integer</td>
+            <td>Maximum number of savepoint FlinkStateSnapshot resources entries to retain.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.savepoint.trigger.grace-period</h5></td>
+            <td style="word-wrap: break-word;">1 min</td>
+            <td>Duration</td>
+            <td>The interval before a savepoint trigger attempt is marked as unsuccessful.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.session.block-on-unmanaged-jobs</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Block FlinkDeployment deletion if unmanaged jobs (jobs not managed by FlinkSessionJob resources) are running in the session cluster. Example: Jobs submitted via CLI.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.snapshot.resource.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Create new FlinkStateSnapshot resources for storing snapshots. Disable if you wish to use the deprecated mode and save snapshot results to FlinkDeployment/FlinkSessionJob status fields. The Operator will fallback to legacy mode during runtime if the CRD is not found, even if this value is true.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.user.artifacts.http.header</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>Map</td>
+            <td>Custom HTTP header for HttpArtifactFetcher. The header will be applied when getting the session job artifacts. Expected format: headerKey1:headerValue1,headerKey2:headerValue2.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="autoscaler-configuration">
+  Autoscaler Configuration
+  <a class="anchor" href="#autoscaler-configuration">#</a>
+</h3>
+<p>Like other resource options these can be configured on both an operator and a per-resource level. When set under <code>spec.flinkConfiguration</code> for the Flink resources it will override the default value provided in the operator default configuration (<code>flink-conf.yaml</code>).</p>
+<blockquote>
+<p>Note: The option prefix <code>kubernetes.operator.</code> was removed in FLIP-334, because the autoscaler module was decoupled from flink-kubernetes-operator.</p>
+</blockquote>
+<table class="configuration table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 20%">Key</th>
+            <th class="text-left" style="width: 15%">Default</th>
+            <th class="text-left" style="width: 10%">Type</th>
+            <th class="text-left" style="width: 55%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><h5>job.autoscaler.backlog-processing.lag-threshold</h5></td>
+            <td style="word-wrap: break-word;">5 min</td>
+            <td>Duration</td>
+            <td>Lag threshold which will prevent unnecessary scalings while removing the pending messages responsible for the lag.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.catch-up.duration</h5></td>
+            <td style="word-wrap: break-word;">30 min</td>
+            <td>Duration</td>
+            <td>The target duration for fully processing any backlog after a scaling operation. Set to 0 to disable backlog based scaling.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Enable job autoscaler module.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.excluded.periods</h5></td>
+            <td style="word-wrap: break-word;"></td>
+            <td>List&lt;String&gt;</td>
+            <td>A (semicolon-separated) list of expressions indicate excluded periods during which autoscaling execution is forbidden, the expression consist of two optional subexpressions concatenated with &amp;&amp;, one is cron expression in Quartz format (6 or 7 positions), for example, * * 9-11,14-16 * * ? means exclude from 9:00:00am to 11:59:59am and from 2:00:00pm to 4:59:59pm every day, * * * ? * 2-6 means exclude every weekday, etc.see http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html for the usage of cron expression.Caution: in most case cron expression is enough, we introduce the other subexpression: daily expression, because cron can only represent integer hour period without minutes and seconds suffix, daily expression's formation is startTime-endTime, such as 9:30:30-10:50:20, when exclude from 9:30:30-10:50:20 in Monday and Thursday we can express it as 9:30:30-10:50:20 &amp;&amp; * * * ? * 2,5</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.flink.rest-client.timeout</h5></td>
+            <td style="word-wrap: break-word;">10 s</td>
+            <td>Duration</td>
+            <td>The timeout for waiting the flink rest client to return.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.history.max.age</h5></td>
+            <td style="word-wrap: break-word;">1 d</td>
+            <td>Duration</td>
+            <td>Maximum age for past scaling decisions to retain.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.history.max.count</h5></td>
+            <td style="word-wrap: break-word;">3</td>
+            <td>Integer</td>
+            <td>Maximum number of past scaling decisions to retain per vertex.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.memory.gc-pressure.threshold</h5></td>
+            <td style="word-wrap: break-word;">1.0</td>
+            <td>Double</td>
+            <td>Max allowed GC pressure (percentage spent garbage collecting) during scaling operations. Autoscaling will be paused if the GC pressure exceeds this limit.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.memory.heap-usage.threshold</h5></td>
+            <td style="word-wrap: break-word;">1.0</td>
+            <td>Double</td>
+            <td>Max allowed percentage of heap usage during scaling operations. Autoscaling will be paused if the heap usage exceeds this threshold.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.memory.tuning.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>If enabled, the initial amount of memory specified for TaskManagers will be reduced/increased according to the observed needs.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.memory.tuning.maximize-managed-memory</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>If enabled and managed memory is used (e.g. RocksDB turned on), any reduction of heap, network, or metaspace memory will increase the managed memory.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.memory.tuning.overhead</h5></td>
+            <td style="word-wrap: break-word;">0.2</td>
+            <td>Double</td>
+            <td>Overhead to add to tuning decisions (0-1). This ensures spare capacity and allows the memory to grow beyond the dynamically computed limits, but never beyond the original memory limits.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.memory.tuning.scale-down-compensation.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>If this option is enabled and memory tuning is enabled, TaskManager memory will be increased when scaling down. This ensures that after applying memory tuning there is sufficient memory when running with fewer TaskManagers.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.metrics.busy-time.aggregator</h5></td>
+            <td style="word-wrap: break-word;">MAX</td>
+            <td><p>Enum</p></td>
+            <td>Metric aggregator to use for busyTime metrics. This affects how true processing/output rate will be computed. Using max allows us to handle jobs with data skew more robustly, while avg may provide better stability when we know that the load distribution is even.<br /><br />Possible values:<ul><li>"AVG"</li><li>"MAX"</li><li>"MIN"</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.metrics.window</h5></td>
+            <td style="word-wrap: break-word;">15 min</td>
+            <td>Duration</td>
+            <td>Scaling metrics aggregation window size.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.observed-scalability.coefficient-min</h5></td>
+            <td style="word-wrap: break-word;">0.5</td>
+            <td>Double</td>
+            <td>Minimum allowed value for the observed scalability coefficient. Prevents aggressive scaling by clamping low coefficient estimates. If the estimated coefficient falls below this value, it is capped at the configured minimum.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.observed-scalability.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Enables the use of an observed scalability coefficient when computing target parallelism. If enabled, the system will estimate the scalability coefficient based on historical scaling data instead of assuming perfect linear scaling. This helps account for real-world inefficiencies such as network overhead and coordination costs.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.observed-scalability.min-observations</h5></td>
+            <td style="word-wrap: break-word;">3</td>
+            <td>Integer</td>
+            <td>Defines the minimum number of historical scaling observations required to estimate the scalability coefficient. If the number of available observations is below this threshold, the system falls back to assuming linear scaling. Note: To effectively use a higher minimum observation count, you need to increase job.autoscaler.history.max.count. Avoid setting job.autoscaler.history.max.count to a very high value, as the number of retained data points is limited by the size of the state store—particularly when using Kubernetes-based state store.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.observed-true-processing-rate.lag-threshold</h5></td>
+            <td style="word-wrap: break-word;">30 s</td>
+            <td>Duration</td>
+            <td>Lag threshold for enabling observed true processing rate measurements.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.observed-true-processing-rate.min-observations</h5></td>
+            <td style="word-wrap: break-word;">2</td>
+            <td>Integer</td>
+            <td>Minimum nr of observations used when estimating / switching to observed true processing rate.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.observed-true-processing-rate.switch-threshold</h5></td>
+            <td style="word-wrap: break-word;">0.15</td>
+            <td>Double</td>
+            <td>Percentage threshold for switching to observed from busy time based true processing rate if the measurement is off by at least the configured fraction. For example 0.15 means we switch to observed if the busy time based computation is at least 15% higher during catchup.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.quota.cpu</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>Double</td>
+            <td>Quota of the CPU count. When scaling would go beyond this number the the scaling is not going to happen.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.quota.memory</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>MemorySize</td>
+            <td>Quota of the memory size. When scaling would go beyond this number the the scaling is not going to happen.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.restart.time</h5></td>
+            <td style="word-wrap: break-word;">5 min</td>
+            <td>Duration</td>
+            <td>Expected restart time to be used until the operator can determine it reliably from history.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.restart.time-tracking.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Whether to use the actual observed rescaling restart times instead of the fixed 'job.autoscaler.restart.time' configuration. If set to true, the maximum restart duration over a number of samples will be used. The value of 'job.autoscaler.restart.time-tracking.limit' will act as an upper bound, and the value of 'job.autoscaler.restart.time' will still be used when there are no rescale samples.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.restart.time-tracking.limit</h5></td>
+            <td style="word-wrap: break-word;">15 min</td>
+            <td>Duration</td>
+            <td>Maximum cap for the observed restart time when 'job.autoscaler.restart.time-tracking.enabled' is set to true.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.scale-down.interval</h5></td>
+            <td style="word-wrap: break-word;">1 h</td>
+            <td>Duration</td>
+            <td>The delay time for scale down to be executed. If it is greater than 0, the scale down will be delayed. Delayed rescale can merge multiple scale downs within `scale-down.interval` into a scale down, thereby reducing the number of rescales. Reducing the frequency of job restarts can improve job availability. Scale down can be executed directly if it's less than or equal 0.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.scale-down.max-factor</h5></td>
+            <td style="word-wrap: break-word;">0.6</td>
+            <td>Double</td>
+            <td>Max scale down factor. 1 means no limit on scale down, 0.6 means job can only be scaled down with 60% of the original parallelism.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.scale-up.max-factor</h5></td>
+            <td style="word-wrap: break-word;">100000.0</td>
+            <td>Double</td>
+            <td>Max scale up factor. 2.0 means job can only be scaled up with 200% of the current parallelism.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.scaling.effectiveness.detection.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Whether to enable detection of ineffective scaling operations and allowing the autoscaler to block further scale ups.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.scaling.effectiveness.threshold</h5></td>
+            <td style="word-wrap: break-word;">0.1</td>
+            <td>Double</td>
+            <td>Processing rate increase threshold for detecting ineffective scaling threshold. 0.1 means if we do not accomplish at least 10% of the desired capacity increase with scaling, the action is marked ineffective.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.scaling.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Enable vertex scaling execution by the autoscaler. If disabled, the autoscaler will only collect metrics and evaluate the suggested parallelism for each vertex but will not upgrade the jobs.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.scaling.event.interval</h5></td>
+            <td style="word-wrap: break-word;">30 min</td>
+            <td>Duration</td>
+            <td>Time interval to resend the identical event</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.scaling.key-group.partitions.adjust.mode</h5></td>
+            <td style="word-wrap: break-word;">EVENLY_SPREAD</td>
+            <td><p>Enum</p></td>
+            <td>How to adjust the parallelism of Source vertex or upstream shuffle is keyBy<br /><br />Possible values:<ul><li>"EVENLY_SPREAD": This mode ensures that the parallelism adjustment attempts to evenly distribute data across subtasks. It is particularly effective for source vertices that are aware of partition counts or vertices after 'keyBy' operation. The goal is to have the number of key groups or partitions be divisible by the set parallelism, ensuring even data distribution and reducing data skew.</li><li>"MAXIMIZE_UTILISATION": This model is to maximize resource utilization. In this mode, an attempt is made to set the parallelism that meets the current consumption rate requirements. It is not enforced that the number of key groups or partitions is divisible by the parallelism.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.stabilization.interval</h5></td>
+            <td style="word-wrap: break-word;">5 min</td>
+            <td>Duration</td>
+            <td>Stabilization period in which no new scaling will be executed</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.utilization.max</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>Double</td>
+            <td>Max vertex utilization</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.utilization.min</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>Double</td>
+            <td>Min vertex utilization</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.utilization.target</h5></td>
+            <td style="word-wrap: break-word;">0.7</td>
+            <td>Double</td>
+            <td>Target vertex utilization</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.vertex.exclude.ids</h5></td>
+            <td style="word-wrap: break-word;"></td>
+            <td>List&lt;String&gt;</td>
+            <td>A (semicolon-separated) list of vertex ids in hexstring for which to disable scaling. Caution: For non-sink vertices this will still scale their downstream operators until https://issues.apache.org/jira/browse/FLINK-31215 is implemented.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.vertex.max-parallelism</h5></td>
+            <td style="word-wrap: break-word;">200</td>
+            <td>Integer</td>
+            <td>The maximum parallelism the autoscaler can use. Note that this limit will be ignored if it is higher than the max parallelism configured in the Flink config or directly on each operator.</td>
+        </tr>
+        <tr>
+            <td><h5>job.autoscaler.vertex.min-parallelism</h5></td>
+            <td style="word-wrap: break-word;">1</td>
+            <td>Integer</td>
+            <td>The minimum parallelism the autoscaler can use.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="autoscaler-standalone-configuration">
+  Autoscaler Standalone Configuration
+  <a class="anchor" href="#autoscaler-standalone-configuration">#</a>
+</h3>
+<p>Unlike other resource options, these options only work with autoscaler standalone process.</p>
+<table class="configuration table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 20%">Key</th>
+            <th class="text-left" style="width: 15%">Default</th>
+            <th class="text-left" style="width: 10%">Type</th>
+            <th class="text-left" style="width: 55%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><h5>autoscaler.standalone.control-loop.interval</h5></td>
+            <td style="word-wrap: break-word;">10 s</td>
+            <td>Duration</td>
+            <td>The interval of autoscaler standalone control loop.</td>
+        </tr>
+        <tr>
+            <td><h5>autoscaler.standalone.control-loop.parallelism</h5></td>
+            <td style="word-wrap: break-word;">100</td>
+            <td>Integer</td>
+            <td>The parallelism of autoscaler standalone control loop.</td>
+        </tr>
+        <tr>
+            <td><h5>autoscaler.standalone.event-handler.type</h5></td>
+            <td style="word-wrap: break-word;">LOGGING</td>
+            <td><p>Enum</p></td>
+            <td>The autoscaler event handler type.<br /><br />Possible values:<ul><li>"LOGGING": The event handler based on logging.</li><li>"JDBC": The event handler which persists all events in JDBC related database. It's recommended in production.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>autoscaler.standalone.fetcher.flink-cluster.host</h5></td>
+            <td style="word-wrap: break-word;">"localhost"</td>
+            <td>String</td>
+            <td>The host name of flink cluster when the flink-cluster fetcher is used.</td>
+        </tr>
+        <tr>
+            <td><h5>autoscaler.standalone.fetcher.flink-cluster.port</h5></td>
+            <td style="word-wrap: break-word;">8081</td>
+            <td>Integer</td>
+            <td>The port of flink cluster when the flink-cluster fetcher is used.</td>
+        </tr>
+        <tr>
+            <td><h5>autoscaler.standalone.jdbc.event-handler.ttl</h5></td>
+            <td style="word-wrap: break-word;">90 d</td>
+            <td>Duration</td>
+            <td>The time to live based on create time for the JDBC event handler records. When the config is set as '0', the ttl strategy for the records would be disabled.</td>
+        </tr>
+        <tr>
+            <td><h5>autoscaler.standalone.jdbc.password-env-variable</h5></td>
+            <td style="word-wrap: break-word;">"JDBC_PWD"</td>
+            <td>String</td>
+            <td>The environment variable name of jdbc password when <code class="highlighter-rouge">autoscaler.standalone.state-store.type</code> or <code class="highlighter-rouge">autoscaler.standalone.event-handler.type</code> has been set to <code class="highlighter-rouge">JDBC</code>. In general, the environment variable name doesn't need to be changed. Users need to export the password using this environment variable.</td>
+        </tr>
+        <tr>
+            <td><h5>autoscaler.standalone.jdbc.url</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>String</td>
+            <td>The jdbc url when <code class="highlighter-rouge">autoscaler.standalone.state-store.type</code> or <code class="highlighter-rouge">autoscaler.standalone.event-handler.type</code> has been set to <code class="highlighter-rouge">JDBC</code>, such as: <code class="highlighter-rouge">jdbc:mysql://localhost:3306/flink_autoscaler</code>.<br />This option is required when using JDBC state store or JDBC event handler.</td>
+        </tr>
+        <tr>
+            <td><h5>autoscaler.standalone.jdbc.username</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>String</td>
+            <td>The jdbc username when <code class="highlighter-rouge">autoscaler.standalone.state-store.type</code> or <code class="highlighter-rouge">autoscaler.standalone.event-handler.type</code> has been set to <code class="highlighter-rouge">JDBC</code>.</td>
+        </tr>
+        <tr>
+            <td><h5>autoscaler.standalone.state-store.type</h5></td>
+            <td style="word-wrap: break-word;">MEMORY</td>
+            <td><p>Enum</p></td>
+            <td>The autoscaler state store type.<br /><br />Possible values:<ul><li>"MEMORY": The state store based on the Java Heap, the state will be discarded after process restarts.</li><li>"JDBC": The state store which persists its state in JDBC related database. It's recommended in production.</li></ul></td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="system-metrics-configuration">
+  System Metrics Configuration
+  <a class="anchor" href="#system-metrics-configuration">#</a>
+</h3>
+<p>Operator system metrics configuration. Cannot be overridden on a per-resource basis.</p>
+<table class="configuration table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 20%">Key</th>
+            <th class="text-left" style="width: 15%">Default</th>
+            <th class="text-left" style="width: 10%">Type</th>
+            <th class="text-left" style="width: 55%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><h5>kubernetes.operator.josdk.metrics.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Enable forwarding of Java Operator SDK metrics to the Flink metric registry.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.jvm.metrics.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Enable Kubernetes Operator JVM metrics.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.kubernetes.client.metrics.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Enable KubernetesClient metrics for measuring the HTTP traffic to the Kubernetes API Server.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.kubernetes.client.metrics.http.response.code.groups.enabled</h5></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Enable KubernetesClient metrics for measuring the HTTP traffic to the Kubernetes API Server by response code group, e.g. 1xx, 2xx.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.kubernetes.client.metrics.slow.request.threshold</h5></td>
+            <td style="word-wrap: break-word;">5 s</td>
+            <td>Duration</td>
+            <td>Threshold value that triggers slow request counter for Kubernetes client metrics</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.metrics.histogram.sample.size</h5></td>
+            <td style="word-wrap: break-word;">1000</td>
+            <td>Integer</td>
+            <td>Defines the number of measured samples when calculating statistics.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.metrics.scope.k8soperator.resource</h5></td>
+            <td style="word-wrap: break-word;">"&lt;host&gt;.k8soperator.&lt;namespace&gt;.&lt;name&gt;.resource.&lt;resourcens&gt;.&lt;resourcename&gt;.&lt;resourcetype&gt;"</td>
+            <td>String</td>
+            <td>Defines the scope format string that is applied to all metrics scoped to the kubernetes operator resource.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.metrics.scope.k8soperator.resourcens</h5></td>
+            <td style="word-wrap: break-word;">"&lt;host&gt;.k8soperator.&lt;namespace&gt;.&lt;name&gt;.namespace.&lt;resourcens&gt;.&lt;resourcetype&gt;"</td>
+            <td>String</td>
+            <td>Defines the scope format string that is applied to all metrics scoped to the kubernetes operator resource namespace.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.metrics.scope.k8soperator.system</h5></td>
+            <td style="word-wrap: break-word;">"&lt;host&gt;.k8soperator.&lt;namespace&gt;.&lt;name&gt;.system"</td>
+            <td>String</td>
+            <td>Defines the scope format string that is applied to all metrics scoped to the kubernetes operator.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.resource.lifecycle.metrics.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Enable resource lifecycle state metrics. This enables both state and transition counts/histograms.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.resource.lifecycle.namespace.histograms.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>In addition to the system level histograms, enable per namespace tracking of state and transition times.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.resource.metrics.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Enables metrics for FlinkDeployment and FlinkSessionJob custom resources.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="advanced-system-configuration">
+  Advanced System Configuration
+  <a class="anchor" href="#advanced-system-configuration">#</a>
+</h3>
+<p>Advanced operator system configuration. Cannot be overridden on a per-resource basis.</p>
+<table class="configuration table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 20%">Key</th>
+            <th class="text-left" style="width: 15%">Default</th>
+            <th class="text-left" style="width: 10%">Type</th>
+            <th class="text-left" style="width: 55%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><h5>kubernetes.operator.cluster.resource-view.refresh-interval</h5></td>
+            <td style="word-wrap: break-word;">-1 min</td>
+            <td>Duration</td>
+            <td>How often to retrieve Kubernetes cluster resource usage information. This information is used to avoid running out of cluster resources when scaling up resources. Negative values disable the feature.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.config.cache.size</h5></td>
+            <td style="word-wrap: break-word;">1000</td>
+            <td>Integer</td>
+            <td>Max config cache size.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.config.cache.timeout</h5></td>
+            <td style="word-wrap: break-word;">10 min</td>
+            <td>Duration</td>
+            <td>Expiration time for cached configs.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.dynamic.config.check.interval</h5></td>
+            <td style="word-wrap: break-word;">5 min</td>
+            <td>Duration</td>
+            <td>Time interval for checking config changes.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.dynamic.config.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Whether to enable on-the-fly config changes through the operator configmap.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.events.exceptions.limit-per-reconciliation</h5></td>
+            <td style="word-wrap: break-word;">10</td>
+            <td>Integer</td>
+            <td>Maximum number of exception-related Kubernetes events emitted per reconciliation cycle.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.events.exceptions.stacktrace-lines</h5></td>
+            <td style="word-wrap: break-word;">5</td>
+            <td>Integer</td>
+            <td>Maximum number of stack trace lines to include in exception-related Kubernetes event messages.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.health.canary.resource.timeout</h5></td>
+            <td style="word-wrap: break-word;">1 min</td>
+            <td>Duration</td>
+            <td>Allowed max time between spec update and reconciliation for canary resources.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.health.probe.enabled</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Enables health probe for the kubernetes operator.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.health.probe.port</h5></td>
+            <td style="word-wrap: break-word;">8085</td>
+            <td>Integer</td>
+            <td>The port the health probe will use to expose the status.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.ingress.manage</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Feature flag if operator will manage the Ingress resource. If false, no InformerEventSource will be registered for Ingress, and Ingress won't be created.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.label.selector</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>String</td>
+            <td>Label selector of the custom resources to be watched. Please see https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors for the format supported.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.observer.progress-check.interval</h5></td>
+            <td style="word-wrap: break-word;">10 s</td>
+            <td>Duration</td>
+            <td>The interval for observing status for in-progress operations such as deployment and savepoints.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.observer.rest-ready.delay</h5></td>
+            <td style="word-wrap: break-word;">10 s</td>
+            <td>Duration</td>
+            <td>Final delay before deployment is marked ready after port becomes accessible.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.resource.deletion.propagation</h5></td>
+            <td style="word-wrap: break-word;">Foreground</td>
+            <td><p>Enum</p></td>
+            <td>JM/TM Deployment deletion propagation.<br /><br />Possible values:<ul><li>"Orphan"</li><li>"Background"</li><li>"Foreground"</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.savepoint.history.max.age.threshold</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>Duration</td>
+            <td>Maximum age threshold for FlinkStateSnapshot resources to retain.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.savepoint.history.max.count.threshold</h5></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>Integer</td>
+            <td>Maximum number threshold of savepoint FlinkStateSnapshot resources to retain.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.startup.stop-on-informer-error</h5></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Whether informer errors should stop operator startup. If false, the startup will ignore recoverable errors, caused for example by RBAC issues and will retry periodically.</td>
+        </tr>
+        <tr>
+            <td><h5>kubernetes.operator.termination.timeout</h5></td>
+            <td style="word-wrap: break-word;">10 s</td>
+            <td>Duration</td>
+            <td>Operator shutdown timeout before reconciliation threads are killed.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="ipv6-configuration">
+  IPV6 Configuration
+  <a class="anchor" href="#ipv6-configuration">#</a>
+</h3>
+<p>If you run Flink Operator in IPV6 environment, the <a href="https://issues.apache.org/jira/browse/FLINK-32777">host name verification error</a> will be triggered
+due to a known bug in Okhttp client. As a workaround before new Okhttp 5.0.0 release, the environment variable below needs to be set
+for both Flink Operator and Flink Deployment Configuration.</p>
+<p>KUBERNETES_DISABLE_HOSTNAME_VERIFICATION=true</p>
+<h2 id="java-options-for-java-17-based-jobtask-manager-images">
+  Java options for Java 17 based Job/Task Manager images
+  <a class="anchor" href="#java-options-for-java-17-based-jobtask-manager-images">#</a>
+</h2>
+<h3 id="summary">
+  Summary
+  <a class="anchor" href="#summary">#</a>
+</h3>
+<p>From Java 17 onwards, Flink requires certain Java options to be supplied in order to function. These are set by default in the operator&rsquo;s <code>helm</code> configuration file.
+However, users should note:</p>
+<ul>
+<li><strong>Flink 1.19+</strong>: If users want to change the default opts for all Flink deployments, they should <strong>add to</strong> rather than replace these default options (<code>kubernetes.operator.default-configuration.flink-version.&lt;flink-version&gt;.env.java.default-opts.all</code>) in the <code>helm</code> configuration. They should also avoid overriding <code>env.java.default-opts.all</code> in their <code>FlinkDeployment</code> configuration and use <code>env.java.opts.all</code> for any Java options needed by their own code.</li>
+<li><strong>Flink 1.18</strong>: Setting default Java opts is not available in Flink 1.18, so the operator sets <code>env.java.opts.all</code> to allow Java 17 to work. If users wish to use Flink 1.18 with Java 17 based images, they should avoid overriding <code>env.java.default.all</code> in their <code>FlinkDeployment</code> configuration. If custom Java opts are required, then they should include the <a href="https://github.com/apache/flink/blob/release-1.18.1/flink-dist/src/main/resources/flink-conf.yaml">upstream Java options</a>.</li>
+</ul>
+<h3 id="details">
+  Details
+  <a class="anchor" href="#details">#</a>
+</h3>
+<p>The default Job/Task Manager images use JRE 11 (Eclipse Temurin).
+However, there are official images published which use JRE 17 (e.g. <code>flink:1.20.0-scala_2.12-java17</code>) and users can customize the image used in their <code>FlinkDeployment</code> which can use a custom JRE.</p>
+<p>As Java 17 now requires the use of the module system (<a href="https://openjdk.org/projects/jigsaw/">Project Jigsaw</a>), the user will need to supply the appropriate <code>add-exports</code> and <code>add-opens</code> Java options in order for the pre-module system code in Flink to function correctly with Java 17+.
+These options are defined upstream in the default configuration yaml (e.g. for <a href="https://github.com/apache/flink/blob/release-1.20.0/flink-dist/src/main/resources/config.yaml">Flink 1.20</a>).</p>
+<p>Users wanting to run images based on Java 17 could supply a copy of these options by setting <code>env.java.opts.all</code>, in their <code>FlinkDeployment.spec.flinkconfiguration</code> to the upstream opts list and adding any options their code required.
+However, this has to be done for every deployment.
+To avoid this, the default configuration file used for <code>helm</code> sets the <a href="https://nightlies.apache.org/flink/flink-docs-master/docs/deployment/config/#env-java-default-opts-all"><code>env.java.default-opts.all</code></a> config to the upstream Flink Java options for the given Flink version.
+The default opts are appended to any user supplied options via <code>env.java.opts.all</code>.
+Therefore, users can continue to set Java options for their own code in their <code>FlinkDeployment</code>s and those required for Flink&rsquo;s core operations will be appended automatically.</p>
+<p>The exception to the above is Flink 1.18, as the <code>env.java.default-opts.all</code> option is not available in that version.
+For 1.18 the <code>helm</code> default config sets the <code>env.java.opts.all</code> directly.
+This will allow Java 17 based images to work correctly.
+However, if a user sets their own <code>env.java.opts.all</code> in their <code>FlinkDeployment</code>, then they will need to copy the <a href="https://github.com/apache/flink/blob/release-1.18.1/flink-dist/src/main/resources/flink-conf.yaml">upstream Java options</a> into their list.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  
+
+
+
+
+<a href="//github.com/apache/flink-kubernetes-operator/edit/release-1.13/docs/content/docs/operations/configuration.md" style="color:black"><i class="fa fa-edit fa-fw"></i>Edit This Page</a>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#specifying-operator-configuration">Specifying Operator Configuration</a>
+      <ul>
+        <li><a href="#flink-version-and-namespace-specific-defaults">Flink Version and Namespace specific defaults</a></li>
+      </ul>
+    </li>
+    <li><a href="#dynamic-operator-configuration">Dynamic Operator Configuration</a></li>
+    <li><a href="#leader-election-and-high-availability">Leader Election and High Availability</a></li>
+    <li><a href="#environment-variables">Environment variables</a></li>
+    <li><a href="#operator-configuration-reference">Operator Configuration Reference</a>
+      <ul>
+        <li><a href="#system-configuration">System Configuration</a></li>
+        <li><a href="#resourceuser-configuration">Resource/User Configuration</a></li>
+        <li><a href="#autoscaler-configuration">Autoscaler Configuration</a></li>
+        <li><a href="#autoscaler-standalone-configuration">Autoscaler Standalone Configuration</a></li>
+        <li><a href="#system-metrics-configuration">System Metrics Configuration</a></li>
+        <li><a href="#advanced-system-configuration">Advanced System Configuration</a></li>
+        <li><a href="#ipv6-configuration">IPV6 Configuration</a></li>
+      </ul>
+    </li>
+    <li><a href="#java-options-for-java-17-based-jobtask-manager-images">Java options for Java 17 based Job/Task Manager images</a>
+      <ul>
+        <li><a href="#summary">Summary</a></li>
+        <li><a href="#details">Details</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+ 
+    </aside>
+    <aside class="expand-toc">
+      <button class="toc" onclick="expandToc()">
+        <i class="fa fa-expand" aria-hidden="true"></i>
+      </button>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

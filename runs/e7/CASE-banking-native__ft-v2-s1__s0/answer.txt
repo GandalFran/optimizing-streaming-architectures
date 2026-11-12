@@ -1,0 +1,43 @@
+```bash
+# Create the Kafka topics
+kafka-topics.sh --create --topic banking-transactions --partitions 10 --replication-factor 3 --config retention.ms=604800000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic banking-transactions-validated --partitions 10 --replication-factor 3 --config retention.ms=604800000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092
+```
+
+```yaml
+# Flink configuration
+flink.jobmanager.memory.process.size: 1024 mb
+flink.taskmanager.memory.process.size: 1024 mb
+flink.jobmanager.rpc.address: jobmanager
+flink.resourcemanager.address: jobmanager
+flink.resourcemanager.web.address: jobmanager
+flink.resourcemanager.scheduler: capacity
+flink.resourcemanager.scheduler.capacity.root.default.peak.memory.mb: 2448
+flink.resourcemanager.scheduler.capacity.root.default.slots: 12
+flink.resourcemanager.scheduler.capacity.root.default.slots-per-node: 4
+flink.resourcemanager.scheduler.capacity.root.default.heartbeat.interval: 00:00:05
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group: 1
+flink.resourcemanager.scheduler.capacity.root.default.maximum.active.failover-groups-per-user-per-job-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group-per-failover-group

@@ -1,0 +1,107 @@
+ ```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 1
+  replicas: 2
+  replicaCount: 2
+  config:
+    retention.ms: "86400000"
+    segment.bytes: "1073741824"
+```
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions-clean
+spec:
+  partitions: 1
+  replicas: 2
+  replicaCount: 2
+  config:
+    retention.ms: "86400000"
+    segment.bytes: "1073741824"
+```
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: vehicle-positions
+spec:
+  partitions: 1
+  replicas: 2
+  replicaCount: 2
+  config:
+    retention.ms: "86400000"
+    segment.bytes: "1073741824"
+```
+
+```sql
+CREATE TABLE vehicle_positions (
+    vehicle_id VARCHAR,
+    gps_event JSON,
+    timestamp TIMESTAMP,
+    PRIMARY KEY (vehicle_id)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'vehicle-positions',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'scan.startup.mode' = 'earliest-offset',
+    'format' = 'json'
+);
+
+CREATE TABLE vehicle_positions_clean (
+    vehicle_id VARCHAR,
+    gps_event JSON,
+    timestamp TIMESTAMP,
+    PRIMARY KEY (vehicle_id)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'vehicle-positions-clean',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'scan.startup.mode' = 'earliest-offset',
+    'format' = 'json'
+);
+```
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-sql-runner
+  template:
+    metadata:
+      labels:
+        app: flink-sql-runner
+    spec:
+      containers:
+        - name: flink-sql-runner
+          image: local:///opt/flink/usrlib/sql-runner.jar
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "4"
+              memory: "8Gi"
+            requests:
+              cpu: "4"
+              memory: "8Gi"
+          env:
+            - name: FLINK_PROPERTIES
+              value: "state.backend=filesystem;state.checkpoints.dir=s3://flink-state/checkpoints;taskmanager.numberOfTaskSlots=1"
+            - name: KAFKA_TOPICS
+              value: "vehicle-positions vehicle-positions-clean"
+```
+
+The `KafkaTopic` resources create topics with enough partitions to sustain the given input rate and with retention settings that ensure data persistence for 1 day. The `FlinkDeployment` resource configures the Flink operator with enough resources to handle the maximum throughput of 20,000 events per second and specifies the exact-once delivery guarantee through the Kafka connector properties. The Flink SQL `CREATE TABLE` statements define the source and sink tables with the necessary transformations and keying.

@@ -1,0 +1,98 @@
+### Kafka Topic Creation Commands
+
+```bash
+# Create the session-events topic with 10 partitions (to handle the input rate) and 3 replicas (to ensure durability)
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 10 --topic session-events --config retention.ms=604800000
+
+# Create the session-events-enriched topic with 10 partitions (to handle the output rate) and 3 replicas (to ensure durability)
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 10 --topic session-events-enriched --config retention.ms=604800000
+```
+
+### Flink Configuration
+
+```yml
+execution:
+  checkpointing:
+    unaligned-checkpoints: true
+    checkpoint-interval: 10000
+    checkpointing-mode: EXACTLY_ONCE
+    checkpoint-ttl: 1h
+    max-concurrent-checkpoints: 1
+  restart-strategy:
+    failure-rate:
+      max-failures-per-interval: 3
+      failure-rate-interval: 1m
+      delay-between-attempts: 10s
+
+state:
+  backend: filesystem
+  backend.fs.checkpoint-data-uri: s3://flink-state/checkpoints
+
+table:
+  auto-update: true
+  dynamic-table-options:
+    table.exec.state.ttl.ms: 3600000
+
+kafka:
+  kafka-clients:
+    bootstrap.servers: kafka:9092
+    group.id: flink-session-events
+    default.replication.factor: 3
+    default.replication.factor-produce: 3
+  consumer:
+    isolation.level: read_committed
+  producer:
+    transactional.id: flink-session-events
+```
+
+### Flink SQL Table Definitions
+
+```sql
+-- Create the Kafka source table for session events
+CREATE TABLE session_events (
+  user_id STRING,
+  event_time TIMESTAMP(3),
+  event_data STRING,
+  WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'session-events',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'update-mode' = 'append',
+  'format.type' = 'json',
+  'format.derive-schema' = 'true'
+);
+
+-- Create the Kafka sink table for enriched session events
+CREATE TABLE session_events_enriched (
+  user_id STRING,
+  event_time TIMESTAMP(3),
+  event_data STRING,
+  derived_field STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'session-events-enriched',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'update-mode' = 'append',
+  'format.type' = 'json',
+  'format.derive-schema' = 'true'
+);
+```
+
+**Justification:**
+
+- **Topic partitions**: The `session-events` topic has 10 partitions to handle the input rate of 5,000 events/s. Assuming one partition sustains at most 5 MB/s of produce traffic and an average event size of 2048 bytes, we need at least 5 partitions to handle the input rate. Considering the Flink source subtask can process at most 20,000 events/s, we can safely use 10 partitions for the topic.
+
+- **Topic replication factor**: Both topics have a replication factor of 3 to ensure durability and survive the loss of any single Kafka broker without losing acknowledged data.
+
+- **Checkpointing**: Unaligned checkpoints are enabled with a checkpoint interval of 10 seconds to ensure low latency and efficient failure recovery.
+
+- **Restart strategy**: The restart strategy is set to failure-rate with a maximum of 3 failures per minute and a delay of 10 seconds between attempts to prevent overwhelming the system with frequent restarts.
+
+- **State backend**: The state backend is set to filesystem with the checkpoint data stored in S3 for durable storage.
+
+- **Kafka configuration**: The Kafka configuration is set to use the `kafka:9092` bootstrap server and the `read_committed` isolation level for the consumer. The producer is configured to use transactions with the `flink-session-events` transactional ID.
+
+- **Flink SQL tables**: The Flink SQL tables are defined with the Kafka connector and JSON format. The `WATERMARK` is defined for the `session_events` table to handle late-arriving events.

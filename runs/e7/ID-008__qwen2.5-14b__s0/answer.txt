@@ -1,0 +1,95 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+  namespace: my-namespace
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 86400000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+  namespace: my-namespace
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 86400000
+```
+
+```yaml
+apiVersion: flinkoperator.k8s.io/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: ad-impressions-enrichment
+  namespace: my-namespace
+spec:
+  image: flink:1.20
+  flinkConfiguration:
+    state.checkpoints.num-retained: "10"
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    taskmanager.numberOfTaskSlots: "2"
+  serviceAccount: flink-service-account
+  podTemplate:
+    spec:
+      containers:
+      - name: taskmanager
+        resources:
+          limits:
+            cpu: "4"
+            memory: 8Gi
+  job:
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    entryClass: org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
+```
+
+```sql
+CREATE TABLE ad_impressions (
+    campaign_id STRING,
+    impression_data STRING,
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'ad-impressions',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'properties.group.id' = 'ad-impressions-group',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset'
+);
+
+CREATE TABLE ad_impressions_enriched (
+    campaign_id STRING,
+    impression_data STRING,
+    enriched_data STRING,
+    event_time TIMESTAMP(3),
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'ad-impressions-enriched',
+    'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+    'format' = 'json'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topic Partitions and Replicas**:
+   - **Partitions**: 10 partitions are chosen to distribute the input rate of 5,000 events/s across multiple partitions, ensuring each partition handles 500 events/s, well below the assumed maximum of 20,000 events/s per Flink source subtask.
+   - **Replicas**: 3 replicas ensure durability and availability, as required by the problem statement.
+
+2. **Flink Configuration**:
+   - **TaskManager Slots**: Each TaskManager has 2 slots to allow parallel execution of the Flink job.
+   - **Resources**: TaskManager is configured to use up to 4 CPU and 8 GiB of memory, aligning with the sizing assumptions.
+   - **Checkpointing**: Checkpoints are retained for 10 iterations to ensure fault tolerance and recovery.
+   - **State Backend**: RocksDB is used for state backend to ensure efficient state management.
+
+3. **SQL Table Definitions**:
+   - **WATERMARK**: A watermark is set to handle out-of-order events, ensuring that the system can handle up to 5 seconds of delay in event time.
+   - **Format**: JSON format is used to match the input data format.
+   - **Scan Startup Mode**: `latest-offset` ensures that the Flink job starts reading from the latest offset, aligning with the at-least-once delivery guarantee.

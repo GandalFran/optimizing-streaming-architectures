@@ -1,0 +1,78 @@
+ 1. Kafka Topic Creation (`bash`):
+
+```bash
+# Create session-events topic with 3 replication factors and 10 partitions
+kafka-topics.sh --create --topic session-events --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=86400000
+
+# Create session-events-enriched topic with 3 replication factors and 10 partitions
+kafka-topics.sh --create --topic session-events-enriched --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=86400000
+```
+
+The replication factor is set to 3 to ensure data durability, and 10 partitions are created to handle the input rate of 20,000 events/s.
+
+2. Flink Configuration (`config.yaml`):
+
+```yaml
+job.type: Streaming
+parallelism.default: 3
+taskmanager.numberOfTaskSlots: 4
+checkpointing.enabled: true
+checkpointing.mode: EXACTLY_ONCE
+checkpointing.minPauseBetweenCheckpoints: 5000
+checkpointing.maxConcurrentCheckpoints: 1
+state.backend: filesystem
+state.filesystem.type: s3
+state.savepoints.dir: s3://flink-state/savepoints
+rest.port: 8081
+```
+
+The parallelism is set to 3 to match the number of Kafka partitions and TaskManagers. Checkpointing is enabled for fault tolerance, and the mode is set to EXACTLY_ONCE for at-least-once delivery guarantee. The minPauseBetweenCheckpoints is set to 5000ms to ensure that checkpoints are not too frequent and the maxConcurrentCheckpoints is set to 1 to avoid conflicts. The state backend is set to filesystem, and the savepoints are stored in S3 for long-term storage.
+
+3. Flink SQL `CREATE TABLE` statements:
+
+```sql
+-- Create Kafka source table for session-events
+CREATE TABLE session_events (
+    user_id STRING,
+    event_data JSON
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'session-events-source',
+    'format' = 'json',
+    'json.ignore-parse-errors' = 'true'
+);
+
+-- Create a derived table for enriching session events
+CREATE TABLE enriched_session_events AS (
+    SELECT
+        user_id,
+        json_extract(event_data, '$.event_type') AS event_type,
+        json_extract(event_data, '$.timestamp') AS event_timestamp,
+        -- Add more derived fields as needed
+        event_data
+    FROM
+        session_events
+    WHERE
+        json_valid(event_data) = 'true';
+);
+
+-- Create Kafka sink table for session-events-enriched
+CREATE TABLE session_events-enriched (
+    user_id STRING,
+    event_type STRING,
+    event_timestamp BIGINT,
+    event_data JSON
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.key.serializer' = 'org.apache.kafka.common.serialization.StringSerializer',
+    'properties.value.serializer' = 'org.apache.kafka.common.serialization.StringSerializer'
+);
+```
+
+The Kafka source table is created with the `session-events` topic and the `json_ignore_parse_errors` property set to `true` to handle malformed events. The derived table `enriched_session_events` is created to perform the enrichment operations. The Kafka sink table is created with the `session-events-enriched` topic and the appropriate serializers for the key and value.
+
+The end-to-end latency can be improved by increasing the parallelism, optimizing the enrichment operations, and reducing the time spent on checkpointing. The retention and durability requirements are met by the Kafka topic configurations.

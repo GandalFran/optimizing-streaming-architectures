@@ -1,0 +1,79 @@
+```bash
+# Create Kafka topics with 3 partitions and 1 replica to ensure durability and high availability
+kafka-topics.sh --create --topic session-events --partitions 3 --replication-factor 3 --config retention.ms=604800000 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic session-events-enriched --partitions 3 --replication-factor 3 --config retention.ms=604800000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+jobmanager.rpc.address: jobmanager
+jobmanager.rpc.port: 6123
+jobmanager.web.port: 8081
+taskmanager.numberOfTaskSlots: 4
+state.backend: rocksdb
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.checkpoints.min-pause: 10s
+state.checkpoints.num-retained: 3
+parallelism.default: 3
+```
+
+```sql
+-- Create Kafka source table for session events
+CREATE TABLE session_events (
+  user_id STRING,
+  event_time TIMESTAMP(3),
+  event_data STRING,
+  PRIMARY KEY (user_id) NOT ENFORCED
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.topic' = 'session-events',
+  'connector.bootstrap-server' = 'kafka:9092',
+  'connector.group-id' = 'session-events-group',
+  'format.type' = 'json',
+  'scan.startup.mode' = 'latest-offset',
+  'sink.checkpointing-mode' = 'exactly-once',
+  'sink.checkpointing-interval' = '5000',
+  'sink.parallelism' = '3',
+  'sink.delivery-guarantee' = 'at-least-once',
+  'sink.topic' = 'session-events-enriched',
+  'sink.partition-commit.policy.type' = 'all-complete'
+);
+
+-- Create Kafka sink table for enriched session events
+CREATE TABLE session_events_enriched (
+  user_id STRING,
+  event_time TIMESTAMP(3),
+  event_data STRING,
+  derived_field1 STRING,
+  derived_field2 STRING,
+  PRIMARY KEY (user_id) NOT ENFORCED
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.topic' = 'session-events-enriched',
+  'connector.bootstrap-server' = 'kafka:9092',
+  'format.type' = 'json',
+  'sink.checkpointing-mode' = 'exactly-once',
+  'sink.checkpointing-interval' = '5000',
+  'sink.parallelism' = '3',
+  'sink.delivery-guarantee' = 'at-least-once',
+  'sink.partition-commit.policy.type' = 'all-complete'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topics Creation:**
+   - **Partitions and Replication Factor:** Set to 3 partitions and 3 replicas to ensure high availability and durability. This configuration allows the system to tolerate the loss of any single broker without losing acknowledged data.
+   - **Retention:** Set to 7 days (604800000 ms) to retain data in both topics for the required duration.
+
+2. **Flink Configuration:**
+   - **Parallelism:** Set to 3 to match the number of partitions in the Kafka topics, ensuring that the load is evenly distributed.
+   - **Checkpointing:** Enabled with a checkpoint interval of 5 seconds to ensure fault tolerance and exactly-once semantics.
+   - **State Backend:** RocksDB is chosen for its efficiency and reliability in state management.
+   - **Checkpoint Storage:** S3 is used for durable checkpoint storage to ensure that the job can recover from failures.
+
+3. **Flink SQL Tables:**
+   - **Source Table:** Configured to read from `session-events` with a JSON format and a group ID to manage consumer offsets.
+   - **Sink Table:** Configured to write to `session-events-enriched` with the same JSON format and exactly-once semantics to ensure no data loss and no duplicates.
+   - **Delivery Guarantee:** Set to `at-least-once` to ensure that no data is lost, although duplicates are acceptable.
+   - **Partition Commit Policy:** Set to `all-complete` to ensure that all partitions are committed before the sink is considered complete, ensuring consistency.

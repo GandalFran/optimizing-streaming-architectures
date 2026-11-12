@@ -1,0 +1,107 @@
+ ```bash
+# Create Kafka topics
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions --partitions 3 --replication-factor 3 --config retention.ms=604800000
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions-validated --partitions 3 --replication-factor 3 --config retention.ms=604800000
+```
+
+```yaml
+# Flink configuration (config.yaml)
+
+# Kafka consumer configuration
+kafka.consumer.properties:
+  bootstrap.servers: kafka:9092
+  group.id: flink-banking-transactions
+  auto.offset.reset: latest
+  key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  max.partition.fetch.bytes: 1048576
+  session.timeout.ms: 30000
+  max.poll.interval.ms: 30000
+  auto.commit.interval.ms: 1000
+
+# Flink job configuration
+jobmanager.rpc.address: jobmanager
+jobmanager.heap.mb: 1024
+taskmanager.numberOfTaskSlots: 3
+taskmanager.heap.mb: 8192
+taskmanager.heap.memoryFraction: 0.8
+taskmanager.memory.offHeap.enabled: true
+taskmanager.memory.offHeap.sizeInMB: 2048
+taskmanager.heap.oom.protection: STOP
+taskmanager.heap.dump.onOutOfMemory: true
+taskmanager.heap.dump.dir: /tmp
+taskmanager.heap.dump.onOutOfMemory.histogram: true
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSize: 100m
+taskmanager.heap.dump.onOutOfMemory.maxHistory: 10
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10
+taskmanager.heap.dump.onOutOfMemory.enabled: true
+taskmanager.heap.dump.onOutOfMemory.maxSizeInMb: 100
+taskmanager.heap.dump.onOutOfMemory.maxHistoryInMb: 10

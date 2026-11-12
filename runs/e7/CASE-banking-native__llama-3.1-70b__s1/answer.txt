@@ -1,0 +1,84 @@
+**Create Kafka Topics**
+```bash
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions --partitions 10 --replication-factor 3 --retention.ms 604800000
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic banking-transactions-validated --partitions 10 --replication-factor 3 --retention.ms 604800000
+```
+
+**Flink Configuration**
+```yaml
+execution:
+  checkpointing:
+    interval: 10000
+    timeout: 100000
+    unaligned: true
+    checkpoint-duration-max: 10000
+    checkpoint-idle-timeout: 30000
+    checkpoint-timeout-timeout: 100000
+    checkpoints-after-tasks-finish-enabled: true
+    fail-on-checkpointing-errors: false
+    tolerance: 300000
+    unaligned-force: true
+    enable-unaligned-checkpoints: true
+    checkpoint-interval: 10000
+    externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+
+state:
+  backend: filesystem
+  backend.fs.checkpoint-data-uri: s3://flink-state/checkpoints
+  backend.fs.checkpoint-metadata-uri: s3://flink-state/checkpoints
+
+restart-strategy:
+  fixed-delay:
+    attempts: 2147483647
+    delay: 1000
+
+parallelism:
+  default: 10
+  taskmanager.numberOfTaskSlots: 4
+
+state.checkpoints.num-retained: -1
+
+table.exec.state.ttl.ms: 604800000
+```
+
+**Flink SQL**
+```sql
+CREATE TABLE banking_transactions (
+  `account_id` STRING,
+  `transaction_id` STRING,
+  `amount` DECIMAL(10, 2),
+  `timestamp` TIMESTAMP(3),
+  WATERMARK FOR `timestamp` AS `timestamp`
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'banking-transactions',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'format.type' = 'json',
+  'update-mode' = 'append'
+);
+
+CREATE TABLE banking_transactions_validated (
+  `account_id` STRING,
+  `transaction_id` STRING,
+  `amount` DECIMAL(10, 2),
+  `timestamp` TIMESTAMP(3),
+  PRIMARY KEY (`account_id`) NOT ENFORCED
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'banking-transactions-validated',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'format.type' = 'json',
+  'upsert-kafka-partitioner' = 'fixed',
+  'update-mode' = 'upsert'
+);
+```
+
+The main values are justified as follows:
+
+*   We create two Kafka topics, `banking-transactions` and `banking-transactions-validated`, with 10 partitions each to handle the sustained input rate of 50,000 events/s. The replication factor is set to 3 to ensure durability and survive the loss of any single Kafka broker. The retention period is set to 7 days.
+
+*   In the Flink configuration, we set up unaligned checkpoints to achieve low latency, and we use an externalized checkpoint store to persist checkpoints. We configure the restart strategy to have a fixed delay of 1 second and allow for a large number of attempts to recover from failures. The parallelism is set to 10 to match the number of Kafka partitions.
+
+*   In the Flink SQL, we define two tables: `banking_transactions` and `banking_transactions_validated`. We use the Kafka connector with the JSON format to read and write data from Kafka topics. The `banking_transactions_validated` table has a primary key defined, but it's not enforced since we're using a Kafka sink. We use the `fixed` partitioner to ensure that all events for the same account are written to the same Kafka partition.

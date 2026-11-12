@@ -1,0 +1,67 @@
+ ```bash
+# Creating Kafka topics
+kafka-topics --bootstrap-server kafka:9092 --create --topic sensor-readings --partitions 3 --replication-factor 3 --config retention.ms=86400000
+kafka-topics --bootstrap-server kafka:9092 --create --topic sensor-readings-clean --partitions 3 --replication-factor 3 --config retention.ms=86400000
+```
+
+Justification:
+- The `--partitions` option is set to 3, which is a common number of partitions that balances between performance and manageability. It's a multiple of the number of Kafka brokers (3) which ensures no single broker is overloaded.
+- The `--replication-factor` is set to 3 to provide durability, ensuring that data is replicated across 3 brokers. This provides fault tolerance if one broker fails.
+- The `--config` option sets the retention period to 7 days (`86400000` milliseconds).
+
+```yaml
+# Flink configuration
+topology.state.checkpoints.dir: s3://flink-state/checkpoints
+taskmanager.numberOfTaskSlots: 3
+taskmanager.type: standalone
+taskmanager.heap.mb: 8
+taskmanager.file.upload.dir: /tmp/flink-taskmanager-files
+taskmanager.heap.per.core.mb: 1
+taskmanager.memory.preallocate: false
+flink.execution.checkpointing.interval: 300000
+flink.execution.checkpointing.persistency: file
+```
+
+Justification:
+- `topology.state.checkpoints.dir` is set to the S3 path where checkpoints will be stored, ensuring durability.
+- `taskmanager.numberOfTaskSlots` is set to 3, which matches the number of brokers in Kafka.
+- `taskmanager.type` is set to `standalone`, which is suitable for a small number of TaskManagers.
+- `taskmanager.heap.mb` is set to 8 GB to provide enough memory for processing and in-memory state.
+- `taskmanager.file.upload.dir` is set to `/tmp/flink-taskmanager-files` for storing temporary files.
+- `taskmanager.heap.per.core.mb` is set to 1 MB per core to optimize memory usage.
+- `taskmanager.memory.preallocate` is set to false to avoid wasting memory with unnecessary preallocation.
+- `flink.execution.checkpointing.interval` is set to 300 seconds (5 minutes), which is a balance between checkpoint overhead and recovery time.
+- `flink.execution.checkpointing.persistency` is set to `file` to store checkpoints on the file system.
+
+```sql
+-- Flink SQL statements to create Kafka source and sink tables
+CREATE TABLE sensor-readings (
+  sensor_id VARCHAR,
+  data JSON,
+  key VARCHAR
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'scan.startup.mode' = 'earliest-offset',
+  'format' = 'json'
+);
+
+CREATE TABLE sensor-readings-clean (
+  sensor_id VARCHAR,
+  data JSON,
+  key VARCHAR
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings-clean',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'scan.startup.mode' = 'earliest-offset',
+  'format' = 'json'
+);
+```
+
+Justification:
+- The `sensor-readings` table has a schema that matches the expected JSON payload from the `sensor-readings` Kafka topic.
+- The `sensor-readings-clean` table is identical to the `sensor-readings` table, as we are only transforming the data and not joining or aggregating it.
+- Both tables use the `kafka` connector to read from and write to the respective Kafka topics.
+- The `scan.startup.mode` is set to `earliest-offset` to ensure that Flink starts processing from the earliest available offset in the Kafka topic.

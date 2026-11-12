@@ -1,0 +1,86 @@
+### Kafka Topic Creation Commands
+
+```bash
+# Create ad-impressions topic with 10 partitions (to handle 50,000 events/s) and 30 days retention
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 10 --config retention.ms=2592000000 ad-impressions
+
+# Create ad-impressions-enriched topic with 10 partitions and 30 days retention
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 10 --config retention.ms=2592000000 ad-impressions-enriched
+```
+
+### Flink Configuration
+
+```yml
+execution:
+  checkpointing:
+    interval: 10s
+    timeout: 1min
+    enable-unaligned-checkpoints: true
+  restart-strategy:
+    fixed-delay:
+      attempts: 3
+      delay: 10s
+
+state:
+  backend: filesystem
+  savepoints: s3://flink-state/savepoints
+  checkpoints: s3://flink-state/checkpoints
+
+taskmanager:
+  num: 3
+  slots: 4
+  cpu.cores: 4
+  memory.jvm-metaspace.size: 896m
+  memory.off-heap.size: 6g
+  memory.jvm-heap.size: 1g
+  managed-memory.size: 512m
+  managed-memory.fraction: 0.2
+
+blob:
+  storage.directory: /tmp/blob
+
+jobmanager:
+  rpc:
+    port: 6123
+```
+
+### Flink SQL
+
+```sql
+CREATE TABLE ad_impressions (
+  `campaign_id` STRING,
+  `event` ROW<...>  -- adjust to match the JSON structure
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'ad-impressions',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'connector.properties.group.id' = 'flink-group',
+  'format.type' = 'json',
+  'format.json.fail-on-missing-field' = 'true'
+);
+
+CREATE TABLE ad_impressions_enriched (
+  `campaign_id` STRING,
+  `event` ROW<...>,  -- adjust to match the JSON structure with derived fields
+  `derived_field1` STRING,
+  `derived_field2` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'ad-impressions-enriched',
+  'connector.properties.bootstrap.servers' = 'kafka:9092',
+  'connector.properties.group.id' = 'flink-group',
+  'format.type' = 'json',
+  'format.json.fail-on-missing-field' = 'true'
+);
+```
+
+**Justification:**
+
+*   We create the `ad-impressions` and `ad-impressions-enriched` topics with 10 partitions each to handle the input rate of 50,000 events/s. This is based on the assumption that one Kafka partition can sustain at most 5 MB/s of produce traffic and one Flink source subtask processes at most 20,000 events/s.
+*   We configure Flink with 3 TaskManagers, each with 4 CPU cores and 8 GB of memory to match the environment.
+*   We use the `filesystem` state backend with S3 storage for checkpoints and savepoints to ensure durable storage.
+*   We enable checkpointing with a 10s interval and 1min timeout to ensure at-least-once delivery guarantee.
+*   We configure the restart strategy to have 3 attempts with a 10s delay to handle failures.
+*   We define the Flink SQL tables to match the JSON structure of the ad impression events and derived fields, and use the Kafka connector with the `universal` version and `json` format.

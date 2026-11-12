@@ -1,0 +1,144 @@
+### Kafka Topic Configuration
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 2592000000
+    segment.ms: 604800000
+    cleanup.policy: DELETE
+    flush.ms: 10000
+    min.insync.replicas: 1
+    max.message.bytes: 1048576
+    compression.type: none
+    num.partitions: 16
+  brokers: my-cluster-kafka-bootstrap:9092
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 2592000000
+    segment.ms: 604800000
+    cleanup.policy: DELETE
+    flush.ms: 10000
+    min.insync.replicas: 1
+    max.message.bytes: 1048576
+    compression.type: none
+    num.partitions: 16
+  brokers: my-cluster-kafka-bootstrap:9092
+```
+
+### Flink Configuration
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-sql-job
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-sql-job
+  template:
+    metadata:
+      labels:
+        app: flink-sql-job
+    spec:
+      containers:
+      - name: flink
+        image: flink:1.20.0
+        ports:
+        - containerPort: 6123
+        volumeMounts:
+        - name: flink-config
+          mountPath: /opt/flink/conf
+        - name: flink-lib
+          mountPath: /opt/flink/usrlib
+      volumes:
+      - name: flink-config
+        configMap:
+          name: flink-config
+      - name: flink-lib
+        persistentVolumeClaim:
+          claimName: flink-lib-pvc
+      - name: s3-checkpoints
+        persistentVolumeClaim:
+          claimName: s3-checkpoints-pvc
+  volumes:
+  - name: flink-config
+    configMap:
+      name: flink-config
+  - name: flink-lib
+    persistentVolumeClaim:
+      claimName: flink-lib-pvc
+  - name: s3-checkpoints
+    persistentVolumeClaim:
+      claimName: s3-checkpoints-pvc
+spec:
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "4"
+    taskmanager.memory.process.size: "8g"
+    parallelism.default: "4"
+    restart-strategy: "failfast"
+    restart-strategy.options: "5"
+    checkpointing.checkpointing-type: "EL RETRY"
+    checkpointing.checkpointing-mode: "EXACTLY_ONCE"
+    checkpointing.checkpointing-period: "10000"
+    checkpointing.checkpointing-ttl: "600000"
+    checkpointing.num-retained-checkpoints: "3"
+    checkpointing.state.backend: "filesystem"
+    checkpointing.state.checkpoint-storage: "s3://flink-state/checkpoints"
+    checkpointing.state.checkpoint-storage.fs.data.dir: "/checkpoints"
+    checkpointing.state.checkpoint-storage.fs.checkpointing-queue-size: "1000"
+    checkpointing.state.checkpoint-storage.fs.checkpointing-period: "10000"
+    checkpointing.state.checkpoint-storage.fs.checkpointing-ttl: "600000"
+    checkpointing.state.checkpoint-storage.fs.num-retained-checkpoints: "3"
+    parallelism.default: "4"
+    parallelism.prefer-same-rack: "true"
+    parallelism.prefer-same-zone: "true"
+    parallelism.prefer-same-node: "true"
+    parallelism.prefer-same-taskmanager: "true"
+    parallelism.prefer-same-taskmanager-group: "true"
+    parallelism.prefer-same-taskmanager-group-id: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash: "true"
+    parallelism.prefer-same-taskmanager-group-id-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override-hash-override

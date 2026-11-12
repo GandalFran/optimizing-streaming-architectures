@@ -1,0 +1,180 @@
+# 1. Strimzi KafkaTopic resources for all topics
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 3
+  replicas: 3
+  topicNameFormat: clicks
+  config:
+    "min.insync.replicas": "2"
+    "retention.ms": "604800000"
+    "cleanup.policy": "delete"
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 3
+  replicas: 3
+  topicNameFormat: clicks-enriched
+  config:
+    "min.insync.replicas": "2"
+    "retention.ms": "604800000"
+    "cleanup.policy": "delete"
+
+# 2. FlinkDeployment resource
+
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+  labels:
+    app.kubernetes.io/name: flink
+    app.kubernetes.io/instance: sql-runner
+    app.kubernetes.io/component: flink
+spec:
+  flinkConfiguration:
+    taskmanager.memory.process.fraction: "0.85"
+    state.backend: rocksdb
+    state.backend.incremental: true
+    state.backend.fs.checkpoint-dir: s3://flink-state/checkpoints
+    jobmanager.memory.fraction: "0.45"
+    jobmanager.rpc.address: sql-runner-0.sql-runner.flink.svc.cluster.local
+    taskmanager.numberOfTaskSlots: "3"
+    taskmanager.memory.tasks.fraction: "0.9"
+    parallelism.default: "3"
+    taskmanager.network.memory.fraction: "0.9"
+    state.backend.incremental.checkpoints.store.ttl: "24h"
+    state.backend.incremental.checkpoints.store.checkpoint.dirs: "s3://flink-state/checkpoints/"
+    jobmanager.archive.fs.dir: s3://flink-state/finished-jobs/
+    jobmanager.archive.fs.ttl: "24h"
+    jobmanager.archive.purging: "true"
+    jobmanager.archive.log.enable: "true"
+    jobmanager.archive.log.ttl: "24h"
+    jobmanager.archive.log.purging: "true"
+    taskmanager.archive.fs.dir: s3://flink-state/taskmanager-archive/
+    taskmanager.archive.fs.ttl: "24h"
+    taskmanager.archive.fs.purging: "true"
+    taskmanager.archive.task.log.enable: "true"
+    taskmanager.archive.task.log.ttl: "24h"
+    taskmanager.archive.task.log.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24h"
+    taskmanager.archive.task.errors.purging: "true"
+    taskmanager.archive.task.logs.enable: "true"
+    taskmanager.archive.task.logs.ttl: "24h"
+    taskmanager.archive.task.logs.purging: "true"
+    taskmanager.archive.task.errors.enable: "true"
+    taskmanager.archive.task.errors.ttl: "24

@@ -1,0 +1,128 @@
+# 1. Strimzi KafkaTopic resources for all topics
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 86400000
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 86400000
+
+# 2. FlinkDeployment resource
+
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+  namespace: default
+spec:
+  taskManager:
+    serviceAccountName: flink
+    resources:
+      requests:
+        memory: 8Gi
+        cpu: 4
+      limits:
+        memory: 8Gi
+        cpu: 4
+    replicas: 3
+  jobManager:
+    serviceAccountName: flink
+    resources:
+      requests:
+        memory: 10Gi
+        cpu: 8
+      limits:
+        memory: 10Gi
+        cpu: 8
+    replicas: 1
+  flinkConfiguration:
+    taskmanager.memory.process.size: 8G
+    taskmanager.numberOfTaskSlots: 3
+    parallelism.default: 3
+    state.backend: rocksdb
+    state.backend.rocksdb.path: s3://flink-state
+    state.backend.rocksdb.checkpoint.max-num-checkpoints: 1
+    state.backend.rocksdb.checkpoint.min-pause: 10s
+    state.backend.rocksdb.checkpoint.max-pause: 1m
+    state.backend.rocksdb.checkpoint.interval: 10s
+    state.backend.rocksdb.checkpoint.trigger-after: 1000
+    state.backend.rocksdb.checkpoint.write-on-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-activation: true
+    state.backend.rocksdb.checkpoint.write-on-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-checkpoint: true
+    state.backend.rocksdb.checkpoint.write-on-recovery-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-commit-savepoint: true
+    state.backend.rocksdb.checkpoint.write

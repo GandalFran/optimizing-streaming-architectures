@@ -1,0 +1,137 @@
+# 1. Strimzi KafkaTopic resources for all topics
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 259200000
+    max.message.bytes: 1048576
+    cleanup.policy: "delete"
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 259200000
+    max.message.bytes: 1048576
+    cleanup.policy: "delete"
+
+# 2. FlinkDeployment resource
+
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+  namespace: default
+spec:
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "3"
+    taskmanager.memory.process.size: "24g"
+    taskmanager.memory.network.size: "1g"
+    jobmanager.memory.process.size: "24g"
+    jobmanager.memory.heap.size: "12g"
+    jobmanager.heap.size: "12g"
+    parallelism.default: "3"
+    state.backend: "rocksdb"
+    state.backend.rocksdb.path: "s3://flink-state/checkpoints"
+    state.backend.rocksdb.block-cache-size: "2g"
+    state.backend.rocksdb.block-cache.max-size: "2g"
+    state.backend.rocksdb.block-cache.timeout: "30s"
+    state.backend.rocksdb.block-cache.eviction-rate: "10"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"
+    state.backend.rocksdb.block-cache.stats-cleanup-threshold: "100"
+    state.backend.rocksdb.block-cache.stats-cleanup-interval: "60s"

@@ -1,0 +1,72 @@
+```bash
+# Create the `app-logs` topic with 4 partitions and 1-day retention
+kafka-topics.sh --create --topic app-logs --bootstrap-server kafka:9092 --partitions 4 --config retention.ms=86400000
+
+# Create the `app-logs-parsed` topic with 4 partitions and 1-day retention
+kafka-topics.sh --create --topic app-logs-parsed --bootstrap-server kafka:9092 --partitions 4 --config retention.ms=86400000
+```
+
+```yaml
+# Flink configuration
+config:
+  high-availability: s3
+  high-availability.storageDir: s3://flink-state/checkpoints
+  parallelism.default: 4
+  taskmanager.numberOfTaskSlots: 4
+  state.checkpoints.num-retained: 10
+  metrics.reporters: prom
+  metrics.reporter.prom.class: org.apache.flink.metrics.prometheus.PrometheusReporter
+  metrics.reporter.prom.port: 8089
+  state.backend: rocksdb
+  state.backend.incremental: true
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.savepoints.dir: s3://flink-state/savepoints
+  state.checkpointing.interval: 60000
+  execution.checkpointing.mode: EXACTLY_ONCE
+  execution.checkpointing.interval: 60000
+  execution.checkpointing.timeout: 600000
+  execution.checkpointing.min-pause: 10000
+```
+
+```sql
+-- Define the source and sink tables for the Flink SQL job
+CREATE TABLE app_logs (
+    log_event JSONB,
+    service STRING,
+    WATERMARK FOR processing_time AS processing_time - INTERVAL '5' SECONDS
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'app-logs',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'earliest-offset',
+    'properties.group.id' = 'app_logs_consumer_group'
+);
+
+CREATE TABLE app_logs_parsed (
+    log_event JSONB,
+    service STRING
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'app-logs-parsed',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'round-robin'
+);
+```
+
+**Justification of Main Values:**
+
+1. **Kafka Topic Partitions:** Each topic has 4 partitions to distribute the input rate of 20,000 events/s evenly across the partitions (20,000/4 = 5,000 events/s per partition, which is well within the 5 MB/s limit per partition).
+
+2. **Flink Parallelism:** The parallelism is set to 4, matching the number of Kafka partitions and ensuring that each Flink subtask can process up to 5,000 events/s, aligning with the Kafka partition throughput.
+
+3. **Checkpointing:** Checkpointing is configured for exactly-once semantics to ensure that there are no duplicates or losses in the event stream. The checkpoint interval is set to 60 seconds, which balances between minimizing the recovery time and managing the overhead of checkpointing.
+
+4. **Watermark:** A watermark is defined with a delay of 5 seconds to ensure that late events are handled properly within the 10-second p99 latency requirement.
+
+5. **Retention:** Both Kafka topics retain data for 1 day, meeting the retention requirement.
+
+6. **Metrics:** Prometheus is configured for monitoring the Flink job to facilitate operational insights and performance tuning.
+
+The configurations are designed to handle the input rate efficiently, meet latency requirements, and ensure data durability and correctness.

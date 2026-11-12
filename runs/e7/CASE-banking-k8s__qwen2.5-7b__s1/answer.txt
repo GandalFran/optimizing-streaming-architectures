@@ -1,0 +1,126 @@
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 604800000 # 7 days
+    cleanup.policy: "delete"
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 604800000 # 7 days
+    cleanup.policy: "delete"
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+spec:
+  taskmanager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+    replicas: 3
+  jobManager:
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 4
+        memory: 8Gi
+  flinkConfiguration:
+    taskmanager.memory.process.fraction: 0.7
+    taskmanager.memory.managed.fraction: 0.3
+    taskmanager.numberOfTaskSlots: 3
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.checkpoints.min-pause: 10s
+    state.checkpoints.num-retained: 3
+    state.backend.rocksdb.checkpoint.interval: 10s
+    state.backend.rocksdb.checkpoint.min-pause: 10s
+    state.backend.rocksdb.checkpoint.max-pause: 30s
+    state.backend.rocksdb.checkpoint.retries: 3
+    taskmanager.network.memory.fraction: 0.8
+    taskmanager.network.memory.min: 4Gi
+    taskmanager.network.memory.max: 6Gi
+    taskmanager.heap.size: 4Gi
+    taskmanager.heap.max-size: 4Gi
+    taskmanager.network.io-threads: 4
+    taskmanager.network.tcp-timeout: 500ms
+    taskmanager.network.socket-rx-buffer-size: 1MiB
+    taskmanager.network.socket-tx-buffer-size: 1MiB
+    parallelism.default: 30
+    taskmanager.io.sort.fetch-size: 20000
+    state.backend.checkpoints.min-pause: 10s
+    state.backend.checkpoints.num-retained: 3
+    state.backend.checkpoints.latency-monitor-interval: 1s
+    state.backend.checkpoints.latency-monitor-threshold: 100ms
+    state.backend.checkpoints.latency-monitor-threshold-p99: 100ms
+    state.backend.checkpoints.latency-monitor-threshold-p999: 150ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999: 200ms
+    state.backend.checkpoints.latency-monitor-threshold-p100: 300ms
+    state.backend.checkpoints.latency-monitor-threshold-p25: 50ms
+    state.backend.checkpoints.latency-monitor-threshold-p50: 75ms
+    state.backend.checkpoints.latency-monitor-threshold-p75: 100ms
+    state.backend.checkpoints.latency-monitor-threshold-p875: 125ms
+    state.backend.checkpoints.latency-monitor-threshold-p9375: 150ms
+    state.backend.checkpoints.latency-monitor-threshold-p9625: 175ms
+    state.backend.checkpoints.latency-monitor-threshold-p9875: 200ms
+    state.backend.checkpoints.latency-monitor-threshold-p99375: 225ms
+    state.backend.checkpoints.latency-monitor-threshold-p99625: 250ms
+    state.backend.checkpoints.latency-monitor-threshold-p99875: 275ms
+    state.backend.checkpoints.latency-monitor-threshold-p999375: 300ms
+    state.backend.checkpoints.latency-monitor-threshold-p999625: 325ms
+    state.backend.checkpoints.latency-monitor-threshold-p999875: 350ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999375: 375ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999625: 400ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999875: 425ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999375: 450ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999625: 475ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999875: 500ms
+    state.backend.checkpoints.latency-monitor-threshold-p999999375: 525ms
+    state.backend.checkpoints.latency-monitor-threshold-p999999625: 550ms
+    state.backend.checkpoints.latency-monitor-threshold-p999999875: 575ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999999375: 600ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999999625: 625ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999999875: 650ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999999375: 675ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999999625: 700ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999999875: 725ms
+    state.backend.checkpoints.latency-monitor-threshold-p999999999375: 750ms
+    state.backend.checkpoints.latency-monitor-threshold-p999999999625: 775ms
+    state.backend.checkpoints.latency-monitor-threshold-p999999999875: 800ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999999999375: 825ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999999999625: 850ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999999999875: 875ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999999999375: 900ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999999999625: 925ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999999999875: 950ms
+    state.backend.checkpoints.latency-monitor-threshold-p999999999999375: 975ms
+    state.backend.checkpoints.latency-monitor-threshold-p999999999999625: 1000ms
+    state.backend.checkpoints.latency-monitor-threshold-p999999999999875: 1025ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999999999999375: 1050ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999999999999625: 1075ms
+    state.backend.checkpoints.latency-monitor-threshold-p9999999999999875: 1100ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999999999999375: 1125ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999999999999625: 1150ms
+    state.backend.checkpoints.latency-monitor-threshold-p99999999999999875: 1175ms
+    state.backend.checkpoints.latency-monitor-threshold-p999999999999999375: 1200ms
+    state.backend.checkpoints.latency-monitor-threshold-p999999999999999625: 1225ms

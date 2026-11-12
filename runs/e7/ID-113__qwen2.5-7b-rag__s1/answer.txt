@@ -1,0 +1,86 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic clicks --bootstrap-server kafka:9092 --partitions 8 --replication-factor 3
+kafka-topics.sh --create --topic clicks-enriched --bootstrap-server kafka:9092 --partitions 8 --replication-factor 3
+kafka-configs.sh --alter --topic clicks --add-config retention.ms=2592000000 --bootstrap-server kafka:9092
+kafka-configs.sh --alter --topic clicks-enriched --add-config retention.ms=2592000000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+jobmanager.rpc.address: jobmanager
+jobmanager.rpc.port: 6123
+jobmanager.web.port: 8081
+taskmanager.numberOfTaskSlots: 4
+parallelism.default: 8
+state.backend: filesystem
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.backend.fs.checkpoint-dir: s3://flink-state/checkpoints
+state.savepoints.dir: s3://flink-state/savepoints
+metrics.report.interval.seconds: 60
+metricsCENTER_DOT_CENTER_exporter.jmxCENTER_DOT_CENTER_port: 8081
+metricsCENTER_DOT_CENTER_exporter.prometheusCENTER_DOT_CENTER_port: 8082
+metricsCENTER_DOT_CENTER_exporter.prometheusCENTER_DOT_CENTER_scrape.interval.seconds: 60
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements
+CREATE TABLE clicks (
+    session_id STRING,
+    event_time TIMESTAMP(3),
+    event TEXT,
+    -- Add other fields as necessary
+    PRIMARY KEY (session_id) NOT ENFORCED
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'sink.partitioner' = 'fixed',
+    'sink.delivery-guarantee' = 'exactly-once',
+    'sink.checkpoint.min-pause' = '0',
+    'sink.checkpoint.max-pause' = '0',
+    'sink.checkpoint.interval' = '5000',
+    'scan.startup.mode' = 'earliest-offset',
+    'scan.startup.max-offsets-per-trigger' = '100000',
+    'connector.table_partition_discovery.interval' = '300000'
+);
+
+CREATE TABLE clicks_enriched (
+    session_id STRING,
+    event_time TIMESTAMP(3),
+    event TEXT,
+    -- Add other fields as necessary
+    PRIMARY KEY (session_id) NOT ENFORCED
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'clicks-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'fixed',
+    'sink.delivery-guarantee' = 'exactly-once',
+    'sink.checkpoint.min-pause' = '0',
+    'sink.checkpoint.max-pause' = '0',
+    'sink.checkpoint.interval' = '5000',
+    'sink.partitioner' = 'fixed',
+    'sink.parallelism' = '8'
+);
+```
+
+### Justification of Main Values:
+
+1. **Kafka Topic Creation:**
+   - **Partitions and Replication Factor:** We create 8 partitions for both `clicks` and `clicks-enriched` topics with a replication factor of 3 to ensure high availability and fault tolerance.
+   - **Retention Period:** We set the retention period to 30 days (2592000000 milliseconds) for both topics to retain data for 30 days.
+
+2. **Flink Configuration:**
+   - **Parallelism:** We set the parallelism to 8 for both source and sink to match the number of Kafka partitions, ensuring that the data is evenly distributed.
+   - **Checkpointing:** We enable checkpointing with `exactly-once` delivery guarantee, which ensures no duplicates and no loss of data.
+   - **Checkpointing Interval:** We set the checkpointing interval to 5 seconds to balance between latency and durability.
+   - **Partitioner:** We use the `fixed` partitioner to ensure that data is written to the same Kafka partition, maintaining consistency.
+
+3. **Flink SQL Table Creation:**
+   - **Table Schemas:** We define the schemas for the `clicks` and `clicks_enriched` tables, ensuring that the primary key constraint is enforced.
+   - **Connector Configuration:** We configure the Kafka connector with `exactly-once` delivery guarantee and set the partitioner to `fixed` to ensure data is written to the correct Kafka partition.
+   - **Sink Parallelism:** We set the sink parallelism to 8 to match the number of partitions and ensure efficient processing.

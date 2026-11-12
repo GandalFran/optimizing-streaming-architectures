@@ -1,0 +1,80 @@
+**Create Kafka Topics**
+```bash
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic sensor-readings --partitions 10 --replication-factor 3 --retention.ms 604800000
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic sensor-readings-clean --partitions 10 --replication-factor 3 --retention.ms 604800000
+```
+
+**Flink Configuration**
+```yaml
+execution:
+  checkpointing.interval: 10000
+  checkpointing.timeout: 30000
+  checkpointing.unaligned: true
+  checkpointing.externalized: true
+  checkpointing.externalized.path: s3://flink-state/checkpoints
+  checkpointing.externalized.checkpoint-retention: ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION
+  restart-strategy:
+    type: fixed-delay
+    attempts: 10
+    delay: 10000
+
+state:
+  backend: filesystem
+  backend.fs.checkpointdirectory: s3://flink-state/checkpoints
+
+table:
+  executive: sql
+  planner: blink
+
+environment:
+  job:
+    restart-strategy:
+      type: fixed-delay
+      attempts: 10
+      delay: 10000
+
+kafka:
+  brokers: kafka:9092
+```
+
+**Flink SQL Tables**
+```sql
+CREATE TABLE sensor_readings (
+  `sensor_id` STRING,
+  `reading` STRING,
+  `event_time` TIMESTAMP(3),
+  `PROCTIME` AS PROCTIME()
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'key.format' = 'json',
+  'value.format' = 'json',
+  'key.json.ignore-parse-errors' = 'true',
+  'value.json.ignore-parse-errors' = 'false',
+  'json.timestamp-format.standard' = 'ISO-8601'
+);
+
+CREATE TABLE sensor_readings_clean (
+  `sensor_id` STRING,
+  `reading` STRING,
+  `event_time` TIMESTAMP(3),
+  `derived_field1` STRING,
+  `derived_field2` STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings-clean',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'key.format' = 'json',
+  'value.format' = 'json',
+  'key.json.ignore-parse-errors' = 'true',
+  'value.json.ignore-parse-errors' = 'false',
+  'json.timestamp-format.standard' = 'ISO-8601',
+  'upsert-kafka-partitioner' = 'fixed'
+);
+```
+
+Justification:
+* We create both Kafka topics with 10 partitions to ensure that the sustained input rate of 50,000 events/s is evenly distributed across partitions, staying within the 5 MB/s limit per partition. We use a replication factor of 3 to ensure that data is not lost in case of a single broker failure.
+* The Flink configuration uses unaligned checkpointing with a 10-second interval to achieve a good balance between throughput and end-to-end latency. We set the checkpoint timeout to 30 seconds to account for potential network delays. Externalized checkpoints are stored in S3 to ensure durability.
+* The Flink SQL tables use the Kafka connector with JSON key and value formats. We ignore parse errors for keys, but not for values, to ensure that malformed events are filtered out. The `PROCTIME` column is used to keep track of the event processing time. In the `sensor_readings_clean` table, we add two derived fields as placeholders for the enriched fields. The `upsert-kafka-partitioner` is set to `fixed` to ensure that the same key is always written to the same partition.

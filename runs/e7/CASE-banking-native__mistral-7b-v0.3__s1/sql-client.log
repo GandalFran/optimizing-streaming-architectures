@@ -1,0 +1,22 @@
+Nov 10, 2026 8:10:28 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE banking_transactions (
+>     account_id BIGINT,
+>     transaction JSON,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'banking-transactions',
+>     'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>     'properties.group.id' = 'banking-transactions-source',
+>     'format' = 'json',
+>     'json.ignore-parse-errors' = 'true'
+> )[31;1m[ERROR] Could not execute SQL statement. Reason:
+java.lang.IllegalArgumentException: The scheme (hdfs://, file://, etc) is null. Please specify the file system scheme explicitly in the URI.[0m
+
+Shutting down the session...
+done.

@@ -1,0 +1,80 @@
+```bash
+# Create Kafka topics
+kafka-topics.sh --create --topic ad-impressions --partitions 3 --replication-factor 3 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic ad-impressions-enriched --partitions 3 --replication-factor 3 --bootstrap-server kafka:9092
+
+# Set topic retention policy
+kafka-topics.sh --alter --topic ad-impressions --config retention.ms=2592000000 --bootstrap-server kafka:9092
+kafka-topics.sh --alter --topic ad-impressions-enriched --config retention.ms=2592000000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+flink-conf.yaml:
+  taskmanager.memory.process.size: 8000m
+  taskmanager.numberOfTaskSlots: 4
+  checkpointing.mode: exactly-once
+  checkpointing.interval: 10000
+  state.backend: rocksdb
+  state.backend.rocksdb.path: s3://flink-state/rocksdb
+  state.backend.rocksdb.checkpoint.snapshots-to-keep: 3
+  state.backend.rocksdb.memory-mapped: false
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  parallelism.default: 3
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements
+CREATE TABLE ad_impressions (
+  campaign_id STRING,
+  event_time TIMESTAMP(3),
+  -- Add other fields from JSON as necessary
+  -- Example: impression_id STRING,
+  -- Example: impression_timestamp TIMESTAMP(3),
+  -- Example: ad_id STRING,
+  -- Example: user_id STRING,
+  -- Example: device_type STRING,
+  -- Example: impression_status STRING,
+  -- Example: ad_network STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'ad-impressions',
+  'properties.bootstrap-server' = 'kafka:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'earliest-offset',
+  'update-mode' = 'incrementing',
+  'key.fields' = 'campaign_id',
+  'value.format.derive-missing-values' = 'true'
+);
+
+CREATE TABLE ad_impressions_enriched (
+  campaign_id STRING,
+  event_time TIMESTAMP(3),
+  -- Add enriched fields here
+  -- Example: enriched_field STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'ad-impressions-enriched',
+  'properties.bootstrap-server' = 'kafka:9092',
+  'format' = 'json',
+  'sink.partitioner' = 'round-robin',
+  'sink.flush.max-rows' = '10000',
+  'sink.flush.interval' = '1000'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topic Creation and Retention**:
+   - **Partitions and Replication Factor**: Set to 3 partitions and a replication factor of 3 for high availability and fault tolerance.
+   - **Retention Policy**: Retention is set to 30 days (`2592000000 ms`), ensuring data is retained for a month.
+
+2. **Flink Configuration**:
+   - **Memory and Task Slots**: Configured to use 8 GB of memory per TaskManager and 4 slots, ensuring sufficient resources for processing.
+   - **Checkpointing**: Enabled exactly-once semantics with a checkpoint interval of 10 seconds to maintain durability and fault tolerance.
+   - **State Backend**: Using RocksDB for state storage, with appropriate settings to manage snapshots and memory mapping.
+   - **Parallelism**: Set to 3 to match the number of Kafka partitions, ensuring efficient processing.
+
+3. **Flink SQL Table Definitions**:
+   - **Source Table**: Reads from `ad-impressions` Kafka topic, configured to start from the earliest offset and use JSON format.
+   - **Sink Table**: Writes to `ad-impressions-enriched` Kafka topic, using a round-robin partitioner and configured for efficient flushing.

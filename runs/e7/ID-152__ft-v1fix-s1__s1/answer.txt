@@ -1,0 +1,356 @@
+# 1. Strimzi KafkaTopic resources for all topics
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 604800000
+  storage:
+    class: kubernetes
+    size: 10Gi
+    volumeName: payments-storage
+  topicNameFormat: payments-{{ . }}
+  bootstrapServers: my-cluster-kafka-bootstrap:9092
+  partitionsPerTopic: 3
+  replicasPerPartition: 3
+  retention: 7 days
+  retentionBytes: 16800000000
+  cleanupPolicy: "delete"
+  compactedTopic: false
+  minInsyncReplicas: 2
+  configOverrides:
+    - name: min.insync.replicas
+      value: "2"
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 604800000
+  storage:
+    class: kubernetes
+    size: 10Gi
+    volumeName: payments-validated-storage
+  topicNameFormat: payments-validated-{{ . }}
+  bootstrapServers: my-cluster-kafka-bootstrap:9092
+  partitionsPerTopic: 3
+  replicasPerPartition: 3
+  retention: 7 days
+  retentionBytes: 16800000000
+  cleanupPolicy: "delete"
+  compactedTopic: false
+  minInsyncReplicas: 2
+  configOverrides:
+    - name: min.insync.replicas
+      value: "2"
+
+# 2. FlinkDeployment resource
+
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: payments
+  namespace: payments
+  annotations:
+    strimzi.io/kafka-topics: payments
+spec:
+  flinkConfiguration:
+    job:
+      name: payments
+      jar: local:///opt/flink/usrlib/sql-runner.jar
+    taskmanager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobmanager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobmanager:
+      log4j-console:
+        config: |-
+          log4j.rootLogger=INFO, stdout
+          log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+          log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+          log4j.appender.stdout.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+    taskmanager:
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskmanager:
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskmanager:
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    state:
+      backend: s3
+      backendConfiguration:
+        type: s3
+        accessKey: access-key
+        secretKey: secret-key
+        bucketName: flink-state
+        bucketRegion: us-east-1
+        endpoint: https://s3.amazonaws.com
+        region: us-east-1
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    jobManager:
+      memory: 8Gi
+      parallelism: 1
+      slots:
+        resources:
+          cpu: 4
+          memory: 8Gi
+      network:
+        partition-group: 0
+    taskManager:
+      memory: 8Gi
+      parallelism: 3
+      slots:
+        resources:
+          cpu: 4
+          memory

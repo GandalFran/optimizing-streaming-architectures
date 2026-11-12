@@ -1,0 +1,154 @@
+# 1. Strimzi KafkaTopic resources for all topics
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    max.message.bytes: 1024
+    min.insync.replicas: 2
+    cleanup.policy: compact
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+  namespace: default
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    max.message.bytes: 1024
+    min.insync.replicas: 2
+    cleanup.policy: compact
+
+# 2. FlinkDeployment resource
+
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+  namespace: default
+  labels:
+    app: sql-runner
+spec:
+  flinkVersion: "1.20"
+  taskManager:
+    serviceAccountName: default
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 2
+        memory: 4Gi
+    container:
+      image: flink:1.20-scala_2.13-java11
+      imagePullPolicy: Always
+      resources:
+        limits:
+          cpu: 4
+          memory: 8Gi
+        requests:
+          cpu: 2
+          memory: 4Gi
+  jobManager:
+    serviceAccountName: default
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 2
+        memory: 4Gi
+    container:
+      image: flink:1.20-scala_2.13-java11
+      imagePullPolicy: Always
+      resources:
+        limits:
+          cpu: 4
+          memory: 8Gi
+        requests:
+          cpu: 2
+          memory: 4Gi
+  parallelism: 10
+  flinkConfiguration:
+    flink.runtime.checkpointing-mode: exactly-once
+    flink.runtime.jobmanager.rpc.address: my-cluster-kafka-bootstrap
+    flink.runtime.jobmanager.rpc.port: 6123
+    flink.runtime.taskmanager.memory.process.size: 4096m
+    flink.runtime.parallelism.default: 10
+    flink.runtime.state.storage.fs.checkpoints.dir: s3://flink-state/checkpoints
+    flink.runtime.state.storage.fs.savepoints.dir: s3://flink-state/checkpoints
+    flink.runtime.taskmanager.network.memory.fraction: 0.8
+    flink.runtime.network.partitioning.network-buffer-size: 8388608
+    flink.runtime.network.partitioning.max-message-size: 1048576
+    flink.runtime.taskmanager.network.socket-frame-size: 262144
+    flink.runtime.taskmanager.network.socket-queue-size: 10240
+    flink.runtime.metrics.reporter.kafka.compression.type: none
+    flink.runtime.metrics.reporter.kafka.bootstrap.servers: my-cluster-kafka-bootstrap:9092
+    flink.runtime.metrics.reporter.kafka.topic: flink-metrics
+    flink.runtime.metrics.reporter.kafka.partition: 0
+    flink.runtime.metrics.reporter.kafka.key: sql-runner
+    flink.runtime.metrics.reporter.kafka.max-message-size: 1048576
+    flink.runtime.metrics.reporter.kafka.batch-size: 1024
+    flink.runtime.metrics.reporter.kafka.buffer-size: 65536
+    flink.runtime.metrics.reporter.kafka.max-retries: 3
+    flink.runtime.metrics.reporter.kafka.retry.backoff-base-millis: 100
+    flink.runtime.metrics.reporter.kafka.retry.backoff-factor: 2
+    flink.runtime.metrics.reporter.kafka.retry.max-retries: 5
+    flink.runtime.metrics.reporter.kafka.retry.max-backoff-millis: 60000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-max-millis: 120000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-factor: 0.5
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-max-millis: 10000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-min-millis: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-millis: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-millis-range: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-min: 1000
+    flink.runtime.metrics.reporter.kafka.retry.backoff-jitter-seed-range-max: 1000
+    flink

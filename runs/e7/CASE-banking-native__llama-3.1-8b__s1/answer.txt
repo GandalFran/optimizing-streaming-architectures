@@ -1,0 +1,101 @@
+### 1. Kafka Topic Creation
+
+```bash
+# Create the banking-transactions topic
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --config min.insync.replicas=2 --config acks=all --config retention.ms=604800000 --config segment.bytes=50000000 --config flush.ms=1000 banking-transactions
+
+# Create the banking-transactions-validated topic
+kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 3 --partitions 8 --config min.insync.replicas=2 --config acks=all --config retention.ms=604800000 --config segment.bytes=50000000 --config flush.ms=1000 banking-transactions-validated
+```
+
+### 2. Flink Configuration
+
+```yaml
+# config.yaml
+jobmanager:
+  high-availability:
+    standby-mode: true
+  host: flink-jobmanager
+  port: 6123
+  web.address: 0.0.0.0:8081
+
+taskmanager:
+  taskmanager.numberOfTaskSlots: 4
+  taskmanager.memory.fraction: 0.7
+  taskmanager.heap.size: 8g
+
+kafka:
+  bootstrap.servers: kafka:9092
+  transactional.id: flink-transactional-id
+  checkpointing:
+    enabled: true
+    interval: 10000
+    mode: EXACTLY_ONCE
+  state.backend: ROCKSDB
+  state.checkpoint.dir: s3://flink-state/checkpoints
+  state.updates.ttl: 604800000
+  state.retention: 604800000
+
+logging:
+  level: INFO
+```
+
+### 3. Flink SQL Table Definitions
+
+```sql
+CREATE TABLE banking_transactions (
+  account_id VARCHAR,
+  event_timestamp TIMESTAMP,
+  amount DECIMAL(10, 2)
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'banking-transactions',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'banking-transactions-group',
+  'scan.startup.mode' = 'earliest-offset',
+  'value.format' = 'json',
+  'json.timestamp-format.standard' = 'ISO 8601',
+  'json.fail-on-missing-field' = 'true',
+  'json.timestamp-format' = 'ISO 8601'
+);
+
+CREATE TABLE banking_transactions_validated (
+  account_id VARCHAR,
+  event_timestamp TIMESTAMP,
+  amount DECIMAL(10, 2)
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'topic' = 'banking-transactions-validated',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'banking-transactions-validated-group',
+  'producer.default-acks' = 'all',
+  'producer.acks' = 'all',
+  'producer.retries' = 3,
+  'producer.max.in.flight.requests.per.connection' = 1,
+  'producer.linger.ms' = 100,
+  'producercompression.type' = 'gzip'
+);
+
+CREATE TABLE validated_transactions AS
+SELECT
+  account_id,
+  event_timestamp,
+  amount
+FROM
+  banking_transactions
+WHERE
+  amount > 0 AND event_timestamp > timestamp('2024-01-01');
+```
+
+**Justification:**
+
+- **Kafka Topic Creation:**
+  - We create two topics with 8 partitions each to ensure high-throughput and low-latency. The replication factor is set to 3 to ensure durability in case of a single broker failure. We also set `min.insync.replicas` to 2 and `acks` to `all` to guarantee exactly-once delivery. The `segment.bytes` and `flush.ms` settings are adjusted to balance between segment size and flush frequency.
+
+- **Flink Configuration:**
+  - We configure the Flink job manager and task managers to have high-availability. The task managers have 4 slots and 8 GB of heap size. We enable exactly-once checkpointing with a checkpoint interval of 10 seconds. We also configure the state backend to use RocksDB for checkpointing and set the state retention to 7 days.
+
+- **Flink SQL Table Definitions:**
+  - We define two tables, `banking_transactions` and `banking_transactions_validated`, with the necessary properties for Kafka connectivity. We use the universal connector and set the value format to JSON. For the `validated_transactions` table, we filter out invalid transactions with negative amounts or timestamps before 2024-01-01. The producer properties for `banking_transactions_validated` are set to ensure exactly-once delivery and low latency.

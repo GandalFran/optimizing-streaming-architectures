@@ -1,0 +1,75 @@
+ ```bash
+# Create Kafka topics
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic session-events --partitions 3 --replication-factor 3
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic session-events-enriched --partitions 3 --replication-factor 3
+```
+
+```yaml
+# Flink configuration (config.yaml)
+
+# Kafka consumer configuration
+kafka-consumer-config:
+  bootstrap-servers: kafka:9092
+  group-id: flink-session-group
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  auto-offset-reset: earliest
+  enable.auto.commit: false
+  session.timeout.ms: 30000
+  max.poll.interval.ms: 60000
+
+# Flink job configuration
+flink-job:
+  execution-mode: standalone
+  taskmanager.numberOfTaskSlots: 3
+  taskmanager.resource.memory: 8192
+  taskmanager.heap.mb: 4096
+  checkpoint.interval: 10
+  state.backend: s3://flink-state/checkpoints
+  parallelism.default: 1
+  job.name: session-enrichment-job
+
+# Kafka sink configuration
+kafka-sink-config:
+  bootstrap-servers: kafka:9092
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  topic: session-events-enriched
+  auto.offset.reset: latest
+  delivery.guarantee: at-least-once
+  retention.ms: 86400000
+```
+
+```sql
+-- Flink SQL table creation for session-events topic
+CREATE TABLE session_events (
+  user_id STRING,
+  event_data STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'flink-session-group',
+  'format' = 'json'
+);
+
+-- Flink SQL table creation for session-events-enriched topic
+CREATE TABLE session_events_enriched (
+  user_id STRING,
+  event_data STRING,
+  enriched_data STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'flink-session-group',
+  'format' = 'json'
+);
+```
+
+Justification:
+- The Kafka topics are created with 3 partitions and a replication factor of 3 to ensure durability and high availability.
+- The Flink configuration is set up for a standalone cluster with 3 task managers, each with 4 CPU cores and 8 GB of memory. The checkpoint interval is set to 10 seconds to meet the end-to-end latency requirement.
+- The Kafka consumer configuration is set to read from the `session-events` topic and deserialize the data as JSON. The Flink job configuration is set to use the default parallelism of 1 for each task, which should be sufficient given the input rate and the assumption that one Flink source subtask can process at most 20,000 events/s.
+- The Kafka sink configuration is set to write to the `session-events-enriched` topic with at-least-once delivery guarantee and a retention period of 1 day.
+- The Flink SQL table creation statements define the schema for the Kafka source and sink tables, using the `json` format for deserialization and serialization.

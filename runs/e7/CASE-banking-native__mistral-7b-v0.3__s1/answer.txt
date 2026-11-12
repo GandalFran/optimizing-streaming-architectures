@@ -1,0 +1,71 @@
+ 1. Here's the `kafka-topics.sh` commands for creating the Kafka topics:
+
+```bash
+# Create banking-transactions topic with 10 partitions, replication factor 3, and configured to sustain 5 MB/s of produce traffic.
+kafka-topics.sh --create --topic banking-transactions --bootstrap-server kafka:9092 --partitions 10 --replication-factor 3 --config compression.type=lz4 --config retention.ms=604800000
+
+# Create banking-transactions-validated topic with the same configuration as banking-transactions.
+kafka-topics.sh --create --topic banking-transactions-validated --bootstrap-server kafka:9092 --partitions 10 --replication-factor 3 --config compression.type=lz4 --config retention.ms=604800000
+```
+
+2. Below is the Flink configuration (`config.yaml`) with the required settings:
+
+```yaml
+jobmanager.rpc.address: localhost
+taskmanager.numberOfTaskSlots: 3
+rest-plus-api.port: 8081
+jobmanager.rpc.port: 6123
+taskmanager.heartbeat.interval: 3000
+taskmanager.timeout: 120000
+checkpointing.enabled: true
+checkpointing.min-pause-between-checkpoints: 3000
+checkpointing.max-concurrent-checkpoints: 1
+checkpointing.checkpoint-interval: 5000
+checkpointing.fail-on-empty-checkpoint: false
+state.backend: filesystem
+state.filesystem.type: s3
+state.filesystem.bucket: flink-state
+state.checkpoints.dir: checkpoints
+taskmanager.memory.process-memory-mb: 8192
+taskmanager.memory.heap-memory-mb: 8192
+taskmanager.memory.off-heap-memory-mb: 512
+parallelism-degree-over-partition-size: 20000
+parallelism-reuse-multiplier: 1.5
+```
+
+3. Here's the Flink SQL `CREATE TABLE` statements for every Kafka source and sink table:
+
+```sql
+-- Create Kafka source table for banking-transactions topic
+CREATE TABLE banking_transactions (
+    account_id BIGINT,
+    transaction JSON
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'banking-transactions-source',
+    'format' = 'json',
+    'json.ignore-parse-errors' = 'true'
+);
+
+-- Create Flink sink table for banking-transactions-validated topic
+CREATE TABLE banking_transactions_validated (
+    account_id BIGINT,
+    transaction JSON
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'banking-transactions-validated',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.key.serializer' = 'org.apache.kafka.common.serialization.LongSerializer',
+    'properties.value.serializer' = 'org.apache.kafka.common.serialization.StringSerializer'
+);
+```
+
+Justification:
+
+1. The Kafka topic configurations are set up with the specified number of partitions, replication factor, and retention period. The compression type is set to LZ4 to reduce the data size and improve the overall throughput.
+
+2. The Flink configuration is optimized for the given environment and pipeline requirements. Key settings include parallelism-degree-over-partition-size, parallelism-reuse-multiplier, and checkpointing configuration.
+
+3. The Flink SQL `CREATE TABLE` statements define the source and sink tables for the Kafka topics, specifying the appropriate serializers, deserializers, and format for the JSON data. The JSON.ignore-parse-errors property is set for the source table to handle invalid JSON events without causing Flink to fail.

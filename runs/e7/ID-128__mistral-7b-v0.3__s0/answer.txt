@@ -1,0 +1,95 @@
+ 1. Strimzi `KafkaTopic` resources for all topics:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  kafka:
+    replicas: 3
+    listeners:
+    - name: plain
+      port: 9092
+      tls: false
+      config:
+        advertisingListenerEnabled: "true"
+        listenerType: CONNECT
+        listenerName: PLAIN
+    zooKeeper:
+      enabled: false
+    entityOperator:
+      topicOperator:
+        create:
+          - apiVersion: kafka.strimzi.io/v1beta2
+            kind: KafkaTopic
+            metadata:
+              name: clicks
+            spec:
+              partitions: 10
+              replicas: 3
+              config:
+                retention.ms: 604800000
+                compression.type: lzo
+                message.max.bytes: 1048576
+                segment.bytes: 1073741824
+                segment.ms: 3600000
+                min.insync.replicas: 2
+                unclean.leader.election.enable: "false"
+                transaction.timeout.ms: 60000
+                transaction.state.log.replication.factor: 3
+                transaction.state.log.min.isr: 2
+
+          - apiVersion: kafka.strimzi.io/v1beta2
+            kind: KafkaTopic
+            metadata:
+              name: clicks-enriched
+            spec:
+              partitions: 10
+              replicas: 3
+              config:
+                retention.ms: 604800000
+                compression.type: lzo
+                message.max.bytes: 1048576
+                segment.bytes: 1073741824
+                segment.ms: 3600000
+                min.insync.replicas: 2
+                unclean.leader.election.enable: "false"
+                transaction.timeout.ms: 60000
+                transaction.state.log.replication.factor: 3
+                transaction.state.log.min.isr: 2
+```
+
+2. Flink Deployment resource:
+
+```yaml
+apiVersion: flink.tdl.io/v1alpha1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-enrichment
+spec:
+  image: flink:1.13.0
+  replicas: 3
+  resources:
+    limits:
+      cpu: 4
+      memory: 8Gi
+    requests:
+      cpu: 2
+      memory: 4Gi
+  jobManager:
+    ports:
+    - containerPort: 8081
+      name: job-manager
+      protocol: TCP
+  taskManager:
+    containerPorts:
+    - containerPort: 6123
+      name: task-manager
+      protocol: TCP
+    podTemplate:
+      spec:
+        containers:
+        - name: task-manager
+          image: flink:1.13.0
+          command: ["java", "-jar", "/opt/flink/bin/flink-standalone-jobmanager.sh", "-Dflink.jobmanager.web.port=8081", "-Dflink.jobmanager.rpc.address=0.0.0.0", "-Dflink.jobmanager.zookeeper.address=zookeeper:2181", "-Dflink.jobmanager.deployment.mode=kubernetes", "-Dflink.jobmanager.deployment.kubernetes.namespace=default", "-Dflink.jobmanager.deployment.kubernetes.job-manager-pod-template-file=/opt/flink/conf/k8s/job-manager-template.json", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-file=/opt/flink/conf/k8s/task-manager-template.json", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-max-replicas=3", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-min-replicas=1", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-labels=app=clickstream-enrichment", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-annotations=app=clickstream-enrichment", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-namespace=default", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-service-account-name=flink", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-image-pull-policy=Always", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-volume-mounts=/opt/flink/conf/k8s/conf-volume:/opt/flink/conf", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_CHECKPOINT_S3_ENDPOINT=s3://flink-state/checkpoints", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_CHECKPOINT_S3_REGION=us-west-2", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_CHECKPOINT_S3_ACCESS_KEY=<access_key>", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_CHECKPOINT_S3_SECRET_KEY=<secret_key>", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_JAR=local:///opt/flink/usrlib/sql-runner.jar", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_TASK_MANAGER_NUMBER_TASK_SLOTS=20000", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_TASK_MANAGER_HEAP_SIZE=8g", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_TASK_MANAGER_JVM_XMS=2g", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_TASK_MANAGER_JVM_XMX=2g", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_TASK_MANAGER_JVM_XSS=512m", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_TASK_MANAGER_JVM_XMS_MAX=2g", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_TASK_MANAGER_JVM_XMX_MAX=2g", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_TASK_MANAGER_JVM_XSS_MAX=512m", "-Dflink.jobmanager.deployment.kubernetes.task-manager-pod-template-env=FLINK_TASK_MANAGER_JVM_GC_OPTS=-XX:+UseG1GC -XX:G1HeapRegionSize=32M -XX:MaxGCPauseMillis=50 -XX:+UseStringDeduplication -XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent -XX:+UnlockExperimentalVMOptions -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCMSInitiatingOccupancy

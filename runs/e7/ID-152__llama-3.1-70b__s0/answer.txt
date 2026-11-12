@@ -1,0 +1,130 @@
+```yaml
+# KafkaTopic resources for payments and payments-validated topics
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.ms: 604800000
+```
+
+```yaml
+# FlinkDeployment resource with Flink configuration
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: payments-validator
+spec:
+  image:
+    name: flink:1.20
+  flinkVersion: v1_20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.memory.jvm-metaspace.size: 128m
+    taskmanager.memory.jvm-overhead.min: 384m
+    taskmanager.memory.jvm-overhead.max: 384m
+    taskmanager.memory.process.size: 7680m
+    state.savepoints.dir: s3://flink-state/checkpoints
+    execution.checkpointing.interval: 10s
+    execution.checkpointing.timeout: 1min
+    execution.checkpointing.unaligned: true
+    execution.checkpointing.tolerable-failed-checkpoints: 3
+    execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+    restart-strategy: fixed-delay
+    restart-strategy.fixed-delay.attempts: 3
+    restart-strategy.fixed-delay.delay: 10s
+    execution.runtime-mode: streaming
+  job:
+    jarURI: local:///opt/flink/usrlib/sql-runner.jar
+    parallelism: 10
+  resources:
+    taskmanager:
+      cpu: 4
+      memory: 8Gi
+  podTemplate:
+    spec:
+      containers:
+      - name: flink-main-container
+        volumeMounts:
+        - name: flink-config-volume
+          mountPath: /opt/flink/conf
+      volumes:
+      - name: flink-config-volume
+        configMap:
+          name: flink-config
+  replicas: 3
+```
+
+```sql
+-- Flink SQL CREATE TABLE statements for Kafka source and sink tables
+CREATE TABLE payments (
+  `account_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `amount` DECIMAL(10, 2),
+  `currency` STRING,
+  `event` STRING,
+  `event_type` STRING,
+  `source` STRING,
+  `sink` STRING,
+  `status` STRING,
+  `transaction_id` STRING,
+  `user_id` STRING,
+  WATERMARK FOR `event_time` AS `event_time` - INTERVAL '5' SECOND
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'payments',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.fail-on-missing-field' = 'true',
+  'update-mode' = 'append'
+);
+
+CREATE TABLE payments_validated (
+  `account_id` STRING,
+  `event_time` TIMESTAMP(3),
+  `amount` DECIMAL(10, 2),
+  `currency` STRING,
+  `event` STRING,
+  `event_type` STRING,
+  `source` STRING,
+  `sink` STRING,
+  `status` STRING,
+  `transaction_id` STRING,
+  `user_id` STRING,
+  `derived_field1` STRING,
+  `derived_field2` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'payments-validated',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.fail-on-missing-field' = 'true',
+  'update-mode' = 'append'
+);
+```
+
+Justification:
+
+*   We create two Kafka topics (`payments` and `payments-validated`) with 10 partitions each to handle the input rate of 50,000 events/s. This allows for a maximum produce traffic of 50 MB/s (10 partitions \* 5 MB/s per partition), which is above the required 40 MB/s (50,000 events/s \* 2048 bytes per event / (1024 \* 1024 bytes per MB)).
+*   We set the replication factor to 3 for both topics to ensure that data is not lost in case of a single broker failure.
+*   We configure the Flink job to use 10 TaskManagers with 4 CPU and 8 GiB of memory each. This allows for a maximum of 200,000 events/s (10 TaskManagers \* 20,000 events/s per TaskManager), which is above the required 50,000 events/s.
+*   We set the checkpointing interval to 10 seconds and the checkpointing timeout to 1 minute to ensure that the job can recover from failures within the required end-to-end latency of 1 second at p99.
+*   We use the `fixed-delay` restart strategy with 3 attempts and a delay of 10 seconds to handle failures.
+*   We configure the Flink SQL tables to use the Kafka connector with the `universal` version and the `json` format. We also set `format.fail-on-missing-field` to `true` to filter out malformed events.

@@ -1,0 +1,283 @@
+{
+  "id": "ID-141",
+  "model": "ft-v2-s1",
+  "seed": 0,
+  "track": "native",
+  "family": "grid",
+  "spec": {
+    "delivery": "exactly-once",
+    "durability": "standard",
+    "event_bytes": 512,
+    "latency_slo_ms": 10000,
+    "retention_days": 1,
+    "sink": "app-logs-parsed",
+    "src": "app-logs",
+    "throughput_eps": 20000
+  },
+  "finish_reason": "length",
+  "host": "cn001",
+  "slurm_job": "8424",
+  "started": "2026-11-10T21:59:05+0100",
+  "substitutions": [
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic app-logs --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic app-logs --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic app-logs-parsed --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092",
+      "kind": "binary-path",
+      "from": "kafka-topics.sh",
+      "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+    },
+    {
+      "artefact": "topics",
+      "cmd": "kafka-topics.sh --create --topic app-logs-parsed --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092",
+      "kind": "bootstrap-server",
+      "from": "kafka:9092",
+      "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    }
+  ],
+  "translations": [],
+  "augmentations": [],
+  "topic_commands": [
+    {
+      "answer_cmd": "kafka-topics.sh --create --topic app-logs --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic app-logs --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic app-logs.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    },
+    {
+      "answer_cmd": "kafka-topics.sh --create --topic app-logs-parsed --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092",
+      "cmd": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh --create --topic app-logs-parsed --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server 127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002",
+      "substitutions": [
+        {
+          "kind": "binary-path",
+          "from": "kafka-topics.sh",
+          "to": "/home/chamoso/tuning-revision/opt/kafka/bin/kafka-topics.sh"
+        },
+        {
+          "kind": "bootstrap-server",
+          "from": "kafka:9092",
+          "to": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+        }
+      ],
+      "rc": 0,
+      "stdout_tail": "Created topic app-logs-parsed.\n",
+      "stderr_head": "",
+      "stderr_tail": ""
+    }
+  ],
+  "job_submitted": false,
+  "job_id": null,
+  "job_state_final": null,
+  "root_exception": "the answer's Flink configuration is not valid YAML: ScannerError: while scanning a simple key",
+  "checkpoints_completed": null,
+  "checkpoints_failed": null,
+  "offered_eps": null,
+  "sink_eps": null,
+  "latency_ms": {
+    "p50": null,
+    "p95": null,
+    "p99": null
+  },
+  "slo_ms": 10000,
+  "lost": null,
+  "duplicates": null,
+  "untestable_reason": null,
+  "criteria": {
+    "C1_deploy": false,
+    "C2_checkpoints": false,
+    "C3_throughput": false,
+    "C4_latency": false,
+    "C5_delivery": false
+  },
+  "runtime_pass": false,
+  "null_reasons": {},
+  "criteria_reasons": {
+    "C1_deploy": "the answer's Flink configuration is not valid YAML: ScannerError: while scanning a simple key",
+    "C2_checkpoints": "job not running",
+    "C3_throughput": "job not running: no load phase",
+    "C4_latency": "job not running: no load phase",
+    "C5_delivery": "job not running: no load phase"
+  },
+  "events": [
+    {
+      "t": 1794344354.0,
+      "rel": null,
+      "event": "kafka_up",
+      "seconds": 7.3,
+      "bootstrap": "127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002"
+    },
+    {
+      "t": 1794344357.486,
+      "rel": null,
+      "event": "topics",
+      "created": [
+        "app-logs",
+        "app-logs-parsed"
+      ],
+      "ok": true
+    }
+  ],
+  "notes": [],
+  "driver_args": {
+    "id": "ID-141",
+    "answer_file": null,
+    "answers": "runs/main/ft-v2-s1.greedy.jsonl",
+    "model": "ft-v2-s1",
+    "seed": 0,
+    "finish_reason": "stop",
+    "bench": "/lustre/home/chamoso/phd-rev/bench/kfbench-v1.jsonl",
+    "out": "runs/e7/ID-141__ft-v2-s1__s0.json",
+    "duration": 180.0,
+    "warmup": 30.0,
+    "kill_at": 90.0,
+    "guard": 10.0,
+    "restart_after": 15.0,
+    "drain": 60.0,
+    "rate_cap": 50000.0,
+    "settle": 5.0,
+    "c1_deadline": 60.0,
+    "running_timeout": 120.0,
+    "templates": 4096,
+    "seed_load": 1,
+    "kafka_cores": 2,
+    "tm_cores": 4,
+    "jm_cores": 1,
+    "ctl_cores": 2,
+    "meas_cores": 1,
+    "run_root": "/tmp/chamoso-e7/8424",
+    "keep_state": false,
+    "deploy_untestable": false
+  },
+  "ignored": {
+    "commands": [],
+    "sql_statements": []
+  },
+  "static_validator": {
+    "n_findings": 3,
+    "findings_L1_L3": [
+      "L1:truncated:generation stopped at the token limit",
+      "L1:syntax:ScannerError: while scanning a simple key",
+      "L1:missing-artefact:no SQL block with CREATE TABLE statements"
+    ]
+  },
+  "topology": {
+    "port_base": 12000,
+    "cores_per_role": {
+      "kafka": 2,
+      "flink": 4,
+      "jm": 1,
+      "control": 2,
+      "meas": 1
+    },
+    "quality": {
+      "spanning_nodes": [],
+      "spanning_sut_nodes": [],
+      "sut_domains": [
+        1
+      ]
+    },
+    "nodes": {
+      "k1": "32,33,144,145",
+      "k2": "34,35,146,147",
+      "k3": "36,37,148,149",
+      "f1": "38,39,40,41,150,151,152,153",
+      "f2": "42,43,44,45,154,155,156,157",
+      "f3": "46,47,48,49,158,159,160,161",
+      "j1": "50,162",
+      "ctl": "51,52,163,164",
+      "m1": "53,165"
+    }
+  },
+  "kafka_broker_properties": [
+    "process.roles=broker,controller",
+    "node.id=1",
+    "controller.quorum.voters=1@127.0.0.1:12010,2@127.0.0.1:12011,3@127.0.0.1:12012",
+    "listeners=PLAINTEXT://127.0.0.1:12000,CONTROLLER://127.0.0.1:12010",
+    "advertised.listeners=PLAINTEXT://127.0.0.1:12000",
+    "controller.listener.names=CONTROLLER",
+    "listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT",
+    "log.dirs=/tmp/chamoso-e7/8424/e7-2173845/k1/kafka-data"
+  ],
+  "topics_after_commands": {
+    "app-logs": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "segment.bytes": "1073741824",
+        "retention.ms": "86400000"
+      }
+    },
+    "app-logs-parsed": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "segment.bytes": "1073741824",
+        "retention.ms": "86400000"
+      }
+    }
+  },
+  "topics_created": {
+    "source": true,
+    "sink": true
+  },
+  "failure_stage": "answer",
+  "topics_after_run": {
+    "app-logs": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "segment.bytes": "1073741824",
+        "retention.ms": "86400000"
+      }
+    },
+    "app-logs-parsed": {
+      "partitions": 10,
+      "replication_factor": 3,
+      "configs": {
+        "min.insync.replicas": "1",
+        "segment.bytes": "1073741824",
+        "retention.ms": "86400000"
+      }
+    }
+  },
+  "timeline": [],
+  "teardown_leftovers": [],
+  "criteria_applicable": [
+    "C1_deploy",
+    "C3_throughput",
+    "C4_latency",
+    "C2_checkpoints",
+    "C5_delivery"
+  ],
+  "finished": "2026-11-10T21:59:24+0100"
+}

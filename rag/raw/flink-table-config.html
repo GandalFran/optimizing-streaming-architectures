@@ -1,0 +1,6411 @@
+
+<!DOCTYPE html>
+<html lang="en" dir=>
+
+<head>
+  <meta name="generator" content="Hugo 0.110.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Configuration # By default, the Table &amp; SQL API is preconfigured for producing accurate results with acceptable performance.
+Depending on the requirements of a table program, it might be necessary to adjust certain parameters for optimization. For example, unbounded streaming programs may need to ensure that the required state size is capped (see streaming concepts).
+Overview # When instantiating a TableEnvironment, EnvironmentSettings can be used to pass the desired configuration for the current session, by passing a Configuration object to the EnvironmentSettings.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="Configuration" />
+<meta property="og:description" content="Configuration # By default, the Table &amp; SQL API is preconfigured for producing accurate results with acceptable performance.
+Depending on the requirements of a table program, it might be necessary to adjust certain parameters for optimization. For example, unbounded streaming programs may need to ensure that the required state size is capped (see streaming concepts).
+Overview # When instantiating a TableEnvironment, EnvironmentSettings can be used to pass the desired configuration for the current session, by passing a Configuration object to the EnvironmentSettings." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/config/" /><meta property="article:section" content="docs" />
+
+
+<title>Configuration | Apache Flink</title>
+<link rel="manifest" href="/flink/flink-docs-release-1.20/manifest.json">
+<link rel="icon" href="/flink/flink-docs-release-1.20/favicon.png" type="image/x-icon">
+<link rel="alternate" hreflang="zh" href="//nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/dev/table/config/" title="配置">
+
+<link rel="stylesheet" href="/flink/flink-docs-release-1.20/book.min.5c00beaef6b82f1a3a01d19bc3724120a51475ac74de00cc3d9bade85ac5c0db.css" integrity="sha256-XAC&#43;rva4Lxo6AdGbw3JBIKUUdax03gDMPZut6FrFwNs=">
+<script defer src="/flink/flink-docs-release-1.20/en.search.min.58faf144e7f8c66c419f8c7cae6d68feb5f98156f21d139467d846499792bf3c.js" integrity="sha256-WPrxROf4xmxBn4x8rm1o/rX5gVbyHROUZ9hGSZeSvzw="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+
+<link rel="canonical" href="https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/config/" />
+
+<link rel="stylesheet" type="text/css" href="//nightlies.apache.org/flink/flink-docs-release-1.20/font-awesome/css/font-awesome.min.css">
+<script src="//nightlies.apache.org/flink/flink-docs-release-1.20/js/anchor.min.js"></script>
+<script src="//nightlies.apache.org/flink/flink-docs-release-1.20/js/flink.js"></script>
+
+
+    
+    <script>
+      var _paq = window._paq = window._paq || [];
+       
+       
+      _paq.push(['disableCookies']);
+       
+      _paq.push(["setDomains", ["*.flink.apache.org","*.nightlies.apache.org/flink"]]);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="//analytics.apache.org/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '1']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    
+</head>
+
+<body dir=>
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      
+  
+
+<nav>
+
+
+<a id="logo" href="//nightlies.apache.org/flink/flink-docs-release-1.20">
+    <img width="70%" src="//nightlies.apache.org/flink/flink-docs-release-1.20/flink-header-logo.svg">
+</a>
+<p style="text-align:right">v1.20.3</p>
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ee00ed8156e685af335ebb5ccd4e75ca" class="toggle"  />
+    <label for="section-ee00ed8156e685af335ebb5ccd4e75ca" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Try Flink</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/local_installation/" class="">First steps</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/datastream/" class="">Fraud Detection with the DataStream API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/table_api/" class="">Real Time Reporting with the Table API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/try-flink/flink-operations-playground/" class="">Flink Operations Playground</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-a5f62c05e51da2d13fd0cb021dee4187" class="toggle"  />
+    <label for="section-a5f62c05e51da2d13fd0cb021dee4187" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Learn Flink</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/datastream_api/" class="">Intro to the DataStream API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/etl/" class="">Data Pipelines & ETL</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/streaming_analytics/" class="">Streaming Analytics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/event_driven/" class="">Event-driven Applications</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/learn-flink/fault_tolerance/" class="">Fault Tolerance</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-6c07f7e07850a28420f21d62041fba0d" class="toggle"  />
+    <label for="section-6c07f7e07850a28420f21d62041fba0d" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i>&nbsp;&nbsp;Concepts</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/stateful-stream-processing/" class="">Stateful Stream Processing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/time/" class="">Timely Stream Processing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/flink-architecture/" class="">Flink Architecture</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/concepts/glossary/" class="">Glossary</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  	<br/>
+  
+  
+    <input type="checkbox" id="section-4be50b0d8f9a243d0d0b85d5143097d6" class="toggle" checked />
+    <label for="section-4be50b0d8f9a243d0d0b85d5143097d6" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-code title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Application Development</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-978b3bcc65df430772604fa311c9f9eb" class="toggle"  />
+    <label for="section-978b3bcc65df430772604fa311c9f9eb" class="flex justify-between">Project Configuration<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/maven/" class="">Using Maven</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/gradle/" class="">Using Gradle</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/connector/" class="">Connectors and Formats</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/testing/" class="">Test Dependencies</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/configuration/advanced/" class="">Advanced Configuration</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-cc76d21600ce4269c2fc917d6514fd35" class="toggle"  />
+    <label for="section-cc76d21600ce4269c2fc917d6514fd35" class="flex justify-between">DataStream API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution_mode/" class="">Execution Mode (Batch/Streaming)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d1ca6a3ddf6206fe9e3e2905ecc5b840" class="toggle"  />
+    <label for="section-d1ca6a3ddf6206fe9e3e2905ecc5b840" class="flex justify-between">Event Time<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/event-time/generating_watermarks/" class="">Generating Watermarks</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/event-time/built_in/" class="">Builtin Watermark Generators</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d99ef0e0a25e058e76eafba1cd8eaa48" class="toggle"  />
+    <label for="section-d99ef0e0a25e058e76eafba1cd8eaa48" class="flex justify-between">State & Fault Tolerance<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/state/" class="">Working with State</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/broadcast_state/" class="">The Broadcast State Pattern</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/checkpointing/" class="">Checkpointing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/state_backends/" class="">State Backends</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f5f5986e7da95b9b579d8ae2bd679031" class="toggle"  />
+    <label for="section-f5f5986e7da95b9b579d8ae2bd679031" class="flex justify-between">Data Types & Serialization<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/types_serialization/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/schema_evolution/" class="">State Schema Evolution</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/custom_serialization/" class="">Custom State Serialization</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/fault-tolerance/serialization/third_party_serializers/" class="">3rd Party Serializers</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/user_defined_functions/" class="">User-Defined Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ef1281f923b745dff2ed7c163aa9ec7b" class="toggle"  />
+    <label for="section-ef1281f923b745dff2ed7c163aa9ec7b" class="flex justify-between">Operators<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/windows/" class="">Windows</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/joining/" class="">Joining</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/process_function/" class="">Process Function</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/asyncio/" class="">Async I/O</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/operators/full_window_partition/" class="">Full Window Partition</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/sources/" class="">Data Sources</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/side_output/" class="">Side Outputs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/application_parameters/" class="">Handling Application Parameters</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/testing/" class="">Testing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/experimental/" class="">Experimental Features</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/scala_api_extensions/" class="">Scala API Extensions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/java_lambdas/" class="">Java Lambda Expressions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-937b4e61cb5436a4175e69bac4599ad8" class="toggle"  />
+    <label for="section-937b4e61cb5436a4175e69bac4599ad8" class="flex justify-between">Managing Execution<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution/execution_configuration/" class="">Execution Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution/packaging/" class="">Program Packaging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/execution/parallel/" class="">Parallel Execution</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/datastream/dataset_migration/" class="">How to Migrate from DataSet to DataStream</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-8f7718ee0841350d23d794e6e80ecca8" class="toggle" checked />
+    <label for="section-8f7718ee0841350d23d794e6e80ecca8" class="flex justify-between">Table API & SQL<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/common/" class="">Concepts & Common API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/data_stream_api/" class="">DataStream API Integration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-437f7dc45a912e6ba89e4658e9cf16c7" class="toggle"  />
+    <label for="section-437f7dc45a912e6ba89e4658e9cf16c7" class="flex justify-between">Streaming Concepts<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/determinism/" class="">Determinism in Continuous Queries</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/dynamic_tables/" class="">Dynamic Tables</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/time_attributes/" class="">Time Attributes</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/versioned_tables/" class="">Versioned Tables</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/temporal_table_function/" class="">Temporal Table Function</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/types/" class="">Data Types</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/timezone/" class="">Time Zone</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/tableapi/" class="">Table API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-4c1e1791793983012460cd817472d096" class="toggle"  />
+    <label for="section-4c1e1791793983012460cd817472d096" class="flex justify-between">SQL<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/overview/" class="">SQL</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/gettingstarted/" class="">Getting Started</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-5d6c290ca84a704ca1b8b2b8851d96d7" class="toggle"  />
+    <label for="section-5d6c290ca84a704ca1b8b2b8851d96d7" class="flex justify-between">Queries<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/hints/" class="">Hints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/with/" class="">WITH clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/select/" class="">SELECT & WHERE</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/select-distinct/" class="">SELECT DISTINCT</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-tvf/" class="">Windowing TVF</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-agg/" class="">Window Aggregation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/group-agg/" class="">Group Aggregation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/over-agg/" class="">Over Aggregation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/joins/" class="">Joins</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-join/" class="">Window JOIN</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/set-ops/" class="">Set Operations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/orderby/" class="">ORDER BY clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/limit/" class="">LIMIT clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/topn/" class="">Top-N</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-topn/" class="">Window Top-N</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/deduplication/" class="">Deduplication</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/window-deduplication/" class="">Window Deduplication</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/match_recognize/" class="">Pattern Recognition</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/queries/time-travel/" class="">Time Travel</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/create/" class="">CREATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/drop/" class="">DROP Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/alter/" class="">ALTER Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/insert/" class="">INSERT Statement</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/analyze/" class="">ANALYZE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/describe/" class="">DESCRIBE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/truncate/" class="">TRUNCATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/explain/" class="">EXPLAIN Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/use/" class="">USE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/show/" class="">SHOW Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/load/" class="">LOAD Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/unload/" class="">UNLOAD Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/set/" class="">SET Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/reset/" class="">RESET Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/jar/" class="">JAR Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/job/" class="">JOB Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/update/" class="">UPDATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/delete/" class="">DELETE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql/call/" class="">CALL Statements</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-813c733a327563e57075b729114cc8b5" class="toggle"  />
+    <label for="section-813c733a327563e57075b729114cc8b5" class="flex justify-between">Materialized Table<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/materialized-table/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/materialized-table/statements/" class="">Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/materialized-table/quickstart/" class="">Quickstart</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b587c52eb9cc90a648b2c07dee157839" class="toggle"  />
+    <label for="section-b587c52eb9cc90a648b2c07dee157839" class="flex justify-between">Functions<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/functions/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/functions/systemfunctions/" class="">System (Built-in) Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/functions/udfs/" class="">User-defined Functions</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/procedures/" class="">Procedures</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/modules/" class="">Modules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/catalogs/" class="">Catalogs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/jdbcdriver/" class="">Flink JDBC Driver</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/olap_quickstart/" class="">OLAP Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sqlclient/" class="">SQL Client</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-5faa5ed4946fc579132ce4387e7df6d6" class="toggle"  />
+    <label for="section-5faa5ed4946fc579132ce4387e7df6d6" class="flex justify-between">SQL Gateway<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql-gateway/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql-gateway/rest/" class="">REST Endpoint</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sql-gateway/hiveserver2/" class="">HiveServer2 Endpoint</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-27d468a2caf7b6b532e75a9890a8be61" class="toggle"  />
+    <label for="section-27d468a2caf7b6b532e75a9890a8be61" class="flex justify-between">Hive Compatibility<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-bd89891f1fcee30f52191d13ca7cb941" class="toggle"  />
+    <label for="section-bd89891f1fcee30f52191d13ca7cb941" class="flex justify-between">Hive Dialect<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d0c530a3ce23c2eaeeb0c3e4c8519d4e" class="toggle"  />
+    <label for="section-d0c530a3ce23c2eaeeb0c3e4c8519d4e" class="flex justify-between">Queries<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/sort-cluster-distribute-by/" class="">Sort/Cluster/Distributed By</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/group-by/" class="">Group By</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/join/" class="">Join</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/set-op/" class="">Set Operations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/lateral-view/" class="">Lateral View Clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/window-functions/" class="">Window Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/sub-queries/" class="">Sub-Queries</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/cte/" class="">CTE</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/transform/" class="">Transform Clause</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/queries/table-sample/" class="">Table Sample</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/create/" class="">CREATE Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/drop/" class="">DROP Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/alter/" class="">ALTER Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/insert/" class="">INSERT Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/load-data/" class="">Load Data Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/show/" class="">SHOW Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/add/" class="">ADD Statements</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/hive-compatibility/hive-dialect/set/" class="">SET Statements</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/config/" class=" active">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/tuning/" class="">Performance Tuning</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/sourcessinks/" class="">User-defined Sources & Sinks</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-a25fe3d5e31775b296acf374d7cdac92" class="toggle"  />
+    <label for="section-a25fe3d5e31775b296acf374d7cdac92" class="flex justify-between">Python API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/installation/" class="">Installation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table_api_tutorial/" class="">Table API Tutorial</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream_tutorial/" class="">DataStream API Tutorial</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-424bf2ddca17cc2b040ec160630144f2" class="toggle"  />
+    <label for="section-424bf2ddca17cc2b040ec160630144f2" class="flex justify-between">Table API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/intro_to_table_api/" class="">Intro to the Python Table API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/table_environment/" class="">TableEnvironment</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-91932491e3426637ac0c6917c35f993f" class="toggle"  />
+    <label for="section-91932491e3426637ac0c6917c35f993f" class="flex justify-between">Operations<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/operations/operations/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/operations/row_based_operations/" class="">Row-based Operations</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/python_types/" class="">Data Types</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/system_functions/" class="">System (Built-in) Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-2c6dae1d1333e53da24a0d0b4469849e" class="toggle"  />
+    <label for="section-2c6dae1d1333e53da24a0d0b4469849e" class="flex justify-between">User Defined Functions<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/udfs/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/udfs/python_udfs/" class="">General User-defined Functions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/udfs/vectorized_python_udfs/" class="">Vectorized User-defined Functions</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/conversion_of_pandas/" class="">Conversions between PyFlink Table and Pandas DataFrame</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/conversion_of_data_stream/" class="">Conversions between Table and DataStream</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/sql/" class="">SQL</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/catalogs/" class="">Catalogs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/metrics/" class="">Metrics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/table/python_table_api_connectors/" class="">Connectors</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-42116523be06cf749380b5ce462b0bf6" class="toggle"  />
+    <label for="section-42116523be06cf749380b5ce462b0bf6" class="flex justify-between">DataStream API<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/intro_to_datastream_api/" class="">Intro to the Python DataStream API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-412609674eacdd1d31a3f4c67bbb191f" class="toggle"  />
+    <label for="section-412609674eacdd1d31a3f4c67bbb191f" class="flex justify-between">Operators<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/operators/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/operators/windows/" class="">Windows</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/operators/process_function/" class="">Process Function</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/data_types/" class="">Data Types</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/datastream/state/" class="">State</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/dependency_management/" class="">Dependency Management</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/python_execution_mode/" class="">Execution Mode</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/python_config/" class="">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/debugging/" class="">Debugging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/environment_variables/" class="">Environment Variables</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/python/faq/" class="">FAQ</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f5bf4e18a429153f481150a5e746bb4f" class="toggle"  />
+    <label for="section-f5bf4e18a429153f481150a5e746bb4f" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-book title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Libraries</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/libs/cep/" class="">Event Processing (CEP)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/libs/state_processor_api/" class="">State Processor API</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ed82234225dbf97cc7245e5b0cb1addb" class="toggle"  />
+    <label for="section-ed82234225dbf97cc7245e5b0cb1addb" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-random title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Connectors</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-a526b98d366d55d2402b163c9f80b4de" class="toggle"  />
+    <label for="section-a526b98d366d55d2402b163c9f80b4de" class="flex justify-between">DataStream Connectors<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/guarantees/" class="">Fault Tolerance Guarantees</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-c5d27e93a39d1000fee2c771ab8e4c99" class="toggle"  />
+    <label for="section-c5d27e93a39d1000fee2c771ab8e4c99" class="flex justify-between">Formats<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/avro/" class="">Avro</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/azure_table_storage/" class="">Azure Table storage</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/csv/" class="">CSV</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/hadoop/" class="">Hadoop</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/json/" class="">JSON</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/parquet/" class="">Parquet</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/formats/text_files/" class="">Text files</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/datagen/" class="">DataGen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/dynamic-kafka/" class="">Dynamic Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/kafka/" class="">Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/cassandra/" class="">Cassandra</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/dynamodb/" class="">DynamoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/elasticsearch/" class="">Elasticsearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/firehose/" class="">Firehose</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/kinesis/" class="">Kinesis</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/mongodb/" class="">MongoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/opensearch/" class="">Opensearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/prometheus/" class="">Prometheus</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/sqs/" class="">SQS</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/filesystem/" class="">FileSystem</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/kudu/" class="">Kudu</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/rabbitmq/" class="">RabbitMQ</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/pubsub/" class="">Google Cloud PubSub</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/hybridsource/" class="">Hybrid Source</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/pulsar/" class="">Pulsar</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/datastream/jdbc/" class="">JDBC</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-cd269c4be446b40053a18f8b84110041" class="toggle"  />
+    <label for="section-cd269c4be446b40053a18f8b84110041" class="flex justify-between">Table API Connectors<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-4078b95b237c79336e676b4e2edb2772" class="toggle"  />
+    <label for="section-4078b95b237c79336e676b4e2edb2772" class="flex justify-between">Formats<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/overview/" class="">Formats</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/csv/" class="">CSV</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/json/" class="">JSON</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/avro/" class="">Avro</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/avro-confluent/" class="">Confluent Avro</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/protobuf/" class="">Protobuf</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/debezium/" class="">Debezium</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/canal/" class="">Canal</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/maxwell/" class="">Maxwell</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/ogg/" class="">Ogg</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/parquet/" class="">Parquet</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/orc/" class="">Orc</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/formats/raw/" class="">Raw</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/kafka/" class="">Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/upsert-kafka/" class="">Upsert Kafka</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/dynamodb/" class="">DynamoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/firehose/" class="">Firehose</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/kinesis/" class="">Kinesis</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/mongodb/" class="">MongoDB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/jdbc/" class="">JDBC</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/kudu/" class="">Kudu</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/elasticsearch/" class="">Elasticsearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/opensearch/" class="">Opensearch</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/filesystem/" class="">FileSystem</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hbase/" class="">HBase</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/pulsar/" class="">Pulsar</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/datagen/" class="">DataGen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/print/" class="">Print</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/blackhole/" class="">BlackHole</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-61ae5a238c9fe2f26340cb03198dfcd7" class="toggle"  />
+    <label for="section-61ae5a238c9fe2f26340cb03198dfcd7" class="flex justify-between">Hive<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/hive_catalog/" class="">Hive Catalog</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/hive_read_write/" class="">Hive Read & Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/hive/hive_functions/" class="">Hive Functions</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/connectors/table/downloads/" class="">Download</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f8c920cc65db331ce219e9ca783fabb2" class="toggle"  />
+    <label for="section-f8c920cc65db331ce219e9ca783fabb2" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-sliders title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Deployment</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/java_compatibility/" class="">Java Compatibility</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-f57030cb5bc69ac1d28bd73a2e0fa4a9" class="toggle"  />
+    <label for="section-f57030cb5bc69ac1d28bd73a2e0fa4a9" class="flex justify-between">Resource Providers<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-ea9ad33af563289787cbec15cada5824" class="toggle"  />
+    <label for="section-ea9ad33af563289787cbec15cada5824" class="flex justify-between">Standalone<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/working_directory/" class="">Working Directory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/docker/" class="">Docker</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/standalone/kubernetes/" class="">Kubernetes</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/native_kubernetes/" class="">Native Kubernetes</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/resource-providers/yarn/" class="">YARN</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/config/" class="">Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b2b21a6932971423f75546845eaa0270" class="toggle"  />
+    <label for="section-b2b21a6932971423f75546845eaa0270" class="flex justify-between">Memory Configuration<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_setup/" class="">Set up Flink's Process Memory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_setup_tm/" class="">Set up TaskManager Memory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_setup_jobmanager/" class="">Set up JobManager Memory</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_tuning/" class="">Memory Tuning Guide</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_trouble/" class="">Troubleshooting</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/mem_migration/" class="">Migration Guide</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/memory/network_mem_tuning/" class="">Network Buffer Tuning</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/cli/" class="">Command-Line Interface</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/elastic_scaling/" class="">Elastic Scaling</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/finegrained_resource/" class="">Fine-Grained Resource Management</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/speculative_execution/" class="">Speculative Execution</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-3ad52e3c294903bbe597454f3be784d1" class="toggle"  />
+    <label for="section-3ad52e3c294903bbe597454f3be784d1" class="flex justify-between">File Systems<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/common/" class="">Common Configurations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/s3/" class="">Amazon S3</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/gcs/" class="">Google Cloud Storage</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/oss/" class="">Aliyun OSS</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/azure/" class="">Azure Blob Storage</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/filesystems/plugins/" class="">Plugins</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-8e839847034c230e3c48f00e4eea472f" class="toggle"  />
+    <label for="section-8e839847034c230e3c48f00e4eea472f" class="flex justify-between">High Availability<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/ha/overview/" class="">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/ha/zookeeper_ha/" class="">ZooKeeper HA Services</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/ha/kubernetes_ha/" class="">Kubernetes HA Services</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/metric_reporters/" class="">Metric Reporters</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/trace_reporters/" class="">Trace Reporters</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-fa25a9e1707135a6191375ba5ebf6927" class="toggle"  />
+    <label for="section-fa25a9e1707135a6191375ba5ebf6927" class="flex justify-between">REPLs<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/repls/python_shell/" class="">Python REPL</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-da02acee0967ffc7d941d06ca50959d2" class="toggle"  />
+    <label for="section-da02acee0967ffc7d941d06ca50959d2" class="flex justify-between">Security<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/security/security-ssl/" class="">SSL Setup</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/security/security-kerberos/" class="">Kerberos</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/security/security-delegation-token/" class="">Delegation tokens</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b63e989880aebee7e5211ac1d3ce4e9f" class="toggle"  />
+    <label for="section-b63e989880aebee7e5211ac1d3ce4e9f" class="flex justify-between">Advanced<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/external_resources/" class="">External Resources</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/historyserver/" class="">History Server</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/logging/" class="">Logging</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/advanced/failure_enrichers/" class="">Failure Enrichers</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-5b57649c0c94af0841dac91e624830af" class="toggle"  />
+    <label for="section-5b57649c0c94af0841dac91e624830af" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-cogs title maindish" aria-hidden="true"></i>&nbsp;&nbsp;Operations</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-42a8c1c4247207b80e64d3d223c23a23" class="toggle"  />
+    <label for="section-42a8c1c4247207b80e64d3d223c23a23" class="flex justify-between">State & Fault Tolerance<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/checkpoints/" class="">Checkpoints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/checkpointing_under_backpressure/" class="">Checkpointing under backpressure</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/savepoints/" class="">Savepoints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/checkpoints_vs_savepoints/" class="">Checkpoints vs. Savepoints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/state_backends/" class="">State Backends</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/large_state_tuning/" class="">Tuning Checkpoints and Large State</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/state/task_failure_recovery/" class="">Task Failure Recovery</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/metrics/" class="">Metrics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/traces/" class="">Traces</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/rest_api/" class="">REST API</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-50f4b9e6604765e74142b0e1cd9fb44d" class="toggle"  />
+    <label for="section-50f4b9e6604765e74142b0e1cd9fb44d" class="flex justify-between">Batch<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/batch/batch_shuffle/" class="">Batch Shuffle</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/batch/recovery_from_job_master_failure/" class="">Recovery job progress from job master failures</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-d4f1bef6f783a5c6d1b2d5f55db8965f" class="toggle"  />
+    <label for="section-d4f1bef6f783a5c6d1b2d5f55db8965f" class="flex justify-between">Debugging<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/debugging_event_time/" class="">Debugging Windows & Event Time</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/debugging_classloading/" class="">Debugging Classloading</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/flame_graphs/" class="">Flame Graphs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/profiler/" class="">Profiler</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/debugging/application_profiling/" class="">Application Profiling & Debugging</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-b424141921a30487c09eab3a187e5859" class="toggle"  />
+    <label for="section-b424141921a30487c09eab3a187e5859" class="flex justify-between">Monitoring<span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/monitoring/checkpoint_monitoring/" class="">Monitoring Checkpointing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/monitoring/back_pressure/" class="">Monitoring Back Pressure</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/upgrading/" class="">Upgrading Applications and Flink Versions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/ops/production_ready/" class="">Production Readiness Checklist</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  	<br/>
+  
+  
+    <input type="checkbox" id="section-ded926075d02fa6eb11100b638eddaf4" class="toggle"  />
+    <label for="section-ded926075d02fa6eb11100b638eddaf4" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-cogs title dessert" aria-hidden="true"></i>&nbsp;&nbsp;Flink Development</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/flinkdev/ide_setup/" class="">Importing Flink into an IDE</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/flinkdev/building/" class="">Building Flink from Source</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <input type="checkbox" id="section-98ea7844cf9262a9ba52500fc93377fe" class="toggle"  />
+    <label for="section-98ea7844cf9262a9ba52500fc93377fe" class="flex justify-between"><div style="font-weight:450;margin-bottom:0.5em"><i class="fa fa-book title dessert" aria-hidden="true"></i>&nbsp;&nbsp;Internals</div><span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/internals/job_scheduling/" class="">Jobs and Scheduling</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/internals/task_lifecycle/" class="">Task Lifecycle</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+  
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/internals/filesystems/" class="">File Systems</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/>
+<hr class="menu-break">
+
+<a href="//flink.apache.org" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> Project Homepage</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/api/java/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> JavaDocs</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/api/scala/index.html#org.apache.flink.api.scala.package/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> ScalaDocs</a>
+<br/>
+
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/api/python/" style="color:black;margin-bottom:0.5em"><i class="link fa fa-external-link title" aria-hidden="true"></i> PyDocs</a>
+<br/>
+
+<hr class="menu-break">
+<li style="list-style-type: none">
+  <br>
+  <input type="checkbox" id="section-version-picker" class="toggle">
+  <label for="section-version-picker" class="flex justify-between">
+     <div style="font-weight:450;margin-bottom:0.5em">Pick Docs Version</div>
+     <span>▾</span>
+  </label>
+  <ul>
+    <a href="//nightlies.apache.org/flink/flink-docs-release-1.20">
+      1.20 (✓)
+    </a>
+    <hr class="menu-break">
+    
+      <li>
+        <a href="http://nightlies.apache.org/flink/flink-docs-release-1.20">
+          v1.20
+        </a>
+      </li>
+    
+      <li>
+        <a href="http://nightlies.apache.org/flink/flink-docs-release-1.19">
+          v1.19
+        </a>
+      </li>
+    
+    <hr class="menu-break">
+    <li>
+      <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/versions">
+          All Versions
+      </a>
+    </li>
+  </ul>
+</li>
+
+
+
+
+  
+
+  
+
+
+  
+
+
+
+
+
+
+<a  href="//nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/dev/table/config/" class="flex align-center">
+  <i class="fa fa-globe" aria-hidden="true"></i>&nbsp;&nbsp;
+  中文版
+</a>
+
+<script src="//nightlies.apache.org/flink/flink-docs-release-1.20/js/track-search-terms.js"></script>
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/flink/flink-docs-release-1.20/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Configuration</strong>
+
+  <label for="toc-control">
+    
+    <img src="/flink/flink-docs-release-1.20/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#configuration">Configuration</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#execution-options">Execution Options</a></li>
+            <li><a href="#optimizer-options">Optimizer Options</a></li>
+            <li><a href="#table-options">Table Options</a></li>
+            <li><a href="#materialized-table-options">Materialized Table Options</a></li>
+            <li><a href="#sql-client-options">SQL Client Options</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+
+
+
+<article class="markdown">
+    <blockquote style="border-color:#f66">
+        This documentation is for an out-of-date version of Apache Flink. We recommend you use the latest <a href="//nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/config/">stable version</a>.
+    </blockquote>
+</article>
+
+
+
+
+      
+  <article class="markdown"><!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<h1 id="configuration">
+  Configuration
+  <a class="anchor" href="#configuration">#</a>
+</h1>
+<p>By default, the Table &amp; SQL API is preconfigured for producing accurate results with acceptable
+performance.</p>
+<p>Depending on the requirements of a table program, it might be necessary to adjust
+certain parameters for optimization. For example, unbounded streaming programs may need to ensure
+that the required state size is capped (see <a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/dev/table/concepts/overview/">streaming concepts</a>).</p>
+<h3 id="overview">
+  Overview
+  <a class="anchor" href="#overview">#</a>
+</h3>
+<p>When instantiating a <code>TableEnvironment</code>, <code>EnvironmentSettings</code> can be used to pass the desired
+configuration for the current session, by passing a <code>Configuration</code> object to the
+<code>EnvironmentSettings</code>.</p>
+<p>Additionally, in every table environment, the <code>TableConfig</code> offers options for configuring the
+current session.</p>
+<p>For common or important configuration options, the <code>TableConfig</code> provides getters and setters methods
+with detailed inline documentation.</p>
+<p>For more advanced configuration, users can directly access the underlying key-value map. The following
+sections list all available options that can be used to adjust Flink Table &amp; SQL API programs.</p>
+<p><span class="label label-danger">Attention</span> Because options are read at different point in time
+when performing operations, it is recommended to set configuration options early after instantiating a
+table environment.</p>
+
+
+
+
+
+<div class="book-tabs"><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Java"
+    name="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00"
+    id="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00-0"
+    checked="checked" 
+    onclick="onSwitch('Java')"
+  />
+  <label for="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00-0">Java</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// instantiate table environment
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">Configuration</span> <span class="n">configuration</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// set low-level key-value options
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">configuration</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.enabled&#34;</span><span class="o">,</span> <span class="s">&#34;true&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">configuration</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.allow-latency&#34;</span><span class="o">,</span> <span class="s">&#34;5 s&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">configuration</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.size&#34;</span><span class="o">,</span> <span class="s">&#34;5000&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">EnvironmentSettings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">EnvironmentSettings</span><span class="o">.</span><span class="na">newInstance</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">inStreamingMode</span><span class="o">().</span><span class="na">withConfiguration</span><span class="o">(</span><span class="n">configuration</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">TableEnvironment</span> <span class="n">tEnv</span> <span class="o">=</span> <span class="n">TableEnvironment</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">settings</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// access flink configuration after table environment instantiation
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">TableConfig</span> <span class="n">tableConfig</span> <span class="o">=</span> <span class="n">tEnv</span><span class="o">.</span><span class="na">getConfig</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// set low-level key-value options
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">tableConfig</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.enabled&#34;</span><span class="o">,</span> <span class="s">&#34;true&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">tableConfig</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.allow-latency&#34;</span><span class="o">,</span> <span class="s">&#34;5 s&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">tableConfig</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.size&#34;</span><span class="o">,</span> <span class="s">&#34;5000&#34;</span><span class="o">);</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Scala"
+    name="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00"
+    id="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00-1"
+     
+    onclick="onSwitch('Scala')"
+  />
+  <label for="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00-1">Scala</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scala" data-lang="scala"><span class="line"><span class="cl"><span class="c1">// instantiate table environment
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">val</span> <span class="n">configuration</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Configuration</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// set low-level key-value options
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">configuration</span><span class="o">.</span><span class="n">setString</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.enabled&#34;</span><span class="o">,</span> <span class="s">&#34;true&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">configuration</span><span class="o">.</span><span class="n">setString</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.allow-latency&#34;</span><span class="o">,</span> <span class="s">&#34;5 s&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">configuration</span><span class="o">.</span><span class="n">setString</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.size&#34;</span><span class="o">,</span> <span class="s">&#34;5000&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">val</span> <span class="n">settings</span> <span class="k">=</span> <span class="nc">EnvironmentSettings</span><span class="o">.</span><span class="n">newInstance</span>
+</span></span><span class="line"><span class="cl">  <span class="o">.</span><span class="n">inStreamingMode</span><span class="o">.</span><span class="n">withConfiguration</span><span class="o">(</span><span class="n">configuration</span><span class="o">).</span><span class="n">build</span>
+</span></span><span class="line"><span class="cl"><span class="k">val</span> <span class="n">tEnv</span><span class="k">:</span> <span class="kt">TableEnvironment</span> <span class="o">=</span> <span class="nc">TableEnvironment</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="n">settings</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// access flink configuration after table environment instantiation
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">val</span> <span class="n">tableConfig</span> <span class="k">=</span> <span class="n">tEnv</span><span class="o">.</span><span class="n">getConfig</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// set low-level key-value options
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">tableConfig</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.enabled&#34;</span><span class="o">,</span> <span class="s">&#34;true&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">tableConfig</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.allow-latency&#34;</span><span class="o">,</span> <span class="s">&#34;5 s&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">tableConfig</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="s">&#34;table.exec.mini-batch.size&#34;</span><span class="o">,</span> <span class="s">&#34;5000&#34;</span><span class="o">)</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="Python"
+    name="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00"
+    id="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00-2"
+     
+    onclick="onSwitch('Python')"
+  />
+  <label for="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00-2">Python</label>
+  <div class="book-tabs-content markdown-inner"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># instantiate table environment</span>
+</span></span><span class="line"><span class="cl"><span class="n">configuration</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">configuration</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&#34;table.exec.mini-batch.enabled&#34;</span><span class="p">,</span> <span class="s2">&#34;true&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">configuration</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&#34;table.exec.mini-batch.allow-latency&#34;</span><span class="p">,</span> <span class="s2">&#34;5 s&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">configuration</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&#34;table.exec.mini-batch.size&#34;</span><span class="p">,</span> <span class="s2">&#34;5000&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">settings</span> <span class="o">=</span> <span class="n">EnvironmentSettings</span><span class="o">.</span><span class="n">new_instance</span><span class="p">()</span> \
+</span></span><span class="line"><span class="cl"><span class="o">...</span>     <span class="o">.</span><span class="n">in_streaming_mode</span><span class="p">()</span> \
+</span></span><span class="line"><span class="cl"><span class="o">...</span>     <span class="o">.</span><span class="n">with_configuration</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span> \
+</span></span><span class="line"><span class="cl"><span class="o">...</span>     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">t_env</span> <span class="o">=</span> <span class="n">TableEnvironment</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># access flink configuration after table environment instantiation</span>
+</span></span><span class="line"><span class="cl"><span class="n">table_config</span> <span class="o">=</span> <span class="n">t_env</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># set low-level key-value options</span>
+</span></span><span class="line"><span class="cl"><span class="n">table_config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&#34;table.exec.mini-batch.enabled&#34;</span><span class="p">,</span> <span class="s2">&#34;true&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">table_config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&#34;table.exec.mini-batch.allow-latency&#34;</span><span class="p">,</span> <span class="s2">&#34;5 s&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">table_config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&#34;table.exec.mini-batch.size&#34;</span><span class="p">,</span> <span class="s2">&#34;5000&#34;</span><span class="p">)</span>
+</span></span></code></pre></div></div><input 
+    type="radio"
+    class="toggle"
+    data-tab-group="flink-tabs"
+    data-tab-item="SQL CLI"
+    name="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00"
+    id="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00-3"
+     
+    onclick="onSwitch('SQL CLI')"
+  />
+  <label for="tabs-44bae726-b416-4fa0-8d5d-7aa9a5409e00-3">SQL CLI</label>
+  <div class="book-tabs-content markdown-inner"><pre tabindex="0"><code>Flink SQL&gt; SET &#39;table.exec.mini-batch.enabled&#39; = &#39;true&#39;;
+Flink SQL&gt; SET &#39;table.exec.mini-batch.allow-latency&#39; = &#39;5s&#39;;
+Flink SQL&gt; SET &#39;table.exec.mini-batch.size&#39; = &#39;5000&#39;;
+</code></pre></div></div>
+
+<blockquote class="book-hint info">
+  <strong>Note:</strong> All of the following configuration options can also be set globally in
+<a href="//nightlies.apache.org/flink/flink-docs-release-1.20/docs/deployment/config/#flink-configuration-file">Flink configuration file</a> and can be later
+on overridden in the application, through <code>EnvironmentSettings</code>, before instantiating
+the <code>TableEnvironment</code>, or through the <code>TableConfig</code> of the <code>TableEnvironment</code>.
+</blockquote>
+
+<h3 id="execution-options">
+  Execution Options
+  <a class="anchor" href="#execution-options">#</a>
+</h3>
+<p>The following options can be used to tune the performance of the query execution.</p>
+<table class="configuration table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 20%">Key</th>
+            <th class="text-left" style="width: 15%">Default</th>
+            <th class="text-left" style="width: 10%">Type</th>
+            <th class="text-left" style="width: 55%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><h5>table.exec.async-lookup.buffer-capacity</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">100</td>
+            <td>Integer</td>
+            <td>The max number of async i/o operation that the async lookup join can trigger.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.async-lookup.output-mode</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">ORDERED</td>
+            <td><p>Enum</p></td>
+            <td>Output mode for asynchronous operations which will convert to {@see AsyncDataStream.OutputMode}, ORDERED by default. If set to ALLOW_UNORDERED, will attempt to use {@see AsyncDataStream.OutputMode.UNORDERED} when it does not affect the correctness of the result, otherwise ORDERED will be still used.<br /><br />Possible values:<ul><li>"ORDERED"</li><li>"ALLOW_UNORDERED"</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.async-lookup.timeout</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">3 min</td>
+            <td>Duration</td>
+            <td>The async timeout for the asynchronous operation to complete.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.async-scalar.buffer-capacity</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">10</td>
+            <td>Integer</td>
+            <td>The max number of async i/o operation that the async lookup join can trigger.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.async-scalar.max-attempts</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">3</td>
+            <td>Integer</td>
+            <td>The max number of async retry attempts to make before task execution is failed.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.async-scalar.retry-delay</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">100 ms</td>
+            <td>Duration</td>
+            <td>The delay to wait before trying again.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.async-scalar.retry-strategy</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">FIXED_DELAY</td>
+            <td><p>Enum</p></td>
+            <td>Restart strategy which will be used, FIXED_DELAY by default.<br /><br />Possible values:<ul><li>"NO_RETRY"</li><li>"FIXED_DELAY"</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.async-scalar.timeout</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">3 min</td>
+            <td>Duration</td>
+            <td>The async timeout for the asynchronous operation to complete.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.deduplicate.insert-update-after-sensitive-enabled</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Set whether the job (especially the sinks) is sensitive to INSERT messages and UPDATE_AFTER messages. If false, Flink may, sometimes (e.g. deduplication for last row), send UPDATE_AFTER instead of INSERT for the first row. If true, Flink will guarantee to send INSERT for the first row, in that case there will be additional overhead. Default is true.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.deduplicate.mini-batch.compact-changes-enabled</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Set whether to compact the changes sent downstream in row-time mini-batch. If true, Flink will compact changes and send only the latest change downstream. Note that if the downstream needs the details of versioned data, this optimization cannot be applied. If false, Flink will send all changes to downstream just like when the mini-batch is not enabled.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.disabled-operators</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>String</td>
+            <td>Mainly for testing. A comma-separated list of operator names, each name represents a kind of disabled operator.
+Operators that can be disabled include "NestedLoopJoin", "ShuffleHashJoin", "BroadcastHashJoin", "SortMergeJoin", "HashAgg", "SortAgg".
+By default no operator is disabled.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.interval-join.min-cleanup-interval</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">0 ms</td>
+            <td>Duration</td>
+            <td>Specifies a minimum time interval for how long cleanup unmatched records in the interval join operator. Before Flink 1.18, the default value of this param was the half of interval duration. Note: Set this option greater than 0 will cause unmatched records in outer joins to be output later than watermark, leading to possible discarding of these records by downstream watermark-dependent operators, such as window operators. The default value is 0, which means it will clean up unmatched records immediately.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.legacy-cast-behaviour</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">DISABLED</td>
+            <td><p>Enum</p></td>
+            <td>Determines whether CAST will operate following the legacy behaviour or the new one that introduces various fixes and improvements.<br /><br />Possible values:<ul><li>"ENABLED": CAST will operate following the legacy behaviour.</li><li>"DISABLED": CAST will operate following the new correct behaviour.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.local-hash-agg.adaptive.distinct-value-rate-threshold</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">0.5</td>
+            <td>Double</td>
+            <td>The distinct value rate can be defined as the number of local aggregation results for the sampled data divided by the sampling threshold (see table.exec.local-hash-agg.adaptive.sampling-threshold). If the computed result is lower than the given configuration value, the remaining input records proceed to do local aggregation, otherwise the remaining input records are subjected to simple projection which calculation cost is less than local aggregation. The default value is 0.5.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.local-hash-agg.adaptive.enabled</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Whether to enable adaptive local hash aggregation. Adaptive local hash aggregation is an optimization of local hash aggregation, which can adaptively determine whether to continue to do local hash aggregation according to the distinct value rate of sampling data. If distinct value rate bigger than defined threshold (see parameter: table.exec.local-hash-agg.adaptive.distinct-value-rate-threshold), we will stop aggregating and just send the input data to the downstream after a simple projection. Otherwise, we will continue to do aggregation. Adaptive local hash aggregation only works in batch mode. Default value of this parameter is true.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.local-hash-agg.adaptive.sampling-threshold</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">500000</td>
+            <td>Long</td>
+            <td>If adaptive local hash aggregation is enabled, this value defines how many records will be used as sampled data to calculate distinct value rate (see parameter: table.exec.local-hash-agg.adaptive.distinct-value-rate-threshold) for the local aggregate. The higher the sampling threshold, the more accurate the distinct value rate is. But as the sampling threshold increases, local aggregation is meaningless when the distinct values rate is low. The default value is 500000.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.mini-batch.allow-latency</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">0 ms</td>
+            <td>Duration</td>
+            <td>The maximum latency can be used for MiniBatch to buffer input records. MiniBatch is an optimization to buffer input records to reduce state access. MiniBatch is triggered with the allowed latency interval and when the maximum number of buffered records reached. NOTE: If table.exec.mini-batch.enabled is set true, its value must be greater than zero.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.mini-batch.enabled</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Specifies whether to enable MiniBatch optimization. MiniBatch is an optimization to buffer input records to reduce state access. This is disabled by default. To enable this, users should set this config to true. NOTE: If mini-batch is enabled, 'table.exec.mini-batch.allow-latency' and 'table.exec.mini-batch.size' must be set.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.mini-batch.size</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">-1</td>
+            <td>Long</td>
+            <td>The maximum number of input records can be buffered for MiniBatch. MiniBatch is an optimization to buffer input records to reduce state access. MiniBatch is triggered with the allowed latency interval and when the maximum number of buffered records reached. NOTE: MiniBatch only works for non-windowed aggregations currently. If table.exec.mini-batch.enabled is set true, its value must be positive.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.operator-fusion-codegen.enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>If true, multiple physical operators will be compiled into a single operator by planner which can improve the performance.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.rank.topn-cache-size</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">10000</td>
+            <td>Long</td>
+            <td>Rank operators have a cache which caches partial state contents to reduce state access. Cache size is the number of records in each ranking task.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.resource.default-parallelism</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">-1</td>
+            <td>Integer</td>
+            <td>Sets default parallelism for all operators (such as aggregate, join, filter) to run with parallel instances. This config has a higher priority than parallelism of StreamExecutionEnvironment (actually, this config overrides the parallelism of StreamExecutionEnvironment). A value of -1 indicates that no default parallelism is set, then it will fallback to use the parallelism of StreamExecutionEnvironment.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.simplify-operator-name-enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>When it is true, the optimizer will simplify the operator name with id and type of ExecNode and keep detail in description. Default value is true.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.sink.keyed-shuffle</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">AUTO</td>
+            <td><p>Enum</p></td>
+            <td>In order to minimize the distributed disorder problem when writing data into table with primary keys that many users suffers. FLINK will auto add a keyed shuffle by default when the sink parallelism differs from upstream operator and sink parallelism is not 1. This works only when the upstream ensures the multi-records' order on the primary key, if not, the added shuffle can not solve the problem (In this situation, a more proper way is to consider the deduplicate operation for the source firstly or use an upsert source with primary key definition which truly reflect the records evolution).<br />By default, the keyed shuffle will be added when the sink's parallelism differs from upstream operator. You can set to no shuffle(NONE) or force shuffle(FORCE).<br /><br />Possible values:<ul><li>"NONE"</li><li>"AUTO"</li><li>"FORCE"</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.sink.not-null-enforcer</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">ERROR</td>
+            <td><p>Enum</p></td>
+            <td>Determines how Flink enforces NOT NULL column constraints when inserting null values.<br /><br />Possible values:<ul><li>"ERROR": Throw a runtime exception when writing null values into NOT NULL column.</li><li>"DROP": Drop records silently if a null value would have to be inserted into a NOT NULL column.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.sink.rowtime-inserter</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">ENABLED</td>
+            <td><p>Enum</p></td>
+            <td>Some sink implementations require a single rowtime attribute in the input that can be inserted into the underlying stream record. This option allows disabling the timestamp insertion and avoids errors around multiple time attributes being present in the query schema.<br /><br />Possible values:<ul><li>"ENABLED": Insert a rowtime attribute (if available) into the underlying stream record. This requires at most one time attribute in the input for the sink.</li><li>"DISABLED": Do not insert the rowtime attribute into the underlying stream record.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.sink.type-length-enforcer</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">IGNORE</td>
+            <td><p>Enum</p></td>
+            <td>Determines whether values for columns with CHAR(&lt;length&gt;)/VARCHAR(&lt;length&gt;)/BINARY(&lt;length&gt;)/VARBINARY(&lt;length&gt;) types will be trimmed or padded (only for CHAR(&lt;length&gt;)/BINARY(&lt;length&gt;)), so that their length will match the one defined by the length of their respective CHAR/VARCHAR/BINARY/VARBINARY column type.<br /><br />Possible values:<ul><li>"IGNORE": Don't apply any trimming and padding, and instead ignore the CHAR/VARCHAR/BINARY/VARBINARY length directive.</li><li>"TRIM_PAD": Trim and pad string and binary values to match the length defined by the CHAR/VARCHAR/BINARY/VARBINARY length.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.sink.upsert-materialize</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">AUTO</td>
+            <td><p>Enum</p></td>
+            <td>Because of the disorder of ChangeLog data caused by Shuffle in distributed system, the data received by Sink may not be the order of global upsert. So add upsert materialize operator before upsert sink. It receives the upstream changelog records and generate an upsert view for the downstream.<br />By default, the materialize operator will be added when a distributed disorder occurs on unique keys. You can also choose no materialization(NONE) or force materialization(FORCE).<br /><br />Possible values:<ul><li>"NONE"</li><li>"AUTO"</li><li>"FORCE"</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.sort.async-merge-enabled</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Whether to asynchronously merge sorted spill files.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.sort.default-limit</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">-1</td>
+            <td>Integer</td>
+            <td>Default limit when user don't set a limit after order by. -1 indicates that this configuration is ignored.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.sort.max-num-file-handles</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">128</td>
+            <td>Integer</td>
+            <td>The maximal fan-in for external merge sort. It limits the number of file handles per operator. If it is too small, may cause intermediate merging. But if it is too large, it will cause too many files opened at the same time, consume memory and lead to random reading.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.source.cdc-events-duplicate</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Indicates whether the CDC (Change Data Capture) sources in the job will produce duplicate change events that requires the framework to deduplicate and get consistent result. CDC source refers to the source that produces full change events, including INSERT/UPDATE_BEFORE/UPDATE_AFTER/DELETE, for example Kafka source with Debezium format. The value of this configuration is false by default.<br /><br />However, it's a common case that there are duplicate change events. Because usually the CDC tools (e.g. Debezium) work in at-least-once delivery when failover happens. Thus, in the abnormal situations Debezium may deliver duplicate change events to Kafka and Flink will get the duplicate events. This may cause Flink query to get wrong results or unexpected exceptions.<br /><br />Therefore, it is recommended to turn on this configuration if your CDC tool is at-least-once delivery. Enabling this configuration requires to define PRIMARY KEY on the CDC sources. The primary key will be used to deduplicate change events and generate normalized changelog stream at the cost of an additional stateful operator.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.source.idle-timeout</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">0 ms</td>
+            <td>Duration</td>
+            <td>When a source do not receive any elements for the timeout time, it will be marked as temporarily idle. This allows downstream tasks to advance their watermarks without the need to wait for watermarks from this source while it is idle. Default value is 0, which means detecting source idleness is not enabled.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.spill-compression.block-size</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">64 kb</td>
+            <td>MemorySize</td>
+            <td>The memory size used to do compress when spilling data. The larger the memory, the higher the compression ratio, but more memory resource will be consumed by the job.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.spill-compression.enabled</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Whether to compress spilled data. Currently we only support compress spilled data for sort and hash-agg and hash-join operators.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.state.ttl</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">0 ms</td>
+            <td>Duration</td>
+            <td>Specifies a minimum time interval for how long idle state (i.e. state which was not updated), will be retained. State will never be cleared until it was idle for less than the minimum time, and will be cleared at some time after it was idle. Default is never clean-up the state. NOTE: Cleaning up state requires additional overhead for bookkeeping. Default value is 0, which means that it will never clean up state.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.uid.format</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">"&lt;id&gt;_&lt;transformation&gt;"</td>
+            <td>String</td>
+            <td>Defines the format pattern for generating the UID of an ExecNode streaming transformation. The pattern can be defined globally or per-ExecNode in the compiled plan. Supported arguments are: &lt;id&gt; (from static counter), &lt;type&gt; (e.g. 'stream-exec-sink'), &lt;version&gt;, and &lt;transformation&gt; (e.g. 'constraint-validator' for a sink). In Flink 1.15.x the pattern was wrongly defined as '&lt;id&gt;_&lt;type&gt;_&lt;version&gt;_&lt;transformation&gt;' which would prevent migrations in the future.</td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.uid.generation</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">PLAN_ONLY</td>
+            <td><p>Enum</p></td>
+            <td>In order to remap state to operators during a restore, it is required that the pipeline's streaming transformations get a UID assigned.<br />The planner can generate and assign explicit UIDs. If no UIDs have been set by the planner, the UIDs will be auto-generated by lower layers that can take the complete topology into account for uniqueness of the IDs. See the DataStream API for more information.<br />This configuration option is for experts only and the default should be sufficient for most use cases. By default, only pipelines created from a persisted compiled plan will get UIDs assigned explicitly. Thus, these pipelines can be arbitrarily moved around within the same topology without affecting the stable UIDs.<br /><br />Possible values:<ul><li>"PLAN_ONLY": Sets UIDs on streaming transformations if and only if the pipeline definition comes from a compiled plan. Pipelines that have been constructed in the API without a compilation step will not set an explicit UID as it might not be stable across multiple translations.</li><li>"ALWAYS": Always sets UIDs on streaming transformations. This strategy is for experts only! Pipelines that have been constructed in the API without a compilation step might not be able to be restored properly. The UID generation depends on previously declared pipelines (potentially across jobs if the same JVM is used). Thus, a stable environment must be ensured. Pipeline definitions that come from a compiled plan are safe to use.</li><li>"DISABLED": No explicit UIDs will be set.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.exec.window-agg.buffer-size-limit</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">100000</td>
+            <td>Integer</td>
+            <td>Sets the window elements buffer size limit used in group window agg operator.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="optimizer-options">
+  Optimizer Options
+  <a class="anchor" href="#optimizer-options">#</a>
+</h3>
+<p>The following options can be used to adjust the behavior of the query optimizer to get a better execution plan.</p>
+<table class="configuration table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 20%">Key</th>
+            <th class="text-left" style="width: 15%">Default</th>
+            <th class="text-left" style="width: 10%">Type</th>
+            <th class="text-left" style="width: 55%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><h5>table.optimizer.agg-phase-strategy</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">AUTO</td>
+            <td><p>Enum</p></td>
+            <td>Strategy for aggregate phase. Only AUTO, TWO_PHASE or ONE_PHASE can be set.
+AUTO: No special enforcer for aggregate stage. Whether to choose two stage aggregate or one stage aggregate depends on cost. 
+TWO_PHASE: Enforce to use two stage aggregate which has localAggregate and globalAggregate. Note that if aggregate call does not support optimize into two phase, we will still use one stage aggregate.
+ONE_PHASE: Enforce to use one stage aggregate which only has CompleteGlobalAggregate.<br /><br />Possible values:<ul><li>"AUTO"</li><li>"ONE_PHASE"</li><li>"TWO_PHASE"</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.bushy-join-reorder-threshold</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">12</td>
+            <td>Integer</td>
+            <td>The maximum number of joined nodes allowed in the bushy join reorder algorithm, otherwise the left-deep join reorder algorithm will be used. The search space of bushy join reorder algorithm will increase with the increase of this threshold value, so this threshold is not recommended to be set too large. The default value is 12.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.distinct-agg.split.bucket-num</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">1024</td>
+            <td>Integer</td>
+            <td>Configure the number of buckets when splitting distinct aggregation. The number is used in the first level aggregation to calculate a bucket key 'hash_code(distinct_key) % BUCKET_NUM' which is used as an additional group key after splitting.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.distinct-agg.split.enabled</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Tells the optimizer whether to split distinct aggregation (e.g. COUNT(DISTINCT col), SUM(DISTINCT col)) into two level. The first aggregation is shuffled by an additional key which is calculated using the hashcode of distinct_key and number of buckets. This optimization is very useful when there is data skew in distinct aggregation and gives the ability to scale-up the job. Default is false.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.dynamic-filtering.enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>When it is true, the optimizer will try to push dynamic filtering into scan table source, the irrelevant partitions or input data will be filtered to reduce scan I/O in runtime.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.incremental-agg-enabled</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>When both local aggregation and distinct aggregation splitting are enabled, a distinct aggregation will be optimized into four aggregations, i.e., local-agg1, global-agg1, local-agg2, and global-agg2. We can combine global-agg1 and local-agg2 into a single operator (we call it incremental agg because it receives incremental accumulators and outputs incremental results). In this way, we can reduce some state overhead and resources. Default is enabled.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.join-reorder-enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Enables join reorder in optimizer. Default is disabled.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.join.broadcast-threshold</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">1048576</td>
+            <td>Long</td>
+            <td>Configures the maximum size in bytes for a table that will be broadcast to all worker nodes when performing a join. By setting this value to -1 to disable broadcasting.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.multiple-input-enabled</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>When it is true, the optimizer will merge the operators with pipelined shuffling into a multiple input operator to reduce shuffling and improve performance. Default value is true.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.non-deterministic-update.strategy</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">IGNORE</td>
+            <td><p>Enum</p></td>
+            <td>When it is `TRY_RESOLVE`, the optimizer tries to resolve the correctness issue caused by 'Non-Deterministic Updates' (NDU) in a changelog pipeline. Changelog may contain kinds of message types: Insert (I), Delete (D), Update_Before (UB), Update_After (UA). There's no NDU problem in an insert only changelog pipeline. For updates, there are  three main NDU problems:<br />1. Non-deterministic functions, include scalar, table, aggregate functions, both builtin and custom ones.<br />2. LookupJoin on an evolving source<br />3. Cdc-source carries metadata fields which are system columns, not belongs to the entity data itself.<br /><br />For the first step, the optimizer automatically enables the materialization for No.2(LookupJoin) if needed, and gives the detailed error message for No.1(Non-deterministic functions) and No.3(Cdc-source with metadata) which is relatively easier to solve by changing the SQL.<br />Default value is `IGNORE`, the optimizer does no changes.<br /><br />Possible values:<ul><li>"TRY_RESOLVE"</li><li>"IGNORE"</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.reuse-optimize-block-with-digest-enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>When true, the optimizer will try to find out duplicated sub-plans by digest to build optimize blocks (a.k.a. common sub-graphs). Each optimize block will be optimized independently.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.reuse-source-enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>When it is true, the optimizer will try to find out duplicated table sources and reuse them. This works only when table.optimizer.reuse-sub-plan-enabled is true.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.reuse-sub-plan-enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>When it is true, the optimizer will try to find out duplicated sub-plans and reuse them.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.runtime-filter.enabled</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>A flag to enable or disable the runtime filter. When it is true, the optimizer will try to inject a runtime filter for eligible join.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.runtime-filter.max-build-data-size</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">150 mb</td>
+            <td>MemorySize</td>
+            <td>Max data volume threshold of the runtime filter build side. Estimated data volume needs to be under this value to try to inject runtime filter.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.runtime-filter.min-filter-ratio</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">0.5</td>
+            <td>Double</td>
+            <td>Min filter ratio threshold of the runtime filter. Estimated filter ratio needs to be over this value to try to inject runtime filter.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.runtime-filter.min-probe-data-size</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">10 gb</td>
+            <td>MemorySize</td>
+            <td>Min data volume threshold of the runtime filter probe side. Estimated data volume needs to be over this value to try to inject runtime filter.This value should be larger than <code class="highlighter-rouge">table.optimizer.runtime-filter.max-build-data-size</code>.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.source.report-statistics-enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>When it is true, the optimizer will collect and use the statistics from source connectors if the source extends from SupportsStatisticReport and the statistics from catalog is UNKNOWN.Default value is true.</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.sql2rel.project-merge.enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>If set to true, it will merge projects when converting SqlNode to RelNode.<br />Note: it is not recommended to turn on unless you are aware of possible side effects, such as causing the output of certain non-deterministic expressions to not meet expectations(see FLINK-20887).</td>
+        </tr>
+        <tr>
+            <td><h5>table.optimizer.union-all-as-breakpoint-enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>When true, the optimizer will breakup the graph at union-all node when it's a breakpoint. When false, the optimizer will skip the union-all node even it's a breakpoint, and will try find the breakpoint in its inputs.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="table-options">
+  Table Options
+  <a class="anchor" href="#table-options">#</a>
+</h3>
+<p>The following options can be used to adjust the behavior of the table planner.</p>
+<table class="configuration table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 20%">Key</th>
+            <th class="text-left" style="width: 15%">Default</th>
+            <th class="text-left" style="width: 10%">Type</th>
+            <th class="text-left" style="width: 55%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><h5>table.builtin-catalog-name</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">"default_catalog"</td>
+            <td>String</td>
+            <td>The name of the initial catalog to be created when instantiating a TableEnvironment.</td>
+        </tr>
+        <tr>
+            <td><h5>table.builtin-database-name</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">"default_database"</td>
+            <td>String</td>
+            <td>The name of the default database in the initial catalog to be created when instantiating TableEnvironment.</td>
+        </tr>
+        <tr>
+            <td><h5>table.catalog-modification.listeners</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>List&lt;String&gt;</td>
+            <td>A (semicolon-separated) list of factories that creates listener for catalog modification which will be notified in catalog manager after it performs database and table ddl operations successfully.</td>
+        </tr>
+        <tr>
+            <td><h5>table.column-expansion-strategy</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;"></td>
+            <td><p>List&lt;Enum&gt;</p></td>
+            <td>Configures the default expansion behavior of 'SELECT *'. By default, all top-level columns of the table's schema are selected and nested fields are retained.<br /><br />Possible values:<ul><li>"EXCLUDE_ALIASED_VIRTUAL_METADATA_COLUMNS": Excludes virtual metadata columns that reference a metadata key via an alias. For example, a column declared as 'c METADATA VIRTUAL FROM k' is not selected by default if the strategy is applied.</li><li>"EXCLUDE_DEFAULT_VIRTUAL_METADATA_COLUMNS": Excludes virtual metadata columns that directly reference a metadata key. For example, a column declared as 'k METADATA VIRTUAL' is not selected by default if the strategy is applied.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.display.max-column-width</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">30</td>
+            <td>Integer</td>
+            <td>When printing the query results to the client console, this parameter determines the number of characters shown on screen before truncating. This only applies to columns with variable-length types (e.g. CHAR, VARCHAR, STRING) in the streaming mode. Fixed-length types are printed in the batch mode using a deterministic column width.</td>
+        </tr>
+        <tr>
+            <td><h5>table.dml-sync</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Specifies if the DML job (i.e. the insert operation) is executed asynchronously or synchronously. By default, the execution is async, so you can submit multiple DML jobs at the same time. If set this option to true, the insert operation will wait for the job to finish.</td>
+        </tr>
+        <tr>
+            <td><h5>table.dynamic-table-options.enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Enable or disable the OPTIONS hint used to specify table options dynamically, if disabled, an exception would be thrown if any OPTIONS hint is specified</td>
+        </tr>
+        <tr>
+            <td><h5>table.generated-code.max-length</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">4000</td>
+            <td>Integer</td>
+            <td>Specifies a threshold where generated code will be split into sub-function calls. Java has a maximum method length of 64 KB. This setting allows for finer granularity if necessary. Default value is 4000 instead of 64KB as by default JIT refuses to work on methods with more than 8K byte code.</td>
+        </tr>
+        <tr>
+            <td><h5>table.local-time-zone</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">"default"</td>
+            <td>String</td>
+            <td>The local time zone defines current session time zone id. It is used when converting to/from &lt;code&gt;TIMESTAMP WITH LOCAL TIME ZONE&lt;/code&gt;. Internally, timestamps with local time zone are always represented in the UTC time zone. However, when converting to data types that don't include a time zone (e.g. TIMESTAMP, TIME, or simply STRING), the session time zone is used during conversion. The input of option is either a full name such as "America/Los_Angeles", or a custom timezone id such as "GMT-08:00".</td>
+        </tr>
+        <tr>
+            <td><h5>table.plan.compile.catalog-objects</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">ALL</td>
+            <td><p>Enum</p></td>
+            <td>Strategy how to persist catalog objects such as tables, functions, or data types into a plan during compilation.<br /><br />It influences the need for catalog metadata to be present during a restore operation and affects the plan size.<br /><br />This configuration option does not affect anonymous/inline or temporary objects. Anonymous/inline objects will be persisted entirely (including schema and options) if possible or fail the compilation otherwise. Temporary objects will be persisted only by their identifier and the object needs to be present in the session context during a restore.<br /><br />Possible values:<ul><li>"ALL": All metadata about catalog tables, functions, or data types will be persisted into the plan during compilation. For catalog tables, this includes the table's identifier, schema, and options. For catalog functions, this includes the function's identifier and class. For catalog data types, this includes the identifier and entire type structure. With this strategy, the catalog's metadata doesn't have to be available anymore during a restore operation.</li><li>"SCHEMA": In addition to an identifier, schema information about catalog tables, functions, or data types will be persisted into the plan during compilation. A schema allows for detecting incompatible changes in the catalog during a plan restore operation. However, all other metadata will still be retrieved from the catalog.</li><li>"IDENTIFIER": Only the identifier of catalog tables, functions, or data types will be persisted into the plan during compilation. All metadata will be retrieved from the catalog during a restore operation. With this strategy, plans become less verbose.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.plan.force-recompile</h5><br> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>When false COMPILE PLAN statement will fail if the output plan file is already existing, unless the clause IF NOT EXISTS is used. When true COMPILE PLAN will overwrite the existing output plan file. We strongly suggest to enable this flag only for debugging purpose.</td>
+        </tr>
+        <tr>
+            <td><h5>table.plan.restore.catalog-objects</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">ALL</td>
+            <td><p>Enum</p></td>
+            <td>Strategy how to restore catalog objects such as tables, functions, or data types using a given plan and performing catalog lookups if necessary. It influences the need for catalog metadata to bepresent and enables partial enrichment of plan information.<br /><br />Possible values:<ul><li>"ALL": Reads all metadata about catalog tables, functions, or data types that has been persisted in the plan. The strategy performs a catalog lookup by identifier to fill in missing information or enrich mutable options. If the original object is not available in the catalog anymore, pipelines can still be restored if all information necessary is contained in the plan.</li><li>"ALL_ENFORCED": Requires that all metadata about catalog tables, functions, or data types has been persisted in the plan. The strategy will neither perform a catalog lookup by identifier nor enrich mutable options with catalog information. A restore will fail if not all information necessary is contained in the plan.</li><li>"IDENTIFIER": Uses only the identifier of catalog tables, functions, or data types and always performs a catalog lookup. A restore will fail if the original object is not available in the catalog anymore. Additional metadata that might be contained in the plan will be ignored.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>table.resources.download-dir</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">System.getProperty("java.io.tmpdir")</td>
+            <td>String</td>
+            <td>Local directory that is used by planner for storing downloaded resources.</td>
+        </tr>
+        <tr>
+            <td><h5>table.rtas-ctas.atomicity-enabled</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Specifies if the CREATE TABLE/REPLACE TABLE/CREATE OR REPLACE AS SELECT statement is executed atomically. By default, the statement is non-atomic. The target table is created/replaced on the client side, and it will not be rolled back even though the job fails or is canceled. If set this option to true and the underlying DynamicTableSink implements the SupportsStaging interface, the statement is expected to be executed atomically, the behavior of which depends on the actual DynamicTableSink.</td>
+        </tr>
+        <tr>
+            <td><h5>table.sql-dialect</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">"default"</td>
+            <td>String</td>
+            <td>The SQL dialect defines how to parse a SQL query. A different SQL dialect may support different SQL grammar. Currently supported dialects are: default and hive</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="materialized-table-options">
+  Materialized Table Options
+  <a class="anchor" href="#materialized-table-options">#</a>
+</h3>
+<p>The following options can be used to adjust the behavior of the materialized table.</p>
+<table class="configuration table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 20%">Key</th>
+            <th class="text-left" style="width: 15%">Default</th>
+            <th class="text-left" style="width: 10%">Type</th>
+            <th class="text-left" style="width: 55%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><h5>materialized-table.refresh-mode.freshness-threshold</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">30 min</td>
+            <td>Duration</td>
+            <td>Specifies a time threshold for determining the materialized table refresh mode. If the materialized table defined FRESHNESS is below this threshold, it run in continuous mode. Otherwise, it switches to full refresh mode.</td>
+        </tr>
+        <tr>
+            <td><h5>partition.fields.#.date-formatter</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">(none)</td>
+            <td>String</td>
+            <td>Specifies the time partition formatter for the partitioned materialized table, where '#' denotes a string-based partition field name. This serves as a hint to the framework regarding which partition to refresh in full refresh mode.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="sql-client-options">
+  SQL Client Options
+  <a class="anchor" href="#sql-client-options">#</a>
+</h3>
+<p>The following options can be used to adjust the behavior of the sql client.</p>
+<table class="configuration table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 20%">Key</th>
+            <th class="text-left" style="width: 15%">Default</th>
+            <th class="text-left" style="width: 10%">Type</th>
+            <th class="text-left" style="width: 55%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><h5>sql-client.display.color-schema</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">"DEFAULT"</td>
+            <td>String</td>
+            <td>SQL highlight color schema to be used at SQL client. Possible values: 'default', 'dark', 'light', 'chester', 'vs2010', 'solarized', 'obsidian', 'geshi'</td>
+        </tr>
+        <tr>
+            <td><h5>sql-client.display.print-time-cost</h5><br> <span class="label label-primary">Batch</span></td>
+            <td style="word-wrap: break-word;">true</td>
+            <td>Boolean</td>
+            <td>Determine whether to display the time consumption of the query. By default, no query time cost will be displayed.</td>
+        </tr>
+        <tr>
+            <td><h5>sql-client.display.show-line-numbers</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Determines whether there should be shown line numbers in multiline SQL or not.</td>
+        </tr>
+        <tr>
+            <td><h5>sql-client.execution.max-table-result.rows</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">1000000</td>
+            <td>Integer</td>
+            <td>The number of rows to cache when in the table mode. If the number of rows exceeds the specified value, it retries the row in the FIFO style.</td>
+        </tr>
+        <tr>
+            <td><h5>sql-client.execution.result-mode</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">TABLE</td>
+            <td><p>Enum</p></td>
+            <td>Determines how the query result should be displayed.<br /><br />Possible values:<ul><li>"TABLE": Materializes results in memory and visualizes them in a regular, paginated table representation.</li><li>"CHANGELOG": Visualizes the result stream that is produced by a continuous query.</li><li>"TABLEAU": Display results in the screen directly in a tableau format.</li></ul></td>
+        </tr>
+        <tr>
+            <td><h5>sql-client.verbose</h5><br> <span class="label label-primary">Batch</span> <span class="label label-primary">Streaming</span></td>
+            <td style="word-wrap: break-word;">false</td>
+            <td>Boolean</td>
+            <td>Determine whether to output the verbose output to the console. If set the option true, it will print the exception stack. Otherwise, it only output the cause.</td>
+        </tr>
+    </tbody>
+</table>
+
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  
+
+
+
+
+
+<a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications">Want to contribute translation?</a>
+<br><br>
+<a href="//github.com/apache/flink/edit/release-1.20/docs/content/docs/dev/table/config.md" style="color:black"><i class="fa fa-edit fa-fw"></i>Edit This Page</a>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      
+  
+
+<nav id="TableOfContents"><h3>On This Page <button class="toc" onclick="collapseToc()"><i class="fa fa-compress" aria-hidden="true"></i></button></h3>
+  <ul>
+    <li><a href="#configuration">Configuration</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#execution-options">Execution Options</a></li>
+            <li><a href="#optimizer-options">Optimizer Options</a></li>
+            <li><a href="#table-options">Table Options</a></li>
+            <li><a href="#materialized-table-options">Materialized Table Options</a></li>
+            <li><a href="#sql-client-options">SQL Client Options</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+ 
+    </aside>
+    <aside class="expand-toc">
+      <button class="toc" onclick="expandToc()">
+        <i class="fa fa-expand" aria-hidden="true"></i>
+      </button>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

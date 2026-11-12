@@ -1,0 +1,142 @@
+ ```yaml
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+  namespace: default
+  labels:
+    app: ad-impressions-topic
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention: 1d
+  cleanupPolicy: "compact"
+
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+  namespace: default
+  labels:
+    app: ad-impressions-enriched-topic
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention: 1d
+  cleanupPolicy: "compact"
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: ad-impressions-flink-deployment
+  namespace: default
+spec:
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 3
+    taskmanager.memory.process.size: "8192m"
+    taskmanager.memory.buffer.size: "1024m"
+    taskmanager.heap.size: "4096m"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.numberOfTaskSlots: 3
+    taskmanager.heap.perTask: "1024m"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"
+    taskmanager.heap.memory.mb: "4096"
+    taskmanager.heap.fraction: "0.6"

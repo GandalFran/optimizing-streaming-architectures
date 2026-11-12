@@ -1,0 +1,64 @@
+```bash
+# Create the sensor-readings topic with 25 partitions for input rate
+kafka-topics.sh --create --topic sensor-readings --bootstrap-server kafka:9092 --replication-factor 3 --partitions 25
+
+# Create the sensor-readings-clean topic with 10 partitions for output rate
+kafka-topics.sh --create --topic sensor-readings-clean --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10
+
+# Set retention time for both topics to 7 days
+kafka-configs.sh --alter --entity-type topics --entity-name sensor-readings --add-config retention.ms=604800000 --bootstrap-server kafka:9092
+kafka-configs.sh --alter --entity-type topics --entity-name sensor-readings-clean --add-config retention.ms=604800000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# Flink configuration
+execution.checkpointing.interval: 5000
+execution.checkpointing.mode: EXACTLY_ONCE
+execution.checkpointing.min-pause: 500
+execution.checkpointing.timeout: 60000
+execution.state.backend: rocksdb
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.savepoints.dir: s3://flink-state/savepoints
+parallelism.default: 25
+```
+
+```sql
+-- Define the source table for sensor readings
+CREATE TABLE sensor_readings_source (
+    sensor_id STRING,
+    reading_data STRING,
+    event_time TIMESTAMP(3),
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'sensor-readings',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'properties.group.id' = 'sensor-readings-group'
+);
+
+-- Define the sink table for cleaned sensor readings
+CREATE TABLE sensor_readings_sink (
+    sensor_id STRING,
+    reading_data STRING,
+    enriched_data STRING,
+    event_time TIMESTAMP(3)
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'sensor-readings-clean',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'org.apache.flink.connector.kafka.sink.GreedyPartitioner',
+    'sink.parallelism' = '10'
+);
+```
+
+### Justification of Main Values:
+- **Topic Partitions:** `sensor-readings` has 25 partitions to handle the input rate of 50,000 events/s (each partition handles up to 2,000 events/s). `sensor-readings-clean` has 10 partitions to accommodate the output rate, assuming some processing overhead.
+- **Retention:** Both topics retain data for 7 days as specified.
+- **Flink Configuration:** 
+  - **Checkpointing:** Interval set to 5 seconds with a timeout of 60 seconds to ensure timely recovery and strong consistency.
+  - **Parallelism:** Default parallelism is set to 25 to match the input topic's partition count, ensuring efficient parallel processing.
+  - **Sink Partitioner:** Uses `GreedyPartitioner` for better load distribution and throughput in the sink.
+- **SQL Statements:** Source and sink tables are defined to read from and write to Kafka topics, with appropriate configurations for Kafka connectors and JSON format.

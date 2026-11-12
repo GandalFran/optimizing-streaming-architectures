@@ -1,0 +1,66 @@
+ 1. Here's the `kafka-topics.sh` commands for creating the Kafka topics:
+
+```bash
+# Create ad-impressions topic with 10 partitions and replication factor 3
+bin/kafka-topics.sh --create --bootstrap-server kafka:9092 --topic ad-impressions --partitions 10 --replication-factor 3 --config retention.ms=2592000000
+
+# Create ad-impressions-enriched topic with 10 partitions and replication factor 3
+bin/kafka-topics.sh --create --bootstrap-server kafka:9092 --topic ad-impressions-enriched --partitions 10 --replication-factor 3 --config retention.ms=2592000000
+```
+
+The topic partitions and replication factor are determined based on the input rate and the sustainable produce traffic per partition. With 10 partitions, each partition will process 50,000 events/s / 10 partitions = 5,000 events/s, which is within the capacity of a single partition (20,000 events/s).
+
+2. Here's the Flink configuration in `config.yaml`:
+
+```yaml
+job.type: Streaming
+parallelism.default: 3
+taskmanager.numberOfTaskSlots: 4
+checkpointing.checkpointInterval: 5000
+checkpointing.minPauseBetweenCheckpoints: 1000
+checkpointing.maxConcurrentCheckpoints: 1
+state.backend: fs
+state.checkpoints.fs.type: file
+state.checkpoints.fs.dir: s3://flink-state/checkpoints
+```
+
+The parallelism is set to 3 to match the number of Kafka partitions and the number of TaskManagers. The checkpointing settings are configured to ensure low-latency checkpoints while maintaining durability.
+
+3. Here's the Flink SQL `CREATE TABLE` statements for the source and sink tables:
+
+```sql
+-- Create the source table from the ad-impressions Kafka topic
+CREATE TABLE ad_impressions (
+    campaign_id INT,
+    event_data STRING
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'ad-impressions',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'flink-source',
+    'format' = 'json',
+    'json.ignore-parse-errors' = true,
+    'json.ignore-unknown-fields' = true
+);
+
+-- Create an enriched table for each event with derived fields
+CREATE TABLE ad_impressions_enriched AS (
+    SELECT
+        campaign_id,
+        event_data,
+        // Derived fields calculation here
+    FROM ad_impressions
+    WHERE is_valid = true
+);
+
+-- Create the sink table to write valid events to the ad-impressions-enriched Kafka topic
+CREATE TABLE ad_impressions_enriched_sink WITH (
+    'connector' = 'kafka',
+    'topic' = 'ad-impressions-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092'
+) AS (
+    SELECT campaign_id, event_data FROM ad_impressions_enriched
+);
+```
+
+The source table is configured with Kafka properties to read from the `ad-impressions` topic, ignoring parse errors and unknown fields. The sink table writes the enriched events to the `ad-impressions-enriched` topic. The Flink job reads the events, filters out malformed events, enriches each event with derived fields, and writes every valid event to the `ad-impressions-enriched` topic. The end-to-end latency, delivery guarantee, retention, and durability are all met by these configurations.

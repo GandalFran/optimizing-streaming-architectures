@@ -1,0 +1,94 @@
+Nov 10, 2026 8:00:41 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE session_events (
+>     user_id STRING,
+>     event_time TIMESTAMP(3),
+>     event_data STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     PRIMARY KEY (user_id) NOT ENFORCED
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'session-events',
+>     'properties.bootstrap.servers' = '127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002',
+>     'format' = 'json',
+>     'scan.startup.mode' = 'latest-offset',
+>     'scan.max.wait.time' = '10000',
+>     'sink.partitioner.class' = 'org.apache.flink.streaming.connectors.kafka.partitioner.FlinkKafkaPartitioner'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE session_events_enriched (
+>     user_id STRING,
+>     event_time TIMESTAMP(3),
+>     event_data STRING,
+>     derived_field STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     PRIMARY KEY (user_id) NOT ENFORCED
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'session-events-enriched',
+>     'properties.bootstrap.servers' = '127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002',
+>     'format' = 'json',
+>     'scan.startup.mode' = 'latest-offset',
+>     'sink.partitioner.class' = 'org.apache.flink.streaming.connectors.kafka.partitioner.FlinkKafkaPartitioner'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO session_events_enriched (`user_id`, `event_time`, `event_data`, `derived_field`, `__sent_ms`, `__seq`)
+> SELECT `user_id`,
+>        `event_time`,
+>        `event_data`,
+>        CAST(NULL AS STRING)[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.table.api.ValidationException: Unsupported options found for 'kafka'.
+
+Unsupported options:
+
+scan.max.wait.time
+sink.partitioner.class
+
+Supported options:
+
+connector
+format
+json.encode.decimal-as-plain-number
+json.encode.ignore-null-fields
+json.fail-on-missing-field
+json.ignore-parse-errors
+json.map-null-key.literal
+json.map-null-key.mode
+json.timestamp-format.standard
+key.fields
+key.fields-prefix
+key.format
+properties.bootstrap.servers
+properties.group.id
+property-version
+scan.bounded.mode
+scan.bounded.specific-offsets
+scan.bounded.timestamp-millis
+scan.startup.mode
+scan.startup.specific-offsets
+scan.startup.timestamp-millis
+scan.topic-partition-discovery.interval
+scan.watermark.alignment.group
+scan.watermark.alignment.max-drift
+scan.watermark.alignment.update-interval
+scan.watermark.emit.strategy
+scan.watermark.idle-timeout
+sink.delivery-guarantee
+sink.parallelism
+sink.partitioner
+sink.semantic
+sink.transactional-id-prefix
+topic
+topic-pattern
+value.fields-include
+value.format[0m
+
+Shutting down the session...
+done.

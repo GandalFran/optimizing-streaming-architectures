@@ -1,0 +1,32 @@
+Nov 10, 2026 8:07:26 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE banking_transactions (
+>     account_id BIGINT,
+>     transaction_data ROW<...>,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'banking-transactions',
+>     'scan.startup.mode' = 'earliest-offset',
+>     'properties.bootstrap.servers' = '127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502',
+>     'format' = 'json'
+> )[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.sql.parser.impl.ParseException: Encountered ".." at line 3, column 26.
+Was expecting one of:
+    "," ...
+    ">" ...
+    <BRACKET_QUOTED_IDENTIFIER> ...
+    <QUOTED_IDENTIFIER> ...
+    <BACK_QUOTED_IDENTIFIER> ...
+    <BIG_QUERY_BACK_QUOTED_IDENTIFIER> ...
+    <HYPHENATED_IDENTIFIER> ...
+    <IDENTIFIER> ...
+    <UNICODE_QUOTED_IDENTIFIER> ...[0m
+
+Shutting down the session...
+done.

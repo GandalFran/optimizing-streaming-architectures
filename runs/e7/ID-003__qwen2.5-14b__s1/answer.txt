@@ -1,0 +1,63 @@
+```bash
+# Create the `session-events` topic with 5 partitions and 7 day retention
+kafka-topics.sh --create --topic session-events --bootstrap-server kafka:9092 --replication-factor 3 --partitions 5 --config retention.ms=604800000
+
+# Create the `session-events-enriched` topic with 5 partitions and 7 day retention
+kafka-topics.sh --create --topic session-events-enriched --bootstrap-server kafka:9092 --replication-factor 3 --partitions 5 --config retention.ms=604800000
+```
+
+```yaml
+# Flink configuration
+parallelism.default: 5
+taskmanager.numberOfTaskSlots: 2
+state.backend: rocksdb
+state.checkpoints.dir: s3://flink-state/checkpoints
+execution.checkpointing.interval: 10000
+execution.checkpointing.mode: EXACTLY_ONCE
+execution.checkpointing.min-pause: 2000
+execution.failover-strategy: region
+```
+
+```sql
+-- Define the source Kafka topic `session-events`
+CREATE TABLE session_events (
+    user_id STRING,
+    event_time TIMESTAMP(3),
+    session_id STRING,
+    event STRING,
+    event_data STRING,
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset',
+    'properties.group.id' = 'session_events_consumer'
+);
+
+-- Define the sink Kafka topic `session-events-enriched`
+CREATE TABLE session_events_enriched (
+    user_id STRING,
+    event_time TIMESTAMP(3),
+    session_id STRING,
+    event STRING,
+    derived_field1 STRING,
+    derived_field2 INT,
+    derived_field3 TIMESTAMP(3),
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json'
+);
+```
+
+### Justification of Main Values
+
+- **Kafka Topic Partitions and Replication Factor**: Both topics have 5 partitions to distribute the load evenly (each partition handles up to 5 MB/s, thus supporting up to 25 MB/s). The replication factor is set to 3 for durability, ensuring that data survives the loss of any single Kafka broker.
+- **Flink Parallelism**: The `parallelism.default` is set to 5 to match the number of Kafka partitions, allowing for optimal distribution of the Flink tasks. Each TaskManager has 2 slots to allow for efficient resource utilization.
+- **Checkpointing Configuration**: Checkpointing is enabled with an interval of 10 seconds to ensure state consistency and fault tolerance. The minimum pause between checkpoints is set to 2 seconds to avoid frequent checkpointing in case of high latency.
+- **Watermarks**: Watermarks are defined to handle event-time processing, ensuring that late events are properly handled and that the system can tolerate up to a 5-second delay in event timestamps.
+- **End-to-end Latency**: The pipeline design, with appropriate parallelism and checkpointing, aims to keep end-to-end latency below 100 ms at p99. The chosen configurations ensure that the pipeline can handle the input rate and process events within the specified latency requirements.

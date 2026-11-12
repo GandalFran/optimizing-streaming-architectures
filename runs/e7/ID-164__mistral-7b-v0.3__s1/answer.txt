@@ -1,0 +1,196 @@
+ 1. Strimzi `KafkaTopic` resources for all topics:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  kafka:
+    replicas: 3
+    listeners:
+    - name: plain
+      port: 9092
+      tls: false
+      advertising: true
+      openCluster: true
+    entityOperator:
+      replicas: 3
+    zookeeper:
+      replicas: 3
+      storageClass: standard
+    kafkaStorage:
+      volumeClaimTemplate:
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 10Gi
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  replicas: 3
+  partitions: 10
+  compaction: daily
+  config:
+    retention.ms: 2592000000  # 30 days in milliseconds
+    segment.bytes: 1073741824  # 1 GB
+    message.max.bytes: 1048576  # 1 MB
+    min.insync.replicas: 2
+    replication.factor: 3
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  replicas: 3
+  partitions: 10
+  compaction: daily
+  config:
+    retention.ms: 2592000000  # 30 days in milliseconds
+    segment.bytes: 1073741824  # 1 GB
+    message.max.bytes: 1048576  # 1 MB
+    min.insync.replicas: 2
+    replication.factor: 3
+```
+
+2. `FlinkDeployment` resource:
+
+```yaml
+apiVersion: flink-kubernetes-operator.flink-cdf.org/v1
+kind: FlinkDeployment
+metadata:
+  name: clickstream-sql-job
+spec:
+  image: flink:1.13.1
+  imagePullPolicy: IfNotPresent
+  serviceAccountName: flink-sa
+  clusterRef:
+    name: my-cluster
+  taskmanager:
+    count: 3
+    cpu: 4
+    memory: 8Gi
+    podTemplate:
+      spec:
+        containers:
+        - name: taskmanager
+          command:
+          - /bin/sh
+          - -c
+          - /opt/flink/bin/taskmanager.sh start
+          image: flink:1.13.1
+          env:
+          - name: JAVA_OPTS
+            value: -Xmx8g
+          ports:
+          - containerPort: 6123
+          volumeMounts:
+          - name: checkpoint-storage
+            mountPath: /flink-ha-checkpoints
+  jobManager:
+    cpu: 4
+    memory: 8Gi
+    podTemplate:
+      spec:
+        containers:
+        - name: jobmanager
+          command:
+          - /bin/sh
+          - -c
+          - /opt/flink/bin/jobmanager.sh start
+          image: flink:1.13.1
+          env:
+          - name: JAVA_OPTS
+            value: -Xmx8g
+          ports:
+          - containerPort: 6121
+          volumeMounts:
+          - name: checkpoint-storage
+            mountPath: /flink-ha-checkpoints
+  jobSpec:
+    jobClass: org.apache.flink.streaming.sql.operators.sql.StreamingSQLJob
+    jar: local:///opt/flink/usrlib/sql-runner.jar
+    options:
+    - --jobManagerRestPort=8081
+    - --taskManagerRestPort=8082
+    - --rest-port=8083
+    - --parallelism-reuse-slots
+    - --parallelism-reuse-slots.min-parallelism-reuse-factor=2
+    - --parallelism-reuse-slots.max-parallelism-reuse-factor=5
+    - --checkpointing.enabled=true
+    - --checkpointing.minPauseBetweenCheckpoints=5000
+    - --checkpointing.maxConcurrentCheckpoints=1
+    - --checkpointing.checkpointInterval=10000
+    - --checkpointing.timeBased=false
+    - --checkpointing.allowed-time-for-no-output=120000
+    - --checkpointing.on-checkpoint-timeout=fail
+    - --rest-endpoint=http://jobmanager:8081
+    - --jobName=clickstream-sql-job
+    - --taskmanager.numberOfTaskSlots=3
+    - --taskmanager.memory.process-heap-size=8g
+    - --taskmanager.memory.off-heap-size=2g
+    - --taskmanager.network.buffer-size=1024000
+    - --taskmanager.network.default-socket-buffer-size=1024000
+    - --taskmanager.numberOfTaskSlots=3
+    - --taskmanager.memory.process-heap-size=8g
+    - --taskmanager.memory.off-heap-size=2g
+    - --taskmanager.network.buffer-size=1024000
+    - --taskmanager.network.default-socket-buffer-size=1024000
+    - --state.backend=filesystem
+    - --state.backend.fs.checkpoint.fs-state.type=fs
+    - --state.backend.fs.checkpoint.fs-state.checkpoint.dir=s3://flink-state/checkpoints
+    - --state.backend.fs.checkpoint.fs-state.path=/flink-ha-checkpoints
+    - --state.backend.fs.checkpoint.fs-state. parallelism-reuse-slots=true
+    - --state.backend.fs.checkpoint.fs-state.fs-state.parallelism-reuse-slots=true
+    - --rest-endpoint=http://jobmanager:8081
+  spec:
+    flinkConfiguration:
+      rest.port: 8083
+      taskmanager.numberOfTaskSlots: 3
+      taskmanager.memory.process-heap-size: 8g
+      taskmanager.memory.off-heap-size: 2g
+      taskmanager.network.buffer-size: 1024000
+      taskmanager.network.default-socket-buffer-size: 1024000
+      checkpointing.enabled: true
+      checkpointing.minPauseBetweenCheckpoints: 5000
+      checkpointing.maxConcurrentCheckpoints: 1
+      checkpointing.checkpointInterval: 10000
+      checkpointing.timeBased: false
+      checkpointing.allowed-time-for-no-output: 120000
+      checkpointing.on-checkpoint-timeout: fail
+      rest-endpoint: http://jobmanager:8081
+      state.backend: filesystem
+      state.backend.fs.checkpoint.fs-state.type: fs
+      state.backend.fs.checkpoint.fs-state.checkpoint.dir: s3://flink-state/checkpoints
+      state.backend.fs.checkpoint.fs-state.path: /flink-ha-checkpoints
+      state.backend.fs.checkpoint.fs-state.parallelism-reuse-slots: true
+      state.backend.fs.checkpoint.fs-state.fs-state.parallelism-reuse-slots: true
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: checkpoint-storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 10Gi
+```
+
+3. Flink SQL `CREATE TABLE` statements for every Kafka source and sink table:
+
+```sql
+CREATE TABLE clicks (
+  session_id STRING,
+  timestamp BIGINT,
+  event JSON,
+  PRIMARY KEY (session_id)

@@ -1,0 +1,23 @@
+Nov 10, 2026 8:09:40 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE ad_impressions (
+>     campaign_id STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     WATERMARK FOR campaign_id AS PROCTIME(),
+>     PRIMARY KEY (campaign_id) NOT ENFORCED
+> ) WITH (
+>   'connector.type' = 'kafka',
+>   'connector.version' = 'universal',
+>   'topic' = 'ad-impressions',
+>   'properties.bootstrap.servers' = '127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502',
+>   'properties.group.id' = 'ad-impressions-group',
+>   'scan.startup.mode' = 'earliest-offset'
+> )[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.table.api.ValidationException: Invalid data type of time field for watermark definition. The field must be of type TIMESTAMP(p) or TIMESTAMP_LTZ(p), the supported precision 'p' is from 0 to 3, but the time field type is STRING NOT NULL[0m
+
+Shutting down the session...
+done.

@@ -1,0 +1,94 @@
+**Kafka Topics**
+```yml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+spec:
+  partitions: 10
+  replicas: 3
+  retention:
+    ms: 86400000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+spec:
+  partitions: 10
+  replicas: 3
+  retention:
+    ms: 86400000
+```
+
+**Flink Deployment**
+```yml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+spec:
+  flinkVersion: v1.20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 4
+    taskmanager.memory.jvm-metaspace.size: 896m
+    taskmanager.memory.jvm-overhead.min: 1536m
+    taskmanager.memory.jvm-overhead.max: 2048m
+    state.savepoints.dir: s3://flink-state/checkpoints
+    execution.checkpointing.interval: 10000
+    execution.checkpointing.timeout: 60000
+    execution.checkpointing.unaligned: true
+    execution.checkpointing.unaligned.checkpoint-interval: 10000
+    execution.checkpointing.tolerable-failed-checkpoints: 3
+  podTemplate:
+    spec:
+      containers:
+      - name: flink-main-container
+        resources:
+          requests:
+            cpu: 4
+            memory: 8Gi
+  job:
+    jarURI: local:///opt/flink/usrlib/sql-runner.jar
+    parallelism: 10
+  replicas: 3
+```
+
+**Flink SQL Tables**
+```sql
+CREATE TABLE ad_impressions (
+  `campaign_id` STRING,
+  `event_time` TIMESTAMP,
+  `event_data` STRING,
+  `Watermark` FOR `event_time` AS `event_time`
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'ad-impressions',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.fail-on-missing-field' = 'true',
+  'update-mode' = 'append'
+);
+
+CREATE TABLE ad_impressions_enriched (
+  `campaign_id` STRING,
+  `event_time` TIMESTAMP,
+  `event_data` STRING,
+  `derived_field` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'ad-impressions-enriched',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'format.type' = 'json',
+  'format.fail-on-missing-field' = 'true',
+  'update-mode' = 'append',
+  'sink.partitioner' = 'fixed'
+);
+```
+
+Justification:
+- **Kafka Topics**: 10 partitions each are chosen to sustain the input rate of 5,000 events/s (about 2.5 MB/s), assuming an average event size of 512 bytes. Three replicas ensure that data survives the loss of a single Kafka broker.
+- **Flink Deployment**: The Flink configuration is chosen to achieve an end-to-end latency below 1 s at p99. Unaligned checkpoints are enabled to reduce checkpointing overhead. The job parallelism is set to 10 to match the number of Kafka partitions. The TaskManager resources are set to the maximum allowed values. The Flink version and jarURI are set according to the problem statement.
+- **Flink SQL Tables**: The `ad_impressions` table is created with a Kafka connector as the source and a JSON format. Watermarking is enabled for event-time processing. The `ad_impressions_enriched` table is created with a Kafka connector as the sink and a JSON format. A fixed partitioner is used to avoid data skew.

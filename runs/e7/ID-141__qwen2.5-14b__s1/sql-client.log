@@ -1,0 +1,23 @@
+Nov 10, 2026 8:03:09 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE app_logs (
+>     log_event JSONB,
+>     service STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT,
+>     WATERMARK FOR processing_time AS processing_time - INTERVAL '5' SECONDS
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'app-logs',
+>     'properties.bootstrap.servers' = '127.0.0.1:13000,127.0.0.1:13001,127.0.0.1:13002',
+>     'format' = 'json',
+>     'scan.startup.mode' = 'earliest-offset',
+>     'properties.group.id' = 'app_logs_consumer_group'
+> )[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.calcite.sql.validate.SqlValidatorException: Unknown identifier 'JSONB'[0m
+
+Shutting down the session...
+done.

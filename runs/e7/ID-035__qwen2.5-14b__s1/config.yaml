@@ -1,0 +1,25 @@
+env.java.opts.all: --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+jobmanager.bind-host: 127.0.0.1
+jobmanager.rpc.address: 127.0.0.1
+jobmanager.rpc.port: 13030
+jobmanager.memory.process.size: 1600m
+jobmanager.execution.failover-strategy: region
+taskmanager.bind-host: 127.0.0.1
+taskmanager.host: 127.0.0.1
+taskmanager.numberOfTaskSlots: 1
+taskmanager.memory.process.size: 1728m
+parallelism.default: 1
+rest.address: 127.0.0.1
+config.taskmanager.numberOfTaskSlots: 4
+config.parallelism.default: 4
+config.state.checkpoints.dir: file:///tmp/chamoso-e7/8388/e7-1668003/objstore/flink-state/checkpoints
+config.s3.access-key: YOUR_S3_ACCESS_KEY
+config.s3.secret-key: YOUR_S3_SECRET_KEY
+config.state.backend: rocksdb
+config.state.backend.incremental: true
+config.state.checkpointing.interval: 60000
+config.state.checkpointing.mode: exactly-once
+config.state.ttl.checkpoints.retain.min.inactive.time: 3600000
+rest.bind-address: 127.0.0.1
+rest.port: 13031
+io.tmp.dirs: /tmp/chamoso-e7/8388/e7-1668003/flink-io

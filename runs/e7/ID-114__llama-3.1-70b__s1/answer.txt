@@ -1,0 +1,117 @@
+**Kafka Topics**
+```yml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions
+spec:
+  partitions: 10
+  replicas: 3
+  retention:
+    ms: 2592000000 # 30 days
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: card-transactions-enriched
+spec:
+  partitions: 10
+  replicas: 3
+  retention:
+    ms: 2592000000 # 30 days
+```
+
+**Flink Deployment**
+```yml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: card-transactions-enricher
+spec:
+  image:
+    name: flink:1.20
+  flinkVersion: v1_20
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 1
+    taskmanager.memory.jvm-metaspace.size: 256m
+    taskmanager.memory.jvm-overhead.min: 512m
+    taskmanager.memory.jvm-overhead.max: 1024m
+    taskmanager.memory.process.size: 8192m
+    execution.checkpointing.interval: 10000
+    execution.checkpointing.timeout: 300000
+    execution.checkpointing.unaligned: true
+    execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+    execution.checkpointing.checkpoints directory: s3://flink-state/checkpoints
+    execution.savepoint.pause-job.timeout: 300000
+    restart-strategy: fixed-delay
+    restart-strategy.fixed-delay.attempts: 2147483647
+    restart-strategy.fixed-delay.delay: 10000
+    execution.runtime-mode: streaming
+    state.backend: rocksdb
+    state.checkpoints.dir: s3://flink-state/checkpoints
+  job:
+    jarURI: local:///opt/flink/usrlib/sql-runner.jar
+    parallelism: 10
+    upgradeMode: stateless
+  taskManager:
+    resources:
+      cpu: 4
+      memory: 8G
+    replicas: 3
+  podTemplate:
+    spec:
+      containers:
+        - name: flink-main-container
+          volumeMounts:
+            - name: flink-config-volume
+              mountPath: /opt/flink/conf
+  volumes:
+    - name: flink-config-volume
+      configMap:
+        name: flink-config
+```
+
+**Flink SQL Tables**
+```sql
+CREATE TABLE card_transactions (
+  `card_id` STRING,
+  `transaction_id` STRING,
+  `amount` DECIMAL(10, 2),
+  `timestamp` TIMESTAMP(3),
+  WATERMARK FOR `timestamp` AS `timestamp` - INTERVAL '10' SECOND
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'card-transactions',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'update-mode' = 'append',
+  'format.type' = 'json'
+);
+
+CREATE TABLE card_transactions_enriched (
+  `card_id` STRING,
+  `transaction_id` STRING,
+  `amount` DECIMAL(10, 2),
+  `timestamp` TIMESTAMP(3),
+  `derived_field_1` STRING,
+  `derived_field_2` STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'card-transactions-enriched',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'update-mode' = 'append',
+  'format.type' = 'json',
+  'sink.partitioner' = 'fixed',
+  'sink.semantic' = 'exactly-once'
+);
+```
+
+Justification:
+
+*   Kafka topics have 10 partitions each, as the sustained input rate is 5,000 events/s and one partition can handle at most 5 MB/s. With an average event size of 2048 bytes, the input rate is approximately 9.76 MB/s, so 10 partitions should be sufficient.
+*   Flink has a parallelism of 10, matching the number of Kafka partitions. This allows for maximum throughput and optimal resource utilization.
+*   Flink's checkpoint interval is set to 10 seconds, which is a reasonable trade-off between the overhead of checkpointing and the potential data loss in case of a failure. The timeout is set to 5 minutes to ensure that checkpoints are completed within a reasonable time.
+*   Flink's restart strategy is set to fixed-delay with 2147483647 attempts and a 10-second delay. This allows for a high number of restarts with a reasonable delay between attempts.
+*   Flink's state backend is set to RocksDB, which is a common choice for stateful applications. The state checkpoint directory is set to an S3 bucket for durability.
+*   The Flink SQL tables have a watermark for the `timestamp` field with a 10-second delay to handle late-arriving events. The `update-mode` is set to `append` for both tables, and the `format.type` is set to `json` to match the input data format. The `sink.partitioner` is set to `fixed` to ensure that events are partitioned correctly, and `sink.semantic` is set to `exactly-once` to guarantee exactly-once delivery.

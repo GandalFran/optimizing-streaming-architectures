@@ -1,0 +1,119 @@
+Nov 11, 2026 8:08:37 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE clicks (
+>     session_id STRING,
+>     event STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector' = 'kafka',
+>   'topic' = 'clicks',
+>   'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>   'format' = 'json',
+>   'scan.startup.mode' = 'latest-offset',
+>   'scan.startup.offsets.file.path' = '/tmp/flink_state/flink-state/checkpoints/startup-offsets.json',
+>   'connector.incremental-poll.enabled' = 'true',
+>   'connector.incremental-poll.interval' = '1000',
+>   'connector.incremental-poll.max-offset-difference' = '200000',
+>   'connector.incremental-poll.max-offset-difference-per-partition' = '100000',
+>   'sink.type' = 'kafka',
+>   'sink.topic' = 'clicks-enriched',
+>   'sink.bootstrap.servers' = 'kafka:9092',
+>   'sink.partition-grouper' = 'round-robin',
+>   'sink.partition-assigner' = 'round-robin',
+>   'sink.partitioner' = 'round-robin',
+>   'sink.max-rate' = '5000'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE clicks_enriched (
+>     session_id STRING,
+>     event STRING,
+>     derived_field STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector' = 'kafka',
+>   'topic' = 'clicks-enriched',
+>   'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>   'format' = 'json',
+>   'scan.startup.mode' = 'latest-offset',
+>   'scan.startup.offsets.file.path' = '/tmp/flink_state/flink-state/checkpoints/startup-offsets.json',
+>   'connector.incremental-poll.enabled' = 'true',
+>   'connector.incremental-poll.interval' = '1000',
+>   'connector.incremental-poll.max-offset-difference' = '200000',
+>   'connector.incremental-poll.max-offset-difference-per-partition' = '100000',
+>   'sink.type' = 'kafka',
+>   'sink.topic' = 'clicks-enriched',
+>   'sink.bootstrap.servers' = 'kafka:9092',
+>   'sink.partition-grouper' = 'round-robin',
+>   'sink.partition-assigner' = 'round-robin',
+>   'sink.partitioner' = 'round-robin',
+>   'sink.max-rate' = '5000'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO clicks_enriched (`session_id`, `event`, `derived_field`, `__sent_ms`, `__seq`)
+> SELECT `session_id`,
+>        `event`,
+>        CAST(NULL AS STRING)[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.table.api.ValidationException: Unsupported options found for 'kafka'.
+
+Unsupported options:
+
+connector.incremental-poll.enabled
+connector.incremental-poll.interval
+connector.incremental-poll.max-offset-difference
+connector.incremental-poll.max-offset-difference-per-partition
+scan.startup.offsets.file.path
+sink.bootstrap.servers
+sink.max-rate
+sink.partition-assigner
+sink.partition-grouper
+sink.topic
+sink.type
+
+Supported options:
+
+connector
+format
+json.encode.decimal-as-plain-number
+json.encode.ignore-null-fields
+json.fail-on-missing-field
+json.ignore-parse-errors
+json.map-null-key.literal
+json.map-null-key.mode
+json.timestamp-format.standard
+key.fields
+key.fields-prefix
+key.format
+properties.bootstrap.servers
+properties.group.id
+property-version
+scan.bounded.mode
+scan.bounded.specific-offsets
+scan.bounded.timestamp-millis
+scan.startup.mode
+scan.startup.specific-offsets
+scan.startup.timestamp-millis
+scan.topic-partition-discovery.interval
+scan.watermark.alignment.group
+scan.watermark.alignment.max-drift
+scan.watermark.alignment.update-interval
+scan.watermark.emit.strategy
+scan.watermark.idle-timeout
+sink.delivery-guarantee
+sink.parallelism
+sink.partitioner
+sink.semantic
+sink.transactional-id-prefix
+topic
+topic-pattern
+value.fields-include
+value.format[0m
+
+Shutting down the session...
+done.

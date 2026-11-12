@@ -1,0 +1,66 @@
+Nov 10, 2026 7:59:13 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE ad_impressions (
+>     campaign_id BIGINT,
+>     event_data STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'ad-impressions',
+>     'properties.bootstrap.servers' = '127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502',
+>     'properties.group.id' = 'flink-ad-impressions-source',
+>     'format' = 'json',
+>     'json.ignore-parse-errors' = 'true'
+> )[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE ad_impressions_enriched (
+>     campaign_id BIGINT,
+>     impression_id STRING,
+>     timestamp BIGINT,
+>     ad_id STRING,
+>     user_id STRING,
+>     ip_address STRING,
+>     device_type STRING,
+>     location STRING,
+>     impression_type STRING,
+>     ad_creative STRING,
+>     impression_url STRING,
+>     impression_category STRING,
+>     impression_duration BIGINT,
+>     click_url STRING,
+>     click_timestamp BIGINT,
+>     click_id STRING,
+>     click_type STRING,
+>     conversion_url STRING,
+>     conversion_timestamp BIGINT,
+>     conversion_id STRING,
+>     conversion_type STRING,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>     'connector' = 'kafka',
+>     'topic' = 'ad-impressions-enriched',
+>     'properties.bootstrap.servers' = '127.0.0.1:12500,127.0.0.1:12501,127.0.0.1:12502',
+>     'format' = 'json'
+> )[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.sql.parser.impl.ParseException: Encountered "timestamp" at line 5, column 5.
+Was expecting one of:
+    "CONSTRAINT" ...
+    "PRIMARY" ...
+    "UNIQUE" ...
+    "WATERMARK" ...
+    <BRACKET_QUOTED_IDENTIFIER> ...
+    <QUOTED_IDENTIFIER> ...
+    <BACK_QUOTED_IDENTIFIER> ...
+    <BIG_QUERY_BACK_QUOTED_IDENTIFIER> ...
+    <HYPHENATED_IDENTIFIER> ...
+    <IDENTIFIER> ...
+    <UNICODE_QUOTED_IDENTIFIER> ...[0m
+
+Shutting down the session...
+done.

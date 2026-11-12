@@ -1,0 +1,85 @@
+# 1. Strimzi KafkaTopic resources
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+  namespace: default
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 86400000
+    cleanup.policy: compact
+    min.insync.replicas: 2
+    max.message.bytes: 524288
+    max.compaction.lag.ms: 5000
+    segment.bytes: 1073741824
+    segment.ms: 604800000
+    delete.retention.ms: 86400000
+    flush.messages: 10000
+    flush.ms: 10000
+    flush.interval.messages: 10000
+    flush.max.bytes: 10485760
+    flush.max.messages: 10000
+    flush.max.bytes.per.partition: 10485760
+    flush.max.messages.per.partition: 10000
+    flush.max.bytes.per.second: 10485760
+    flush.max.messages.per.second: 10000
+    flush.max.bytes.per.second.per.partition: 10485760
+    flush.max.messages.per.second.per.partition: 10000
+    flush.max.bytes.per.second.per.partition.max: 10485760
+    flush.max.messages.per.second.per.partition.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10485760
+    flush.max.messages.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max: 10000
+    flush.max.bytes.per.second.per.partition.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max.max

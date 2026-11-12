@@ -1,0 +1,140 @@
+### Kafka Topic Configuration
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 2592000000
+    segment.ms: 604800000
+    cleanup.policy: compact
+    flush.ms: 10000
+    min.insync.replicas: 2
+    replication.factor: 3
+    max.message.bytes: 1048576
+    max.in.flight.requests.per.connection: 5
+    retries: 3
+    acks: all
+    enable.idempotence: false
+    transactional.id: null
+  kafkaVersion: 4.1.0
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 2592000000
+    segment.ms: 604800000
+    cleanup.policy: compact
+    flush.ms: 10000
+    min.insync.replicas: 2
+    replication.factor: 3
+    max.message.bytes: 1048576
+    max.in.flight.requests.per.connection: 5
+    retries: 3
+    acks: all
+    enable.idempotence: false
+    transactional.id: null
+  kafkaVersion: 4.1.0
+```
+
+### Flink Configuration
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-sql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-sql
+  template:
+    metadata:
+      labels:
+        app: flink-sql
+    spec:
+      containers:
+      - name: flink
+        image: flink:1.20.0
+        ports:
+        - containerPort: 6123
+        volumeMounts:
+        - name: flink-conf
+          mountPath: /etc/flink/conf
+        - name: usrlib
+          mountPath: /opt/flink/usrlib
+        - name: s3-checkpoints
+          mountPath: /opt/flink/conf/checkpoints
+      volumes:
+      - name: flink-conf
+        configMap:
+          name: flink-conf
+      - name: usrlib
+        emptyDir: {}
+      - name: s3-checkpoints
+        persistentVolumeClaim:
+          claimName: flink-checkpoints
+      - name: s3-checkpoints
+        persistentVolumeClaim:
+          claimName: flink-checkpoints
+      tolerations:
+      - key: "node.kubernetes.io/not-terminated"
+        operator: "Equal"
+        value: "true"
+      - key: "node.kubernetes.io/exclude-from-termination"
+        operator: "Equal"
+        value: "true"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - key: "node.kubernetes.io/instance-type"
+            operator: "In"
+            values:
+            - "n1-standard-4"
+            - "n1-standard-8"
+            - "n1-standard-16"
+spec:
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "4"
+    taskmanager.memory.process.size: "8g"
+    parallelism.default: "3"
+    state.backend: "filesystem"
+    state.checkpoints.dir: "s3://flink-state/checkpoints"
+    state.checkpoints.interval: "10s"
+    state.checkpoints.num-retained: "10"
+    parallelism.min: "1"
+    parallelism.max: "3"
+    parallelism.prefer-same-rack: "true"
+    parallelism.prefer-same-zone: "true"
+    parallelism.prefer-same-node: "true"
+    parallelism.prefer-same-pod: "true"
+    parallelism.prefer-same-container: "true"
+    parallelism.prefer-same-taskmanager: "true"
+    parallelism.prefer-same-taskmanager-slot: "true"
+    parallelism.prefer-same-taskmanager-slot-id: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container: "true"
+    parallelism.prefer-same-taskmanager-slot-id-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-taskmanager-and-pod-and-container-and-task

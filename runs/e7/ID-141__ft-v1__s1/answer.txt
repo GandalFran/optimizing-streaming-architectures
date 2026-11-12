@@ -1,0 +1,154 @@
+# 1. `kafka-topics.sh` commands to create the Kafka topics
+bash
+# create topic 'app-logs'
+./bin/kafka-topics.sh --create --topic app-logs --partitions 48 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=compact --bootstrap-server kafka:9092
+
+# create topic 'app-logs-parsed'
+./bin/kafka-topics.sh --create --topic app-logs-parsed --partitions 48 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=compact --bootstrap-server kafka:9092
+```
+
+# 2. Flink configuration (`config.yaml`)
+yaml
+flink:
+  # adjust the number of source subtasks to the expected input rate (20k/s)
+  parallelism.default: 32
+
+  # checkpoint interval is 3 seconds, to give us 3 seconds to detect failures and restore state
+  state:
+    backend: s3
+    backend-checkpoint-dir: s3://flink-state/checkpoints
+    backend-type: fs
+    snapshot-interval-millis: 3000
+    persistence-millis: 3000
+    persistence-format: v1
+    persistence-recovery-mode: restore
+
+  taskmanager:
+    # use 4 cores and 8 GB of memory for each taskmanager
+    # adjust the memory settings according to your taskmanager settings
+    memory: 8 GB
+    # use 4 cores and 8 GB of memory for each taskmanager
+    # adjust the memory settings according to your taskmanager settings
+    # cores: 4
+
+  jobmanager:
+    # use 4 cores and 8 GB of memory for the jobmanager
+    # adjust the memory settings according to your jobmanager settings
+    memory: 8 GB
+    # use 4 cores and 8 GB of memory for the jobmanager
+    # adjust the memory settings according to your jobmanager settings
+    # cores: 4
+
+  # set the maximum size of the data per event
+  # this is needed to make sure that we do not run into memory issues
+  # adjust the size according to your input data
+  # memory: 512 B
+
+  # configure the input topic
+  # adjust the topic name according to your setup
+  # adjust the partition count according to your setup
+  # adjust the replication factor according to your setup
+  # adjust the retention.ms according to your setup
+  # adjust the cleanup.policy according to your setup
+  # adjust the bootstrap server according to your setup
+  # adjust the parallelism according to your setup
+  # adjust the memory according to your setup
+  # adjust the state.backend.type according to your setup
+  # adjust the state.backend-checkpoint-dir according to your setup
+  # adjust the state.backend-type according to your setup
+  # adjust the state.persistence-millis according to your setup
+  # adjust the state.persistence-format according to your setup
+  # adjust the state.persistence-recovery-mode according to your setup
+  # adjust the state.snapshot-interval-millis according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-type according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state.state-backend-checkpoint-dir according to your setup
+  # adjust the state

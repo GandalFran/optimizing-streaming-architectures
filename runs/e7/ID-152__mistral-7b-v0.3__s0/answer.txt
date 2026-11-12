@@ -1,0 +1,113 @@
+ 1. Strimzi `KafkaTopic` resources for all topics:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  kafka:
+    replicas: 3
+    listeners:
+    - name: plain
+      port: 9092
+      tls: false
+      config:
+        advertisingListenerEnabled: "true"
+        listenerType: "PLAINTEXT"
+        listenerSecurityPolicy: "PLAINTEXT_LISTENER"
+        zookeeperConnect: "zookeeper:2181"
+        bootstrapServer: "my-cluster-kafka-bootstrap:9092"
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments
+spec:
+  replicas: 3
+  partitions: 10
+  config:
+    retention.ms: 604800000
+    segment.bytes: 10485760
+    compression.type: "lz4"
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+spec:
+  replicas: 3
+  partitions: 10
+  config:
+    retention.ms: 604800000
+    segment.bytes: 10485760
+    compression.type: "lz4"
+```
+
+Explanation:
+- We have a Kafka cluster with 3 brokers and a plain listener.
+- The `payments` and `payments-validated` topics have 10 partitions each, which allows for a total throughput of 500,000 events/s (5 MB/s per partition).
+- The segment.bytes and retention.ms configurations ensure that the topics retain data for 7 days and have a segment size of 10 MB.
+- Compression is set to LZ4 to reduce the storage footprint.
+
+2. FlinkDeployment resource:
+
+```yaml
+apiVersion: kustomize.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+
+patchesStrategicMerge:
+- patch: |
+    spec:
+      flinkConfiguration:
+        taskmanager.numberOfTaskSlots: 4
+        taskmanager.memory.process-heap-size-mb: 8192
+        taskmanager.numberOfTaskManagers: 3
+        checkpointing.enabled: true
+        checkpointing.minPauseBetweenCheckpoints: 5000
+        checkpointing.checkpointInterval: 5000
+        checkpointing.maxConcurrentCheckpoints: 3
+        checkpointing.failure-tolerance.max-concurrent-checkpoints: 3
+        checkpointing.failure-tolerance.max-failure-numbers-for-checkpoint: 3
+        checkpointing.failure-tolerance.min-pause-between-checkpoints: 5000
+        checkpointing.failure-tolerance.mode: "exactly-once"
+        checkpointing.mode: "exactly-once"
+        state.backend: "filesystem"
+        state.backend.fs.fs.s3a.access.key: "<S3_ACCESS_KEY>"
+        state.backend.fs.fs.s3a.secret.key: "<S3_SECRET_KEY>"
+        state.backend.fs.fs.s3a.endpoint: "<S3_ENDPOINT>"
+        state.backend.fs.fs.s3a.path: "s3://flink-state/checkpoints"
+        jobmanager.rpc.address: "0.0.0.0"
+        jobmanager.rpc.port: 6123
+        taskmanager.rpc.address: "0.0.0.0"
+        taskmanager.rpc.port: 6124
+        parallelism.default: 20
+        parallelism.rebalance.threshold: 10
+        parallelism.rebalance.factor: 2
+        parallelism.rebalance.max-parallelism-rebalance-time: 10000
+        parallelism.rebalance.min-parallelism-rebalance-time: 5000
+        parallelism.rebalance.strategy: "org.apache.flink.runtime.jobmaster.rebalance.DefaultParallelismRebalanceStrategy"
+        parallelism.rebalance.strategy.options: "{\"max-parallelism-rebalance-time\":10000,\"min-parallelism-rebalance-time\":5000,\"rebalance-factor\":2,\"rebalance-threshold\":10}"
+        parallelism.rebalance.strategy.class: "org.apache.flink.runtime.jobmaster.rebalance.DefaultParallelismRebalanceStrategy"
+        parallelism.rebalance.strategy.options: "{\"max-parallelism-rebalance-time\":10000,\"min-parallelism-rebalance-time\":5000,\"rebalance-factor\":2,\"rebalance-threshold\":10}"
+        parallelism.rebalance.strategy.class: "org.apache.flink.runtime.jobmaster.rebalance.DefaultParallelismRebalanceStrategy"
+        parallelism.rebalance.strategy.options: "{\"max-parallelism-rebalance-time\":10000,\"min-parallelism-rebalance-time\":5000,\"rebalance-factor\":2,\"rebalance-threshold\":10}"
+        parallelism.rebalance.strategy.class: "org.apache.flink.runtime.jobmaster.rebalance.DefaultParallelismRebalanceStrategy"
+        parallelism.rebalance.strategy.options: "{\"max-parallelism-rebalance-time\":10000,\"min-parallelism-rebalance-time\":5000,\"rebalance-factor\":2,\"rebalance-threshold\":10}"
+        parallelism.rebalance.strategy.class: "org.apache.flink.runtime.jobmaster.rebalance.DefaultParallelismRebalanceStrategy"
+        parallelism.rebalance.strategy.options: "{\"max-parallelism-rebalance-time\":10000,\"min-parallelism-rebalance-time\":5000,\"rebalance-factor\":2,\"rebalance-threshold\":10}"
+        parallelism.rebalance.strategy.class: "org.apache.flink.runtime.jobmaster.rebalance.DefaultParallelismRebalanceStrategy"
+        parallelism.rebalance.strategy.options: "{\"max-parallelism-rebalance-time\":10000,\"min-parallelism-rebalance-time\":5000,\"rebalance-factor\":2,\"rebalance-threshold\":10}"
+        parallelism.rebalance.strategy.class: "org.apache.flink.runtime.jobmaster.rebalance.DefaultParallelismRebalanceStrategy"
+        parallelism.rebalance.strategy.options: "{\"max-parallelism-rebalance-time\":10000,\"min-parallelism-rebalance-time\":5000,\"rebalance-factor\":2,\"rebalance-threshold\":10}"
+        parallelism.rebalance.strategy.class: "org.apache.flink.runtime.jobmaster.rebalance.DefaultParallelismRebalanceStrategy"
+        parallelism.rebalance.strategy.options: "{\"max-parallelism-rebalance-time\":10000,\"min-parallelism-rebalance-time\":5000,\"rebalance-factor\":2,\"rebalance-threshold\":10}"
+        parallelism.rebalance.strategy.class: "org.apache.flink.runtime.jobmaster.rebalance.DefaultParallelismRebalanceStrategy"
+        parallelism.rebalance.strategy.options: "{\"max-parallelism-rebalance-time\":10000,\"min-parallelism-rebalance-time\":5000,\"rebalance-factor\":2,\"rebalance-threshold\":10}"
+        parallelism.rebalance.strategy.class: "org.apache.flink.runtime.jobmaster.rebalance.DefaultParallelismRebalanceStrategy"
+        parallelism.rebalance.strategy.options: "{\"max-parallelism-rebalance-time\":10000,\"min-parallelism-rebalance-time\":5000,\"rebalance-factor

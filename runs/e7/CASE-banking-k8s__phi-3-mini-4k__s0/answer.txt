@@ -1,0 +1,112 @@
+ ```yaml
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+  namespace: default
+  labels:
+    app: banking-transactions
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention: 7d
+  cleanupPolicy: "compact"
+
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+  namespace: default
+  labels:
+    app: banking-transactions-validated
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention: 7d
+  cleanupPolicy: "compact"
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: banking-transactions-deployment
+  namespace: default
+spec:
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 3
+    taskmanager.memory.process.size: 8192
+    taskmanager.heap.size: 4096
+    taskmanager.numberOfTaskSlots: 3
+    taskmanager.heap.size: 4096
+    taskmanager.heap.per.core.limit: 1024
+    taskmanager.heap.retain.percent: 90
+    taskmanager.heap.retain.size: 1024
+    taskmanager.heap.retain.count: 10
+    taskmanager.heap.retain.count.per.core: 1
+    taskmanager.heap.retain.count.per.core.limit: 1
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 90
+    taskmanager.heap.retain.count.per.core.limit.size: 1024
+    taskmanager.heap.retain.count.per.core.limit.percent: 9

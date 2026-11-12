@@ -1,0 +1,74 @@
+```bash
+# Create Kafka topics with 3 partitions and 1 replica
+kafka-topics.sh --create --topic clicks --partitions 3 --replication-factor 1 --config retention.ms=2592000000 --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic clicks-enriched --partitions 3 --replication-factor 1 --config retention.ms=2592000000 --bootstrap-server kafka:9092
+```
+
+```yaml
+# config.yaml
+jobmanager.rpc.address: jobmanager
+jobmanager.rpc.port: 6123
+taskmanager.numberOfTaskSlots: 4
+taskmanager.memory.task.heap-size: 8G
+state.backend: rocksdb
+state.checkpoints.dir: s3://flink-state/checkpoints
+state.checkpoints.min-pause: 10s
+state.checkpoints.num-retained: 3
+parallelism.default: 3
+execution.checkpointing.interval: 5s
+execution.checkpointing.mode: EXACTLY_ONCE
+execution.checkpointing.externalized-checkpoints.dir: s3://flink-state/checkpoints
+```
+
+```sql
+-- Create Kafka source table for clicks
+CREATE TABLE clicks (
+  session_id STRING,
+  event_time TIMESTAMP(3),
+  event_data STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.topic' = 'clicks',
+  'connector.bootstrap-server' = 'kafka:9092',
+  'connector.group-id' = 'clicks-group',
+  'format.type' = 'json',
+  'scan.startup.mode' = 'latest-offset',
+  'connector.options' = 'key.format.class=org.apache.flink.formats.json.JsonRowDeserializationSchema, value.format.class=org.apache.flink.formats.json.JsonRowDeserializationSchema',
+  'execution.checkpointing.mode' = 'EXACTLY_ONCE',
+  'execution.checkpointing.interval' = '5s'
+);
+
+-- Create Kafka sink table for clicks-enriched
+CREATE TABLE clicks_enriched (
+  session_id STRING,
+  event_time TIMESTAMP(3),
+  event_data STRING,
+  derived_field1 STRING,
+  derived_field2 STRING
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.topic' = 'clicks-enriched',
+  'connector.bootstrap-server' = 'kafka:9092',
+  'format.type' = 'json',
+  'sink.partitioner' = 'round-robin',
+  'sink.delivery-guarantee' = 'EXACTLY_ONCE',
+  'execution.checkpointing.mode' = 'EXACTLY_ONCE',
+  'execution.checkpointing.interval' = '5s'
+);
+```
+
+### Justification of Main Values
+
+1. **Kafka Topics Creation:**
+   - **Partitions and Replication Factor:** Set to 3 partitions and 1 replica to balance between throughput and fault tolerance. Given the input rate of 5,000 events/s, 3 partitions should be sufficient.
+   - **Retention:** Set to 30 days (2592000000 ms) to ensure data is retained for the required duration.
+
+2. **Flink Configuration:**
+   - **Parallelism:** Set to 3 to match the number of Kafka partitions.
+   - **Checkpointing:** Enabled with `EXACTLY_ONCE` mode and a 5-second interval to ensure exactly-once semantics and meet the end-to-end latency requirement.
+   - **State Backend:** RocksDB is used for state storage.
+   - **Checkpoint Storage:** S3 is used for checkpointing to ensure durability.
+
+3. **Flink SQL Tables:**
+   - **Source Table (`clicks`):** Configured to read from Kafka, with JSON deserialization, and set to use exactly-once semantics.
+   - **Sink Table (`clicks-enriched`):** Configured to write to Kafka, with JSON serialization, and set to use exactly-once semantics. The `sink.partitioner` is set to `round-robin` to distribute the load evenly across partitions.

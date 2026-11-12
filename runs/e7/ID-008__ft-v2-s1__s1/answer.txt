@@ -1,0 +1,129 @@
+```yaml
+# Topic definitions
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions
+spec:
+  partitions: 1
+  replicationFactor: 3
+  topicNameFormat: ad-impressions
+  retentionMs: 86400000
+
+apiVersion: strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: ad-impressions-enriched
+spec:
+  partitions: 1
+  replicationFactor: 3
+  topicNameFormat: ad-impressions-enriched
+  retentionMs: 86400000
+```
+
+```yaml
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: flink-sql
+spec:
+  jobManager:
+    resources:
+      limits:
+        cpu: "2"
+        memory: 4Gi
+      requests:
+        cpu: "1"
+        memory: 2Gi
+  taskManager:
+    replicas: 3
+    resources:
+      limits:
+        cpu: "4"
+        memory: 8Gi
+      requests:
+        cpu: "2"
+        memory: 4Gi
+  flinkConfiguration:
+    jobmanager:
+      jobmanager.rpc.address: flink-jobmanager
+    taskmanager:
+      process.taskmanager.numberOfTaskSlots: 1
+    execution.checkpointing:
+      interval: 3000
+      min-pause: 3000
+      enabled: true
+    state.backend: filesystem
+    state.backend.fs.checkpointdir: s3://flink-state/checkpoints
+    state.backend.fs.checkpointdir.cleanup: on-demand
+    high-availability: kubernetes
+    kubernetes.cluster-id: my-cluster
+    kubernetes.jobmanager.memory.process.size: 2048m
+    kubernetes.jobmanager.cpu: "1"
+    kubernetes.taskmanager.memory.process.size: 2048m
+    kubernetes.taskmanager.cpu: "1"
+    kubernetes.client.memory.process.size: 512m
+    kubernetes.client.cpu: "0.25"
+    kubernetes.cluster-id: my-cluster
+    jobmanager.rpc.address: flink-jobmanager
+    jobmanager.rpc.port: "6123"
+    blob.server.port: "6124"
+    queryable-state.client.port: "6125"
+    high-availability.cluster-id: my-cluster
+    high-availability.storageDir: s3://flink-state/checkpoints
+    jobmanager.memory.process.size: 2048m
+    taskmanager.memory.process.size: 2048m
+    taskmanager.memory.framework.heap.size: 512m
+    jobmanager.memory.framework.heap.size: 512m
+    taskmanager.memory.flink.heap.size: 1024m
+    jobmanager.memory.flink.heap.size: 1024m
+    taskmanager.memory.flink.off-heap.size: 1024m
+    jobmanager.memory.flink.off-heap.size: 1024m
+    taskmanager.memory.framework.off-heap.size: 512m
+    jobmanager.memory.framework.off-heap.size: 512m
+    parallelism.default: 1
+    resourcemanager.memory.process.size: 2048m
+    resourcemanager.cpu: "1"
+    parallelism.default: 1
+    execution.checkpointing.interval: 3000
+    execution.checkpointing.min-pause: 3000
+    execution.checkpointing.max-concurrent-checkpoints: 1
+    execution.checkpointing.recovery-strategy: point-in-time
+    execution.checkpointing.storage-id: fs
+    execution.checkpointing.checkpoint-storage: filesystem
+    execution.checkpointing.file-checkpointing: true
+    execution.checkpointing.file-merging: true
+    execution.checkpointing.file-merging.max-file-size: 100000000
+    execution.checkpointing.file-merging.max-file-number: 1000
+    execution.checkpointing.file-merging.max-number-of-files-to-merge: 10
+    execution.checkpointing.file-merging.min-free-space: 0.1
+    execution.checkpointing.file-merging.min-free-space-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-mb: 100
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm: 10
+    execution.checkpointing.file-merging.min-free-space-percentage-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm-in-vm

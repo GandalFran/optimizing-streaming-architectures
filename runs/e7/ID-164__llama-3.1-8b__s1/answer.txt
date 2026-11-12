@@ -1,0 +1,191 @@
+### 1. Strimzi KafkaTopic resources for all topics
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  kafka:
+    bootstrapServiceName: my-cluster-kafka-bootstrap
+    replicas: 3
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+      - name: tls
+        port: 9093
+        type: internal
+    config:
+      num.partitions: 6
+      min.insync.replicas: 2
+      acks: all
+      retention.ms: 2592000000 # 30 days
+      cleanup.policy: delete
+      flush.ms: 1000
+  partitions: 6
+  replicas: 3
+  configuration:
+    cleanup.policy: compact
+---
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks-enriched
+spec:
+  kafka:
+    bootstrapServiceName: my-cluster-kafka-bootstrap
+    replicas: 3
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+      - name: tls
+        port: 9093
+        type: internal
+    config:
+      num.partitions: 6
+      min.insync.replicas: 2
+      acks: all
+      retention.ms: 2592000000 # 30 days
+      cleanup.policy: delete
+      flush.ms: 1000
+  partitions: 6
+  replicas: 3
+  configuration:
+    cleanup.policy: compact
+```
+
+### 2. Flink Deployment resource with Flink configuration
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sql-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sql-runner
+  template:
+    metadata:
+      labels:
+        app: sql-runner
+    spec:
+      containers:
+      - name: sql-runner
+        image: flink:latest
+        ports:
+        - containerPort: 6123
+        volumeMounts:
+        - name: flink-conf
+          mountPath: /etc/flink/conf
+        - name: sql-runner
+          mountPath: /opt/flink/usrlib
+      volumes:
+      - name: flink-conf
+        configMap:
+          name: flink-conf
+      - name: sql-runner
+        emptyDir: {}
+      tolerations:
+      - key: "node-role.kubernetes.io/flink"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - key: "node-role.kubernetes.io/flink"
+            operator: "In"
+            values:
+              - "true"
+            effect: "PreferredAvoid"
+spec:
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "4"
+    taskmanager.memory.process.size: "8g"
+    taskmanager.heap.size: "6g"
+    parallelism.default: "1"
+    parallelism.override: "1"
+    checkpointing.checkpoints.number: "1"
+    checkpointing.checkpointing.type: "EL RETRYABLE_CHECKPOINT"
+    checkpointing.checkpointing.mode: "EXACTLY_ONCE"
+    checkpointing.checkpointing.interval: "1000"
+    checkpointing.checkpointing.timeout: "30000"
+    checkpointing.checkpointing.max-concurrent-checkpoints: "1"
+    state.backend: "filesystem"
+    state.checkpoint.dir: "s3://flink-state/checkpoints"
+    state.savepoints.dir: "s3://flink-state/savepoints"
+    stream.execution.checkpointing.interval: "1000"
+    stream.execution.checkpointing.timeout: "30000"
+    stream.execution.checkpointing.max-concurrent-checkpoints: "1"
+    parallelism.default: "1"
+    parallelism.override: "1"
+    log.max.partitioned-message-batch-size: "2000000"
+    log.max.partitioned-message-count: "1000000"
+    producer.acks: "all"
+    producer.retries: "3"
+    producer.acks: "all"
+    producer.transactional.id: "true"
+    producer.acks: "all"
+```
+
+### 3. Flink SQL `CREATE TABLE` statements
+
+```sql
+CREATE TABLE clicks (
+  `session_id` STRING,
+  `timestamp` TIMESTAMP,
+  `event` MAP<STRING, STRING>
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.group.id' = 'my-group',
+  'scan.startup.mode' = 'latest-offsets',
+  'properties.deserialization-decoder' = 'json',
+  'format' = 'json',
+  'json.fail-on-missing-field' = 'true',
+  'json.ignore-parse-errors' = 'true',
+  'json.fail-on-missing-field' = 'true'
+);
+
+CREATE TABLE clicks_enriched (
+  `session_id` STRING,
+  `timestamp` TIMESTAMP,
+  `event` MAP<STRING, STRING>,
+  `derived_field1` STRING,
+  `derived_field2` STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks-enriched',
+  'properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'properties.producer.transactional.id' = 'true',
+  'format' = 'json',
+  'properties.producer.acks' = 'all',
+  'properties.producer.retries' = '3'
+);
+
+INSERT INTO clicks_enriched
+SELECT
+  `session_id`,
+  `timestamp`,
+  `event`,
+  `derived_field1`,
+  `derived_field2`
+FROM clicks
+WHERE `event` IS NOT NULL;
+```
+
+### Justification
+
+The Kafka topic `clicks` and `clicks-enriched` are created with 6 partitions each, 3 replicas, and a retention period of 30 days. The `cleanup.policy` is set to `compact` to remove old data.
+
+The Flink deployment is configured with 1 TaskManager pod, using 4 CPU and 8 GiB of memory each. The `taskmanager.numberOfTaskSlots` is set to 4, which means each TaskManager can run 4 subtasks in parallel. The `parallelism.default` and `parallelism.override` are set to 1 to ensure the job runs with 1 subtask.
+
+The Flink configuration includes settings for exactly-once checkpointing, durable checkpoint storage, and producer settings. The `producer.acks` is set to `all` to ensure exactly-once delivery. The `producer.retries` is set to 3 to handle temporary failures.
+
+The Flink SQL `CREATE TABLE` statements define the `clicks` and `clicks_enriched` tables, which are connected to the corresponding Kafka topics. The `clicks` table uses a JSON deserializer and fails on missing fields and parse errors. The `clicks_enriched` table uses a JSON serializer and producer with transactional ID for exactly-once delivery.

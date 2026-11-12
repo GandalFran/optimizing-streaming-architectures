@@ -1,0 +1,35 @@
+Nov 10, 2026 6:07:14 PM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE src (
+>     account_id STRING,
+>     amount DOUBLE,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector' = 'kafka', 'topic' = 'banking-transactions', 'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>   'properties.group.id' = 'validator', 'scan.startup.mode' = 'group-offsets',
+>   'properties.auto.offset.reset' = 'earliest', 'format' = 'json')[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> CREATE TABLE snk (
+>     account_id STRING,
+>     amount DOUBLE,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector' = 'kafka', 'topic' = 'banking-transactions-validated', 'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>   'format' = 'json', 'sink.delivery-guarantee' = 'exactly-once', 'sink.transactional-id-prefix' = 'bank-val',
+>   'properties.transaction.timeout.ms' = '600000')[34;1m[INFO] Execute statement succeeded.[0m
+
+Flink SQL> 
+> INSERT INTO snk (`account_id`, `amount`, `__sent_ms`, `__seq`)[34;1m[INFO] Submitting SQL update statement to the cluster...[0m
+[34;1m[INFO] SQL update statement has been successfully submitted to the cluster:[0m
+Job ID: 86dd095c908c8ceb44b69f2eff6c7cfc
+
+
+Flink SQL> 
+Shutting down the session...
+done.

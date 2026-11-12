@@ -1,0 +1,90 @@
+ ```bash
+# Creating Kafka topics
+kafka-topics --bootstrap-server kafka:9092 --create --topic clicks --partitions 3 --replication-factor 3 --config retention.ms=2592000000
+kafka-topics --bootstrap-server kafka:9092 --create --topic clicks-enriched --partitions 3 --replication-factor 3 --config retention.ms=2592000000
+```
+
+Justification:
+- The `--partitions` and `--replication-factor` values are set to 3 to ensure high availability and fault tolerance in a KRaft mode cluster.
+- The `--config retention.ms=2592000000` (30 days in milliseconds) ensures that data is retained for the required duration.
+
+```yaml
+# Flink configuration settings
+jobmanager.rpc.socket.server.address: 0.0.0.0
+jobmanager.heap.size: 4G
+parallelism.default: 1
+state.checkpoints.dir: s3://flink-state/checkpoints
+taskmanager.numberOfTaskSlots: 3
+taskmanager.memory.instantaneous.fraction: 0.2
+taskmanager.memory.total: 8G
+taskmanager.network.sendRoundTripTime: 2000
+taskmanager.network.connection.max: 1000
+taskmanager.network.sendBuffer: 32768
+taskmanager.network.receiveBuffer: 32768
+taskmanager.heap.mb: 6144
+taskmanager.memory.managed: true
+state.backend: hdfs
+state.timeout.checkpoint: 1000
+state.savepoints.directory: s3://flink-state/savepoints
+state.savepoints.retain.checkpoints: 7
+state.checkpoints.retention.minutes: 30
+state.checkpoints.retention.size: 1G
+state.checkpoints.retention.total.size: 2G
+state.savepoint.timeout.seconds: 10
+
+# Properties for Kafka source and sink
+streaming.use-java-time: true
+flink.taskmanager.logdir: s3://flink-logs/taskmanager
+kafka.consumer.property.fetch.max.bytes: 1048576
+kafka.consumer.property.auto.offset.reset: latest
+flink.state.backend: hdfs
+```
+
+Justification:
+- Allocating sufficient memory to the job manager and task managers to handle the required workload.
+- Configuring checkpointing and state saving to meet the durability and exactly-once processing requirements.
+- Setting the Kafka consumer fetch settings to handle the incoming event rate.
+
+```sql
+-- Flink SQL to create Kafka source and sink tables
+CREATE TABLE clicks (
+  session_id VARCHAR,
+  event_timestamp TIMESTAMP,
+  event_value STRUCT<json:STRING>
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'scan.startup.mode' = 'earliest',
+  'format.class' = 'io.confluent.connect.avro.AvroConverter',
+  'key.converter.schema.registry.url' = 'http://schema-registry:8081',
+  'value.converter.schema.registry.url' = 'http://schema-registry:8081',
+  'value.converter' = 'io.confluent.connect.avro.AvroConverter',
+  'key.converter' = 'io.confluent.connect.avro.AvroConverter',
+  'value.deserializer' = 'io.confluent.connect.avro.AvroDataFormat$Value',
+  'key.deserializer' = 'io.confluent.connect.avro.AvroDataFormat$Key'
+) AS 'rawClicks';
+
+CREATE TABLE clicks-enriched (
+  session_id VARCHAR,
+  event_timestamp TIMESTAMP,
+  enriched_event_value STRUCT<json:STRING>
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'clicks-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format.class' = 'io.confluent.connect.avro.AvroConverter',
+  'key.converter.schema.registry.url' = 'http://schema-registry:8081',
+  'value.converter.schema.registry.url' = 'http://schema-registry:8081',
+  'value.converter' = 'io.confluent.connect.avro.AvroConverter',
+  'key.converter' = 'io.confluent.connect.avro.AvroConverter',
+  'value.deserializer' = 'io.confluent.connect.avro.AvroDataFormat$Value',
+  'key.deserializer' = 'io.confluent.connect.avro.AvroDataFormat$Key'
+) AS 'enrichedClicks';
+```
+
+Justification:
+- The SQL statements create Kafka source and sink tables with the necessary schema for the clickstream events.
+- The Kafka connector configuration is set to use Avro serialization format for efficient data processing.
+- The `scan.startup.mode` is set to 'earliest' to ensure that the earliest available events are consumed first.
+- The schema registry URLs are provided to resolve Avro schemas during data processing.

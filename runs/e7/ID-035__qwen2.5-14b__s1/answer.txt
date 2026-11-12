@@ -1,0 +1,71 @@
+```bash
+# Create the `session-events` topic with 4 partitions and replication factor 3
+kafka-topics.sh --create --topic session-events --bootstrap-server kafka:9092 --replication-factor 3 --partitions 4
+
+# Create the `session-events-enriched` topic with 4 partitions and replication factor 3
+kafka-topics.sh --create --topic session-events-enriched --bootstrap-server kafka:9092 --replication-factor 3 --partitions 4
+```
+
+```yaml
+# Flink configuration
+config:
+  taskmanager.numberOfTaskSlots: 4
+  parallelism.default: 4
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  s3.access-key: YOUR_S3_ACCESS_KEY
+  s3.secret-key: YOUR_S3_SECRET_KEY
+  state.backend: rocksdb
+  state.backend.incremental: true
+  state.checkpointing.interval: 60000
+  state.checkpointing.mode: exactly-once
+  state.checkpointing.interval: 60000
+  state.ttl.checkpoints.retain.min.inactive.time: 3600000
+```
+
+```sql
+CREATE TABLE session_events (
+    user_id STRING,
+    event_data STRING,
+    event_time TIMESTAMP(3),
+    WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'session-event-consumer',
+    'format' = 'json',
+    'scan.startup.mode' = 'latest-offset'
+);
+
+CREATE TABLE session_events_enriched (
+    user_id STRING,
+    event_data STRING,
+    derived_field_1 STRING,
+    derived_field_2 STRING,
+    event_time TIMESTAMP(3),
+    event_timestamp AS PROCTIME(),
+    ROWTIME() AS event_time
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'format' = 'json',
+    'sink.partitioner' = 'org.apache.flink.connector.kafka.sink.DefaultPartitioner',
+    'sink.max-concurrent-requests' = '128'
+);
+```
+
+### Justification of Main Values:
+
+- **Kafka Topics (`session-events` and `session-events-enriched`)**:
+  - **Partitions**: 4 partitions per topic, based on the assumption that one partition can handle up to 5 MB/s. Given the input rate of 20,000 events/s with 512 bytes per event (10 MB/s), four partitions ensure that the Kafka brokers can handle the load.
+  - **Replication Factor**: 3, to ensure durability and availability in the event of a single broker failure, as required by the system design.
+
+- **Flink Configuration**:
+  - **Parallelism**: 4, to match the number of partitions in Kafka, ensuring load balancing and efficient processing.
+  - **Checkpointing**: Enabled with an interval of 60 seconds for durability, with exactly-once semantics to ensure no data loss during failure.
+  - **S3 Checkpoint Storage**: Configured to store checkpoints in S3, ensuring state recovery is possible after failures.
+
+- **Flink SQL Tables**:
+  - **Session Events Table**: Defines the input Kafka topic with JSON format and starts consuming from the latest offset.
+  - **Session Events Enriched Table**: Defines the output Kafka topic with additional derived fields. The `sink.max-concurrent-requests` is set to 128 to improve throughput for writing to Kafka, matching the high input rate.

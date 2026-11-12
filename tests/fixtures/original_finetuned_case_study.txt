@@ -1,0 +1,211 @@
+=== PROMPT ===
+
+    Design a Kafka topic configuration and Flink deployment strategy for a 'High-Frequency Banking Transaction' pipeline.
+    Requirements:
+    - Throughput: 50,000 events/sec.
+    - Latency: < 100ms end-to-end.
+    - Reliability: Exactly-once semantics is mandatory.
+    - Retention: 7 days.
+    
+    Provide the specific 'topic create' command with partition count/replication factor and the Flink checkpointing configuration in YAML/Java.
+    
+
+=== BASE MODEL (Qwen) ===
+To design a Kafka topic configuration and Flink deployment strategy for a high-frequency banking transaction pipeline that meets the specified requirements, we need to ensure that the Kafka topic is configured appropriately for high throughput and low latency, while also ensuring exactly-once processing semantics. Additionally, we will configure Flink to handle these requirements effectively.
+
+### Kafka Topic Configuration
+
+For a Kafka topic named `banking_transactions`, we need to set up the following parameters:
+
+- **Partition Count**: To achieve high throughput, we should have a sufficient number of partitions. Given the requirement of 50,000 events per second, let's assume each partition can handle around 10,000 events per second. Therefore, we need at least 5 partitions.
+- **Replication Factor**: For reliability and fault tolerance, we will use a replication factor of 3.
+- **Retention Time**: The retention period is set to 7 days.
+
+The `kafka-topics.sh` command to create this topic would look like this:
+
+```sh
+kafka-topics.sh --create \
+--topic banking_transactions \
+--partitions 5 \
+--replication-factor 3 \
+--config retention.ms=$((7 * 24 * 60 * 60 * 1000)) \
+--zookeeper localhost:2181
+```
+
+### Flink Deployment Strategy
+
+For Flink, we need to ensure that it can process the data with low latency and exactly-once semantics. Here’s how you can configure Flink:
+
+#### Flink Checkpointing Configuration
+
+Flink uses checkpoints to ensure exactly-once processing. We need to configure the checkpoint interval and other relevant settings.
+
+Here is an example of how to configure Flink in Java:
+
+```java
+import org.apache.flink.api.common.state.CheckpointingMode;
+import org.apache.flink.streaming.api.CheckpointingMode;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+
+public class HighFrequencyBankingTransactionPipeline {
+    public static void main(String[] args) throws Exception {
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        // Enable checkpointing
+        env.enableCheckpointing(5000); // Checkpoint every 5 seconds
+        env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
+        env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
+        env.getCheckpointConfig().setMinPauseBetweenCheckpoints(5000);
+        env.getCheckpointConfig().setCheckpoint
+
+=== BASELINE (Mistral) ===
+You are an expert Software Architect specializing in streaming data platforms (Kafka, Flink).
+
+
+    Design a Kafka topic configuration and Flink deployment strategy for a 'High-Frequency Banking Transaction' pipeline.
+    Requirements:
+    - Throughput: 50,000 events/sec.
+    - Latency: < 100ms end-to-end.
+    - Reliability: Exactly-once semantics is mandatory.
+    - Retention: 7 days.
+    
+    Provide the specific 'topic create' command with partition count/replication factor and the Flink checkpointing configuration in YAML/Java.
+     To meet the requirements of a high-throughput, low-latency, reliable, and retention-bound streaming data pipeline for high-frequency banking transactions, we'll design a Kafka topic and Flink deployment strategy.
+
+**Kafka Topic Configuration:**
+
+```bash
+bin/kafka-topics.sh --create --topic banking-transactions --partitions 100 --replication-factor 3 --config retention.ms=604800000 --config compression.type=lz4
+```
+
+In this configuration, we set up 100 partitions and a replication factor of 3 for high throughput and reliability. The retention period is set to 7 days (604800000 milliseconds). Compression is enabled using LZ4 for efficient data storage and transmission.
+
+**Flink Checkpointing Configuration (YAML):**
+
+```yaml
+checkpointing:
+  checkpoint-interval: 5s
+  checkpoint-timeout: 120s
+  min-pause-between-checkpoints: 10s
+  checkpoint-storage: fs
+  checkpoint-location: hdfs://namenode-host:port/flink/checkpoints/banking-transactions
+  failure-tolerance:
+    type: exact
+    checkpointing-mode: failure-by-time
+    max-concurrent-checkpoints: 3
+    missing-checkpoints-tolerated: 0
+```
+
+In this configuration, we set up checkpointing with an interval of 5 seconds, a timeout of 120 seconds, and a minimum pause of 10 seconds between checkpoints. The checkpoints are stored in HDFS for durability. The failure tolerance is set to exact for exactly-once semantics, and the checkpointing mode is set to failure-by-time. We allow a maximum of 3 concurrent checkpoints and do not tolerate any missing checkpoints.
+
+**Flink Deployment Configuration (Java):**
+
+```java
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.checkpoint.CheckpointConfig;
+import org.
+
+=== BASELINE (Phi-3) ===
+You are an expert Software Architect specializing in streaming data platforms (Kafka, Flink). Design a Kafka topic configuration and Flink deployment strategy for a 'High-Frequency Banking Transaction' pipeline.
+    Requirements:
+    - Throughput: 50,000 events/sec.
+    - Latency: < 100ms end-to-end.
+    - Reliability: Exactly-once semantics is mandatory.
+    - Retention: 7 days.
+    
+    Provide the specific 'topic create' command with partition count/replication factor and the Flink checkpointing configuration in YAML/Java.
+     To design a Kafka topic configuration and Flink deployment strategy for a 'High-Frequency Banking Transaction' pipeline with the specified requirements, we need to consider the throughput, latency, reliability, and retention requirements.
+
+### Kafka Topic Configuration
+
+For the Kafka topic, we need to ensure that it can handle the throughput of 50,000 events per second with a latency of less than 100ms. To achieve this, we can use the following configuration:
+
+```bash
+kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 10 --topic high_frequency_banking_transactions
+```
+
+This command creates a Kafka topic named `high_frequency_banking_transactions` with a replication factor of 3 and 10 partitions. The replication factor ensures that the data is replicated across 3 brokers, providing fault tolerance and high availability. The partition count helps in achieving parallelism and distributing the load across multiple brokers.
+
+### Flink Deployment Strategy
+
+For the Flink deployment strategy, we need to ensure that the pipeline can handle the throughput of 50,000 events per second with a latency of less than 100ms and exactly-once semantics. To achieve this, we can use the following configuration:
+
+#### Flink Checkpointing Configuration (YAML)
+
+```yaml
+job:
+  name: high_frequency_banking_transactions
+  parallelism: 10
+  checkpoint:
+    interval: 100ms
+    time: true
+    asynchronous: false
+    retention: 7 days
+    cleanup:
+      policy:
+        type: CLEANUP_WHEN_EXPIRED
+        maxWarnings: 1
+```
+
+This configuration sets the checkpoint interval to 100ms, ensuring that the state is checkpointed frequently to achieve low latency. The `time: true` option ensures that the checkpoint interval is based on time rather than events, which helps in achieving exactly-once semantics. The `retention: 7 days` option ensures that the checkpoints are retained for 7 days, meeting
+
+=== FINE-TUNED MODEL (Ours) ===
+# Kafka Topic Configuration
+kafka-topics.sh --create \
+--topic high-frequency-banking \
+--partitions 32 \
+--replication-factor 3 \
+--config retention.ms=604800000 \
+--zookeeper localhost:2181
+
+# Flink Checkpointing Configuration
+checkpointing:
+  enabled: true
+  min-pause-between-checkpoints: 2000 ms
+  max-concurrent-checkpoints: 1
+  num-checkpoints-to-retain: 10
+  externalized-checkpoint-dir: s3://<bucket-name>/flink/checkpoints
+  state-backend:
+    type: fs
+    fs.checkpointdir: s3://<bucket-name>/flink/checkpoints
+  savepoint-dir: s3://<bucket-name>/flink/savepoints
+  savepoint-name-prefix: flink-savepoint- 
+  savepoint-trigger-mode: periodic
+  savepoint-trigger-interval: 300000 ms
+  savepoint-trigger-condition:
+    type: periodic
+    interval: 300000 ms
+    max-snapshots-to-store: 10
+    retention-policy:
+      type: age
+      age: 86400000 ms
+  savepoint-trigger-condition:
+    type: periodic
+    interval: 300000 ms
+    max-snapshots-to-store: 10
+    retention-policy:
+      type: age
+      age: 86400000 ms
+  savepoint-trigger-condition:
+    type: periodic
+    interval: 300000 ms
+    max-snapshots-to-store: 10
+    retention-policy:
+      type: age
+      age: 86400000 ms
+  savepoint-trigger-condition:
+    type: periodic
+    interval: 300000 ms
+    max-snapshots-to-store: 10
+    retention-policy:
+      type: age
+      age: 86400000 ms
+  savepoint-trigger-condition:
+    type: periodic
+    interval: 300000 ms
+    max-snapshots-to-store: 10
+    retention-policy:
+      type: age
+      age: 86400000 ms
+  savepoint-trigger-condition:
+    type: periodic

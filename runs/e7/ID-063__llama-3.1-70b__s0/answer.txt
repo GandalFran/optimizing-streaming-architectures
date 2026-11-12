@@ -1,0 +1,88 @@
+```bash
+# Create the input topic with 10 partitions to handle the input rate
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic sensor-readings --partitions 10 --replication-factor 3 --config retention.ms=604800000
+
+# Create the output topic with 10 partitions to handle the output rate
+kafka-topics.sh --bootstrap-server kafka:9092 --create --topic sensor-readings-clean --partitions 10 --replication-factor 3 --config retention.ms=604800000
+```
+
+```yml
+execution:
+  checkpointing:
+    interval: 1000
+    timeout: 10000
+    unaligned: true
+    checkpoint-duration: 1000
+    checkpoint-interval: 1000
+    checkpoint-ttl: 3600000
+    checkpoint-idle-timeout: 3600000
+    checkpoint-timing: EXACTLY_ONCE
+    checkpoint-retries: 3
+    checkpoint-retry-delay: 1000
+    checkpoint-externalized: true
+    checkpoint-externalized-path: s3://flink-state/checkpoints
+
+  restart-strategy:
+    type: fixed-delay
+    attempts: 3
+    delay: 1000
+
+  parallelism: 30
+
+  buffer-timeout: 100
+
+  latency-tracking:
+    enabled: true
+    latency-tracking-interval: 1000
+
+  metrics:
+    latency:
+      interval: 1000
+      scope: operator
+```
+
+```sql
+CREATE TABLE sensor_readings (
+  `sensor_id` STRING,
+  `reading` STRING,
+  `event_time` TIMESTAMP(3),
+  `watermark` WATERMARK FOR `event_time` AS `event_time` - INTERVAL '5' SECOND
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'sensor-group',
+  'scan.startup.mode' = 'earliest-offset',
+  'format' = 'json',
+  'json.fail-on-missing-field' = 'false',
+  'json.ignore-parse-errors' = 'true'
+);
+
+CREATE TABLE sensor_readings_clean (
+  `sensor_id` STRING,
+  `reading` STRING,
+  `event_time` TIMESTAMP(3),
+  `derived_field` STRING
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'sensor-readings-clean',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'sensor-group',
+  'scan.startup.mode' = 'earliest-offset',
+  'format' = 'json',
+  'json.fail-on-missing-field' = 'false',
+  'json.ignore-parse-errors' = 'true',
+  'sink.partitioner' = 'round-robin'
+);
+```
+
+Justification:
+
+*   We create the input and output topics with 10 partitions each to handle the input rate of 50,000 events/s. This is because one Kafka partition can sustain at most 5 MB/s of produce traffic, and with an average event size of 512 bytes, we can estimate the input rate per partition to be around 5,000 events/s (5 MB/s / 512 bytes/event \* 8 bits/byte). With 10 partitions, we can handle the input rate of 50,000 events/s.
+*   We set the replication factor to 3 to ensure that both topics can survive the loss of any single Kafka broker without losing acknowledged data.
+*   We set the retention period to 7 days (604800000 ms) for both topics.
+*   In the Flink configuration, we set the checkpoint interval to 1 second and the checkpoint timeout to 10 seconds to ensure that the end-to-end latency is below 100 ms at p99. We also set the checkpoint retries to 3 and the retry delay to 1 second to handle failures.
+*   We set the parallelism to 30 to ensure that the Flink job can handle the input rate of 50,000 events/s. This is because one Flink source subtask can process at most 20,000 events/s, so we need at least 3 subtasks to handle the input rate.
+*   We set the buffer timeout to 100 ms to ensure that the Flink job can handle the end-to-end latency requirement.
+*   We enable latency tracking and set the latency tracking interval to 1 second to monitor the end-to-end latency.
+*   In the Flink SQL configuration, we create the input and output tables with the corresponding Kafka topics and set the format to JSON. We also set the `json.fail-on-missing-field` and `json.ignore-parse-errors` properties to false and true, respectively, to handle malformed events.

@@ -1,0 +1,174 @@
+# 1. Strimzi KafkaTopic resources for all topics
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments
+spec:
+  partitions: 3
+  replicas: 3
+  topicNameFormat: "${cluster.name}-${topic.name}"
+  config:
+    message.format.version: "2.5-rc1"
+    min.insync.replicas: "1"
+    "cleanup.policy": "delete"
+    "delete.retention.ms": "2000"
+    "retention.ms": "604800000"
+    "compression.type": "lz4"
+    "unclean.leader.election.enable": "true"
+    "auto.create.topics.enable": "false"
+    "auto.leader.rebalance.enable": "true"
+    "auto.expire.unclean.leader.election.enable": "true"
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+spec:
+  partitions: 3
+  replicas: 3
+  topicNameFormat: "${cluster.name}-${topic.name}"
+  config:
+    message.format.version: "2.5-rc1"
+    min.insync.replicas: "1"
+    "cleanup.policy": "delete"
+    "delete.retention.ms": "2000"
+    "retention.ms": "604800000"
+    "compression.type": "lz4"
+    "unclean.leader.election.enable": "true"
+    "auto.create.topics.enable": "false"
+    "auto.leader.rebalance.enable": "true"
+    "auto.expire.unclean.leader.election.enable": "true"
+
+# Justification: Each Kafka topic has 3 partitions and 3 replicas. The retention is set to 7 days, and the cleanup policy is set to delete. The min.insync.replicas is set to 1 to ensure that data is not lost in case of a broker failure. The compression type is set to lz4 to reduce the amount of data that is stored in the Kafka topics. The unclean.leader.election.enable is set to true to ensure that a broker can be elected as a leader even if it is not in sync with the other brokers.
+
+# 2. FlinkDeployment resource
+
+apiVersion: flink.apache.org/v1
+kind: FlinkDeployment
+metadata:
+  name: sql-runner
+spec:
+  flinkVersion: "1.20"
+  serviceAccountName: "default"
+  taskManager:
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2G"
+      limits:
+        cpu: "4"
+        memory: "8G"
+    replicas: 3
+  jobManager:
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2G"
+      limits:
+        cpu: "4"
+        memory: "8G"
+    replicas: 1
+  savepointDirectory: s3://flink-state/savepoints
+  checkpointing:
+    enabled: true
+    interval: "10000"
+    maxRetries: 3
+    externalizedCheckpointDir: s3://flink-state/checkpoints
+  kubernetes:
+    serviceAccountName: "default"
+    properties:
+      jobmanager.rpc.address: "127.0.0.1"
+      jobmanager.rpc.port: "6123"
+      jobmanager.web.port: "8081"
+      taskmanager.memory.process.fraction: "0.7"
+      taskmanager.memory.flink.fraction: "0.5"
+      taskmanager.memory.managed.fraction: "0.5"
+      taskmanager.memory.managed.min: "384M"
+      taskmanager.memory.managed.max: "4G"
+      taskmanager.memory.jvm.max: "3G"
+      taskmanager.memory.network.fraction: "0.05"
+      taskmanager.memory.heap.size: "1G"
+      taskmanager.numberOfTaskSlots: "1"
+  flinkConfiguration:
+    "execution.checkpointing.interval": "10s"
+    "state.backend": " RocksDBStateBackend"
+    "state.backend.rocksdb.block-cache-size": "2048M"
+    "state.backend.rocksdb.path": "/tmp/rocksdb"
+    "taskmanager.network.memory.fraction": "0.4"
+    "taskmanager.network.memory.max": "2G"
+    "taskmanager.network.memory.min": "1G"
+    "taskmanager.memory.network.fraction": "0.1"
+    "taskmanager.memory.network.min": "256M"
+    "taskmanager.memory.network.max": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "taskmanager.memory.network.min-size": "256M"
+    "taskmanager.memory.network.max-size": "512M"
+    "taskmanager.memory.network.min-fraction": "0.1"
+    "taskmanager.memory.network.max-fraction": "0.2"
+    "task

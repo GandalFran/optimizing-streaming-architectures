@@ -1,0 +1,93 @@
+ ```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payments
+  namespace: default
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 10
+  replicas: 3
+  replicaCount: 3
+  config:
+    retention.ms: "604800000"
+    retention.bytes: "629145600"
+    cleanup.policy: "delete"
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: flink-payment-job
+  namespace: default
+spec:
+  FlinkConfiguration: |
+    state.checkpoints.dir: s3://flink-state/checkpoints
+    state.backend: kafka
+    state.cleanup.checkpoints.enable: true
+    state.checkpoints.retention: 30
+    state.max.retained.bytes: 1073741824
+    state.savepoints.directory: s3://flink-state/savepoints
+    state.savepoints.retention: 30
+    state.savepoints.retention.checkpoints: 30
+    state.savepoints.retention.checkpoints.dir: s3://flink-state/savepointcheckpoints
+    state.savepoints.s3.bucket: flink-state
+    state.savepoints.s3.path: savepoints
+    state.savepoints.s3.retention: 30
+    state.savepoints.s3.retention.checkpoints: 30
+    state.savepoints.s3.retention.checkpoints.dir: savepointcheckpoints
+    state.snapshot.timeout.secs: 600
+    taskmanager.numberOfTaskSlots: 3
+    taskmanager.memory.size: "8Gi"
+    taskmanager.memory.preallocate: false
+    taskmanager.network.timeout: 120s
+    parallelism.default: 4
+    parallelism.max.reached: 6
+    parallelism.min: 4
+    parallelism.reassign.strategy: STATE_SUPPLY
+    parallelism.reassign.min: 4
+    parallelism.reassign.max: 6
+    parallelism.reassign.strategy.type: STATE_SUPPLY
+    parallelism.reassign.strategy.interval: 60s
+    parallelism.reassign.strategy.max.retries: 3
+    parallelism.reassign.strategy.max.retries.interval: 1h
+    parallelism.reassign.strategy.max.retries.interval.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager: 2
+    parallelism.reassign.strategy.max.retries.per.taskmanager.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance: 1
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per: 1
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per: 1
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per: 1
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per: 1
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per: 1
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per: 1
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per: 1
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.per: 1
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.per.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.per.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.per.per: 1
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.per.per.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.per.per.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.per.per.per: 1
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.per.per.per.interval: 1h
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.per.per.per.unit: s
+    parallelism.reassign.strategy.max.retries.per.taskmanager.per.instance.per.per.per.per.per.per.per.per.per.per.per:

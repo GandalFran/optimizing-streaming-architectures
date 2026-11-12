@@ -1,0 +1,70 @@
+# 1. Strimzi KafkaTopic resources for all topics
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: clicks
+spec:
+  partitions: 3
+  replicas: 3
+  topicNameFormat: clicks
+  config:
+    "min.insync.replicas": "2"
+    "retention.ms": "2592000000" # 30 days
+    "delete.topic.enable": "true"
+    "compression.type": "lz4"
+    "compression.type.default": "lz4"
+    "message.downloader.buffer.size": "1048576"
+    "message.downloader.max_bytes_per_second": "5242880"
+    "message.downloader.max_bytes_per_second.unset": "false"
+    "message.downloader.timeout_ms": "250"
+    "message.downloader.timeout_ms.unset": "false"
+    "message.downloader.timeout_ms.unset.default": "500"
+    "message.downloader.timeout_ms.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default": "500"
+    "message.downloader.timeout_ms.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default.default

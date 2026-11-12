@@ -1,0 +1,77 @@
+# 1. Create Kafka topics
+bash
+kafka-topics.sh --create --topic app-logs --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic app-logs-parsed --partitions 10 --replication-factor 3 --config retention.ms=86400000 --config cleanup.policy=delete --bootstrap-server kafka:9092
+# 2. Flink configuration
+yaml
+# Flink configuration
+# ...
+# TaskManager
+# ...
+# JobManager
+# ...
+# State Backend
+state.backend=kafka
+state.backend.kafka.topic=flink-state
+state.backend.kafka.bootstrap.servers=kafka:9092
+state.backend.kafka.topic.partitions=10
+state.backend.kafka.topic.replication-factor=3
+# 3. Flink SQL statements
+sql
+CREATE TABLE app_logs (
+  service STRING,
+  event STRUCT<type:STRING, message:STRING>
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'app-logs',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'format' = 'json',
+  'scan.startup.mode' = 'latest-offset',
+  'scan.startup.mode.latest.offset.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore' = 'true',
+  'scan.startup.mode.latest.offset.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore.fail.ignore

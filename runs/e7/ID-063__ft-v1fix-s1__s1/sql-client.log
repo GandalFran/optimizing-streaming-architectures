@@ -1,0 +1,22 @@
+Nov 11, 2026 8:09:39 AM org.jline.utils.Log logr
+WARNING: Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+[34;1m[INFO] Executing SQL from file.[0m
+
+Command history file path: /home/chamoso/.flink-sql-history
+Flink SQL> CREATE TABLE sensor_readings (
+>     sensor_id STRING,
+>     data JSON,
+>     `__sent_ms` BIGINT,
+>     `__seq` BIGINT
+> ) WITH (
+>   'connector' = 'kafka',
+>   'topic' = 'sensor-readings',
+>   'properties.bootstrap.servers' = '127.0.0.1:12000,127.0.0.1:12001,127.0.0.1:12002',
+>   'format' = 'json',
+>   'scan.startup.mode' = 'latest-offset',
+>   'format.derived-columns' = 'clean_data = data->>\'clean_data\''
+> )[31;1m[ERROR] Could not execute SQL statement. Reason:
+org.apache.flink.sql.parser.impl.TokenMgrError: Lexical error at line 12, column 63.  Encountered: "\\" (92), after : ""[0m
+
+Shutting down the session...
+done.

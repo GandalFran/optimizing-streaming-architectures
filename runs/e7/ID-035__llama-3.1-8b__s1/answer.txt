@@ -1,0 +1,99 @@
+### 1. Kafka Topic Creation
+
+```bash
+# Create topic session-events with 4 partitions and replication factor 3
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 4 session-events
+
+# Create topic session-events-enriched with 4 partitions and replication factor 3
+kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 3 --partitions 4 session-events-enriched
+
+# Describe topic session-events to confirm settings
+kafka-topics.sh --describe --bootstrap-server kafka:9092 session-events
+
+# Describe topic session-events-enriched to confirm settings
+kafka-topics.sh --describe --bootstrap-server kafka:9092 session-events-enriched
+```
+
+### 2. Flink Configuration (`config.yaml`)
+
+```yaml
+# Flink configuration file
+flink:
+  configuration:
+    cluster:
+      parallelism: 4
+    checkpoints:
+      type: 1
+      interval: 10s
+      max-concurrent-checkpoints: 1
+      external-fs:
+        type: S3
+        fs-url: s3://flink-state/checkpoints
+        min-fs-checkpoint-interval: 1m
+      num-retained-checkpoints: 24
+      state-backend:
+        type: filesystem
+        fs-url: s3://flink-state/checkpoints
+        min-fs-checkpoint-interval: 1m
+
+# Kafka consumer configuration
+kafka:
+  properties:
+    bootstrap.servers: kafka:9092
+    group.id: flink-group
+    key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    enable.auto.commit: false
+    max.poll.records: 100
+    session.timeout.ms: 10000
+    heartbeat.interval.ms: 1000
+    auto.offset.reset: earliest
+    enable.idempotence: false
+
+# Kafka producer configuration
+kafka:
+  producer:
+    properties:
+      bootstrap.servers: kafka:9092
+      acks: all
+      retries: 5
+      max.in.flight.requests.per.connection: 1
+      batch.size: 50000
+      linger.ms: 10
+```
+
+### 3. Flink SQL `CREATE TABLE` Statements
+
+```sql
+# Create source table for session-events
+CREATE TABLE session_events (
+  `user_id` VARCHAR,
+  -- Add other fields as needed
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.group.id' = 'flink-group',
+  'scan.startup.mode' = 'latest-offset',
+  'value.format' = 'json'
+);
+
+# Create sink table for session-events-enriched
+CREATE TABLE session_events_enriched (
+  `user_id` VARCHAR,
+  -- Add other fields as needed
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'session-events-enriched',
+  'properties.bootstrap.servers' = 'kafka:9092',
+  'properties.key.converter' = 'org.apache.kafka.connect.storage.StringConverter',
+  'properties.value.converter' = 'org.apache.kafka.connect.storage.StringConverter',
+  'sink.partition.roterator' = 'round-robin'
+);
+```
+
+### Justification of main values:
+
+- Kafka topics are created with 4 partitions each to allow for efficient processing of the high-volume input stream (20,000 events/s). The replication factor is set to 3 to ensure durability in case of a single broker failure.
+- In the Flink configuration, the parallelism is set to 4 to match the number of available TaskManagers. Checkpointing is enabled with a checkpoint interval of 10 seconds to meet the end-to-end latency requirement. The `min-fs-checkpoint-interval` is set to 1 minute to prevent frequent checkpointing. The `num-retained-checkpoints` is set to 24 to retain checkpoint data for 1 day.
+- In the Flink SQL `CREATE TABLE` statements, the `scan.startup.mode` is set to `latest-offset` to start consuming from the latest available offset in the topic. The `properties.bootstrap.servers` is set to `kafka:9092` to connect to the Kafka cluster. The `value.format` is set to `json` to parse JSON events. The `properties.key.converter` and `properties.value.converter` are set to `org.apache.kafka.connect.storage.StringConverter` to serialize/deserialize keys and values as strings.

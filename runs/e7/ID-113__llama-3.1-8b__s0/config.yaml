@@ -1,0 +1,29 @@
+env.java.opts.all: --add-exports=java.base/sun.net.util=ALL-UNNAMED --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
+jobmanager.bind-host: 127.0.0.1
+jobmanager.rpc.address: 127.0.0.1
+jobmanager.rpc.port: 12530
+jobmanager.memory.process.size: 1600m
+jobmanager.execution.failover-strategy: region
+taskmanager.bind-host: 127.0.0.1
+taskmanager.host: 127.0.0.1
+taskmanager.numberOfTaskSlots: 1
+taskmanager.memory.process.size: 1728m
+parallelism.default: 1
+rest.address: 127.0.0.1
+application.name: clickstream-enrichment
+application.type: batch
+flink.cluster.mode: standalone
+flink.cluster.parallelism: 4
+flink.taskmanager.num-executors: 3
+flink.taskmanager.taskmanager-opts:
+- memory:8g
+- num-cores:4
+flink.checkpointing.mode: EXACTLY_ONCE
+flink.kafka.bootstrap-servers: kafka:9092
+flink.kafka.properties.bootstrap.servers: kafka:9092
+flink.kafka.properties.key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+flink.kafka.properties.value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+flink.logging.level: DEBUG
+rest.bind-address: 127.0.0.1
+rest.port: 12531
+io.tmp.dirs: /tmp/chamoso-e7/8381/e7-1200811/flink-io

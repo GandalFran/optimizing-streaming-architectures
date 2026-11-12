@@ -1,0 +1,73 @@
+ 1. Kafka Topic Creation (`bash`):
+
+```bash
+# Create session-events topic with 3 replication factors, 10 partitions, and 5 MB segment size.
+kafka-topics.sh --create --topic session-events --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=604800000 --config segment.bytes=5242880
+
+# Create session-events-enriched topic with 3 replication factors, 10 partitions, and 5 MB segment size.
+kafka-topics.sh --create --topic session-events-enriched --bootstrap-server kafka:9092 --replication-factor 3 --partitions 10 --config retention.ms=604800000 --config segment.bytes=5242880
+```
+
+The replication factor of 3 ensures data durability by surviving the loss of any single Kafka broker. The number of partitions is chosen to match the Flink source subtask processing capacity. The segment size is set to accommodate the input rate and average event size.
+
+2. Flink Configuration (`config.yaml`):
+
+```yaml
+jobmanager.rpc.address: localhost
+taskmanager.numberOfTaskSlots: 4
+parallelism.default: 4
+rest.port: 8081
+checkpointing.enabled: true
+checkpointing.mode: EXACTLY_ONCE
+checkpointing.failure-tolerance-mode: FAIL_FAST
+checkpointing.min-pause-between-checkpoints: 5000
+checkpointing.max-concurrency: 3
+state.backend: filesystem
+state.backend.fs.type: s3
+state.backend.fs.bucket: flink-state
+```
+
+The jobmanager and taskmanager settings are configured to match the environment. Checkpointing is enabled for fault tolerance, and the mode is set to EXACTLY_ONCE to ensure data consistency. The min-pause-between-checkpoints is set to allow enough time for checkpointing without affecting the end-to-end latency. The max-concurrency is set to the number of available task slots. The state backend is configured to use S3 for durable checkpoint storage.
+
+3. Flink SQL `CREATE TABLE` statements:
+
+```sql
+-- Create Kafka source table for session-events
+CREATE TABLE session_events (
+    user_id STRING,
+    event_data JSON
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.group.id' = 'session-events-source',
+    'format' = 'json',
+    'json.ignore-parse-errors' = 'true'
+);
+
+-- Create Flink SQL table for enriched events
+CREATE TABLE session_events_enriched (
+    user_id STRING,
+    event_data JSON,
+    derived_field1 INT,
+    derived_field2 STRING
+) WITH (
+    'connector' = 'print'
+);
+
+-- Create Kafka sink table for session-events-enriched
+CREATE TABLE session_events_enriched_sink (
+    user_id STRING,
+    event_data JSON
+) WITH (
+    'connector' = 'kafka',
+    'topic' = 'session-events-enriched',
+    'properties.bootstrap.servers' = 'kafka:9092',
+    'properties.key.serializer' = 'org.apache.kafka.common.serialization.StringSerializer',
+    'properties.value.serializer' = 'org.apache.kafka.common.serialization.StringSerializer'
+);
+```
+
+The source table is created from the Kafka topic `session-events`, with the `json.ignore-parse-errors` property to handle malformed events. The sink table is created for the enriched events, writing to the Kafka topic `session-events-enriched`. The serializers are set to the default Kafka serializers for strings.
+
+The Flink SQL job reads from the source table, performs the required transformations, and writes the results to the sink table. The end-to-end latency should be below 100 ms at p99 due to the high parallelism, efficient serialization, and the choice of Kafka topics with appropriate partitioning and segment sizes. The delivery guarantee is at-least-once due to Flink's checkpointing and Kafka's replication factor. The retention period is set to 7 days for both topics.

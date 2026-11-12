@@ -1,0 +1,172 @@
+### Kafka Topic Configuration
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.ms: 604800000
+    cleanup.policy: DELETE
+    flush.ms: 10000
+    min.insync.replicas: 2
+    acks: all
+    replication.factor: 3
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: banking-transactions-validated
+spec:
+  partitions: 16
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.ms: 604800000
+    cleanup.policy: DELETE
+    flush.ms: 10000
+    min.insync.replicas: 2
+    acks: all
+    replication.factor: 3
+```
+
+### Flink Configuration
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-sql-job
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-sql-job
+  template:
+    metadata:
+      labels:
+        app: flink-sql-job
+    spec:
+      containers:
+      - name: flink
+        image: flink:latest
+        ports:
+        - containerPort: 6123
+        volumeMounts:
+        - name: flink-config
+          mountPath: /opt/flink/conf
+        - name: flink-lib
+          mountPath: /opt/flink/usrlib
+        - name: checkpoint-storage
+          mountPath: /opt/flink/checkpoints
+      volumes:
+      - name: flink-config
+        configMap:
+          name: flink-config
+      - name: flink-lib
+        emptyDir: {}
+      - name: checkpoint-storage
+        persistentVolumeClaim:
+          claimName: flink-checkpoint-pvc
+      - name: flink-log
+        emptyDir: {}
+  volumes:
+  - name: flink-config
+    configMap:
+      name: flink-config
+  - name: flink-checkpoint-pvc
+    persistentVolumeClaim:
+      claimName: flink-checkpoint-pvc
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flink-config
+data:
+  flink-conf.yaml: |
+    jobmanager.rpc.port: 6123
+    taskmanager.numberOfTaskSlots: 4
+    taskmanager.memory.process.size: 8192m
+    parallelism.default: 4
+    state.backend: fs
+    state.checkpointing.interval: 10000
+    state.checkpointing.max-retained-checkpoints: 3
+    state.checkpointing.checkpointing-mode: EXACTLY_ONCE
+    state.checkpointing.checkpointing-store: s3://flink-state/checkpoints
+    state.checkpointing.num-retained-checkpoints: 3
+    state.checkpointing.timeout: 30000
+    parallelism.min: 1
+    parallelism.max: 3
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: flink-checkpoint-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+```
+
+### Flink SQL Configuration
+
+```sql
+CREATE TABLE banking_transactions (
+  account_id STRING,
+  transaction_id STRING,
+  amount DECIMAL(10, 2),
+  timestamp TIMESTAMP(3)
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'banking-transactions',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'connector.startup.mode' = 'earliest',
+  'scan.startup.mode' = 'latest',
+  'connector.properties.group.id' = 'banking-transactions-group',
+  'connector.properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'connector.properties.value.deserializer' = 'io.confluent.kafka.serializers.KafkaJsonDeserializer',
+  'connector.properties.value.deserializer.schema.registry.url' = 'http://schema-registry:8081',
+  'connector.properties.value.deserializer.schema.registry.subject' = 'banking-transactions-value',
+  'connector.properties.value.deserializer.schema.registry.version' = 'latest'
+);
+
+CREATE TABLE banking_transactions_validated (
+  account_id STRING,
+  transaction_id STRING,
+  amount DECIMAL(10, 2),
+  timestamp TIMESTAMP(3)
+) WITH (
+  'connector.type' = 'kafka',
+  'connector.version' = 'universal',
+  'connector.topic' = 'banking-transactions-validated',
+  'connector.properties.bootstrap.servers' = 'my-cluster-kafka-bootstrap:9092',
+  'connector.properties.key.deserializer' = 'org.apache.kafka.common.serialization.StringDeserializer',
+  'connector.properties.value.deserializer' = 'io.confluent.kafka.serializers.KafkaJsonDeserializer',
+  'connector.properties.value.deserializer.schema.registry.url' = 'http://schema-registry:8081',
+  'connector.properties.value.deserializer.schema.registry.subject' = 'banking-transactions-value',
+  'connector.properties.value.deserializer.schema.registry.version' = 'latest'
+);
+
+INSERT INTO banking_transactions_validated
+SELECT
+  account_id,
+  transaction_id,
+  amount,
+  timestamp
+FROM banking_transactions;
+```
+
+### Justification
+
+- **Kafka Topic Configuration**: We create two Kafka topics, `banking-transactions` and `banking-transactions-validated`, each with 16 partitions and 3 replicas. This configuration ensures that the topics can handle the high input rate of 50,000 events/s and provide high availability. The `retention.ms` and `segment.ms` settings are set to 7 days to meet the retention requirement. The `cleanup.policy` is set to `DELETE` to ensure that old data is deleted after the retention period. The `flush.ms` setting is set to 10,000 to ensure that data is flushed to disk regularly. The `min.insync.replicas` and `acks` settings are set to 2 and `all`, respectively, to ensure that data is written to at least two replicas before considering it written.
+
+- **Flink Configuration**: We create a Flink deployment with one TaskManager pod, each with 4 CPU and 8 GiB of memory. The `taskmanager.numberOfTaskSlots` is set to 4 to ensure that each TaskManager can handle multiple tasks. The `taskmanager.memory.process.size` is set to 8 GiB to ensure that each TaskManager has enough memory to process the data. The `parallelism.default` is set to 4 to ensure that the job runs in parallel. The `state.backend` is set to `fs` to use the file system as the checkpointing backend. The `state.checkpointing.interval` is set to 10,000 to ensure that checkpoints are taken regularly. The `state.checkpointing.max-retained-checkpoints` is set to 3 to ensure that only the last three checkpoints are retained. The `state.checkpointing.checkpointing-mode` is set to `EXACTLY_ONCE` to ensure that checkpoints are taken exactly once. The `state.checkpointing.checkpointing-store` is set to `s3://flink-state/checkpoints` to store the checkpoints in S3. The `state.checkpointing.num-retained-checkpoints` is set to 3 to ensure that only the last three checkpoints are retained. The `state.checkpointing.timeout` is set to 30,000 to ensure that checkpoints are taken within a reasonable time.
+
+- **Flink SQL Configuration**: We create two tables, `banking_transactions` and `banking_transactions_validated`, each with the same schema. The `banking_transactions` table is a Kafka source table that reads from the `banking-transactions` topic. The `banking_transactions_validated` table is a Kafka sink table that writes to the `banking-transactions-validated` topic. The `INSERT INTO` statement is used to insert the validated transactions into the `banking_transactions_validated` table.

@@ -1,0 +1,115 @@
+ ```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: clicks
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 1
+  replicationFactor: 3
+  config:
+    retention.bytes: 104857600
+    retention.ms: 2592000000
+    log.segment.bytes: 104857600
+    log.retention.hours: 7
+```
+
+```yaml
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: clicks-deployment
+spec:
+  parallelism: 1
+  archives:
+    - name: sql-runner.jar
+      path: local:///opt/flink/usrlib/sql-runner.jar
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: 3
+    taskmanager.resource.memory: 8192
+    kafka.bootstrap.servers: my-cluster-kafka-bootstrap:9092
+    kafka.topic: clicks
+    kafka.consumer.group: flink-consumer-group
+    kafka.consumer.max.poll.interval.ms: 300000
+    kafka.consumer.enable.auto.commit: false
+    kafka.consumer.auto.offset.reset: earliest
+    kafka.consumer.session.timeout.ms: 60000
+    kafka.consumer.max.poll.records: 1000
+    kafka.consumer.auto.commit.interval.ms: 1000
+    kafka.consumer.fetch.max.bytes: 1048576
+    kafka.consumer.max.partition.fetch.bytes: 1048576
+    kafka.consumer.fetch.min.bytes: 1048576
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.max.poll.interval.ms: 300000
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.max.poll.records: 1
+    kafka.consumer.fetch.max.bytes: 1048576
+    kafka.consumer.fetch.min.bytes: 1048576
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.max.poll.interval.ms: 300000
+    kafka.consumer.max.poll.records: 1
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.fetch.max.bytes: 1048576
+    kafka.consumer.fetch.min.bytes: 1048576
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.max.poll.interval.ms: 300000
+    kafka.consumer.max.poll.records: 1
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.fetch.max.bytes: 1048576
+    kafka.consumer.fetch.min.bytes: 1048576
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.max.poll.interval.ms: 300000
+    kafka.consumer.max.poll.records: 1
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.fetch.max.bytes: 1048576
+    kafka.consumer.fetch.min.bytes: 1048576
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.max.poll.interval.ms: 300000
+    kafka.consumer.max.poll.records: 1
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.fetch.max.bytes: 1048576
+    kafka.consumer.fetch.min.bytes: 1048576
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.max.poll.interval.ms: 300000
+    kafka.consumer.max.poll.records: 1
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.fetch.max.bytes: 1048576
+    kafka.consumer.fetch.min.bytes: 1048576
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.max.poll.interval.ms: 300000
+    kafka.consumer.max.poll.records: 1
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.fetch.max.bytes: 1048576
+    kafka.consumer.fetch.min.bytes: 1048576
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.max.poll.interval.ms: 300000
+    kafka.consumer.max.poll.records: 1
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.fetch.max.bytes: 1048576
+    kafka.consumer.fetch.min.bytes: 1048576
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.max.poll.interval.ms: 300000
+    kafka.consumer.max.poll.records: 1
+    kafka.consumer.fetch.max.wait.ms: 10000
+    kafka.consumer.request.timeout.ms: 300000
+    kafka.consumer.fetch.max.bytes: 1048576
+    kafka.consumer.fetch.min.bytes: 1048576
+    kafka.consumer.fetch.max.wait

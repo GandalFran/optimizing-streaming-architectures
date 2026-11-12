@@ -1,0 +1,62 @@
+ ```yaml
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments
+  namespace: default
+  labels:
+    app: payment-processor
+    component: source
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention: 7d
+  messageRetentionTime: 7d
+  cleanupPolicy: "compact"
+
+apiVersion: stream.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: payments-validated
+  namespace: default
+  labels:
+    app: payment-processor
+    component: sink
+spec:
+  partitions: 3
+  replicationFactor: 3
+  retention: 7d
+  messageRetentionTime: 7d
+  cleanupPolicy: "compact"
+```
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-sql-runner
+  template:
+    metadata:
+      labels:
+        app: flink-sql-runner
+    spec:
+      containers:
+      - name: flink-sql-runner
+        image: flink:1.20
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "4"
+            memory: "8Gi"
+          requests:
+            cpu: "2"
+            memory: "4Gi"
+        env:
+        - name: FLINK_PROPERTIES
+          value: "state.backend=filesystem,rest.port=8081,rest.port.ssl=8082,rest.port.http=8080,rest.port.https=8443,rest.port.checkpoints=8083,rest.port.history=8084,rest.port.sinks=8085,rest.port.sources=8086,rest.port.state.manager=8087,rest.port.state.manager.ssl=8088,rest.port.state.manager.http=8089,rest.port.state.manager.https=8445,rest.port.state.manager.checkpoints=8090,rest.port.state.manager.history=8091,rest.port.state.manager.sinks=8092,rest.port.state.manager.sources=8093,rest.port.state.manager.state.backend=filesystem,rest.port.state.manager.state.backend.ssl=false,rest.port.state.manager.state.backend.http=false,rest.port.state.manager.state.backend.https=false,rest.port.state.manager.state.backend.checkpoints=false,rest.port.state.manager.state.backend.history=false,rest.port.state.manager.state.backend.sinks=false,rest.port.state.manager.state.backend.sources=false,rest.port.state.manager.state.backend.state.backend=filesystem,rest.port.state.manager.state.backend.state.backend.ssl=false,rest.port.state.manager.state.backend.state.backend.http=false,rest.port.state.manager.state.backend.state.backend.https=false,rest.port.state.manager.state.backend.state.backend.checkpoints=false,rest.port.state.manager.state.backend.state.backend.history=false,rest.port.state.manager.state.backend.state.backend.sinks=false,rest.port.state.manager.state.backend.state.backend.sources=false,rest.port.state.manager.state.backend.state.backend.state.backend=filesystem,rest.port.state.manager.state.backend.state.backend.state.backend.ssl=false,rest.port.state.manager.state.backend.state.backend.state.backend.http=false,rest.port.state.manager.state.backend.state.backend.state.backend.https=false,rest.port.state.manager.state.backend.state.backend.state.backend.checkpoints=false,rest.port.state.manager.state.backend.state.backend.state.backend.history=false,rest.port.state.manager.state.backend.state.backend.state.backend.sinks=false,rest.port.state.manager.state.backend.state.backend.state.backend.sources=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend=filesystem,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.ssl=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.http=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.https=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.checkpoints=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.history=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.sinks=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.sources=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend=filesystem,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.ssl=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.http=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.https=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.checkpoints=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.history=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.sinks=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.sources=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend=filesystem,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.ssl=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.http=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.https=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.checkpoints=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.history=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.sinks=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.sources=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend=filesystem,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.ssl=false,rest.port.state.manager.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.backend.state.

@@ -1,0 +1,106 @@
+```bash
+# Create the Kafka topics
+kafka-topics.sh --create --topic ad-impressions --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092
+kafka-topics.sh --create --topic ad-impressions-enriched --partitions 10 --replication-factor 3 --config retention.ms=2592000000 --config segment.bytes=1073741824 --if-not-exists --bootstrap-server kafka:9092
+```
+
+```yaml
+# Flink configuration
+flink-conf.yaml:
+  jobmanager.rpc.address: jobmanager
+  taskmanager.numberOfTaskSlots: 4
+  state.checkpoints.dir: s3://flink-state/checkpoints
+  state.backend: rocksdb
+  state.backend.incremental: true
+  state.backend.rocksdb.write-buffer.count: 4
+  state.backend.rocksdb.block-cache.size: 100000000
+  state.backend.rocksdb.block-cache.per-level.size-ratio: 1.0
+  state.backend.rocksdb.block-cache.size: 100000000
+  state.backend.rocksdb.block-cache.size-per-level: 100000000
+  state.backend.rocksdb.block-cache.size-per-level.max: 100000000
+  state.backend.rocksdb.block-cache.size-per-level.min: 100000000
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.max-ratio: 1.0
+  state.backend.rocksdb.block-cache.size-per-level.min-ratio: 1.0
+  state.backend.rocksdb.block-cache.size

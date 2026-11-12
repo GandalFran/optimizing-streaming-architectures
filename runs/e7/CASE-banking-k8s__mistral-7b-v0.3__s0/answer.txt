@@ -1,0 +1,142 @@
+ 1. Strimzi `KafkaTopic` resources for all topics:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  kafka:
+    replicas: 3
+    listeners:
+    - name: plain
+      port: 9092
+      tls: false
+      config:
+        advertisingListenerEnabled: "true"
+        listenerType: "PLAINTEXT"
+        listenerSecurityPolicy: "PLAINTEXT_LISTENER"
+        zookeeperConnect: "my-cluster-zookeeper:2181"
+    kafkaRaft:
+      electionTimeoutMs: 15000
+      heartbeatIntervalMs: 3000
+    entityOperator:
+      topicOperator:
+        topic:
+        - banking-transactions
+          partitions: 10
+          replicas: 3
+          config:
+            retention.ms: 604800000
+            compression.type: "lz4"
+            message.max.bytes: 1048576
+        - banking-transactions-validated
+          partitions: 10
+          replicas: 3
+          config:
+            retention.ms: 604800000
+            compression.type: "lz4"
+            message.max.bytes: 1048576
+```
+
+2. Flink Deployment resource:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: flink-operator
+spec:
+  kafka:
+    bootstrapServers: my-cluster-kafka-bootstrap:9092
+    ssl: false
+    sslTruststore: ""
+    sslKeystore: ""
+    sslTruststorePassword: ""
+    sslKeystorePassword: ""
+    sslKeyPassword: ""
+    sslKeyAlias: ""
+    sslKeyStoreType: ""
+    sslTruststoreType: ""
+    sslProtocol: "TLSv1.2"
+    sslCipherSuites: "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+    sslEnabledProtocols: "TLSv1.2"
+    sslEndEntityCertAlias: ""
+
+---
+apiVersion: flink.tdl.io/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: my-flink-deployment
+spec:
+  kubernetes:
+    serviceAccountName: flink-sa
+    image: flink:1.13.0
+    imagePullPolicy: IfNotPresent
+    replicas: 3
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 2
+        memory: 4Gi
+    config:
+      taskmanager.numberOfTaskSlots: 1
+      jobmanager.rpc.address: jobmanager
+      jobmanager.rpc.port: 6123
+      taskmanager.rpc.address: taskmanager
+      taskmanager.rpc.port: 6124
+      rest.port: 8081
+      rest.bind-host: 0.0.0.0
+      checkpointing.checkpointing-mode: EXACTLY_ONCE
+      checkpointing.minPauseBetweenCheckpoints: 5000
+      checkpointing.maxConcurrentCheckpoints: 1
+      checkpointing.enabled: true
+      checkpointing.failure-tolerance.max-concurrent-checkpoints: 1
+      checkpointing.failure-tolerance.max-failed-checkpoints: 3
+      checkpointing.failure-tolerance.min-pause-between-checkpoints: 5000
+      checkpointing.failure-tolerance.mode: EXACTLY_ONCE
+      checkpointing.failure-tolerance.max-checkpoint-retries: 3
+      checkpointing.failure-tolerance.checkpoint-timeout: 60000
+      checkpointing.failure-tolerance.max-time-for-checkpoint: 600000
+      checkpointing.failure-tolerance.mode-on-failure: FAIL_FAST
+      checkpointing.enabled-for-native-checkpointing: true
+      checkpointing.native-checkpointing.checkpoint-interval: 5000
+      checkpointing.native-checkpointing.min-pause-between-checkpoints: 5000
+      checkpointing.native-checkpointing.max-concurrent-checkpoints: 1
+      checkpointing.native-checkpointing.mode: EXACTLY_ONCE
+      checkpointing.native-checkpointing.failure-tolerance.max-concurrent-checkpoints: 1
+      checkpointing.native-checkpointing.failure-tolerance.max-failed-checkpoints: 3
+      checkpointing.native-checkpointing.failure-tolerance.min-pause-between-checkpoints: 5000
+      checkpointing.native-checkpointing.failure-tolerance.mode: EXACTLY_ONCE
+      checkpointing.native-checkpointing.failure-tolerance.max-checkpoint-retries: 3
+      checkpointing.native-checkpointing.failure-tolerance.checkpoint-timeout: 60000
+      checkpointing.native-checkpointing.failure-tolerance.max-time-for-checkpoint: 600000
+      checkpointing.native-checkpointing.failure-tolerance.mode-on-failure: FAIL_FAST
+      checkpointing.native-checkpointing.enabled: true
+      checkpointing.native-checkpointing.checkpoint-interval-for-native-checkpointing: 5000
+      checkpointing.native-checkpointing.min-pause-between-checkpoints-for-native-checkpointing: 5000
+      checkpointing.native-checkpointing.max-concurrent-checkpoints-for-native-checkpointing: 1
+      checkpointing.native-checkpointing.mode-on-failure-for-native-checkpointing: FAIL_FAST
+      checkpointing.native-checkpointing.enabled-for-native-checkpointing: true
+      checkpointing.native-checkpointing.checkpoint-interval-for-native-checkpointing: 5000
+      checkpointing.native-checkpointing.min-pause-between-checkpoints-for-native-checkpointing: 5000
+      checkpointing.native-checkpointing.max-concurrent-checkpoints-for-native-checkpointing: 1
+      checkpointing.native-checkpointing.mode-on-failure-for-native-checkpointing: FAIL_FAST
+      checkpointing.native-checkpointing.enabled-for-native-checkpointing: true
+      parallelism.default: 1
+      parallelism.rebalance.max-retries: 3
+      parallelism.rebalance.timeout: 10000
+      parallelism.rebalance.threshold: 10
+      parallelism.rebalance.strategy: "org.apache.flink.runtime.jobmaster.rebalance.DefaultRebalanceStrategy"
+      parallelism.rebalance.strategy-class: "org.apache.flink.runtime.jobmaster.rebalance.DefaultRebalanceStrategy"
+      parallelism.rebalance.strategy-options: {}
+      parallelism.rebalance.strategy-options.max-retries: 3
+      parallelism.rebalance.strategy-options.timeout: 10000
+      parallelism.rebalance.strategy-options.threshold: 10
+      parallelism.rebalance.strategy-options.strategy-class: "org.apache.flink.runtime.jobmaster.rebalance.DefaultRebalanceStrategy"
+      parallelism.rebalance.strategy-options.strategy-options: {}
+      parallelism.rebalance.strategy-options.strategy-options.max-retries: 3
+      parallelism.rebalance.strategy-options.strategy-options.timeout: 10000
+      parallelism.rebalance.strategy-options.strategy-options.threshold: 10
